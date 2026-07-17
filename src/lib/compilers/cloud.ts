@@ -1,11 +1,10 @@
 import { Compiler, CompileResult } from "./index";
 
-// Piston API (free public instance)
-const PISTON_API = "https://emkc.org/api/v2/piston";
+const WANDBOX_API = "https://wandbox.org/api/compile.json";
 
-const LANGUAGE_MAP: Record<string, { piston: string; ext: string }> = {
-  c: { piston: "c", ext: "c" },
-  cpp: { piston: "c++", ext: "cpp" },
+const LANGUAGE_MAP: Record<string, string> = {
+  c: "gcc-head",
+  cpp: "gcc-head",
 };
 
 export class CloudCompiler implements Compiler {
@@ -16,41 +15,32 @@ export class CloudCompiler implements Compiler {
   }
 
   async run(code: string): Promise<CompileResult> {
-    const langConfig = LANGUAGE_MAP[this.language];
-    if (!langConfig) {
+    const compiler = LANGUAGE_MAP[this.language];
+    if (!compiler) {
       return { stdout: "", stderr: `Unsupported language: ${this.language}` };
     }
 
     try {
-      const response = await fetch(`${PISTON_API}/execute`, {
+      const response = await fetch(WANDBOX_API, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          language: langConfig.piston,
-          files: [
-            {
-              name: `main.${langConfig.ext}`,
-              content: code,
-            },
-          ],
+          compiler,
+          code,
+          save: false,
         }),
       });
 
-      if (!response.ok) {
-        const text = await response.text();
-        return { stdout: "", stderr: `Cloud compiler error (${response.status}): ${text}` };
-      }
-
       const data = await response.json();
 
-      if (data.message) {
-        return { stdout: "", stderr: data.message };
+      if (data.status !== "0" && data.status !== 0) {
+        const errors = [data.compiler_error, data.program_error].filter(Boolean).join("\n");
+        return { stdout: data.program_output || "", stderr: errors || "Compilation failed" };
       }
 
-      const runOutput = data.run || {};
       return {
-        stdout: runOutput.stdout || "",
-        stderr: runOutput.stderr || "",
+        stdout: data.program_output || "",
+        stderr: data.compiler_error || "",
       };
     } catch (e: any) {
       return {
