@@ -7,6 +7,11 @@
   --background: #f8fafc;
 }
 
+.dark {
+  --foreground: #f1f5f9;
+  --background: #0f172a;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
@@ -19,7 +24,47 @@ body {
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.3);
   }
+  .dark .glass {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
   .gradient-text {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-primary-700;
   }
+}
+
+@layer base {
+  * {
+    @apply border-gray-200 dark:border-dark-700;
+  }
+  html {
+    @apply scroll-smooth;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-dark-800;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-dark-600 rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-dark-500;
+}
+
+/* Skeleton loading animation */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  @apply bg-gray-200 dark:bg-dark-700 rounded;
+  background: linear-gradient(90deg, transparent 25%, rgba(255,255,255,0.1) 50%, transparent 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
 }

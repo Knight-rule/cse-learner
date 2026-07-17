@@ -38,8 +38,10 @@ export default function BookmarkButton({ data }: { data: BookmarkData }) {
   return (
     <button
       onClick={toggle}
-      className={`p-2 rounded-lg transition-colors ${
-        bookmarked ? "bg-yellow-100 text-yellow-600" : "bg-gray-100 text-gray-400 hover:text-yellow-500"
+      className={`p-2 rounded-lg transition-all duration-200 ${
+        bookmarked
+          ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400 scale-110"
+          : "bg-gray-100 dark:bg-dark-700 text-gray-400 dark:text-dark-500 hover:text-yellow-500 hover:scale-105"
       }`}
       title={bookmarked ? "Remove bookmark" : "Add bookmark"}
     >

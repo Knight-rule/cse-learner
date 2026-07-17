@@ -8,12 +8,12 @@ export default function DashboardStats() {
   const avgScore = getAvgScore();
 
   const cards = [
-    { icon: BookOpen, label: "Courses Started", value: stats.coursesStarted.length, color: "bg-blue-100 text-blue-600" },
-    { icon: Brain, label: "Quizzes Taken", value: stats.quizzesTaken, color: "bg-purple-100 text-purple-600" },
-    { icon: Trophy, label: "Avg Score", value: `${avgScore}%`, color: "bg-green-100 text-green-600" },
-    { icon: Code, label: "Code Runs", value: stats.codeRuns, color: "bg-amber-100 text-amber-600" },
-    { icon: Target, label: "Lessons Viewed", value: stats.lessonsViewed, color: "bg-rose-100 text-rose-600" },
-    { icon: TrendingUp, label: "Total Questions", value: stats.totalQuestions, color: "bg-cyan-100 text-cyan-600" },
+    { icon: BookOpen, label: "Courses Started", value: stats.coursesStarted.length, color: "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400" },
+    { icon: Brain, label: "Quizzes Taken", value: stats.quizzesTaken, color: "bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400" },
+    { icon: Trophy, label: "Avg Score", value: `${avgScore}%`, color: "bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400" },
+    { icon: Code, label: "Code Runs", value: stats.codeRuns, color: "bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400" },
+    { icon: Target, label: "Lessons Viewed", value: stats.lessonsViewed, color: "bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400" },
+    { icon: TrendingUp, label: "Total Questions", value: stats.totalQuestions, color: "bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400" },
   ];
 
   return (
@@ -21,14 +21,14 @@ export default function DashboardStats() {
       {cards.map((card) => {
         const Icon = card.icon;
         return (
-          <div key={card.label} className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+          <div key={card.label} className="bg-white dark:bg-dark-800 p-5 rounded-xl border border-gray-100 dark:border-dark-700 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-3">
               <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${card.color}`}>
                 <Icon className="w-5 h-5" />
               </div>
-              <span className="text-sm text-dark-500 font-medium">{card.label}</span>
+              <span className="text-sm text-dark-500 dark:text-dark-400 font-medium">{card.label}</span>
             </div>
-            <div className="text-3xl font-bold text-dark-900">{card.value}</div>
+            <div className="text-3xl font-bold text-dark-900 dark:text-dark-100 animate-count-up">{card.value}</div>
           </div>
         );
       })}

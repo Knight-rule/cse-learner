@@ -50,11 +50,11 @@ export default function HomePage() {
       </section>
 
       {/* Features */}
-      <section className="py-20">
+      <section className="py-20 dark:bg-dark-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Everything You Need</h2>
-            <p className="text-dark-500 text-lg max-w-2xl mx-auto">
+            <p className="text-dark-500 dark:text-dark-400 text-lg max-w-2xl mx-auto">
               A complete learning platform designed for CSE students
             </p>
           </div>
@@ -62,12 +62,12 @@ export default function HomePage() {
             {features.map((f) => {
               const Icon = f.icon;
               return (
-                <div key={f.title} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mb-4">
-                    <Icon className="w-6 h-6 text-primary-600" />
+                <div key={f.title} className="bg-white dark:bg-dark-800 p-6 rounded-2xl border border-gray-100 dark:border-dark-700 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
+                  <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-xl flex items-center justify-center mb-4">
+                    <Icon className="w-6 h-6 text-primary-600 dark:text-primary-400" />
                   </div>
                   <h3 className="font-semibold text-lg mb-2">{f.title}</h3>
-                  <p className="text-dark-500 text-sm">{f.desc}</p>
+                  <p className="text-dark-500 dark:text-dark-400 text-sm">{f.desc}</p>
                 </div>
               );
             })}
@@ -76,14 +76,14 @@ export default function HomePage() {
       </section>
 
       {/* Courses Grid */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50 dark:bg-dark-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-12">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold mb-2">Core Courses</h2>
-              <p className="text-dark-500 text-lg">Master the fundamentals of CS</p>
+              <p className="text-dark-500 dark:text-dark-400 text-lg">Master the fundamentals of CS</p>
             </div>
-            <Link href="/courses" className="hidden md:flex items-center gap-1 text-primary-600 font-medium hover:text-primary-700">
+            <Link href="/courses" className="hidden md:flex items-center gap-1 text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300">
               View All <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
@@ -92,16 +92,16 @@ export default function HomePage() {
               <Link
                 key={course.slug}
                 href={`/courses/${course.slug}`}
-                className="group bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1"
+                className="group bg-white dark:bg-dark-900 p-6 rounded-2xl border border-gray-100 dark:border-dark-700 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1"
               >
                 <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${course.color} flex items-center justify-center text-2xl mb-4`}>
                   {course.icon}
                 </div>
-                <h3 className="font-bold text-xl mb-2 group-hover:text-primary-600 transition-colors">{course.title}</h3>
-                <p className="text-dark-500 text-sm mb-4">{course.description}</p>
+                <h3 className="font-bold text-xl mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">{course.title}</h3>
+                <p className="text-dark-500 dark:text-dark-400 text-sm mb-4">{course.description}</p>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-dark-400">{course.lessons.length} lessons</span>
-                  <span className="text-primary-600 font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
+                  <span className="text-dark-400 dark:text-dark-500">{course.lessons.length} lessons</span>
+                  <span className="text-primary-600 dark:text-primary-400 font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
                     Start <ChevronRight className="w-4 h-4" />
                   </span>
                 </div>
@@ -112,10 +112,10 @@ export default function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20">
+      <section className="py-20 dark:bg-dark-900">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Level Up?</h2>
-          <p className="text-dark-500 text-lg mb-8">
+          <p className="text-dark-500 dark:text-dark-400 text-lg mb-8">
             Start with any course and track your progress. All content is free and open.
           </p>
           <Link

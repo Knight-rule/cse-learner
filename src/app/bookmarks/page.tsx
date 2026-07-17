@@ -27,10 +27,10 @@ export default function BookmarksPage() {
   };
 
   return (
-    <div className="py-12">
+    <div className="py-12 dark:bg-dark-900 min-h-screen">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-2 text-dark-400 text-sm mb-6">
-          <Link href="/" className="hover:text-primary-600">Home</Link>
+        <div className="flex items-center gap-2 text-dark-400 dark:text-dark-500 text-sm mb-6">
+          <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">Home</Link>
           <ChevronRight className="w-4 h-4" />
           <span>Bookmarks</span>
         </div>
@@ -44,7 +44,7 @@ export default function BookmarksPage() {
           <div className="text-center py-16">
             <div className="text-6xl mb-4">📚</div>
             <h2 className="text-2xl font-bold mb-2">No bookmarks yet</h2>
-            <p className="text-dark-500 mb-6">
+            <p className="text-dark-500 dark:text-dark-400 mb-6">
               Save lessons you want to revisit later by clicking the bookmark icon.
             </p>
             <Link
@@ -59,28 +59,28 @@ export default function BookmarksPage() {
             {bookmarks.map((bm, i) => (
               <div
                 key={i}
-                className="flex items-center gap-4 p-5 bg-white rounded-xl border border-gray-100 shadow-sm"
+                className="flex items-center gap-4 p-5 bg-white dark:bg-dark-800 rounded-xl border border-gray-100 dark:border-dark-700 shadow-sm"
               >
                 <Bookmark className="w-5 h-5 text-yellow-500 shrink-0" fill="currentColor" />
                 <div className="flex-1 min-w-0">
                   <Link
                     href={bm.lessonId ? `/courses/${bm.slug}/lessons/${bm.lessonId}` : `/courses/${bm.slug}`}
-                    className="font-semibold hover:text-primary-600 transition-colors"
+                    className="font-semibold hover:text-primary-600 dark:hover:text-primary-400 transition-colors dark:text-dark-100"
                   >
                     {bm.title}
                   </Link>
-                  <p className="text-dark-400 text-sm">{bm.courseTitle}</p>
+                  <p className="text-dark-400 dark:text-dark-500 text-sm">{bm.courseTitle}</p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <Link
                     href={bm.lessonId ? `/courses/${bm.slug}/lessons/${bm.lessonId}` : `/courses/${bm.slug}`}
-                    className="p-2 text-dark-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                    className="p-2 text-dark-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
                   >
                     <ExternalLink className="w-4 h-4" />
                   </Link>
                   <button
                     onClick={() => remove(i)}
-                    className="p-2 text-dark-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                    className="p-2 text-dark-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>

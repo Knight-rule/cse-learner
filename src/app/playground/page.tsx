@@ -6,5 +6,9 @@ export const metadata = {
 };
 
 export default function PlaygroundPage() {
-  return <Playground />;
+  return (
+    <div className="dark:bg-dark-900 min-h-screen">
+      <Playground />
+    </div>
+  );
 }

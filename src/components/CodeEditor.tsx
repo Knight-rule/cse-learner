@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Play, Copy, Check } from "lucide-react";
+import { Copy, Check } from "lucide-react";
 
 interface CodeEditorProps {
   code: string;
@@ -14,6 +14,7 @@ const languageLabels: Record<string, string> = {
   python: "Python",
   sql: "SQL",
   c: "C",
+  cpp: "C++",
   html: "HTML",
   css: "CSS",
   tsx: "React TSX",
@@ -29,7 +30,7 @@ export default function CodeEditor({ code, language = "typescript" }: CodeEditor
   };
 
   return (
-    <div className="rounded-xl overflow-hidden border border-dark-200 shadow-lg">
+    <div className="rounded-xl overflow-hidden border border-dark-200 dark:border-dark-700 shadow-lg">
       <div className="flex items-center justify-between bg-dark-900 px-4 py-2">
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
