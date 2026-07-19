@@ -81,9 +81,14 @@ export default async function CoursePage({ params }: { params: { slug: string } 
               <p className="body-sm">{course.quiz.length} questions to check your understanding</p>
             </div>
           </div>
-          <Link href={"/quiz?course=" + course.slug} className="btn btn-primary" style={{ marginTop: 16 }}>
-            Take Quiz <ArrowRight size={16} />
-          </Link>
+          <div className="flex flex-wrap gap-3">
+            <Link href={"/quiz?course=" + course.slug} className="btn btn-primary">
+              Take Quiz <ArrowRight size={16} />
+            </Link>
+            <Link href={"/courses/" + course.slug + "/lessons/1"} className="btn btn-outline">
+              Start Learning <ArrowRight size={16} />
+            </Link>
+          </div>
         </div>
       </div>
     </div>
