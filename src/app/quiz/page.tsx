@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { ChevronRight, BookOpen, Filter } from "lucide-react";
+import { ChevronRight, BookOpen, Filter, Brain, Zap } from "lucide-react";
 import Link from "next/link";
 import { courses, getCourse } from "@/data/courses";
 import Quiz from "@/components/Quiz";
@@ -55,6 +55,27 @@ export default function QuizPage() {
 
         {!selectedCourse ? (
           <div className="lesson-list">
+            <Link
+              href="/quiz/srs"
+              className="lesson-item"
+              style={{
+                cursor: "pointer",
+                textAlign: "left",
+                border: "1px solid var(--accent-primary)",
+                background: "linear-gradient(135deg, var(--accent-primary)/10, var(--accent-secondary)/10)",
+              }}
+            >
+              <div style={{ width: 48, height: 48, borderRadius: "var(--radius-md)", background: "var(--gradient)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, flexShrink: 0 }}>
+                <Brain size={24} style={{ color: "white" }} />
+              </div>
+              <div className="flex-1">
+                <h3 className="heading-sm">Spaced Repetition Review</h3>
+                <p className="body-sm" style={{ marginTop: 4 }}>
+                  AI-powered review schedule · SM-2 algorithm · Long-term retention
+                </p>
+              </div>
+              <Zap size={18} style={{ color: "var(--accent-primary)", flexShrink: 0 }} />
+            </Link>
             {courses.map((c) => {
               const colors = c.color.split(" ");
               return (

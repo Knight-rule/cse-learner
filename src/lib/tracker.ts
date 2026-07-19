@@ -1,3 +1,5 @@
+import { SRSCard, createSRSCard, calculateSM2, getDueCards, getSRSStats } from "./srs";
+
 export interface Activity {
   id: string;
   type: "quiz" | "practice" | "lesson" | "course_start";
@@ -19,6 +21,7 @@ export interface LearnerStats {
 }
 
 const STORAGE_KEY = "cse-learner-data";
+const SRS_STORAGE_KEY = "cse-learner-srs";
 
 function getData(): LearnerStats {
   if (typeof window === "undefined") {
@@ -34,6 +37,20 @@ function getData(): LearnerStats {
 function saveData(data: LearnerStats) {
   if (typeof window === "undefined") return;
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
+}
+
+function getSRSData(): SRSCard[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(SRS_STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return [];
+}
+
+function saveSRSData(cards: SRSCard[]) {
+  if (typeof window === "undefined") return;
+  try { localStorage.setItem(SRS_STORAGE_KEY, JSON.stringify(cards)); } catch {}
 }
 
 function addActivity(activity: Omit<Activity, "id" | "timestamp">) {
@@ -91,4 +108,47 @@ export function getAvgScore(): number {
   const data = getData();
   if (data.totalQuestions === 0) return 0;
   return Math.round((data.totalScore / data.totalQuestions) * 100);
+}
+
+// SRS Functions
+export function getSRSCards(): SRSCard[] {
+  return getSRSData();
+}
+
+export function getOrCreateSRSCard(questionId: string, courseSlug: string): SRSCard {
+  const cards = getSRSData();
+  let card = cards.find((c) => c.id === `${courseSlug}-${questionId}`);
+  if (!card) {
+    card = createSRSCard(questionId, courseSlug);
+    cards.push(card);
+    saveSRSData(cards);
+  }
+  return card;
+}
+
+export function reviewSRSCard(questionId: string, courseSlug: string, quality: 0 | 1 | 2 | 3 | 4 | 5) {
+  const cards = getSRSData();
+  const index = cards.findIndex((c) => c.id === `${courseSlug}-${questionId}`);
+  if (index === -1) return null;
+
+  const result = calculateSM2(cards[index], quality);
+  cards[index] = result.card;
+  saveSRSData(cards);
+  return result;
+}
+
+export function getDueSRSCards(courseSlug?: string): SRSCard[] {
+  const cards = getSRSData();
+  let due = getDueCards(cards);
+  if (courseSlug) due = due.filter((c) => c.courseSlug === courseSlug);
+  return due;
+}
+
+export function getSRSStatsForCourse(courseSlug: string) {
+  const cards = getSRSData().filter((c) => c.courseSlug === courseSlug);
+  return getSRSStats(cards);
+}
+
+export function getAllSRSStats() {
+  return getSRSStats(getSRSData());
 }
