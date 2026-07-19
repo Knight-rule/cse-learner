@@ -6,13 +6,13 @@ import { BookOpen, Code, Home, Brain, Bookmark, Sun, Moon } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const navLinks = [
-  { href: "/", label: "Home", icon: Home },
-  { href: "/courses", label: "Courses", icon: BookOpen },
-  { href: "/languages", label: "Languages", icon: Code },
-  { href: "/playground", label: "Playground", icon: Code },
-  { href: "/quiz", label: "Quiz", icon: Brain },
-  { href: "/dashboard", label: "Dashboard", icon: Home },
-  { href: "/bookmarks", label: "Bookmarks", icon: Bookmark },
+  { href: "/", label: "Home", icon: Home, color: "#ff6b6b" },
+  { href: "/courses", label: "Courses", icon: BookOpen, color: "#4ecdc4" },
+  { href: "/languages", label: "Languages", icon: Code, color: "#9c27b0" },
+  { href: "/playground", label: "Playground", icon: Code, color: "#ffb347" },
+  { href: "/quiz", label: "Quiz", icon: Brain, color: "#42a5f5" },
+  { href: "/dashboard", label: "Dashboard", icon: Home, color: "#66bb6a" },
+  { href: "/bookmarks", label: "Bookmarks", icon: Bookmark, color: "#ff6fa8" },
 ];
 
 export default function Navbar() {
@@ -45,18 +45,19 @@ export default function Navbar() {
     <nav className={`premium-nav ${scrolled ? "scrolled" : ""} ${dark ? "dark-mode" : ""}`}>
       <div className="nav-container">
         <Link href="/" className="logo">
-          CSE Learner
+          <span style={{ color: '#ff6b6b', fontWeight: '800' }}>CSE</span>
+          <span style={{ color: '#4ecdc4', fontWeight: '600' }}>Learner</span>
         </Link>
 
         <button
-          className="md:hidden p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
+          className="md:hidden p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-expanded={mobileOpen}
           aria-label="Toggle navigation menu"
         >
           {mobileOpen ? 
-            <span className="text-xl text-dark">×</span> : 
-            <span className="text-xl text-dark">☰</span>
+            <span className="text-xl text-dark font-bold">×</span> : 
+            <span className="text-xl text-dark font-bold">☰</span>
           }
         </button>
 
@@ -70,25 +71,27 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 aria-current={active ? "page" : undefined}
-                className={`flex items-center gap-2 px-3 py-2 transition-all ${
-                  active
-                    ? "text-blue font-medium"
-                    : "text-dark dark:text-gray-300 hover:text-blue hover:bg-gray-50 dark:hover:bg-gray-800"
-                }`}
+                className={`flex items-center gap-2 px-3 py-2 transition-all rounded-lg 
+                  ${active 
+                    ? "text-white font-semibold shadow-sm" 
+                    : "text-dark dark:text-gray-300 hover:text-white hover:shadow-md"
+                  }
+                  style={active ? { background: link.color, color: 'white' } : {}}
+                `}
               >
-                <Icon className="w-4 h-4" />
-                {link.label}
+                <Icon className="w-4 h-4" style={active ? { color: 'white' } : { color: link.color }} />
+                <span style={active ? { color: 'white', fontWeight: '600' } : {}}>{link.label}</span>
               </Link>
             );
           })}
           <button
             onClick={toggleDark}
-            className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300"
             aria-label="Toggle dark mode"
           >
             {dark ? 
-              <Sun className="w-5 h-5 text-yellow-500" /> : 
-              <Moon className="w-5 h-5 text-blue-600" />
+              <Sun className="w-5 h-5 text-yellow-500 animate-pulse" /> : 
+              <Moon className="w-5 h-5 text-blue-600 animate-pulse" />
             }
           </button>
         </div>
@@ -105,14 +108,13 @@ export default function Navbar() {
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
                 aria-current={active ? "page" : undefined}
-                className={`flex items-center gap-3 px-4 py-3 text-sm font-medium border-l-4 ${
-                  active
-                    ? "border-blue bg-blue-50 dark:bg-blue-900/20 text-blue dark:text-blue-400"
-                    : "border-transparent text-dark dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                className={`flex items-center gap-3 px-4 py-3 text-sm font-medium border-l-4 ${active 
+                  ? "border-blue bg-blue-50 dark:bg-blue-900/20 text-blue dark:text-blue-400" 
+                  : "border-transparent text-dark dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                 }`}
               >
-                <Icon className="w-5 h-5" />
-                {link.label}
+                <Icon className="w-5 h-5" style={active ? { color: link.color } : {}} />
+                <span style={active ? { color: link.color, fontWeight: '600' } : {}}>{link.label}</span>
               </Link>
             );
           })}
