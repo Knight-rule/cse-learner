@@ -24,11 +24,11 @@ export default function Navbar() {
   useEffect(() => {
     const isDark = document.documentElement.classList.contains("dark");
     setDark(isDark);
-    
+
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
     };
-    
+
     handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -41,12 +41,18 @@ export default function Navbar() {
     localStorage.setItem("cse-theme", next ? "dark" : "light");
   };
 
+  const navClass = [
+    "premium-nav",
+    scrolled ? "scrolled" : "",
+    dark ? "dark-mode" : "",
+  ].filter(Boolean).join(" ");
+
   return (
-    <nav className={`premium-nav ${scrolled ? "scrolled" : ""} ${dark ? "dark-mode" : ""}`}>
+    <nav className={navClass}>
       <div className="nav-container">
         <Link href="/" className="logo">
-          <span style={{ color: '#ff6b6b', fontWeight: '800' }}>CSE</span>
-          <span style={{ color: '#4ecdc4', fontWeight: '600' }}>Learner</span>
+          <span style={{ color: "#ff6b6b", fontWeight: "800" }}>CSE</span>
+          <span style={{ color: "#4ecdc4", fontWeight: "600" }}>Learner</span>
         </Link>
 
         <button
@@ -55,32 +61,36 @@ export default function Navbar() {
           aria-expanded={mobileOpen}
           aria-label="Toggle navigation menu"
         >
-          {mobileOpen ? 
-            <span className="text-xl text-dark font-bold">×</span> : 
+          {mobileOpen ? (
+            <span className="text-xl text-dark font-bold">×</span>
+          ) : (
             <span className="text-xl text-dark font-bold">☰</span>
-          }
+          )}
         </button>
 
-        <div className={`nav-links ${mobileOpen ? 'mobile-open' : ''}`
-        >
+        <div className={"nav-links" + (mobileOpen ? " mobile-open" : "")}>
           {navLinks.map((link) => {
             const Icon = link.icon;
-            const active = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
+            const active =
+              pathname === link.href ||
+              (link.href !== "/" && pathname.startsWith(link.href));
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 aria-current={active ? "page" : undefined}
-                className={`flex items-center gap-2 px-3 py-2 transition-all rounded-lg 
-                  ${active 
-                    ? "text-white font-semibold shadow-sm" 
-                    : "text-dark dark:text-gray-300 hover:text-white hover:shadow-md"
-                  }
-                  style={active ? { background: link.color, color: 'white' } : {}}
-                `}
+                className="flex items-center gap-2 px-3 py-2 transition-all rounded-lg"
+                style={
+                  active
+                    ? { background: link.color, color: "white", fontWeight: "600" }
+                    : {}
+                }
               >
-                <Icon className="w-4 h-4" style={active ? { color: 'white' } : { color: link.color }} />
-                <span style={active ? { color: 'white', fontWeight: '600' } : {}}>{link.label}</span>
+                <Icon
+                  className="w-4 h-4"
+                  style={active ? { color: "white" } : { color: link.color }}
+                />
+                <span>{link.label}</span>
               </Link>
             );
           })}
@@ -89,10 +99,11 @@ export default function Navbar() {
             className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300"
             aria-label="Toggle dark mode"
           >
-            {dark ? 
-              <Sun className="w-5 h-5 text-yellow-500 animate-pulse" /> : 
+            {dark ? (
+              <Sun className="w-5 h-5 text-yellow-500 animate-pulse" />
+            ) : (
               <Moon className="w-5 h-5 text-blue-600 animate-pulse" />
-            }
+            )}
           </button>
         </div>
       </div>
@@ -101,20 +112,29 @@ export default function Navbar() {
         <div className="md:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-dark">
           {navLinks.map((link) => {
             const Icon = link.icon;
-            const active = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
+            const active =
+              pathname === link.href ||
+              (link.href !== "/" && pathname.startsWith(link.href));
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
                 aria-current={active ? "page" : undefined}
-                className={`flex items-center gap-3 px-4 py-3 text-sm font-medium border-l-4 ${active 
-                  ? "border-blue bg-blue-50 dark:bg-blue-900/20 text-blue dark:text-blue-400" 
-                  : "border-transparent text-dark dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-                }`}
+                className="flex items-center gap-3 px-4 py-3 text-sm font-medium border-l-4"
+                style={
+                  active
+                    ? {
+                        borderColor: link.color,
+                        background: link.color + "15",
+                        color: link.color,
+                        fontWeight: "600",
+                      }
+                    : { borderColor: "transparent" }
+                }
               >
                 <Icon className="w-5 h-5" style={active ? { color: link.color } : {}} />
-                <span style={active ? { color: link.color, fontWeight: '600' } : {}}>{link.label}</span>
+                <span>{link.label}</span>
               </Link>
             );
           })}
