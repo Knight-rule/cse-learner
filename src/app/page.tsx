@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ChevronRight, Zap, Code, BookOpen, Brain, Users, Trophy, Laptop, Target, GraduationCap, Rocket } from "lucide-react";
+import { ArrowRight, ChevronRight, Zap, Code, BookOpen, Brain, Users, Trophy, Laptop, Target, GraduationCap, Rocket, ExternalLink } from "lucide-react";
 import { courses } from "@/data/courses";
 
 const features = [
@@ -153,36 +153,47 @@ export default function HomePage() {
             {courses.map((course) => {
               const colors = course.color.split(" ");
               return (
-                <Link
-                  key={course.slug}
-                  href={"/courses/" + course.slug}
-                  className="course-card-aiv glass-card-glow"
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
-                    <div style={{
-                      width: 56, height: 56, borderRadius: "var(--radius-lg)",
-                      background: "linear-gradient(135deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")",
-                      display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, flexShrink: 0
-                    }}>
-                      {course.icon}
+                <div key={course.slug} className="course-card-aiv glass-card-glow" style={{ position: "relative" }}>
+                  <Link
+                    href={"/courses/" + course.slug}
+                    style={{ textDecoration: "none", color: "inherit", display: "block" }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
+                      <div style={{
+                        width: 56, height: 56, borderRadius: "var(--radius-lg)",
+                        background: "linear-gradient(135deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")",
+                        display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, flexShrink: 0
+                      }}>
+                        {course.icon}
+                      </div>
+                      <div>
+                        <h3 className="course-title" style={{ marginBottom: 0 }}>{course.title}</h3>
+                        <p className="body-sm">{course.lessons.length} lessons · {course.quiz.length} quiz questions</p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="course-title" style={{ marginBottom: 0 }}>{course.title}</h3>
-                      <p className="body-sm">{course.lessons.length} lessons · {course.quiz.length} quiz questions</p>
+                    <ul className="course-features">
+                      {course.lessons.slice(0, 3).map((l) => (
+                        <li key={l.id}>{l.title}</li>
+                      ))}
+                    </ul>
+                    <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--border)" }}>
+                      <span className="flex items-center gap-2" style={{ color: "var(--accent)", fontWeight: 600, fontSize: 14 }}>
+                        Start Learning <ChevronRight size={14} />
+                      </span>
                     </div>
-                  </div>
-                  <ul className="course-features">
-                    {course.lessons.slice(0, 3).map((l) => (
-                      <li key={l.id}>{l.title}</li>
-                    ))}
-                  </ul>
-                  <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--border)" }}>
-                    <span className="flex items-center gap-2" style={{ color: "var(--accent)", fontWeight: 600, fontSize: 14 }}>
-                      Start Learning <ChevronRight size={14} />
-                    </span>
-                  </div>
-                </Link>
+                  </Link>
+                  {course.notesUrl && (
+                    <a
+                      href={course.notesUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1"
+                      style={{ color: "var(--accent-purple)", fontWeight: 600, fontSize: 13, textDecoration: "none", position: "absolute", top: 16, right: 16 }}
+                    >
+                      Notes <ExternalLink size={12} />
+                    </a>
+                  )}
+                </div>
               );
             })}
           </div>

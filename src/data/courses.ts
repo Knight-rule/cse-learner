@@ -1,4 +1,4 @@
-import { cLanguageQuestions } from "./questions/c-all";
+﻿import { cLanguageQuestions } from "./questions/c-all";
 import { cppQuestions } from "./questions/cpp-all";
 
 export interface Lesson {
@@ -20,11 +20,13 @@ export interface QuizQuestion {
 }
 
 export interface Course {
-  slug: string;
   title: string;
+  slug: string;
   description: string;
   icon: string;
   color: string;
+  tags?: string[];
+  notesUrl?: string;
   lessons: Lesson[];
   quiz: QuizQuestion[];
 }
@@ -34,7 +36,8 @@ export const courses: Course[] = [
     slug: "data-structures",
     title: "Data Structures",
     description: "Master arrays, linked lists, trees, graphs, hash tables and more.",
-    icon: "🌳",
+    icon: "ðŸŒ³",
+    notesUrl: "https://noteslink.in/product/ds-data-structure-kiit/",
     color: "from-emerald-500 to-teal-600",
     lessons: [
       {
@@ -84,7 +87,7 @@ export const courses: Course[] = [
       {
         id: "ds1",
         question: "What is the time complexity of accessing an element in an array by index?",
-        options: ["O(n)", "O(log n)", "O(1)", "O(n²)"],
+        options: ["O(n)", "O(log n)", "O(1)", "O(nÂ²)"],
         correctIndex: 2,
         explanation: "Arrays provide constant-time O(1) random access because elements are stored in contiguous memory locations."
       },
@@ -115,13 +118,14 @@ export const courses: Course[] = [
     slug: "algorithms",
     title: "Algorithms",
     description: "Learn sorting, searching, dynamic programming, and greedy algorithms.",
-    icon: "⚡",
+    icon: "âš¡",
+    notesUrl: "https://noteslink.in/product/daa-design-and-analysis-of-algorithm-kiit/",
     color: "from-amber-500 to-orange-600",
     lessons: [
       {
         id: "1",
         title: "Sorting Algorithms",
-        content: "Sorting is fundamental to computer science.\n\nComparison-based sorts (O(n log n) lower bound):\n- Quick Sort: O(n log n) avg, O(n²) worst\n- Merge Sort: O(n log n) guaranteed\n- Heap Sort: O(n log n) guaranteed\n\nNon-comparison sorts (can beat O(n log n)):\n- Counting Sort: O(n + k)\n- Radix Sort: O(d × (n + k))\n- Bucket Sort: O(n + k) average",
+        content: "Sorting is fundamental to computer science.\n\nComparison-based sorts (O(n log n) lower bound):\n- Quick Sort: O(n log n) avg, O(nÂ²) worst\n- Merge Sort: O(n log n) guaranteed\n- Heap Sort: O(n log n) guaranteed\n\nNon-comparison sorts (can beat O(n log n)):\n- Counting Sort: O(n + k)\n- Radix Sort: O(d Ã— (n + k))\n- Bucket Sort: O(n + k) average",
         codeExample: `// Quick Sort\nfunction quickSort(arr: number[]): number[] {\n  if (arr.length <= 1) return arr;\n  const pivot = arr[Math.floor(arr.length / 2)];\n  const left = arr.filter(x => x < pivot);\n  const mid = arr.filter(x => x === pivot);\n  const right = arr.filter(x => x > pivot);\n  return [...quickSort(left), ...mid, ...quickSort(right)];\n}\n\n// Merge Sort\nfunction mergeSort(arr: number[]): number[] {\n  if (arr.length <= 1) return arr;\n  const mid = Math.floor(arr.length / 2);\n  const left = mergeSort(arr.slice(0, mid));\n  const right = mergeSort(arr.slice(mid));\n  return merge(left, right);\n}\n\nfunction merge(l: number[], r: number[]): number[] {\n  const result: number[] = [];\n  let i = 0, j = 0;\n  while (i < l.length && j < r.length) {\n    result.push(l[i] <= r[j] ? l[i++] : r[j++]);\n  }\n  return result.concat(l.slice(i), r.slice(j));\n}`,
         language: "typescript"
       },
@@ -151,7 +155,7 @@ export const courses: Course[] = [
       {
         id: "algo1",
         question: "What is the average time complexity of Quick Sort?",
-        options: ["O(n)", "O(n log n)", "O(n²)", "O(log n)"],
+        options: ["O(n)", "O(n log n)", "O(nÂ²)", "O(log n)"],
         correctIndex: 1,
         explanation: "Quick Sort has O(n log n) average time complexity due to its divide-and-conquer approach."
       },
@@ -175,13 +179,14 @@ export const courses: Course[] = [
     slug: "operating-systems",
     title: "Operating Systems",
     description: "Understand processes, threads, memory management, and file systems.",
-    icon: "🖥️",
+    icon: "ðŸ–¥ï¸",
+    notesUrl: "https://noteslink.in/product/os-notes/",
     color: "from-violet-500 to-purple-600",
     lessons: [
       {
         id: "1",
         title: "Processes & Threads",
-        content: "Process: A program in execution with its own memory space.\nThread: A lightweight process sharing the same memory space.\n\nProcess states: New → Ready → Running → Waiting → Terminated\n\nContext switching: Saving and restoring the state of a process.\n\nProcess vs Thread:\n- Process isolation: separate address space\n- Thread: shared memory, cheaper to create/switch\n- Communication: IPC (pipes, shared memory, sockets) vs shared memory",
+        content: "Process: A program in execution with its own memory space.\nThread: A lightweight process sharing the same memory space.\n\nProcess states: New â†’ Ready â†’ Running â†’ Waiting â†’ Terminated\n\nContext switching: Saving and restoring the state of a process.\n\nProcess vs Thread:\n- Process isolation: separate address space\n- Thread: shared memory, cheaper to create/switch\n- Communication: IPC (pipes, shared memory, sockets) vs shared memory",
         codeExample: `// Process creation example in C\n#include <stdio.h>\n#include <unistd.h>\n\nint main() {\n  pid_t pid = fork();\n  if (pid == 0) {\n    printf("Child process\\n");\n  } else if (pid > 0) {\n    printf("Parent process, child PID: %d\\n", pid);\n    wait(NULL);\n  } else {\n    perror("fork failed");\n  }\n  return 0;\n}`,
         language: "c"
       },
@@ -195,7 +200,7 @@ export const courses: Course[] = [
       {
         id: "3",
         title: "Memory Management",
-        content: "Virtual memory maps logical addresses to physical addresses.\n\nPaging:\n- Fixed-size blocks (pages)\n- Page table maps virtual → physical\n- TLB caches recent translations\n\nSegmentation:\n- Variable-size segments based on logical divisions\n\nPage replacement algorithms:\n- FIFO: Replace oldest page\n- LRU: Replace least recently used\n- Optimal: Replace page not used for longest time (theoretical)",
+        content: "Virtual memory maps logical addresses to physical addresses.\n\nPaging:\n- Fixed-size blocks (pages)\n- Page table maps virtual â†’ physical\n- TLB caches recent translations\n\nSegmentation:\n- Variable-size segments based on logical divisions\n\nPage replacement algorithms:\n- FIFO: Replace oldest page\n- LRU: Replace least recently used\n- Optimal: Replace page not used for longest time (theoretical)",
         codeExample: `// LRU Cache implementation\nclass LRUCache {\n  private cache: Map<number, number>;\n  private capacity: number;\n\n  constructor(capacity: number) {\n    this.capacity = capacity;\n    this.cache = new Map();\n  }\n\n  get(key: number): number {\n    if (!this.cache.has(key)) return -1;\n    const value = this.cache.get(key)!;\n    this.cache.delete(key);\n    this.cache.set(key, value);\n    return value;\n  }\n\n  put(key: number, value: number): void {\n    if (this.cache.has(key)) this.cache.delete(key);\n    this.cache.set(key, value);\n    if (this.cache.size > this.capacity) {\n      const firstKey = this.cache.keys().next().value!;\n      this.cache.delete(firstKey);\n    }\n  }\n}`,
         language: "typescript"
       },
@@ -235,7 +240,8 @@ export const courses: Course[] = [
     slug: "dbms",
     title: "Database Systems",
     description: "SQL, normalization, indexing, transactions, and query optimization.",
-    icon: "🗄️",
+    icon: "ðŸ—„ï¸",
+    notesUrl: "https://noteslink.in/product/dbms-notes-kiit/",
     color: "from-rose-500 to-pink-600",
     lessons: [
       {
@@ -295,7 +301,8 @@ export const courses: Course[] = [
     slug: "computer-networks",
     title: "Computer Networks",
     description: "TCP/IP, OSI model, routing, HTTP, and network security.",
-    icon: "🌐",
+    icon: "ðŸŒ",
+    notesUrl: "https://noteslink.in/product/cn-computer-networks-notes-kiit-copy/",
     color: "from-cyan-500 to-blue-600",
     lessons: [
       {
@@ -355,7 +362,7 @@ export const courses: Course[] = [
     slug: "web-development",
     title: "Web Development",
     description: "HTML, CSS, JavaScript, React, and modern web technologies.",
-    icon: "💻",
+    icon: "ðŸ’»",
     color: "from-indigo-500 to-blue-600",
     lessons: [
       {
@@ -415,12 +422,13 @@ export const courses: Course[] = [
     slug: "oop",
     title: "Object-Oriented Programming",
     description: "Encapsulation, inheritance, polymorphism, and design patterns.",
-    icon: "🏗️",
+    icon: "ðŸ—ï¸",
+    notesUrl: "https://noteslink.in/product/oopj-notes-kiit/",
     color: "from-teal-500 to-emerald-600",
     lessons: [
       {
         id: "1",
-        title: "四大 pillars of OOP",
+        title: "å››å¤§ pillars of OOP",
         content: "1. Encapsulation: Bundling data with methods, hiding internals\n2. Inheritance: Creating new classes from existing ones\n3. Polymorphism: Same interface, different implementations\n4. Abstraction: Hiding complexity, showing only essentials\n\nSOLID Principles:\n- Single Responsibility\n- Open/Closed\n- Liskov Substitution\n- Interface Segregation\n- Dependency Inversion",
         codeExample: `// Encapsulation\nclass BankAccount {\n  private balance: number;\n\n  constructor(initialBalance: number) {\n    this.balance = initialBalance;\n  }\n\n  deposit(amount: number): void {\n    if (amount > 0) this.balance += amount;\n  }\n\n  withdraw(amount: number): boolean {\n    if (amount > 0 && amount <= this.balance) {\n      this.balance -= amount;\n      return true;\n    }\n    return false;\n  }\n\n  getBalance(): number {\n    return this.balance;\n  }\n}\n\n// Inheritance & Polymorphism\nclass Animal {\n  speak(): string { return '...'; }\n}\n\nclass Dog extends Animal {\n  speak(): string { return 'Woof!'; }\n}\n\nclass Cat extends Animal {\n  speak(): string { return 'Meow!'; }\n}\n\nfunction makeSound(animal: Animal): string {\n  return animal.speak(); // Polymorphism\n}`,
         language: "typescript"
@@ -468,7 +476,7 @@ export const courses: Course[] = [
     slug: "python",
     title: "Python",
     description: "Learn Python from basics to advanced concepts with real examples.",
-    icon: "🐍",
+    icon: "ðŸ",
     color: "from-yellow-400 to-yellow-600",
     lessons: [
       {
@@ -528,7 +536,7 @@ export const courses: Course[] = [
     slug: "java",
     title: "Java",
     description: "Master Java programming from OOP to collections and multithreading.",
-    icon: "☕",
+    icon: "â˜•",
     color: "from-red-500 to-red-700",
     lessons: [
       {
@@ -588,7 +596,7 @@ export const courses: Course[] = [
     slug: "c-language",
     title: "C Language",
     description: "Master C programming from fundamentals to pointers, memory management, and data structures.",
-    icon: "⚙️",
+    icon: "âš™ï¸",
     color: "from-blue-500 to-indigo-600",
     lessons: [
       {
@@ -633,7 +641,7 @@ export const courses: Course[] = [
     slug: "cpp",
     title: "C++",
     description: "Master C++ with OOP, STL, templates, and modern C++ features.",
-    icon: "🔷",
+    icon: "ðŸ”·",
     color: "from-indigo-500 to-purple-600",
     lessons: [
       {
@@ -671,7 +679,7 @@ export const courses: Course[] = [
     slug: "javascript",
     title: "JavaScript",
     description: "Modern JavaScript from ES6+ to async programming and DOM manipulation.",
-    icon: "📜",
+    icon: "ðŸ“œ",
     color: "from-yellow-400 to-amber-500",
     lessons: [
       {
@@ -731,13 +739,14 @@ export const courses: Course[] = [
     slug: "computer-architecture",
     title: "Computer Architecture (COA)",
     description: "Understand CPU design, memory hierarchy, pipelining, and instruction set architectures.",
-    icon: "🖥️",
+    icon: "ðŸ–¥ï¸",
+    notesUrl: "https://noteslink.in/product/coa-computer-architecture-notes/",
     color: "from-cyan-500 to-blue-600",
     lessons: [
       {
         id: "1",
         title: "Fundamentals of Computer Architecture",
-        content: "Computer architecture defines the structure and behavior of a computer system. It encompasses the design of the CPU, memory system, and I/O mechanisms.\n\nKey concepts:\n- **Von Neumann Architecture**: Shared memory for instructions and data\n- **Harvard Architecture**: Separate memories for instructions and data\n- **Instruction Cycle**: Fetch → Decode → Execute → Store\n- **Bus**: Address bus, Data bus, Control bus\n\nPerformance equation:\n```\nExecution Time = Instruction Count × CPI × Clock Period\n```\n\nWhere CPI = Cycles Per Instruction.",
+        content: "Computer architecture defines the structure and behavior of a computer system. It encompasses the design of the CPU, memory system, and I/O mechanisms.\n\nKey concepts:\n- **Von Neumann Architecture**: Shared memory for instructions and data\n- **Harvard Architecture**: Separate memories for instructions and data\n- **Instruction Cycle**: Fetch â†’ Decode â†’ Execute â†’ Store\n- **Bus**: Address bus, Data bus, Control bus\n\nPerformance equation:\n```\nExecution Time = Instruction Count Ã— CPI Ã— Clock Period\n```\n\nWhere CPI = Cycles Per Instruction.",
         codeExample: `// Simulating instruction cycle
 const memory = [0x12, 0x34, 0x56, 0x78];
 let PC = 0;
@@ -780,7 +789,7 @@ setTimeout(() => pipe.addInstruction(2), 100);`,
       {
         id: "3",
         title: "Memory Hierarchy",
-        content: "**Hierarchy (fastest to slowest):**\n1. Registers (CPU) - <1 ns\n2. L1 Cache - 1-2 ns\n3. L2 Cache - 3-10 ns\n4. L3 Cache - 10-20 ns\n5. Main Memory (RAM) - 50-100 ns\n6. SSD - 10-100 μs\n7. HDD - 5-10 ms\n\n**Cache Mapping:**\n- Direct Mapped: Each memory block maps to exactly one cache line\n- Fully Associative: A block can go anywhere\n- Set Associative: Block maps to a specific set\n\n**Cache Performance:**\n```\nEffective Access Time = Hit Time + Miss Rate × Miss Penalty\n```",
+        content: "**Hierarchy (fastest to slowest):**\n1. Registers (CPU) - <1 ns\n2. L1 Cache - 1-2 ns\n3. L2 Cache - 3-10 ns\n4. L3 Cache - 10-20 ns\n5. Main Memory (RAM) - 50-100 ns\n6. SSD - 10-100 Î¼s\n7. HDD - 5-10 ms\n\n**Cache Mapping:**\n- Direct Mapped: Each memory block maps to exactly one cache line\n- Fully Associative: A block can go anywhere\n- Set Associative: Block maps to a specific set\n\n**Cache Performance:**\n```\nEffective Access Time = Hit Time + Miss Rate Ã— Miss Penalty\n```",
         codeExample: `// Simulating cache lookup
 class Cache {
   private cache: Map<number, number> = new Map();
@@ -879,13 +888,14 @@ console.log("x3 =", cpu.registers[3]);`,
     slug: "discrete-structures",
     title: "Discrete Structures (DSS)",
     description: "Explore logic, sets, relations, graph theory, combinatorics, and Boolean algebra.",
-    icon: "🔗",
+    icon: "ðŸ”—",
+    notesUrl: "https://noteslink.in/product/de-la-notes-kiit/",
     color: "from-violet-500 to-purple-600",
     lessons: [
       {
         id: "1",
         title: "Logic & Proofs",
-        content: "Logic is the foundation of mathematical reasoning and computer science.\n\n**Propositional Logic:**\n- **Negation (¬p)**: NOT\n- **Conjunction (p ∧ q)**: AND\n- **Disjunction (p ∨ q)**: OR\n- **Implication (p → q)**: IF...THEN\n- **Biconditional (p ↔ q)**: IF AND ONLY IF\n\n**Truth Table for p → q:**\n| p | q | p → q |\n|---|---|-------|\n| T | T | T |\n| T | F | F |\n| F | T | T |\n| F | F | T |\n\n**Proof Techniques:**\n- Direct proof\n- Proof by contrapositive\n- Proof by contradiction\n- Mathematical induction\n- Proof by cases",
+        content: "Logic is the foundation of mathematical reasoning and computer science.\n\n**Propositional Logic:**\n- **Negation (Â¬p)**: NOT\n- **Conjunction (p âˆ§ q)**: AND\n- **Disjunction (p âˆ¨ q)**: OR\n- **Implication (p â†’ q)**: IF...THEN\n- **Biconditional (p â†” q)**: IF AND ONLY IF\n\n**Truth Table for p â†’ q:**\n| p | q | p â†’ q |\n|---|---|-------|\n| T | T | T |\n| T | F | F |\n| F | T | T |\n| F | F | T |\n\n**Proof Techniques:**\n- Direct proof\n- Proof by contrapositive\n- Proof by contradiction\n- Mathematical induction\n- Proof by cases",
         codeExample: `// Evaluating logical expressions
 const truthTable = (p: boolean, q: boolean) => ({
   notP: !p,
@@ -895,8 +905,8 @@ const truthTable = (p: boolean, q: boolean) => ({
   pIffQ: p === q
 });
 
-console.log("T → T:", truthTable(true, true));
-console.log("T → F:", truthTable(true, false));
+console.log("T â†’ T:", truthTable(true, true));
+console.log("T â†’ F:", truthTable(true, false));
 
 // Mathematical induction: sum of 1..n = n(n+1)/2
 function sum(n: number): number {
@@ -908,7 +918,7 @@ console.log("Sum 1..10:", sum(10));`,
       {
         id: "2",
         title: "Sets, Relations & Functions",
-        content: "**Sets** are collections of distinct objects.\n\nSet operations:\n- A ∪ B (union)\n- A ∩ B (intersection)\n- A - B (difference)\n- A' (complement)\n- |A| (cardinality)\n\n**Relations** on a set A are subsets of A × A.\nProperties:\n- Reflexive: (a,a) ∈ R for all a\n- Symmetric: (a,b) ∈ R → (b,a) ∈ R\n- Transitive: (a,b) ∈ R ∧ (b,c) ∈ R → (a,c) ∈ R\n- **Equivalence relation**: reflexive + symmetric + transitive\n\n**Functions** f: A → B:\n- Injective (one-to-one)\n- Surjective (onto)\n- Bijective: both injective and surjective",
+        content: "**Sets** are collections of distinct objects.\n\nSet operations:\n- A âˆª B (union)\n- A âˆ© B (intersection)\n- A - B (difference)\n- A' (complement)\n- |A| (cardinality)\n\n**Relations** on a set A are subsets of A Ã— A.\nProperties:\n- Reflexive: (a,a) âˆˆ R for all a\n- Symmetric: (a,b) âˆˆ R â†’ (b,a) âˆˆ R\n- Transitive: (a,b) âˆˆ R âˆ§ (b,c) âˆˆ R â†’ (a,c) âˆˆ R\n- **Equivalence relation**: reflexive + symmetric + transitive\n\n**Functions** f: A â†’ B:\n- Injective (one-to-one)\n- Surjective (onto)\n- Bijective: both injective and surjective",
         codeExample: `// Set operations
 class DiscreteSet<T> {
   private elements: Set<T>;
@@ -929,14 +939,14 @@ class DiscreteSet<T> {
 
 const A = new DiscreteSet([1, 2, 3, 4]);
 const B = new DiscreteSet([3, 4, 5, 6]);
-console.log("A ∪ B:", A.union(B).size);
-console.log("A ∩ B:", A.intersection(B).size);`,
+console.log("A âˆª B:", A.union(B).size);
+console.log("A âˆ© B:", A.intersection(B).size);`,
         language: "typescript"
       },
       {
         id: "3",
         title: "Graph Theory",
-        content: "A graph G = (V, E) consists of vertices V and edges E.\n\n**Types:**\n- **Undirected**: edges have no direction\n- **Directed (Digraph)**: edges have direction\n- **Weighted**: edges have associated weights\n- **Complete**: every pair of vertices is connected\n\n**Representations:**\n- Adjacency matrix: O(V²) space\n- Adjacency list: O(V + E) space\n\n**Traversal:**\n- BFS: Level-order, uses queue\n- DFS: Depth-first, uses stack/recursion\n\n**Key Concepts:**\n- Degree: number of edges incident to a vertex\n- Path: sequence of vertices connected by edges\n- Cycle: path that starts and ends at the same vertex\n- Euler path: visits every edge exactly once\n- Hamiltonian path: visits every vertex exactly once",
+        content: "A graph G = (V, E) consists of vertices V and edges E.\n\n**Types:**\n- **Undirected**: edges have no direction\n- **Directed (Digraph)**: edges have direction\n- **Weighted**: edges have associated weights\n- **Complete**: every pair of vertices is connected\n\n**Representations:**\n- Adjacency matrix: O(VÂ²) space\n- Adjacency list: O(V + E) space\n\n**Traversal:**\n- BFS: Level-order, uses queue\n- DFS: Depth-first, uses stack/recursion\n\n**Key Concepts:**\n- Degree: number of edges incident to a vertex\n- Path: sequence of vertices connected by edges\n- Cycle: path that starts and ends at the same vertex\n- Euler path: visits every edge exactly once\n- Hamiltonian path: visits every vertex exactly once",
         codeExample: `// Graph using adjacency list
 class Graph {
   private adj: Map<string, string[]> = new Map();
@@ -977,7 +987,7 @@ console.log("BFS:", g.bfs("A"));`,
       {
         id: "4",
         title: "Combinatorics & Counting",
-        content: "**Counting Principles:**\n\n**1. Addition Principle:** If task A can be done in m ways and task B in n ways, and they are mutually exclusive, total = m + n.\n\n**2. Multiplication Principle:** If task A has m ways and task B has n ways, total = m × n.\n\n**Permutations:**\n- P(n,r) = n! / (n-r)! — ordered selection\n\n**Combinations:**\n- C(n,r) = n! / (r!(n-r)!) — unordered selection\n\n**Pigeonhole Principle:** If n items are placed in m containers with n > m, at least one container has more than one item.\n\n**Inclusion-Exclusion:**\n|A ∪ B| = |A| + |B| - |A ∩ B|",
+        content: "**Counting Principles:**\n\n**1. Addition Principle:** If task A can be done in m ways and task B in n ways, and they are mutually exclusive, total = m + n.\n\n**2. Multiplication Principle:** If task A has m ways and task B has n ways, total = m Ã— n.\n\n**Permutations:**\n- P(n,r) = n! / (n-r)! â€” ordered selection\n\n**Combinations:**\n- C(n,r) = n! / (r!(n-r)!) â€” unordered selection\n\n**Pigeonhole Principle:** If n items are placed in m containers with n > m, at least one container has more than one item.\n\n**Inclusion-Exclusion:**\n|A âˆª B| = |A| + |B| - |A âˆ© B|",
         codeExample: `// Factorial and combinations
 function factorial(n: number): number {
   return n <= 1 ? 1 : n * factorial(n - 1);
@@ -994,7 +1004,7 @@ console.log("5!:", factorial(5));`,
       {
         id: "5",
         title: "Boolean Algebra & Logic Gates",
-        content: "**Laws:**\n- Identity: A + 0 = A, A · 1 = A\n- Null: A + 1 = 1, A · 0 = 0\n- Complement: A + A' = 1, A · A' = 0\n- De Morgan's: (A + B)' = A' · B', (A · B)' = A' + B'\n\n**Logic Gates:**\n- AND, OR, NOT, NAND, NOR, XOR, XNOR\n\n**Canonical Forms:**\n- Sum of Products (SOP)\n- Product of Sums (POS)\n\n**Simplification:**\n- Karnaugh Maps (K-maps)\n- Quine-McCluskey algorithm",
+        content: "**Laws:**\n- Identity: A + 0 = A, A Â· 1 = A\n- Null: A + 1 = 1, A Â· 0 = 0\n- Complement: A + A' = 1, A Â· A' = 0\n- De Morgan's: (A + B)' = A' Â· B', (A Â· B)' = A' + B'\n\n**Logic Gates:**\n- AND, OR, NOT, NAND, NOR, XOR, XNOR\n\n**Canonical Forms:**\n- Sum of Products (SOP)\n- Product of Sums (POS)\n\n**Simplification:**\n- Karnaugh Maps (K-maps)\n- Quine-McCluskey algorithm",
         codeExample: `// Boolean algebra operations
 const boolOps = (a: boolean, b: boolean) => ({
   AND: a && b,
@@ -1018,12 +1028,12 @@ console.log(boolOps(true, false));`,
       }
     ],
     quiz: [
-      { id: "dss1", question: "What is the negation of p → q?", options: ["¬p → ¬q", "p ∧ ¬q", "¬p ∨ q", "p ↔ q"], correctIndex: 1, explanation: "The negation of p → q is p ∧ ¬q.", difficulty: "medium", chapter: "Logic" },
-      { id: "dss2", question: "How many subsets does a set with n elements have?", options: ["n", "n²", "2ⁿ", "n!"], correctIndex: 2, explanation: "A set with n elements has 2ⁿ subsets.", difficulty: "easy", chapter: "Sets" },
-      { id: "dss3", question: "Transitivity means:", options: ["(a,a) ∈ R", "(a,b) ∈ R → (b,a) ∈ R", "(a,b) ∈ R ∧ (b,c) ∈ R → (a,c) ∈ R", "R is symmetric"], correctIndex: 2, explanation: "Transitivity means the relation can be chained.", difficulty: "easy", chapter: "Relations" },
-      { id: "dss4", question: "In a complete graph with n vertices, how many edges are there?", options: ["n", "n-1", "n(n-1)/2", "n²"], correctIndex: 2, explanation: "A complete graph has C(n,2) = n(n-1)/2 edges.", difficulty: "medium", chapter: "Graph Theory" },
-      { id: "dss5", question: "What is C(10,3)?", options: ["30", "120", "720", "210"], correctIndex: 1, explanation: "C(10,3) = 10!/(3!×7!) = 120.", difficulty: "medium", chapter: "Combinatorics" },
-      { id: "dss6", question: "De Morgan's law states that (A ∪ B)' equals:", options: ["A' ∪ B'", "A' ∩ B'", "A ∩ B", "A' ∩ B"], correctIndex: 1, explanation: "(A ∪ B)' = A' ∩ B'.", difficulty: "easy", chapter: "Boolean Algebra" },
+      { id: "dss1", question: "What is the negation of p â†’ q?", options: ["Â¬p â†’ Â¬q", "p âˆ§ Â¬q", "Â¬p âˆ¨ q", "p â†” q"], correctIndex: 1, explanation: "The negation of p â†’ q is p âˆ§ Â¬q.", difficulty: "medium", chapter: "Logic" },
+      { id: "dss2", question: "How many subsets does a set with n elements have?", options: ["n", "nÂ²", "2â¿", "n!"], correctIndex: 2, explanation: "A set with n elements has 2â¿ subsets.", difficulty: "easy", chapter: "Sets" },
+      { id: "dss3", question: "Transitivity means:", options: ["(a,a) âˆˆ R", "(a,b) âˆˆ R â†’ (b,a) âˆˆ R", "(a,b) âˆˆ R âˆ§ (b,c) âˆˆ R â†’ (a,c) âˆˆ R", "R is symmetric"], correctIndex: 2, explanation: "Transitivity means the relation can be chained.", difficulty: "easy", chapter: "Relations" },
+      { id: "dss4", question: "In a complete graph with n vertices, how many edges are there?", options: ["n", "n-1", "n(n-1)/2", "nÂ²"], correctIndex: 2, explanation: "A complete graph has C(n,2) = n(n-1)/2 edges.", difficulty: "medium", chapter: "Graph Theory" },
+      { id: "dss5", question: "What is C(10,3)?", options: ["30", "120", "720", "210"], correctIndex: 1, explanation: "C(10,3) = 10!/(3!Ã—7!) = 120.", difficulty: "medium", chapter: "Combinatorics" },
+      { id: "dss6", question: "De Morgan's law states that (A âˆª B)' equals:", options: ["A' âˆª B'", "A' âˆ© B'", "A âˆ© B", "A' âˆ© B"], correctIndex: 1, explanation: "(A âˆª B)' = A' âˆ© B'.", difficulty: "easy", chapter: "Boolean Algebra" },
       { id: "dss7", question: "A bijective function is:", options: ["Only injective", "Only surjective", "Both injective and surjective", "Neither"], correctIndex: 2, explanation: "A bijective function is both one-to-one and onto.", difficulty: "easy", chapter: "Functions" },
       { id: "dss8", question: "BFS traversal uses which data structure?", options: ["Stack", "Queue", "Priority Queue", "Deque"], correctIndex: 1, explanation: "BFS uses a queue to explore vertices level by level.", difficulty: "easy", chapter: "Graph Theory" }
     ]
@@ -1032,13 +1042,14 @@ console.log(boolOps(true, false));`,
     slug: "digital-system-design",
     title: "Digital System Design (DSD)",
     description: "Learn number systems, logic gates, combinational and sequential circuit design.",
-    icon: "⚡",
+    icon: "âš¡",
+    notesUrl: "https://noteslink.in/product/dsd-digital-system-design-notes-kiit/",
     color: "from-amber-500 to-orange-600",
     lessons: [
       {
         id: "1",
         title: "Number Systems & Codes",
-        content: "**Number Systems:**\n- Binary (base 2)\n- Octal (base 8)\n- Decimal (base 10)\n- Hexadecimal (base 16)\n\n**Conversions:**\n- Decimal to Binary: Divide by 2, read remainders\n- Binary to Decimal: Σ(dᵢ × 2ⁱ)\n- Binary to Hex: Group 4 bits\n\n**Complements:**\n- 1's complement: Flip all bits\n- 2's complement: 1's complement + 1\n\n**Codes:**\n- BCD (Binary-Coded Decimal)\n- Gray Code: adjacent values differ by 1 bit\n- ASCII: 7-bit character encoding\n- Parity: Even/Odd error detection",
+        content: "**Number Systems:**\n- Binary (base 2)\n- Octal (base 8)\n- Decimal (base 10)\n- Hexadecimal (base 16)\n\n**Conversions:**\n- Decimal to Binary: Divide by 2, read remainders\n- Binary to Decimal: Î£(dáµ¢ Ã— 2â±)\n- Binary to Hex: Group 4 bits\n\n**Complements:**\n- 1's complement: Flip all bits\n- 2's complement: 1's complement + 1\n\n**Codes:**\n- BCD (Binary-Coded Decimal)\n- Gray Code: adjacent values differ by 1 bit\n- ASCII: 7-bit character encoding\n- Parity: Even/Odd error detection",
         codeExample: `// Number system conversions
 const toBinary = (n: number): string => n.toString(2);
 const toHex = (n: number): string => n.toString(16).toUpperCase();
@@ -1081,7 +1092,7 @@ console.log("XOR(1,0):", gate.XOR(1,0));`,
       {
         id: "3",
         title: "Combinational Logic Design",
-        content: "Combinational circuits produce outputs based solely on current inputs.\n\n**Key Components:**\n- **Multiplexer (MUX)**: Selects one of many inputs\n- **Demultiplexer (DEMUX)**: Routes one input to many\n- **Decoder**: n-to-2ⁿ lines\n- **Encoder**: 2ⁿ-to-n lines\n- **Adder**:\n  - Half Adder: Sum = A⊕B, Carry = A·B\n  - Full Adder: Adds 3 bits (A, B, Cin)\n- **Subtractor**: Using 2's complement addition\n\n**Design Steps:**\n1. Problem specification\n2. Truth table\n3. Boolean expression (SOP/POS)\n4. Simplification\n5. Circuit implementation",
+        content: "Combinational circuits produce outputs based solely on current inputs.\n\n**Key Components:**\n- **Multiplexer (MUX)**: Selects one of many inputs\n- **Demultiplexer (DEMUX)**: Routes one input to many\n- **Decoder**: n-to-2â¿ lines\n- **Encoder**: 2â¿-to-n lines\n- **Adder**:\n  - Half Adder: Sum = AâŠ•B, Carry = AÂ·B\n  - Full Adder: Adds 3 bits (A, B, Cin)\n- **Subtractor**: Using 2's complement addition\n\n**Design Steps:**\n1. Problem specification\n2. Truth table\n3. Boolean expression (SOP/POS)\n4. Simplification\n5. Circuit implementation",
         codeExample: `// 4:1 Multiplexer
 function mux4to1(inputs: number[], sel: number[]): number {
   const index = sel[0] * 2 + sel[1];
@@ -1102,7 +1113,7 @@ console.log("Full Adder(1,1,1):", fullAdder(1,1,1));`,
       {
         id: "4",
         title: "Sequential Logic Design",
-        content: "Sequential circuits have memory — outputs depend on current state AND inputs.\n\n**Flip-Flops:**\n- **SR**: Set-Reset (invalid when S=R=1)\n- **D**: Data/Delay (stores input)\n- **JK**: Improved SR (toggle when J=K=1)\n- **T**: Toggle (T=1 flips state)\n\n**Registers:**\n- Shift Register: Serial/parallel data movement\n- Register File: Array of registers\n\n**Counters:**\n- Synchronous: All flip-flops clocked together\n- Asynchronous (ripple): Each FF triggers the next\n\n**State Machines:**\n- Mealy: Output depends on state + input\n- Moore: Output depends only on state",
+        content: "Sequential circuits have memory â€” outputs depend on current state AND inputs.\n\n**Flip-Flops:**\n- **SR**: Set-Reset (invalid when S=R=1)\n- **D**: Data/Delay (stores input)\n- **JK**: Improved SR (toggle when J=K=1)\n- **T**: Toggle (T=1 flips state)\n\n**Registers:**\n- Shift Register: Serial/parallel data movement\n- Register File: Array of registers\n\n**Counters:**\n- Synchronous: All flip-flops clocked together\n- Asynchronous (ripple): Each FF triggers the next\n\n**State Machines:**\n- Mealy: Output depends on state + input\n- Moore: Output depends only on state",
         codeExample: `// D Flip-Flop simulation
 class DFlipFlop {
   private q = 0;
@@ -1131,7 +1142,7 @@ console.log("Counter:", counter.value, counter.binary);`,
       {
         id: "5",
         title: "Memory & Programmable Logic",
-        content: "**Memory Types:**\n- **RAM** (volatile): SRAM (fast), DRAM (dense)\n- **ROM** (non-volatile): PROM, EPROM, EEPROM\n- **Flash**: NAND (storage), NOR (execute-in-place)\n\n**Memory Organization:**\n- Address lines: 2ⁿ locations\n- Data lines: word size (8, 16, 32, 64 bits)\n\n**Programmable Logic:**\n- **PLA**: Programmable AND + OR\n- **PAL**: Fixed OR, programmable AND\n- **FPGA**: Configurable logic blocks\n  - Look-up tables (LUTs)\n  - Configurable interconnects\n  - I/O blocks\n\n**HDL:** Hardware Description Languages (Verilog, VHDL)",
+        content: "**Memory Types:**\n- **RAM** (volatile): SRAM (fast), DRAM (dense)\n- **ROM** (non-volatile): PROM, EPROM, EEPROM\n- **Flash**: NAND (storage), NOR (execute-in-place)\n\n**Memory Organization:**\n- Address lines: 2â¿ locations\n- Data lines: word size (8, 16, 32, 64 bits)\n\n**Programmable Logic:**\n- **PLA**: Programmable AND + OR\n- **PAL**: Fixed OR, programmable AND\n- **FPGA**: Configurable logic blocks\n  - Look-up tables (LUTs)\n  - Configurable interconnects\n  - I/O blocks\n\n**HDL:** Hardware Description Languages (Verilog, VHDL)",
         codeExample: `// Simple memory simulation
 class Memory {
   private data: number[];
@@ -1165,11 +1176,11 @@ console.log("Read 0x05:", mem.read(0x05).toString(16));`,
     quiz: [
       { id: "dsd1", question: "What is 2's complement of 5 in 8-bit binary?", options: ["00000101", "11111011", "11111010", "00001010"], correctIndex: 1, explanation: "5 = 00000101. Invert: 11111010. Add 1: 11111011.", difficulty: "medium", chapter: "Number Systems" },
       { id: "dsd2", question: "Which gate is known as a universal gate?", options: ["AND", "OR", "NAND", "XOR"], correctIndex: 2, explanation: "NAND (and NOR) are universal gates.", difficulty: "easy", chapter: "Logic Gates" },
-      { id: "dsd3", question: "A 4:1 multiplexer has how many select lines?", options: ["1", "2", "3", "4"], correctIndex: 1, explanation: "A 4:1 MUX requires log₂(4) = 2 select lines.", difficulty: "easy", chapter: "Combinational Logic" },
+      { id: "dsd3", question: "A 4:1 multiplexer has how many select lines?", options: ["1", "2", "3", "4"], correctIndex: 1, explanation: "A 4:1 MUX requires logâ‚‚(4) = 2 select lines.", difficulty: "easy", chapter: "Combinational Logic" },
       { id: "dsd4", question: "In a full adder, how many inputs are there?", options: ["1", "2", "3", "4"], correctIndex: 2, explanation: "A full adder has 3 inputs: A, B, and Carry-in.", difficulty: "easy", chapter: "Combinational Logic" },
       { id: "dsd5", question: "Mealy machine output depends on:", options: ["Only state", "State + input", "Input only", "Clock only"], correctIndex: 1, explanation: "In Mealy machines, output depends on both current state and input.", difficulty: "medium", chapter: "Sequential Logic" },
       { id: "dsd6", question: "SR flip-flop is invalid when:", options: ["S=0, R=0", "S=0, R=1", "S=1, R=0", "S=1, R=1"], correctIndex: 3, explanation: "SR flip-flop has an invalid state when both S=1 and R=1.", difficulty: "easy", chapter: "Sequential Logic" },
-      { id: "dsd7", question: "Which memory type is volatile?", options: ["ROM", "EPROM", "SRAM", "Flash"], correctIndex: 2, explanation: "SRAM is volatile — it loses data when power is removed.", difficulty: "easy", chapter: "Memory" },
+      { id: "dsd7", question: "Which memory type is volatile?", options: ["ROM", "EPROM", "SRAM", "Flash"], correctIndex: 2, explanation: "SRAM is volatile â€” it loses data when power is removed.", difficulty: "easy", chapter: "Memory" },
       { id: "dsd8", question: "FPGA stands for:", options: ["Fast Programmable Gate Array", "Field-Programmable Gate Array", "Fixed Programmable Gate Array", "Flexible Programmable Gate Array"], correctIndex: 1, explanation: "FPGA stands for Field-Programmable Gate Array.", difficulty: "easy", chapter: "Programmable Logic" }
     ]
   },
@@ -1177,13 +1188,14 @@ console.log("Read 0x05:", mem.read(0x05).toString(16));`,
     slug: "automata-formal-languages",
     title: "Automata & Formal Languages (AFL)",
     description: "Study finite automata, regular expressions, context-free grammars, and Turing machines.",
-    icon: "🔀",
+    icon: "ðŸ”€",
+    notesUrl: "https://noteslink.in/product/afl-automata-formal-language-kiit/",
     color: "from-rose-500 to-pink-600",
     lessons: [
       {
         id: "1",
         title: "Finite Automata & Regular Languages",
-        content: "**Finite Automaton (FA):** A 5-tuple (Q, Σ, δ, q₀, F)\n- Q: finite set of states\n- Σ: input alphabet\n- δ: transition function\n- q₀: start state\n- F: set of accept states\n\n**Types:**\n- **DFA** (Deterministic): One transition per symbol per state\n- **NFA** (Nondeterministic): Multiple transitions, ε-moves\n\n**Equivalence:** Every NFA can be converted to an equivalent DFA.\n\n**Regular Languages:**\n- Recognized by finite automata\n- Described by regular expressions\n- Closed under: union, concatenation, Kleene star, intersection, complement\n\n**Pumping Lemma:** If L is regular, there exists p such that any string s with |s| ≥ p can be split as s = xyz where |xy| ≤ p, |y| > 0, and xyⁱz ∈ L for all i ≥ 0.",
+        content: "**Finite Automaton (FA):** A 5-tuple (Q, Î£, Î´, qâ‚€, F)\n- Q: finite set of states\n- Î£: input alphabet\n- Î´: transition function\n- qâ‚€: start state\n- F: set of accept states\n\n**Types:**\n- **DFA** (Deterministic): One transition per symbol per state\n- **NFA** (Nondeterministic): Multiple transitions, Îµ-moves\n\n**Equivalence:** Every NFA can be converted to an equivalent DFA.\n\n**Regular Languages:**\n- Recognized by finite automata\n- Described by regular expressions\n- Closed under: union, concatenation, Kleene star, intersection, complement\n\n**Pumping Lemma:** If L is regular, there exists p such that any string s with |s| â‰¥ p can be split as s = xyz where |xy| â‰¤ p, |y| > 0, and xyâ±z âˆˆ L for all i â‰¥ 0.",
         codeExample: `// Simple DFA simulator
 class DFA {
   private state: string;
@@ -1228,7 +1240,7 @@ console.log("aba:", dfa.process("aba"));`,
       {
         id: "2",
         title: "Regular Expressions",
-        content: "**Operators:**\n- **Union**: A|B (A or B)\n- **Concatenation**: AB (A followed by B)\n- **Kleene Star**: A* (zero or more A's)\n- **Positive Closure**: A+ (one or more A's)\n- **Optional**: A? (zero or one A)\n\n**Precedence:** Kleene star > Concatenation > Union\n\n**Conversion:**\n- FA → Regex: State elimination method\n- Regex → FA: Thompson's construction\n\n**Examples:**\n- (a|b)* — all strings over {a,b}\n- (a|b)*abb — strings ending with 'abb'\n- a*b* — any number of a's followed by any number of b's",
+        content: "**Operators:**\n- **Union**: A|B (A or B)\n- **Concatenation**: AB (A followed by B)\n- **Kleene Star**: A* (zero or more A's)\n- **Positive Closure**: A+ (one or more A's)\n- **Optional**: A? (zero or one A)\n\n**Precedence:** Kleene star > Concatenation > Union\n\n**Conversion:**\n- FA â†’ Regex: State elimination method\n- Regex â†’ FA: Thompson's construction\n\n**Examples:**\n- (a|b)* â€” all strings over {a,b}\n- (a|b)*abb â€” strings ending with 'abb'\n- a*b* â€” any number of a's followed by any number of b's",
         codeExample: `// Simple regex pattern matching
 function matchesRegex(pattern: string, input: string): boolean {
   const regex = new RegExp("^" + pattern + "$");
@@ -1243,7 +1255,7 @@ console.log("a*b*:", matchesRegex("a*b*", "aaabbb"));`,
       {
         id: "3",
         title: "Context-Free Grammars & Languages",
-        content: "**Context-Free Grammar (CFG):** A 4-tuple (V, Σ, R, S)\n- V: variables (non-terminals)\n- Σ: terminals\n- R: production rules (A → α)\n- S: start variable\n\n**Derivation:**\n- Leftmost: Replace leftmost variable first\n- Rightmost: Replace rightmost variable first\n- Parse tree: Tree representation of derivation\n\n**Normal Forms:**\n- **Chomsky Normal Form (CNF)**: A → BC or A → a\n- **Greibach Normal Form (GNF)**: A → aα\n\n**Ambiguity:** A CFG is ambiguous if some string has two different parse trees.\n\n**Pushdown Automata (PDA):**\n- Like FA but with a stack\n- Can recognize context-free languages\n- Equivalent to CFGs",
+        content: "**Context-Free Grammar (CFG):** A 4-tuple (V, Î£, R, S)\n- V: variables (non-terminals)\n- Î£: terminals\n- R: production rules (A â†’ Î±)\n- S: start variable\n\n**Derivation:**\n- Leftmost: Replace leftmost variable first\n- Rightmost: Replace rightmost variable first\n- Parse tree: Tree representation of derivation\n\n**Normal Forms:**\n- **Chomsky Normal Form (CNF)**: A â†’ BC or A â†’ a\n- **Greibach Normal Form (GNF)**: A â†’ aÎ±\n\n**Ambiguity:** A CFG is ambiguous if some string has two different parse trees.\n\n**Pushdown Automata (PDA):**\n- Like FA but with a stack\n- Can recognize context-free languages\n- Equivalent to CFGs",
         codeExample: `// CFG parser (simple expression grammar)
 class Parser {
   private input: string;
@@ -1295,7 +1307,7 @@ console.log(parser.parseE());`,
       {
         id: "4",
         title: "Turing Machines & Computability",
-        content: "**Turing Machine (TM):** A 7-tuple (Q, Σ, Γ, δ, q₀, q_accept, q_reject)\n- Γ: tape alphabet (includes blank)\n- δ: Q × Γ → Q × Γ × {L, R}\n\n**Church-Turing Thesis:** Anything computable can be computed by a Turing Machine.\n\n**Variants:**\n- Multi-tape TM\n- Non-deterministic TM\n- All equivalent in power\n\n**Decidability:**\n- A language is **decidable** if a TM always halts and accepts/rejects\n- **Halting Problem**: No TM can decide if an arbitrary TM halts on input w\n- **Rice's Theorem**: Any non-trivial property of RE languages is undecidable\n\n**Complexity Classes:**\n- **P**: Decidable in polynomial time\n- **NP**: Verifiable in polynomial time\n- **NP-complete**: Hardest problems in NP",
+        content: "**Turing Machine (TM):** A 7-tuple (Q, Î£, Î“, Î´, qâ‚€, q_accept, q_reject)\n- Î“: tape alphabet (includes blank)\n- Î´: Q Ã— Î“ â†’ Q Ã— Î“ Ã— {L, R}\n\n**Church-Turing Thesis:** Anything computable can be computed by a Turing Machine.\n\n**Variants:**\n- Multi-tape TM\n- Non-deterministic TM\n- All equivalent in power\n\n**Decidability:**\n- A language is **decidable** if a TM always halts and accepts/rejects\n- **Halting Problem**: No TM can decide if an arbitrary TM halts on input w\n- **Rice's Theorem**: Any non-trivial property of RE languages is undecidable\n\n**Complexity Classes:**\n- **P**: Decidable in polynomial time\n- **NP**: Verifiable in polynomial time\n- **NP-complete**: Hardest problems in NP",
         codeExample: `// Simple Turing Machine simulator
 class TuringMachine {
   private tape: string[];
@@ -1345,12 +1357,12 @@ console.log("TM result:", tm.run());`,
       }
     ],
     quiz: [
-      { id: "afl1", question: "What is the difference between DFA and NFA?", options: ["DFA is faster", "NFA allows ε-transitions and multiple transitions per symbol", "DFA has more states", "NFA is more restrictive"], correctIndex: 1, explanation: "NFA allows ε-transitions and multiple transitions for the same symbol.", difficulty: "medium", chapter: "Finite Automata" },
+      { id: "afl1", question: "What is the difference between DFA and NFA?", options: ["DFA is faster", "NFA allows Îµ-transitions and multiple transitions per symbol", "DFA has more states", "NFA is more restrictive"], correctIndex: 1, explanation: "NFA allows Îµ-transitions and multiple transitions for the same symbol.", difficulty: "medium", chapter: "Finite Automata" },
       { id: "afl2", question: "The pumping lemma is used to:", options: ["Prove a language is regular", "Prove a language is not regular", "Convert NFA to DFA", "Minimize a DFA"], correctIndex: 1, explanation: "The pumping lemma provides a necessary condition for regular languages.", difficulty: "medium", chapter: "Regular Languages" },
       { id: "afl3", question: "Which automaton recognizes context-free languages?", options: ["DFA", "NFA", "Pushdown Automaton", "Turing Machine"], correctIndex: 2, explanation: "Pushdown automata recognize exactly the context-free languages.", difficulty: "easy", chapter: "Context-Free Languages" },
-      { id: "afl4", question: "In Chomsky Normal Form, productions are of the form:", options: ["A → aB | a | ε", "A → BC | a", "A → aA | b", "A → AB"], correctIndex: 1, explanation: "CNF requires A → BC (two variables) or A → a (single terminal).", difficulty: "medium", chapter: "CFG" },
+      { id: "afl4", question: "In Chomsky Normal Form, productions are of the form:", options: ["A â†’ aB | a | Îµ", "A â†’ BC | a", "A â†’ aA | b", "A â†’ AB"], correctIndex: 1, explanation: "CNF requires A â†’ BC (two variables) or A â†’ a (single terminal).", difficulty: "medium", chapter: "CFG" },
       { id: "afl5", question: "The Halting Problem is:", options: ["Decidable in polynomial time", "Decidable but not in P", "Undecidable", "NP-complete"], correctIndex: 2, explanation: "The Halting Problem is provably undecidable.", difficulty: "easy", chapter: "Computability" },
-      { id: "afl6", question: "A CFG is ambiguous if:", options: ["It has ε-productions", "It has left recursion", "Some string has two different parse trees", "It has more than 5 variables"], correctIndex: 2, explanation: "Ambiguity means a string can be generated by two different derivations.", difficulty: "medium", chapter: "CFG" },
+      { id: "afl6", question: "A CFG is ambiguous if:", options: ["It has Îµ-productions", "It has left recursion", "Some string has two different parse trees", "It has more than 5 variables"], correctIndex: 2, explanation: "Ambiguity means a string can be generated by two different derivations.", difficulty: "medium", chapter: "CFG" },
       { id: "afl7", question: "Which complexity class contains all problems solvable in polynomial time?", options: ["NP", "P", "NP-complete", "EXPTIME"], correctIndex: 1, explanation: "P is the class of decision problems solvable by a deterministic TM in polynomial time.", difficulty: "easy", chapter: "Complexity" }
     ]
   },
@@ -1358,13 +1370,14 @@ console.log("TM result:", tm.run());`,
     slug: "probability-statistics",
     title: "Probability & Statistics (PS)",
     description: "Master probability rules, distributions, hypothesis testing, and regression.",
-    icon: "📊",
+    icon: "ðŸ“Š",
+    notesUrl: "https://noteslink.in/product/ps-probability-and-statics-notes-kiit-copy/",
     color: "from-lime-500 to-green-600",
     lessons: [
       {
         id: "1",
         title: "Probability Basics",
-        content: "**Probability** measures the likelihood of an event (0 to 1).\n\n**Axioms:**\n1. P(A) ≥ 0\n2. P(S) = 1 (sample space)\n3. P(A ∪ B) = P(A) + P(B) - P(A ∩ B)\n\n**Key Rules:**\n- **Addition**: P(A ∪ B) = P(A) + P(B) - P(A ∩ B)\n- **Multiplication**: P(A ∩ B) = P(A) · P(B|A)\n- **Complement**: P(A') = 1 - P(A)\n- **Conditional**: P(A|B) = P(A ∩ B) / P(B)\n\n**Bayes' Theorem:**\n```\nP(A|B) = P(B|A) · P(A) / P(B)\n```\n\n**Independence**: P(A ∩ B) = P(A) · P(B)",
+        content: "**Probability** measures the likelihood of an event (0 to 1).\n\n**Axioms:**\n1. P(A) â‰¥ 0\n2. P(S) = 1 (sample space)\n3. P(A âˆª B) = P(A) + P(B) - P(A âˆ© B)\n\n**Key Rules:**\n- **Addition**: P(A âˆª B) = P(A) + P(B) - P(A âˆ© B)\n- **Multiplication**: P(A âˆ© B) = P(A) Â· P(B|A)\n- **Complement**: P(A') = 1 - P(A)\n- **Conditional**: P(A|B) = P(A âˆ© B) / P(B)\n\n**Bayes' Theorem:**\n```\nP(A|B) = P(B|A) Â· P(A) / P(B)\n```\n\n**Independence**: P(A âˆ© B) = P(A) Â· P(B)",
         codeExample: `// Probability calculations
 class Probability {
   static addition(a: number, b: number, intersection: number): number {
@@ -1380,7 +1393,7 @@ class Probability {
   }
 }
 
-console.log("P(A∪B):", Probability.addition(0.3, 0.5, 0.15));
+console.log("P(AâˆªB):", Probability.addition(0.3, 0.5, 0.15));
 
 const pDisease = 0.01;
 const pPositiveGivenDisease = 0.95;
@@ -1392,7 +1405,7 @@ console.log("P(Disease|Test+):",
       {
         id: "2",
         title: "Random Variables & Distributions",
-        content: "**Random Variable:** A function mapping outcomes to real numbers.\n\n**Types:**\n- Discrete: Countable values (e.g., dice rolls)\n- Continuous: Uncountable values (e.g., height)\n\n**Key Distributions:**\n| Distribution | Use Case | Parameters |\n|-------------|----------|------------|\n| Bernoulli | Single trial | p |\n| Binomial | n independent trials | n, p |\n| Poisson | Events per time unit | λ |\n| Normal | Natural phenomena | μ, σ² |\n| Uniform | Equal likelihood | a, b |\n| Exponential | Time between events | λ |\n\n**Expectation & Variance:**\n- E[X] = Σx · P(X=x)\n- Var(X) = E[X²] - (E[X])²",
+        content: "**Random Variable:** A function mapping outcomes to real numbers.\n\n**Types:**\n- Discrete: Countable values (e.g., dice rolls)\n- Continuous: Uncountable values (e.g., height)\n\n**Key Distributions:**\n| Distribution | Use Case | Parameters |\n|-------------|----------|------------|\n| Bernoulli | Single trial | p |\n| Binomial | n independent trials | n, p |\n| Poisson | Events per time unit | Î» |\n| Normal | Natural phenomena | Î¼, ÏƒÂ² |\n| Uniform | Equal likelihood | a, b |\n| Exponential | Time between events | Î» |\n\n**Expectation & Variance:**\n- E[X] = Î£x Â· P(X=x)\n- Var(X) = E[XÂ²] - (E[X])Â²",
         codeExample: `// Probability distributions
 class Distributions {
   static binomial(n: number, p: number, k: number): number {
@@ -1434,7 +1447,7 @@ console.log("Poisson(3,2):", Distributions.poisson(3, 2));`,
       {
         id: "3",
         title: "Statistical Inference",
-        content: "**Estimation:**\n- **Point estimate**: Single value (sample mean x̄)\n- **Interval estimate**: Confidence interval\n\n**Confidence Interval (95%):**\n```\nx̄ ± z* × σ/√n\n```\n\n**Hypothesis Testing:**\n1. H₀ (null) vs H₁ (alternative)\n2. Choose significance level (α = 0.05)\n3. Calculate test statistic\n4. Determine p-value\n5. Reject or fail to reject H₀\n\n**Common Tests:**\n- **Z-test**: Known variance, large sample\n- **T-test**: Unknown variance, small sample\n- **Chi-square**: Categorical data\n- **ANOVA**: Compare multiple means\n\n**Errors:**\n- Type I (α): Reject true H₀\n- Type II (β): Fail to reject false H₀\n- Power = 1 - β",
+        content: "**Estimation:**\n- **Point estimate**: Single value (sample mean xÌ„)\n- **Interval estimate**: Confidence interval\n\n**Confidence Interval (95%):**\n```\nxÌ„ Â± z* Ã— Ïƒ/âˆšn\n```\n\n**Hypothesis Testing:**\n1. Hâ‚€ (null) vs Hâ‚ (alternative)\n2. Choose significance level (Î± = 0.05)\n3. Calculate test statistic\n4. Determine p-value\n5. Reject or fail to reject Hâ‚€\n\n**Common Tests:**\n- **Z-test**: Known variance, large sample\n- **T-test**: Unknown variance, small sample\n- **Chi-square**: Categorical data\n- **ANOVA**: Compare multiple means\n\n**Errors:**\n- Type I (Î±): Reject true Hâ‚€\n- Type II (Î²): Fail to reject false Hâ‚€\n- Power = 1 - Î²",
         codeExample: `// Statistical inference
 class Statistics {
   static confidenceInterval(
@@ -1476,7 +1489,7 @@ console.log("95% CI:", ci.map(x => x.toFixed(2)));`,
       {
         id: "4",
         title: "Regression & Correlation",
-        content: "**Correlation** measures linear relationship strength (-1 to 1).\n\n**Pearson Correlation (r):**\n```\nr = Σ(xi - x̄)(yi - ȳ) / √(Σ(xi - x̄)² · Σ(yi - ȳ)²)\n```\n\n**Simple Linear Regression:** y = β₀ + β₁x + ε\n- β₁ = Σ(xi - x̄)(yi - ȳ) / Σ(xi - x̄)²\n- β₀ = ȳ - β₁x̄\n\n**R² (Coefficient of Determination):** Proportion of variance explained.\n\n**Multiple Regression:** y = β₀ + β₁x₁ + β₂x₂ + ... + ε\n\n**Assumptions:**\n1. Linearity\n2. Independence\n3. Homoscedasticity\n4. Normality of residuals",
+        content: "**Correlation** measures linear relationship strength (-1 to 1).\n\n**Pearson Correlation (r):**\n```\nr = Î£(xi - xÌ„)(yi - È³) / âˆš(Î£(xi - xÌ„)Â² Â· Î£(yi - È³)Â²)\n```\n\n**Simple Linear Regression:** y = Î²â‚€ + Î²â‚x + Îµ\n- Î²â‚ = Î£(xi - xÌ„)(yi - È³) / Î£(xi - xÌ„)Â²\n- Î²â‚€ = È³ - Î²â‚xÌ„\n\n**RÂ² (Coefficient of Determination):** Proportion of variance explained.\n\n**Multiple Regression:** y = Î²â‚€ + Î²â‚xâ‚ + Î²â‚‚xâ‚‚ + ... + Îµ\n\n**Assumptions:**\n1. Linearity\n2. Independence\n3. Homoscedasticity\n4. Normality of residuals",
         codeExample: `// Linear regression
 class Regression {
   static linearRegression(x: number[], y: number[]) {
@@ -1516,26 +1529,27 @@ console.log("Predict 9 hours:", model.predict(9).toFixed(1));`,
       }
     ],
     quiz: [
-      { id: "ps1", question: "If P(A)=0.3 and P(B)=0.5, and A,B are independent, P(A∩B)=?", options: ["0.15", "0.8", "0.35", "0.50"], correctIndex: 0, explanation: "P(A∩B) = P(A)×P(B) = 0.3×0.5 = 0.15.", difficulty: "easy", chapter: "Probability Basics" },
+      { id: "ps1", question: "If P(A)=0.3 and P(B)=0.5, and A,B are independent, P(Aâˆ©B)=?", options: ["0.15", "0.8", "0.35", "0.50"], correctIndex: 0, explanation: "P(Aâˆ©B) = P(A)Ã—P(B) = 0.3Ã—0.5 = 0.15.", difficulty: "easy", chapter: "Probability Basics" },
       { id: "ps2", question: "Bayes' theorem is used to:", options: ["Calculate joint probability", "Update prior probability with new evidence", "Calculate marginal probability", "Test independence"], correctIndex: 1, explanation: "Bayes' theorem updates the probability of a hypothesis given new evidence.", difficulty: "medium", chapter: "Probability Basics" },
       { id: "ps3", question: "Which distribution models events in a fixed time interval?", options: ["Normal", "Binomial", "Poisson", "Uniform"], correctIndex: 2, explanation: "The Poisson distribution models event counts in a fixed interval.", difficulty: "easy", chapter: "Distributions" },
       { id: "ps4", question: "A 95% confidence interval means:", options: ["95% of data is in the interval", "95% of repeated intervals would contain the true mean", "95% chance the mean is in our interval", "95% of samples are correct"], correctIndex: 1, explanation: "In repeated sampling, approximately 95% of intervals would contain the true parameter.", difficulty: "hard", chapter: "Inference" },
-      { id: "ps5", question: "Type I error is:", options: ["Failing to reject a false null", "Rejecting a true null hypothesis", "Accepting a true alternative", "Rejecting a false alternative"], correctIndex: 1, explanation: "Type I error is rejecting H₀ when it is actually true.", difficulty: "medium", chapter: "Inference" },
+      { id: "ps5", question: "Type I error is:", options: ["Failing to reject a false null", "Rejecting a true null hypothesis", "Accepting a true alternative", "Rejecting a false alternative"], correctIndex: 1, explanation: "Type I error is rejecting Hâ‚€ when it is actually true.", difficulty: "medium", chapter: "Inference" },
       { id: "ps6", question: "Correlation r = -0.9 indicates:", options: ["Strong positive", "Strong negative", "No relationship", "Weak negative"], correctIndex: 1, explanation: "r = -0.9 indicates a strong negative linear relationship.", difficulty: "easy", chapter: "Regression" },
-      { id: "ps7", question: "In y = β₀ + β₁x, β₁ represents:", options: ["Intercept", "Slope", "Error term", "Mean"], correctIndex: 1, explanation: "β₁ is the slope — change in y per unit increase in x.", difficulty: "easy", chapter: "Regression" }
+      { id: "ps7", question: "In y = Î²â‚€ + Î²â‚x, Î²â‚ represents:", options: ["Intercept", "Slope", "Error term", "Mean"], correctIndex: 1, explanation: "Î²â‚ is the slope â€” change in y per unit increase in x.", difficulty: "easy", chapter: "Regression" }
     ]
   },
   {
     slug: "artificial-intelligence",
     title: "Artificial Intelligence (AI)",
     description: "Explore search algorithms, knowledge representation, planning, and NLP.",
-    icon: "🤖",
+    icon: "ðŸ¤–",
+    notesUrl: "https://noteslink.in/product/artificial-intelligence-notes-kiit/",
     color: "from-fuchsia-500 to-pink-600",
     lessons: [
       {
         id: "1",
         title: "Introduction to AI & Search",
-        content: "**AI** is the simulation of human intelligence by machines.\n\n**Search Problems:**\n- **State space**: All possible configurations\n- **Initial state**: Starting point\n- **Actions**: Possible moves\n- **Goal test**: Check if state is goal\n- **Path cost**: Cost of solution\n\n**Uninformed Search:**\n- BFS: Complete, optimal for unit costs, O(bᵈ) time/space\n- DFS: Not complete (cycles), not optimal, O(bᵐ) time, O(bm) space\n- Uniform Cost: Optimal, complete\n\n**Informed Search:**\n- Greedy Best-First: Uses heuristic h(n)\n- A*: Uses f(n) = g(n) + h(n)\n  - Optimal if h is admissible (never overestimates)\n\n**Heuristics:**\n- Manhattan distance (grid)\n- Euclidean distance\n- Misplaced tiles (8-puzzle)",
+        content: "**AI** is the simulation of human intelligence by machines.\n\n**Search Problems:**\n- **State space**: All possible configurations\n- **Initial state**: Starting point\n- **Actions**: Possible moves\n- **Goal test**: Check if state is goal\n- **Path cost**: Cost of solution\n\n**Uninformed Search:**\n- BFS: Complete, optimal for unit costs, O(báµˆ) time/space\n- DFS: Not complete (cycles), not optimal, O(báµ) time, O(bm) space\n- Uniform Cost: Optimal, complete\n\n**Informed Search:**\n- Greedy Best-First: Uses heuristic h(n)\n- A*: Uses f(n) = g(n) + h(n)\n  - Optimal if h is admissible (never overestimates)\n\n**Heuristics:**\n- Manhattan distance (grid)\n- Euclidean distance\n- Misplaced tiles (8-puzzle)",
         codeExample: `// A* search implementation
 interface Node {
   state: string;
@@ -1593,7 +1607,7 @@ console.log("A* path:", path);`,
       {
         id: "2",
         title: "Knowledge Representation",
-        content: "**Knowledge Representation** encodes information for AI reasoning.\n\n**Propositional Logic:**\n- Simple, but limited expressiveness\n\n**First-Order Logic (FOL):**\n- Objects, predicates, quantifiers\n- ∀x (Human(x) → Mortal(x))\n- ∃x (Human(x) ∧ King(x))\n\n**Semantic Networks:**\n- Nodes = concepts, Edges = relationships\n- Inheritance: Properties flow down hierarchy\n\n**Ontologies:**\n- Define vocabulary and relationships\n- Enable knowledge sharing and reuse\n\n**Reasoning Methods:**\n- Forward chaining (data-driven)\n- Backward chaining (goal-driven)\n- Resolution (proof by contradiction)",
+        content: "**Knowledge Representation** encodes information for AI reasoning.\n\n**Propositional Logic:**\n- Simple, but limited expressiveness\n\n**First-Order Logic (FOL):**\n- Objects, predicates, quantifiers\n- âˆ€x (Human(x) â†’ Mortal(x))\n- âˆƒx (Human(x) âˆ§ King(x))\n\n**Semantic Networks:**\n- Nodes = concepts, Edges = relationships\n- Inheritance: Properties flow down hierarchy\n\n**Ontologies:**\n- Define vocabulary and relationships\n- Enable knowledge sharing and reuse\n\n**Reasoning Methods:**\n- Forward chaining (data-driven)\n- Backward chaining (goal-driven)\n- Resolution (proof by contradiction)",
         codeExample: `// Simple inference engine
 class KnowledgeBase {
   private facts: Map<string, Set<string>> = new Map();
@@ -1643,7 +1657,7 @@ console.log("Socrates mortal?", kb.query("mortal", "socrates"));`,
       {
         id: "3",
         title: "Planning & Decision Making",
-        content: "**AI Planning** finds a sequence of actions to achieve a goal.\n\n**STRIPS Planning:**\n- Preconditions: What must be true\n- Effects: What changes after action\n- Goal: Desired state\n\n**Planning Algorithms:**\n- Forward search (state space)\n- Backward search (regression)\n- GraphPlan\n\n**Markov Decision Processes (MDPs):**\n- States, actions, transitions, rewards\n- Discount factor γ (0 to 1)\n- Optimal policy: π*(s) = argmax Σ P(s'|s,a)[R(s,a,s') + γV*(s')]\n\n**Reinforcement Learning:**\n- Q-learning: Model-free, learns Q-values\n- Deep RL: Neural networks approximate value/policy",
+        content: "**AI Planning** finds a sequence of actions to achieve a goal.\n\n**STRIPS Planning:**\n- Preconditions: What must be true\n- Effects: What changes after action\n- Goal: Desired state\n\n**Planning Algorithms:**\n- Forward search (state space)\n- Backward search (regression)\n- GraphPlan\n\n**Markov Decision Processes (MDPs):**\n- States, actions, transitions, rewards\n- Discount factor Î³ (0 to 1)\n- Optimal policy: Ï€*(s) = argmax Î£ P(s'|s,a)[R(s,a,s') + Î³V*(s')]\n\n**Reinforcement Learning:**\n- Q-learning: Model-free, learns Q-values\n- Deep RL: Neural networks approximate value/policy",
         codeExample: `// Simple STRIPS planner
 class Action {
   name: string;
@@ -1730,7 +1744,7 @@ console.log("Sentiment:", NLP.sentiment(text));`,
       {
         id: "5",
         title: "Machine Learning in AI",
-        content: "ML is the core of modern AI — systems that learn from data.\n\n**Supervised Learning:**\n- Classification: Decision trees, SVM, Neural networks\n- Regression: Linear, Polynomial, Ridge\n\n**Unsupervised Learning:**\n- Clustering: K-means, DBSCAN, Hierarchical\n- Dimensionality Reduction: PCA, t-SNE\n\n**Neural Networks:**\n- Perceptron → Multi-layer → Deep Learning\n- Activation functions: ReLU, Sigmoid, Tanh\n- Backpropagation: Gradient descent for weight updates\n\n**Evaluation:**\n- Accuracy, Precision, Recall, F1-score\n- ROC curve, AUC\n- Cross-validation\n\n**Regularization:**\n- L1 (Lasso): Feature selection\n- L2 (Ridge): Weight shrinkage\n- Dropout: Random neuron removal",
+        content: "ML is the core of modern AI â€” systems that learn from data.\n\n**Supervised Learning:**\n- Classification: Decision trees, SVM, Neural networks\n- Regression: Linear, Polynomial, Ridge\n\n**Unsupervised Learning:**\n- Clustering: K-means, DBSCAN, Hierarchical\n- Dimensionality Reduction: PCA, t-SNE\n\n**Neural Networks:**\n- Perceptron â†’ Multi-layer â†’ Deep Learning\n- Activation functions: ReLU, Sigmoid, Tanh\n- Backpropagation: Gradient descent for weight updates\n\n**Evaluation:**\n- Accuracy, Precision, Recall, F1-score\n- ROC curve, AUC\n- Cross-validation\n\n**Regularization:**\n- L1 (Lasso): Feature selection\n- L2 (Ridge): Weight shrinkage\n- Dropout: Random neuron removal",
         codeExample: `// Simple neural network
 class NeuralNetwork {
   private weights: number[][][] = [];
@@ -1768,7 +1782,7 @@ console.log("Output:", nn.forward([0.5, 0.3]).map(x => x.toFixed(3)));`,
     ],
     quiz: [
       { id: "ai1", question: "A* search is optimal when the heuristic is:", options: ["Consistent", "Admissible", "Complete", "Both A and B"], correctIndex: 3, explanation: "A* is optimal when h(n) is admissible and consistent.", difficulty: "medium", chapter: "Search" },
-      { id: "ai2", question: "In FOL, ∀ means:", options: ["There exists", "For all", "Not", "Implies"], correctIndex: 1, explanation: "∀ is the universal quantifier meaning 'for all'.", difficulty: "easy", chapter: "Knowledge" },
+      { id: "ai2", question: "In FOL, âˆ€ means:", options: ["There exists", "For all", "Not", "Implies"], correctIndex: 1, explanation: "âˆ€ is the universal quantifier meaning 'for all'.", difficulty: "easy", chapter: "Knowledge" },
       { id: "ai3", question: "Backward chaining advantage:", options: ["Faster", "Only explores relevant rules", "Uses less memory", "No knowledge base needed"], correctIndex: 1, explanation: "Backward chaining only explores rules that could lead to the goal.", difficulty: "medium", chapter: "Planning" },
       { id: "ai4", question: "Transformers use which mechanism?", options: ["Recurrent loops", "Self-attention", "Convolution", "Max pooling"], correctIndex: 1, explanation: "Transformers use self-attention to weigh input importance.", difficulty: "easy", chapter: "NLP" },
       { id: "ai5", question: "Overfitting means:", options: ["Model is too simple", "Good on training, poor on test", "Can't learn", "High bias"], correctIndex: 1, explanation: "Overfitting: model learns noise, performs well on training but poorly on unseen data.", difficulty: "easy", chapter: "ML" },
@@ -1780,13 +1794,14 @@ console.log("Output:", nn.forward([0.5, 0.3]).map(x => x.toFixed(3)));`,
     slug: "machine-learning",
     title: "Machine Learning (ML)",
     description: "Learn supervised and unsupervised learning, neural networks, and model evaluation.",
-    icon: "🧠",
+    icon: "ðŸ§ ",
+    notesUrl: "https://noteslink.in/product/machine-learning-notes-kiit/",
     color: "from-sky-500 to-indigo-600",
     lessons: [
       {
         id: "1",
         title: "Supervised Learning: Classification",
-        content: "**Classification** predicts discrete labels.\n\n**Algorithms:**\n\n**1. K-Nearest Neighbors (KNN):**\n- Classify by majority vote of k nearest points\n- Distance metrics: Euclidean, Manhattan\n- Simple but slow: O(n)\n\n**2. Decision Trees:**\n- Split data on feature thresholds\n- Information gain / Gini impurity\n- Prone to overfitting → Random Forest\n\n**3. Support Vector Machine (SVM):**\n- Find maximum margin hyperplane\n- Kernel trick for non-linear\n\n**4. Logistic Regression:**\n- sigmoid(z) = 1 / (1 + e⁻ᶻ)\n- Outputs probability [0,1]",
+        content: "**Classification** predicts discrete labels.\n\n**Algorithms:**\n\n**1. K-Nearest Neighbors (KNN):**\n- Classify by majority vote of k nearest points\n- Distance metrics: Euclidean, Manhattan\n- Simple but slow: O(n)\n\n**2. Decision Trees:**\n- Split data on feature thresholds\n- Information gain / Gini impurity\n- Prone to overfitting â†’ Random Forest\n\n**3. Support Vector Machine (SVM):**\n- Find maximum margin hyperplane\n- Kernel trick for non-linear\n\n**4. Logistic Regression:**\n- sigmoid(z) = 1 / (1 + eâ»á¶»)\n- Outputs probability [0,1]",
         codeExample: `// KNN classifier
 class KNN {
   private data: { point: number[]; label: string }[] = [];
@@ -1819,7 +1834,7 @@ console.log("Predict [7,6]:", knn.predict([7,6]));`,
       {
         id: "2",
         title: "Supervised Learning: Regression",
-        content: "**Regression** predicts continuous values.\n\n**Linear Regression:**\n- y = β₀ + β₁x₁ + ... + βₙxₙ\n- Minimize MSE: (1/n)Σ(yᵢ - ŷᵢ)²\n\n**Ridge (L2) & Lasso (L1):**\n- Ridge: Adds λΣβᵢ² penalty\n- Lasso: Adds λΣ|βᵢ| penalty → can zero out features\n\n**Polynomial Regression:**\n- y = β₀ + β₁x + β₂x² + ...\n\n**Gradient Descent:**\n- Batch: Use all data\n- Stochastic (SGD): Use one sample\n- Mini-batch: Use subset",
+        content: "**Regression** predicts continuous values.\n\n**Linear Regression:**\n- y = Î²â‚€ + Î²â‚xâ‚ + ... + Î²â‚™xâ‚™\n- Minimize MSE: (1/n)Î£(yáµ¢ - Å·áµ¢)Â²\n\n**Ridge (L2) & Lasso (L1):**\n- Ridge: Adds Î»Î£Î²áµ¢Â² penalty\n- Lasso: Adds Î»Î£|Î²áµ¢| penalty â†’ can zero out features\n\n**Polynomial Regression:**\n- y = Î²â‚€ + Î²â‚x + Î²â‚‚xÂ² + ...\n\n**Gradient Descent:**\n- Batch: Use all data\n- Stochastic (SGD): Use one sample\n- Mini-batch: Use subset",
         codeExample: `// Linear regression with gradient descent
 class LinearRegression {
   private weights: number[] = [];
@@ -1859,7 +1874,7 @@ console.log("Predict [6]:", lr.predict([[6]]));`,
       {
         id: "3",
         title: "Unsupervised Learning",
-        content: "**Clustering** groups similar data points.\n\n**K-Means:**\n1. Initialize k centroids randomly\n2. Assign points to nearest centroid\n3. Update centroids as cluster means\n4. Repeat until convergence\n\n**DBSCAN:**\n- Density-based clustering\n- Parameters: ε, minPts\n- Handles arbitrary shapes and noise\n\n**Dimensionality Reduction:**\n- **PCA**: Find directions of maximum variance\n- **t-SNE**: Non-linear, preserves local structure\n- **UMAP**: Faster alternative to t-SNE",
+        content: "**Clustering** groups similar data points.\n\n**K-Means:**\n1. Initialize k centroids randomly\n2. Assign points to nearest centroid\n3. Update centroids as cluster means\n4. Repeat until convergence\n\n**DBSCAN:**\n- Density-based clustering\n- Parameters: Îµ, minPts\n- Handles arbitrary shapes and noise\n\n**Dimensionality Reduction:**\n- **PCA**: Find directions of maximum variance\n- **t-SNE**: Non-linear, preserves local structure\n- **UMAP**: Faster alternative to t-SNE",
         codeExample: `// K-Means clustering
 class KMeans {
   private centroids: number[][] = [];
@@ -1915,7 +1930,7 @@ console.log("Cluster [9,8]:", km.predict([9,8]));`,
       {
         id: "4",
         title: "Neural Networks & Deep Learning",
-        content: "**Neural Network Structure:**\n- Input layer → Hidden layers → Output layer\n- Each neuron: z = Σ(wᵢxᵢ) + b, a = f(z)\n\n**Activation Functions:**\n- Sigmoid: σ(z) = 1/(1+e⁻ᶻ)\n- Tanh: outputs (-1,1)\n- ReLU: max(0, z) — most common\n\n**Training:**\n1. Forward pass: compute predictions\n2. Compute loss\n3. Backward pass (backpropagation)\n4. Update weights: w = w - α · ∂L/∂w\n\n**Architectures:**\n- **CNN**: Convolutional layers for images\n- **RNN/LSTM**: Recurrent layers for sequences\n- **Transformer**: Self-attention, parallelizable\n\n**Optimization:**\n- SGD with momentum\n- Adam: adaptive learning rates",
+        content: "**Neural Network Structure:**\n- Input layer â†’ Hidden layers â†’ Output layer\n- Each neuron: z = Î£(wáµ¢xáµ¢) + b, a = f(z)\n\n**Activation Functions:**\n- Sigmoid: Ïƒ(z) = 1/(1+eâ»á¶»)\n- Tanh: outputs (-1,1)\n- ReLU: max(0, z) â€” most common\n\n**Training:**\n1. Forward pass: compute predictions\n2. Compute loss\n3. Backward pass (backpropagation)\n4. Update weights: w = w - Î± Â· âˆ‚L/âˆ‚w\n\n**Architectures:**\n- **CNN**: Convolutional layers for images\n- **RNN/LSTM**: Recurrent layers for sequences\n- **Transformer**: Self-attention, parallelizable\n\n**Optimization:**\n- SGD with momentum\n- Adam: adaptive learning rates",
         codeExample: `// Neural network with backpropagation
 class NeuralNet {
   private w1: number[][] = [];
@@ -1967,7 +1982,7 @@ const nn = new NeuralNet(2, 4, 1, 0.5);
 const xorData = [[[0,0],[0]],[[0,1],[1]],[[1,0],[1]],[[1,1],[0]]];
 xorData.forEach(([x, y]) => nn.train(x as number[], y as number[], 5000));
 xorData.forEach(([x, y]) =>
-  console.log(\`\${x} → \${nn.predict(x as number[]).map(v => v.toFixed(2))}\`));`,
+  console.log(\`\${x} â†’ \${nn.predict(x as number[]).map(v => v.toFixed(2))}\`));`,
         language: "typescript"
       }
     ],
@@ -1975,7 +1990,7 @@ xorData.forEach(([x, y]) =>
       { id: "ml1", question: "KNN main issue:", options: ["Cannot handle non-linear", "Slow prediction O(n)", "Requires labels", "Both B and C"], correctIndex: 1, explanation: "KNN must compare against all training data at prediction time.", difficulty: "medium", chapter: "Classification" },
       { id: "ml2", question: "Lasso regression adds which penalty?", options: ["L2", "L1 (absolute weights)", "L3", "No penalty"], correctIndex: 1, explanation: "Lasso uses L1 penalty, which can drive coefficients to zero.", difficulty: "medium", chapter: "Regression" },
       { id: "ml3", question: "K-means minimizes:", options: ["Between-cluster variance", "Within-cluster sum of squares", "Between-cluster distance", "Silhouette score"], correctIndex: 1, explanation: "K-means minimizes within-cluster sum of squares (WCSS).", difficulty: "medium", chapter: "Unsupervised" },
-      { id: "ml4", question: "ReLU is defined as:", options: ["1/(1+e⁻ˣ)", "max(0, x)", "tanh(x)", "x²"], correctIndex: 1, explanation: "ReLU outputs max(0, x).", difficulty: "easy", chapter: "Neural Networks" },
+      { id: "ml4", question: "ReLU is defined as:", options: ["1/(1+eâ»Ë£)", "max(0, x)", "tanh(x)", "xÂ²"], correctIndex: 1, explanation: "ReLU outputs max(0, x).", difficulty: "easy", chapter: "Neural Networks" },
       { id: "ml5", question: "Backpropagation computes:", options: ["Forward pass", "Gradients of loss w.r.t. weights", "Updated weights", "Accuracy"], correctIndex: 1, explanation: "Backpropagation computes gradients using the chain rule.", difficulty: "medium", chapter: "Neural Networks" },
       { id: "ml6", question: "Adam optimizer uses:", options: ["Batch GD", "SGD", "Adaptive learning rates", "Second-order"], correctIndex: 2, explanation: "Adam adapts learning rates using first and second moment estimates.", difficulty: "medium", chapter: "Optimization" },
       { id: "ml7", question: "Cross-validation evaluates:", options: ["Training speed", "Model generalization", "Overfitting", "Both B and C"], correctIndex: 1, explanation: "Cross-validation estimates performance on unseen data.", difficulty: "easy", chapter: "Evaluation" },
@@ -1986,13 +2001,14 @@ xorData.forEach(([x, y]) =>
     slug: "compiler-design",
     title: "Compiler Design (CD)",
     description: "Learn lexical analysis, parsing, semantic analysis, code optimization, and generation.",
-    icon: "⚙️",
+    icon: "âš™ï¸",
+    notesUrl: "https://noteslink.in/product/compiler-design-kiit/",
     color: "from-teal-500 to-emerald-600",
     lessons: [
       {
         id: "1",
         title: "Lexical Analysis",
-        content: "**Lexical Analyzer (Lexer/Scanner):**\n- Converts source code into tokens\n- Removes whitespace and comments\n- Handles string/number literals\n- Reports lexical errors\n\n**Token Types:**\n- Keywords: if, else, while, int\n- Identifiers: variable names\n- Literals: 42, 3.14, \"hello\"\n- Operators: +, -, *, /, ==\n- Delimiters: (, ), {, }, ;\n\n**Regular Expressions → DFA:**\n1. Regex → NFA (Thompson's construction)\n2. NFA → DFA (subset construction)\n3. DFA → Minimized DFA\n\n**Tools:**\n- Lex/Flex: Lexical analyzer generators",
+        content: "**Lexical Analyzer (Lexer/Scanner):**\n- Converts source code into tokens\n- Removes whitespace and comments\n- Handles string/number literals\n- Reports lexical errors\n\n**Token Types:**\n- Keywords: if, else, while, int\n- Identifiers: variable names\n- Literals: 42, 3.14, \"hello\"\n- Operators: +, -, *, /, ==\n- Delimiters: (, ), {, }, ;\n\n**Regular Expressions â†’ DFA:**\n1. Regex â†’ NFA (Thompson's construction)\n2. NFA â†’ DFA (subset construction)\n3. DFA â†’ Minimized DFA\n\n**Tools:**\n- Lex/Flex: Lexical analyzer generators",
         codeExample: `// Simple lexer
 type TokenType = "NUMBER" | "PLUS" | "MINUS" | "MULT" | "DIV" | "LPAREN" | "RPAREN" | "EOF";
 
@@ -2037,7 +2053,7 @@ console.log(lexer.tokenize());`,
       {
         id: "2",
         title: "Parsing & Syntax Analysis",
-        content: "**Parser:** Checks token sequence against grammar, builds parse tree.\n\n**Grammar Types (Chomsky Hierarchy):**\n- Type 0: Unrestricted\n- Type 1: Context-sensitive\n- Type 2: Context-free (CFG) — used in parsing\n- Type 3: Regular\n\n**Parsing Methods:**\n\n**Top-Down:**\n- Recursive Descent: Each non-terminal → function\n- LL(1): Lookahead 1 token\n\n**Bottom-Up:**\n- Shift-Reduce: Shift tokens, reduce by productions\n- LR(0), SLR, LR(1), LALR\n\n**Conflicts:**\n- Shift-reduce: Can shift or reduce\n- Reduce-reduce: Can reduce by two productions\n\n**Tools:**\n- Yacc/Bison: Bottom-up parser generators\n- ANTLR: Top-down parser generator",
+        content: "**Parser:** Checks token sequence against grammar, builds parse tree.\n\n**Grammar Types (Chomsky Hierarchy):**\n- Type 0: Unrestricted\n- Type 1: Context-sensitive\n- Type 2: Context-free (CFG) â€” used in parsing\n- Type 3: Regular\n\n**Parsing Methods:**\n\n**Top-Down:**\n- Recursive Descent: Each non-terminal â†’ function\n- LL(1): Lookahead 1 token\n\n**Bottom-Up:**\n- Shift-Reduce: Shift tokens, reduce by productions\n- LR(0), SLR, LR(1), LALR\n\n**Conflicts:**\n- Shift-reduce: Can shift or reduce\n- Reduce-reduce: Can reduce by two productions\n\n**Tools:**\n- Yacc/Bison: Bottom-up parser generators\n- ANTLR: Top-down parser generator",
         codeExample: `// Recursive descent parser
 class Parser {
   private tokens: { type: string; value: string }[];
@@ -2142,7 +2158,7 @@ console.log("int + int:", checker.checkBinaryOp("+", "number", "number"));`,
       {
         id: "4",
         title: "Code Optimization & Generation",
-        content: "**Code Optimization** improves intermediate code without changing output.\n\n**Optimization Techniques:**\n- **Constant folding**: 3 * 4 → 12\n- **Constant propagation**: x = 5; y = x + 1 → y = 6\n- **Dead code elimination**: Remove unused code\n- **Common subexpression elimination**: Reuse computed values\n- **Loop optimizations**: Invariant code motion, unrolling\n- **Strength reduction**: x * 2 → x << 1\n\n**Code Generation:**\n- Target machine: Registers, instructions\n- Register allocation: Graph coloring\n- Instruction selection: Tree matching\n- Peephole optimization: Local improvements",
+        content: "**Code Optimization** improves intermediate code without changing output.\n\n**Optimization Techniques:**\n- **Constant folding**: 3 * 4 â†’ 12\n- **Constant propagation**: x = 5; y = x + 1 â†’ y = 6\n- **Dead code elimination**: Remove unused code\n- **Common subexpression elimination**: Reuse computed values\n- **Loop optimizations**: Invariant code motion, unrolling\n- **Strength reduction**: x * 2 â†’ x << 1\n\n**Code Generation:**\n- Target machine: Registers, instructions\n- Register allocation: Graph coloring\n- Instruction selection: Tree matching\n- Peephole optimization: Local improvements",
         codeExample: `// Simple optimizer passes
 class Optimizer {
   static foldConstants(code: string[]): string[] {
@@ -2187,7 +2203,7 @@ console.log("Reduced:", Optimizer.strengthReduce(code));`,
       { id: "cd2", question: "Which parser is more powerful?", options: ["Top-down (LL)", "Bottom-up (LR)", "Both equal", "Neither"], correctIndex: 1, explanation: "Bottom-up parsers handle a larger class of grammars.", difficulty: "medium", chapter: "Parsing" },
       { id: "cd3", question: "Shift-reduce conflict occurs when:", options: ["Grammar is ambiguous", "Parser can shift or reduce", "Two reductions possible", "Token unknown"], correctIndex: 1, explanation: "The parser chooses between shifting or reducing.", difficulty: "medium", chapter: "Parsing" },
       { id: "cd4", question: "Constant folding:", options: ["Remove unused constants", "Evaluate constant expressions at compile time", "Replace variables", "Store in registers"], correctIndex: 1, explanation: "Evaluates expressions like 3*4 at compile time.", difficulty: "easy", chapter: "Optimization" },
-      { id: "cd5", question: "Three-Address Code is:", options: ["Machine code", "Intermediate representation", "Regex type", "Parsing algorithm"], correctIndex: 1, explanation: "TAC is an intermediate representation with ≤3 operands per instruction.", difficulty: "easy", chapter: "Code Generation" },
+      { id: "cd5", question: "Three-Address Code is:", options: ["Machine code", "Intermediate representation", "Regex type", "Parsing algorithm"], correctIndex: 1, explanation: "TAC is an intermediate representation with â‰¤3 operands per instruction.", difficulty: "easy", chapter: "Code Generation" },
       { id: "cd6", question: "Scope resolution is part of:", options: ["Lexical analysis", "Syntax analysis", "Semantic analysis", "Code generation"], correctIndex: 2, explanation: "Scope resolution is a semantic analysis task.", difficulty: "medium", chapter: "Semantic Analysis" },
       { id: "cd7", question: "Dead code elimination removes:", options: ["Comments", "Unreachable code", "Variables", "Functions"], correctIndex: 1, explanation: "Removes statements that can never be executed.", difficulty: "easy", chapter: "Optimization" }
     ]
@@ -2196,13 +2212,14 @@ console.log("Reduced:", Optimizer.strengthReduce(code));`,
     slug: "software-engineering",
     title: "Software Engineering (SE)",
     description: "Master SDLC, requirements engineering, design patterns, testing, and agile.",
-    icon: "🛠️",
+    icon: "ðŸ› ï¸",
+    notesUrl: "https://noteslink.in/product/se-software-engineering-kiit/",
     color: "from-orange-500 to-red-600",
     lessons: [
       {
         id: "1",
         title: "Software Development Life Cycle",
-        content: "**SDLC** is a structured process for building software.\n\n**Models:**\n\n**1. Waterfall:**\nRequirements → Design → Implementation → Testing → Maintenance\n- Sequential, document-driven\n- Good for well-understood requirements\n\n**2. V-Model:**\n- Each phase has a corresponding test phase\n\n**3. Spiral Model:**\n- Risk-driven, iterative\n\n**4. Agile:**\n- Iterative, incremental\n- Respond to change over following plan\n- Working software over comprehensive documentation\n\n**Agile Frameworks:**\n- Scrum: Sprints, roles (PO, SM, Dev Team)\n- Kanban: Visual workflow, WIP limits\n- XP: Pair programming, TDD, CI",
+        content: "**SDLC** is a structured process for building software.\n\n**Models:**\n\n**1. Waterfall:**\nRequirements â†’ Design â†’ Implementation â†’ Testing â†’ Maintenance\n- Sequential, document-driven\n- Good for well-understood requirements\n\n**2. V-Model:**\n- Each phase has a corresponding test phase\n\n**3. Spiral Model:**\n- Risk-driven, iterative\n\n**4. Agile:**\n- Iterative, incremental\n- Respond to change over following plan\n- Working software over comprehensive documentation\n\n**Agile Frameworks:**\n- Scrum: Sprints, roles (PO, SM, Dev Team)\n- Kanban: Visual workflow, WIP limits\n- XP: Pair programming, TDD, CI",
         codeExample: `// Sprint backlog simulation
 interface Task {
   id: string;
@@ -2384,7 +2401,8 @@ runner.report();`,
     slug: "data-mining-warehousing",
     title: "Data Mining & Warehousing (DMDW)",
     description: "Learn ETL processes, OLAP, association rules, classification, and clustering.",
-    icon: "⛏️",
+    icon: "â›ï¸",
+    notesUrl: "https://noteslink.in/product/dmdw-data-mining-data-warehousing-kiit/",
     color: "from-yellow-500 to-amber-600",
     lessons: [
       {
@@ -2461,7 +2479,7 @@ pipeline.run();`,
       {
         id: "3",
         title: "Association Rule Mining",
-        content: "**Association Rules** find interesting relationships in data.\n\n**Rule Format:** {A, B} → {C}\n- Support: P(A ∪ B ∪ C)\n- Confidence: P(C | A ∪ B)\n- Lift: Confidence / P(C)\n\n**Algorithms:**\n- **Apriori**: Generate frequent itemsets level by level\n  - Anti-monotone property: subsets of infrequent are infrequent\n- **FP-Growth**: Build FP-tree, mine patterns\n\n**Applications:**\n- Market basket analysis\n- Cross-selling\n- Recommendation systems\n- Medical diagnosis",
+        content: "**Association Rules** find interesting relationships in data.\n\n**Rule Format:** {A, B} â†’ {C}\n- Support: P(A âˆª B âˆª C)\n- Confidence: P(C | A âˆª B)\n- Lift: Confidence / P(C)\n\n**Algorithms:**\n- **Apriori**: Generate frequent itemsets level by level\n  - Anti-monotone property: subsets of infrequent are infrequent\n- **FP-Growth**: Build FP-tree, mine patterns\n\n**Applications:**\n- Market basket analysis\n- Cross-selling\n- Recommendation systems\n- Medical diagnosis",
         codeExample: `// Simple Apriori implementation
 function apriori(transactions: string[][], minSupport: number): Map<string, number> {
   const minCount = Math.ceil(transactions.length * minSupport);
@@ -2498,7 +2516,7 @@ console.log("Frequent items:", Object.fromEntries(result));`,
       {
         id: "4",
         title: "Classification & Clustering",
-        content: "**Classification** (supervised) predicts categorical labels.\n\n**Algorithms:**\n- Decision Tree (ID3, C4.5, CART)\n- Naive Bayes: P(class|features) ∝ P(features|class) × P(class)\n- k-NN: Instance-based learning\n- SVM: Maximum margin classifier\n\n**Clustering** (unsupervised) groups similar data.\n\n**Algorithms:**\n- K-Means: Minimize within-cluster variance\n- DBSCAN: Density-based, handles noise\n- Hierarchical: Agglomerative/Divisive\n\n**Evaluation:**\n- Accuracy, Precision, Recall, F1\n- Confusion matrix\n- Silhouette score (clustering)",
+        content: "**Classification** (supervised) predicts categorical labels.\n\n**Algorithms:**\n- Decision Tree (ID3, C4.5, CART)\n- Naive Bayes: P(class|features) âˆ P(features|class) Ã— P(class)\n- k-NN: Instance-based learning\n- SVM: Maximum margin classifier\n\n**Clustering** (unsupervised) groups similar data.\n\n**Algorithms:**\n- K-Means: Minimize within-cluster variance\n- DBSCAN: Density-based, handles noise\n- Hierarchical: Agglomerative/Divisive\n\n**Evaluation:**\n- Accuracy, Precision, Recall, F1\n- Confusion matrix\n- Silhouette score (clustering)",
         codeExample: `// Naive Bayes classifier
 class NaiveBayes {
   private classCounts = new Map<string, number>();
@@ -2550,9 +2568,9 @@ console.log("Predict:", nb.predict(["sunny", "hot"]));`,
     ],
     quiz: [
       { id: "dmdw1", question: "Which schema has a fact table surrounded by dimension tables?", options: ["Snowflake", "Star", "Galaxy", "Flat"], correctIndex: 1, explanation: "Star schema has a central fact table with denormalized dimension tables.", difficulty: "easy", chapter: "Warehousing" },
-      { id: "dmdw2", question: "ETL stands for:", options: ["Extract, Transform, Load", "Evaluate, Test, Launch", "Export, Transfer, List", "Encode, Transform, Load"], correctIndex: 0, explanation: "ETL = Extract, Transform, Load — the process of moving data to a warehouse.", difficulty: "easy", chapter: "ETL" },
+      { id: "dmdw2", question: "ETL stands for:", options: ["Extract, Transform, Load", "Evaluate, Test, Launch", "Export, Transfer, List", "Encode, Transform, Load"], correctIndex: 0, explanation: "ETL = Extract, Transform, Load â€” the process of moving data to a warehouse.", difficulty: "easy", chapter: "ETL" },
       { id: "dmdw3", question: "Apriori algorithm finds:", options: ["Clusters", "Frequent itemsets", "Classification rules", "Regression models"], correctIndex: 1, explanation: "Apriori finds frequent itemsets using the anti-monotone property.", difficulty: "medium", chapter: "Association Rules" },
-      { id: "dmdw4", question: "Support measures:", options: ["How often items appear together", "Confidence of a rule", "Lift of a rule", "Accuracy"], correctIndex: 0, explanation: "Support = P(A ∪ B ∪ C) — frequency of the itemset in all transactions.", difficulty: "easy", chapter: "Association Rules" },
+      { id: "dmdw4", question: "Support measures:", options: ["How often items appear together", "Confidence of a rule", "Lift of a rule", "Accuracy"], correctIndex: 0, explanation: "Support = P(A âˆª B âˆª C) â€” frequency of the itemset in all transactions.", difficulty: "easy", chapter: "Association Rules" },
       { id: "dmdw5", question: "Naive Bayes is based on:", options: ["Bayes' theorem", "Gradient descent", "Linear regression", "Decision trees"], correctIndex: 0, explanation: "Naive Bayes uses Bayes' theorem with the 'naive' independence assumption.", difficulty: "easy", chapter: "Classification" },
       { id: "dmdw6", question: "OLAP is used for:", options: ["Transaction processing", "Analytical processing", "Data extraction", "Data cleansing"], correctIndex: 1, explanation: "OLAP (Online Analytical Processing) supports complex analysis queries.", difficulty: "easy", chapter: "Warehousing" }
     ]
@@ -2561,7 +2579,8 @@ console.log("Predict:", nb.predict(["sunny", "hot"]));`,
     slug: "distributed-os",
     title: "Distributed Operating Systems (DOS)",
     description: "Learn distributed systems concepts, consensus algorithms, replication, and MapReduce.",
-    icon: "🌐",
+    icon: "ðŸŒ",
+    notesUrl: "https://noteslink.in/product/dos-distributed-operating-system-kiit/",
     color: "from-indigo-500 to-violet-600",
     lessons: [
       {
@@ -2683,7 +2702,7 @@ console.log("Read x:", store.read("x", 2));`,
       {
         id: "4",
         title: "MapReduce & Distributed Computing",
-        content: "**MapReduce** is a programming model for processing large datasets.\n\n**Phases:**\n1. **Map**: Process input key-value pairs → intermediate pairs\n2. **Shuffle**: Group by key\n3. **Reduce**: Aggregate values for each key\n\n**Hadoop Ecosystem:**\n- HDFS: Distributed file system\n- YARN: Resource management\n- MapReduce: Processing engine\n- Hive: SQL-like queries\n- Pig: Scripting language\n\n**Spark:**\n- In-memory computing (10-100x faster)\n- RDDs, DataFrames, Datasets\n- MLlib, GraphX, Streaming\n\n**Applications:**\n- Log analysis\n- Web indexing\n- Machine learning at scale\n- Data warehousing",
+        content: "**MapReduce** is a programming model for processing large datasets.\n\n**Phases:**\n1. **Map**: Process input key-value pairs â†’ intermediate pairs\n2. **Shuffle**: Group by key\n3. **Reduce**: Aggregate values for each key\n\n**Hadoop Ecosystem:**\n- HDFS: Distributed file system\n- YARN: Resource management\n- MapReduce: Processing engine\n- Hive: SQL-like queries\n- Pig: Scripting language\n\n**Spark:**\n- In-memory computing (10-100x faster)\n- RDDs, DataFrames, Datasets\n- MLlib, GraphX, Streaming\n\n**Applications:**\n- Log analysis\n- Web indexing\n- Machine learning at scale\n- Data warehousing",
         codeExample: `// MapReduce simulation
 function mapReduce<T, K, V>(
   data: T[],
@@ -2726,11 +2745,11 @@ console.log("Word count:", Object.fromEntries(wordCount));`,
       }
     ],
     quiz: [
-      { id: "dos1", question: "CAP theorem states a distributed system can have at most:", options: ["1 of 3 properties", "2 of 3 properties", "All 3 properties", "None"], correctIndex: 1, explanation: "CAP: Consistency, Availability, Partition tolerance — only 2 can be guaranteed simultaneously.", difficulty: "medium", chapter: "Fundamentals" },
+      { id: "dos1", question: "CAP theorem states a distributed system can have at most:", options: ["1 of 3 properties", "2 of 3 properties", "All 3 properties", "None"], correctIndex: 1, explanation: "CAP: Consistency, Availability, Partition tolerance â€” only 2 can be guaranteed simultaneously.", difficulty: "medium", chapter: "Fundamentals" },
       { id: "dos2", question: "Raft is:", options: ["A consensus algorithm", "A replication protocol", "A file system", "A programming model"], correctIndex: 0, explanation: "Raft is a consensus algorithm designed to be more understandable than Paxos.", difficulty: "easy", chapter: "Consensus" },
       { id: "dos3", question: "Byzantine Fault Tolerance requires how many nodes for f faulty?", options: ["2f+1", "3f+1", "f+1", "4f"], correctIndex: 1, explanation: "BFT requires 3f+1 nodes to tolerate f Byzantine faults.", difficulty: "medium", chapter: "Consensus" },
       { id: "dos4", question: "Eventual consistency guarantees:", options: ["Immediate consistency", "Replicas will eventually converge", "No consistency", "Strong consistency"], correctIndex: 1, explanation: "Eventual consistency means replicas will converge to the same value over time.", difficulty: "easy", chapter: "Replication" },
-      { id: "dos5", question: "MapReduce has which phases?", options: ["Map, Shuffle, Reduce", "Map, Sort, Reduce", "Map, Group, Reduce", "Map, Filter, Reduce"], correctIndex: 0, explanation: "MapReduce: Map → Shuffle (group by key) → Reduce.", difficulty: "easy", chapter: "MapReduce" },
+      { id: "dos5", question: "MapReduce has which phases?", options: ["Map, Shuffle, Reduce", "Map, Sort, Reduce", "Map, Group, Reduce", "Map, Filter, Reduce"], correctIndex: 0, explanation: "MapReduce: Map â†’ Shuffle (group by key) â†’ Reduce.", difficulty: "easy", chapter: "MapReduce" },
       { id: "dos6", question: "Spark is faster than Hadoop because:", options: ["Better hardware", "In-memory computing", "More nodes", "Better language"], correctIndex: 1, explanation: "Spark uses in-memory computing, making it 10-100x faster for many workloads.", difficulty: "easy", chapter: "MapReduce" }
     ]
   },
@@ -2738,13 +2757,14 @@ console.log("Word count:", Object.fromEntries(wordCount));`,
     slug: "hpc",
     title: "High Performance Computing (HPC)",
     description: "Learn parallel computing, GPU programming, MPI, OpenMP, and performance analysis.",
-    icon: "🚀",
+    icon: "ðŸš€",
+    notesUrl: "https://noteslink.in/product/hpc-high-performances-computing-notes-kiit/",
     color: "from-red-500 to-rose-600",
     lessons: [
       {
         id: "1",
         title: "Parallel Computing Fundamentals",
-        content: "**Parallel Computing:** Using multiple processors simultaneously.\n\n**Types:**\n- **Instruction-level parallelism (ILP)**: Pipelining, superscalar\n- **Data-level parallelism (DLP)**: SIMD, vector processing\n- **Task-level parallelism (TLP)**: Multiple threads/processes\n\n**Architectures (Flynn's Taxonomy):**\n- SISD: Single instruction, single data\n- SIMD: Single instruction, multiple data\n- MISD: Multiple instruction, single data\n- MIMD: Multiple instruction, multiple data\n\n**Performance Metrics:**\n- Speedup: T₁/Tₚ\n- Efficiency: Speedup/p\n- Amdahl's Law: S = 1/((1-f) + f/p)\n- Gustafson's Law",
+        content: "**Parallel Computing:** Using multiple processors simultaneously.\n\n**Types:**\n- **Instruction-level parallelism (ILP)**: Pipelining, superscalar\n- **Data-level parallelism (DLP)**: SIMD, vector processing\n- **Task-level parallelism (TLP)**: Multiple threads/processes\n\n**Architectures (Flynn's Taxonomy):**\n- SISD: Single instruction, single data\n- SIMD: Single instruction, multiple data\n- MISD: Multiple instruction, single data\n- MIMD: Multiple instruction, multiple data\n\n**Performance Metrics:**\n- Speedup: Tâ‚/Tâ‚š\n- Efficiency: Speedup/p\n- Amdahl's Law: S = 1/((1-f) + f/p)\n- Gustafson's Law",
         codeExample: `// Parallel speedup calculation
 function amdahlLaw(f: number, p: number): number {
   return 1 / ((1 - f) + f / p);
@@ -2863,7 +2883,7 @@ console.log("Expected:", 1000 * 1001 / 2);`,
       {
         id: "4",
         title: "GPU Programming & CUDA",
-        content: "**GPU Computing:** Using GPUs for general-purpose computation (GPGPU).\n\n**CUDA (Compute Unified Device Architecture):**\n- NVIDIA's parallel computing platform\n- Host (CPU) + Device (GPU) programming model\n- Kernels: Functions executed on GPU threads\n\n**CUDA Memory:**\n- Global memory: Large, slow\n- Shared memory: Fast, per-block\n- Registers: Fastest, per-thread\n- Constant/Texture memory: Read-only cache\n\n**Programming Model:**\n- Threads → Blocks → Grid\n- Thread indexing: threadIdx, blockIdx, blockDim\n\n**Libraries:**\n- cuBLAS: Linear algebra\n- cuFFT: Fast Fourier Transform\n- cuDNN: Deep learning\n- Thrust: C++ template library",
+        content: "**GPU Computing:** Using GPUs for general-purpose computation (GPGPU).\n\n**CUDA (Compute Unified Device Architecture):**\n- NVIDIA's parallel computing platform\n- Host (CPU) + Device (GPU) programming model\n- Kernels: Functions executed on GPU threads\n\n**CUDA Memory:**\n- Global memory: Large, slow\n- Shared memory: Fast, per-block\n- Registers: Fastest, per-thread\n- Constant/Texture memory: Read-only cache\n\n**Programming Model:**\n- Threads â†’ Blocks â†’ Grid\n- Thread indexing: threadIdx, blockIdx, blockDim\n\n**Libraries:**\n- cuBLAS: Linear algebra\n- cuFFT: Fast Fourier Transform\n- cuDNN: Deep learning\n- Thrust: C++ template library",
         codeExample: `// GPU kernel simulation (conceptual)
 class GPUSimulator {
   private memory: Float32Array;
@@ -2924,13 +2944,14 @@ console.log("GPU result:", Array.from(result));`,
     slug: "image-processing",
     title: "Image Processing & Applications (IPA)",
     description: "Learn digital image fundamentals, filtering, transformations, segmentation, and feature extraction.",
-    icon: "🖼️",
+    icon: "ðŸ–¼ï¸",
+    notesUrl: "https://noteslink.in/product/ipa-image-processing-applications-notes-kiit/",
     color: "from-pink-500 to-fuchsia-600",
     lessons: [
       {
         id: "1",
         title: "Digital Image Fundamentals",
-        content: "**Digital Image:** A 2D array of pixels (picture elements).\n\n**Image Types:**\n- Binary: 1-bit (black/white)\n- Grayscale: 8-bit (0-255)\n- Color: RGB (3 channels)\n- Multispectral/Hyperspectral\n\n**Image Properties:**\n- Resolution: Width × Height\n- Bit depth: Bits per pixel\n- Color space: RGB, HSV, CMYK, YCbCr\n\n**Image Operations:**\n- Point operations: Pixel-by-pixel\n- Neighborhood operations: Filter kernels\n- Geometric: Rotation, scaling, translation\n\n**Histogram:**\n- Distribution of pixel intensities\n- Histogram equalization: Improve contrast",
+        content: "**Digital Image:** A 2D array of pixels (picture elements).\n\n**Image Types:**\n- Binary: 1-bit (black/white)\n- Grayscale: 8-bit (0-255)\n- Color: RGB (3 channels)\n- Multispectral/Hyperspectral\n\n**Image Properties:**\n- Resolution: Width Ã— Height\n- Bit depth: Bits per pixel\n- Color space: RGB, HSV, CMYK, YCbCr\n\n**Image Operations:**\n- Point operations: Pixel-by-pixel\n- Neighborhood operations: Filter kernels\n- Geometric: Rotation, scaling, translation\n\n**Histogram:**\n- Distribution of pixel intensities\n- Histogram equalization: Improve contrast",
         codeExample: `// Image histogram and equalization
 class ImageProcessor {
   static histogram(image: number[][]): number[] {
@@ -2971,7 +2992,7 @@ console.log("Thresholded:", ImageProcessor.threshold(image, 128));`,
       {
         id: "2",
         title: "Image Filtering",
-        content: "**Spatial Filters:**\n- **Smoothing**: Reduce noise (mean, Gaussian, median)\n- **Sharpening**: Enhance edges (Laplacian, Sobel)\n\n**Convolution:**\n- Flip kernel 180° and slide over image\n- Output = Σ(kernel[i][j] × image[i+x][j+y])\n\n**Common Kernels:**\n- Mean: [[1,1,1],[1,1,1],[1,1,1]] / 9\n- Gaussian: Weighted average\n- Sobel: Edge detection (horizontal/vertical)\n- Laplacian: Second derivative\n\n**Frequency Domain:**\n- Fourier Transform: spatial → frequency\n- Low-pass: Blur\n- High-pass: Sharpen\n- Band-pass: Select specific frequencies",
+        content: "**Spatial Filters:**\n- **Smoothing**: Reduce noise (mean, Gaussian, median)\n- **Sharpening**: Enhance edges (Laplacian, Sobel)\n\n**Convolution:**\n- Flip kernel 180Â° and slide over image\n- Output = Î£(kernel[i][j] Ã— image[i+x][j+y])\n\n**Common Kernels:**\n- Mean: [[1,1,1],[1,1,1],[1,1,1]] / 9\n- Gaussian: Weighted average\n- Sobel: Edge detection (horizontal/vertical)\n- Laplacian: Second derivative\n\n**Frequency Domain:**\n- Fourier Transform: spatial â†’ frequency\n- Low-pass: Blur\n- High-pass: Sharpen\n- Band-pass: Select specific frequencies",
         codeExample: `// Image convolution
 class ImageFilter {
   static convolve(image: number[][], kernel: number[][]): number[][] {
@@ -3125,13 +3146,14 @@ console.log("HOG:", FeatureExtractor.histogramOfGradients(image, 1));`,
     slug: "multicore-programming",
     title: "Multicore Programming (MCP)",
     description: "Learn parallelism, threading, synchronization, lock-free algorithms, and OpenMP.",
-    icon: "🧵",
+    icon: "ðŸ§µ",
+    notesUrl: "https://noteslink.in/product/mcp-multicore-programming-notes-kiit/",
     color: "from-emerald-500 to-teal-600",
     lessons: [
       {
         id: "1",
         title: "Parallelism & Threading",
-        content: "**Parallelism vs Concurrency:**\n- Parallelism: Doing multiple things simultaneously\n- Concurrency: Handling multiple things at once\n\n**Thread Basics:**\n- Lightweight process sharing address space\n- Thread-local vs shared data\n- Thread lifecycle: New → Ready → Running → Blocked → Terminated\n\n**Creation Models:**\n- Fork-Join: Create threads, join at barrier\n- Task Pool: Distribute tasks to worker threads\n- Pipeline: Stages connected by queues\n\n**Challenges:**\n- Race conditions\n- Deadlocks\n- Starvation\n- False sharing",
+        content: "**Parallelism vs Concurrency:**\n- Parallelism: Doing multiple things simultaneously\n- Concurrency: Handling multiple things at once\n\n**Thread Basics:**\n- Lightweight process sharing address space\n- Thread-local vs shared data\n- Thread lifecycle: New â†’ Ready â†’ Running â†’ Blocked â†’ Terminated\n\n**Creation Models:**\n- Fork-Join: Create threads, join at barrier\n- Task Pool: Distribute tasks to worker threads\n- Pipeline: Stages connected by queues\n\n**Challenges:**\n- Race conditions\n- Deadlocks\n- Starvation\n- False sharing",
         codeExample: `// Thread simulation
 class ThreadPool {
   private tasks: (() => void)[] = [];
@@ -3226,7 +3248,7 @@ mutex.lock().then(() => {
       {
         id: "3",
         title: "Lock-Free & Wait-Free Algorithms",
-        content: "**Lock-Free:** At least one thread makes progress.\n- Compare-and-Swap (CAS)\n- Load-Linked/Store-Conditional (LL/SC)\n\n**Wait-Free:** Every thread makes progress in bounded steps.\n- More complex but better guarantees\n\n**CAS Algorithm:**\n```\nCAS(address, expected, new_value):\n  if *address == expected:\n    *address = new_value\n    return true\n  else:\n    return false\n```\n\n**Data Structures:**\n- Lock-free stack (CAS on top pointer)\n- Lock-free queue (Michael-Scott queue)\n- Lock-free linked list\n\n**ABA Problem:**\n- Value changes A→B→A between read and CAS\n- Solution: Tagged pointers, hazard pointers",
+        content: "**Lock-Free:** At least one thread makes progress.\n- Compare-and-Swap (CAS)\n- Load-Linked/Store-Conditional (LL/SC)\n\n**Wait-Free:** Every thread makes progress in bounded steps.\n- More complex but better guarantees\n\n**CAS Algorithm:**\n```\nCAS(address, expected, new_value):\n  if *address == expected:\n    *address = new_value\n    return true\n  else:\n    return false\n```\n\n**Data Structures:**\n- Lock-free stack (CAS on top pointer)\n- Lock-free queue (Michael-Scott queue)\n- Lock-free linked list\n\n**ABA Problem:**\n- Value changes Aâ†’Bâ†’A between read and CAS\n- Solution: Tagged pointers, hazard pointers",
         codeExample: `// Lock-free stack using CAS
 class LockFreeStack<T> {
   private head: { value: T; next: any } | null = null;
@@ -3334,7 +3356,7 @@ console.log("Scan:", ParallelPatterns.scan(arr));`,
       { id: "mcp1", question: "Parallelism means:", options: ["Handling multiple things at once", "Doing multiple things simultaneously", "Single-threaded execution", "Sequential processing"], correctIndex: 1, explanation: "Parallelism is doing multiple things simultaneously on multiple cores.", difficulty: "easy", chapter: "Fundamentals" },
       { id: "mcp2", question: "A mutex provides:", options: ["Condition signaling", "Mutual exclusion", "Atomic operations", "Memory ordering"], correctIndex: 1, explanation: "A mutex ensures only one thread can enter a critical section at a time.", difficulty: "easy", chapter: "Synchronization" },
       { id: "mcp3", question: "CAS stands for:", options: ["Compare and Swap", "Critical Area Section", "Concurrent Access System", "Central Allocation Service"], correctIndex: 0, explanation: "Compare-and-Swap is the foundation of lock-free algorithms.", difficulty: "easy", chapter: "Lock-Free" },
-      { id: "mcp4", question: "ABA problem occurs when:", options: ["Two threads access same data", "Value changes A→B→A between read and CAS", "Deadlock happens", "Starvation occurs"], correctIndex: 1, explanation: "ABA: value looks unchanged but was modified in between.", difficulty: "medium", chapter: "Lock-Free" },
+      { id: "mcp4", question: "ABA problem occurs when:", options: ["Two threads access same data", "Value changes Aâ†’Bâ†’A between read and CAS", "Deadlock happens", "Starvation occurs"], correctIndex: 1, explanation: "ABA: value looks unchanged but was modified in between.", difficulty: "medium", chapter: "Lock-Free" },
       { id: "mcp5", question: "OpenMP 'schedule(dynamic)' is best for:", options: ["Equal workload loops", "Unequal workload loops", "Sequential code", "Memory-bound code"], correctIndex: 1, explanation: "Dynamic scheduling distributes small chunks, balancing uneven workloads.", difficulty: "medium", chapter: "OpenMP" },
       { id: "mcp6", question: "False sharing is caused by:", options: ["Shared variables", "Cache line contention between threads", "Deadlocks", "Insufficient memory"], correctIndex: 1, explanation: "False sharing occurs when threads modify different variables on the same cache line.", difficulty: "medium", chapter: "Parallelism" }
     ]
@@ -3343,7 +3365,8 @@ console.log("Scan:", ParallelPatterns.scan(arr));`,
     slug: "advanced-microprocessor",
     title: "ARM & Advanced Microprocessor",
     description: "Learn ARM architecture, assembly language, interrupts, pipeline, and memory management.",
-    icon: "🔧",
+    icon: "ðŸ”§",
+    notesUrl: "https://noteslink.in/product/arm-advanced-microprocessor-notes-kiit/",
     color: "from-zinc-500 to-gray-600",
     lessons: [
       {
@@ -3497,7 +3520,7 @@ intc.raiseIRQ(3);`,
       {
         id: "4",
         title: "ARM Pipeline & Memory Management",
-        content: "**ARM Pipeline:**\n- ARM7: 3-stage (Fetch, Decode, Execute)\n- ARM9: 5-stage\n- Cortex-A: 8-13 stage (out-of-order)\n\n**Pipeline Hazards:**\n- Data hazard: Forwarding/bypassing\n- Control hazard: Branch prediction\n- Structural hazard: Resource duplication\n\n**Memory Management Unit (MMU):**\n- Virtual → Physical address translation\n- Page tables: 4KB pages\n- TLB (Translation Lookaside Buffer)\n- Page faults: Invalid access\n\n**ARM Memory Model:**\n- Little-endian (default) or Big-endian\n- Normal, Device, Strongly-ordered memory\n- Cacheable vs Non-cacheable\n\n**Cache in ARM:**\n- L1: I-Cache + D-Cache (Harvard)\n- L2: Unified\n- Cache policies: Write-back, Write-through",
+        content: "**ARM Pipeline:**\n- ARM7: 3-stage (Fetch, Decode, Execute)\n- ARM9: 5-stage\n- Cortex-A: 8-13 stage (out-of-order)\n\n**Pipeline Hazards:**\n- Data hazard: Forwarding/bypassing\n- Control hazard: Branch prediction\n- Structural hazard: Resource duplication\n\n**Memory Management Unit (MMU):**\n- Virtual â†’ Physical address translation\n- Page tables: 4KB pages\n- TLB (Translation Lookaside Buffer)\n- Page faults: Invalid access\n\n**ARM Memory Model:**\n- Little-endian (default) or Big-endian\n- Normal, Device, Strongly-ordered memory\n- Cacheable vs Non-cacheable\n\n**Cache in ARM:**\n- L1: I-Cache + D-Cache (Harvard)\n- L2: Unified\n- Cache policies: Write-back, Write-through",
         codeExample: `// TLB simulation
 class TLB {
   private entries: Map<number, number> = new Map();
@@ -3548,13 +3571,14 @@ console.log("Stats:", tlb.getStats());`,
     slug: "software-project-management",
     title: "Software Project Management (SPM)",
     description: "Master project planning, estimation, scheduling, risk management, and agile methods.",
-    icon: "📋",
+    icon: "ðŸ“‹",
+    notesUrl: "https://noteslink.in/product/software-project-management-notes-kiit/",
     color: "from-cyan-500 to-blue-600",
     lessons: [
       {
         id: "1",
         title: "Project Planning & Estimation",
-        content: "**Project Planning:**\n- Define scope, objectives, deliverables\n- Work Breakdown Structure (WBS)\n- Resource allocation\n- Timeline and milestones\n\n**Estimation Techniques:**\n- **Expert Judgment**: Experience-based\n- **Analogous Estimation**: Compare to similar projects\n- **Parametric**: COCOMO, Function Point Analysis\n- **Three-Point (PERT)**: (O + 4M + P) / 6\n\n**COCOMO Model:**\n- Effort = a × (KLOC)ᵇ\n- Time = c × (Effort)ᵈ\n\n**WBS:**\n- Decompose project into manageable tasks\n- Hierarchical structure\n- 100% rule: sum of children = parent",
+        content: "**Project Planning:**\n- Define scope, objectives, deliverables\n- Work Breakdown Structure (WBS)\n- Resource allocation\n- Timeline and milestones\n\n**Estimation Techniques:**\n- **Expert Judgment**: Experience-based\n- **Analogous Estimation**: Compare to similar projects\n- **Parametric**: COCOMO, Function Point Analysis\n- **Three-Point (PERT)**: (O + 4M + P) / 6\n\n**COCOMO Model:**\n- Effort = a Ã— (KLOC)áµ‡\n- Time = c Ã— (Effort)áµˆ\n\n**WBS:**\n- Decompose project into manageable tasks\n- Hierarchical structure\n- 100% rule: sum of children = parent",
         codeExample: `// PERT estimation
 function pertEstimate(
   optimistic: number,
@@ -3649,7 +3673,7 @@ console.log("Critical Path:", criticalPath(activities));`,
       {
         id: "3",
         title: "Risk Management",
-        content: "**Risk Management Process:**\n1. **Identification**: Brainstorm, checklists, interviews\n2. **Analysis**: Qualitative and quantitative\n3. **Response Planning**: Avoid, mitigate, transfer, accept\n4. **Monitoring**: Track risks, update plans\n\n**Risk Assessment Matrix:**\n- Probability: Low, Medium, High\n- Impact: Low, Medium, High\n- Risk Score = Probability × Impact\n\n**Risk Response Strategies:**\n- **Avoid**: Eliminate the threat\n- **Mitigate**: Reduce probability or impact\n- **Transfer**: Shift to third party (insurance, outsourcing)\n- **Accept**: Acknowledge and prepare contingency\n\n**Risk Register:**\n- Risk ID, description, probability, impact\n- Owner, response strategy, status",
+        content: "**Risk Management Process:**\n1. **Identification**: Brainstorm, checklists, interviews\n2. **Analysis**: Qualitative and quantitative\n3. **Response Planning**: Avoid, mitigate, transfer, accept\n4. **Monitoring**: Track risks, update plans\n\n**Risk Assessment Matrix:**\n- Probability: Low, Medium, High\n- Impact: Low, Medium, High\n- Risk Score = Probability Ã— Impact\n\n**Risk Response Strategies:**\n- **Avoid**: Eliminate the threat\n- **Mitigate**: Reduce probability or impact\n- **Transfer**: Shift to third party (insurance, outsourcing)\n- **Accept**: Acknowledge and prepare contingency\n\n**Risk Register:**\n- Risk ID, description, probability, impact\n- Owner, response strategy, status",
         codeExample: `// Risk assessment
 interface Risk {
   id: string;
@@ -3736,19 +3760,20 @@ console.log("LOC:", CodeMetrics.linesOfCode(code));`,
       }
     ],
     quiz: [
-      { id: "spm1", question: "PERT uses which formula?", options: ["(O+M+P)/3", "(O+4M+P)/6", "(O+2M+P)/4", "O+M+P"], correctIndex: 1, explanation: "PERT estimate = (Optimistic + 4×MostLikely + Pessimistic) / 6.", difficulty: "easy", chapter: "Estimation" },
+      { id: "spm1", question: "PERT uses which formula?", options: ["(O+M+P)/3", "(O+4M+P)/6", "(O+2M+P)/4", "O+M+P"], correctIndex: 1, explanation: "PERT estimate = (Optimistic + 4Ã—MostLikely + Pessimistic) / 6.", difficulty: "easy", chapter: "Estimation" },
       { id: "spm2", question: "Critical path is:", options: ["Shortest path", "Longest path", "Any path", "Random path"], correctIndex: 1, explanation: "The critical path is the longest path, determining minimum project duration.", difficulty: "easy", chapter: "Scheduling" },
       { id: "spm3", question: "SPI > 1 means:", options: ["Behind schedule", "Ahead of schedule", "On budget", "Over budget"], correctIndex: 1, explanation: "SPI (Schedule Performance Index) > 1 means ahead of schedule.", difficulty: "medium", chapter: "EVM" },
       { id: "spm4", question: "Risk transfer means:", options: ["Eliminate risk", "Reduce risk", "Shift risk to third party", "Ignore risk"], correctIndex: 2, explanation: "Transfer shifts the risk impact to another party (e.g., insurance).", difficulty: "easy", chapter: "Risk" },
       { id: "spm5", question: "Cyclomatic complexity measures:", options: ["Lines of code", "Decision points in code", "Function count", "Variable count"], correctIndex: 1, explanation: "Cyclomatic complexity counts the number of decision points (branches).", difficulty: "easy", chapter: "Quality" },
-      { id: "spm6", question: "WBS stands for:", options: ["Work Breakdown Structure", "Weekly Budget Summary", "Weighted Balanced Scorecard", "Workflow Base System"], correctIndex: 0, explanation: "WBS = Work Breakdown Structure — decomposes project into manageable tasks.", difficulty: "easy", chapter: "Planning" }
+      { id: "spm6", question: "WBS stands for:", options: ["Work Breakdown Structure", "Weekly Budget Summary", "Weighted Balanced Scorecard", "Workflow Base System"], correctIndex: 0, explanation: "WBS = Work Breakdown Structure â€” decomposes project into manageable tasks.", difficulty: "easy", chapter: "Planning" }
     ]
   },
   {
     slug: "industry-4-0",
     title: "Industry 4.0",
     description: "Explore IoT, cyber-physical systems, cloud computing, big data, and AI in manufacturing.",
-    icon: "🏭",
+    icon: "ðŸ­",
+    notesUrl: "https://noteslink.in/product/ind-4-0-noteskiit/",
     color: "from-violet-500 to-purple-600",
     lessons: [
       {
@@ -3859,7 +3884,7 @@ class PredictiveMaintenance {
     vibration: number;
     temperature: number;
     pressure: number;
-   运行小时: number;
+   è¿è¡Œå°æ—¶: number;
   }): { risk: string; confidence: number; action: string } {
     // Simple rule-based prediction
     let riskScore = 0;
@@ -3867,7 +3892,7 @@ class PredictiveMaintenance {
     if (data.vibration > 5) riskScore += 0.3;
     if (data.temperature > 80) riskScore += 0.2;
     if (data.pressure > 100) riskScore += 0.2;
-    if (data.运行小时 > 10000) riskScore += 0.3;
+    if (data.è¿è¡Œå°æ—¶ > 10000) riskScore += 0.3;
 
     const risk = riskScore > this.failureThreshold ? "HIGH" :
                  riskScore > 0.4 ? "MEDIUM" : "LOW";
@@ -3885,7 +3910,7 @@ class PredictiveMaintenance {
 
 const pm = new PredictiveMaintenance();
 const result = pm.analyzeSensorData({
-  vibration: 6, temperature: 85, pressure: 110, 运行小时: 12000
+  vibration: 6, temperature: 85, pressure: 110, è¿è¡Œå°æ—¶: 12000
 });
 console.log("Maintenance analysis:", result);`,
         language: "typescript"
@@ -3941,7 +3966,7 @@ console.log("Metrics:", line.getMetrics());`,
       }
     ],
     quiz: [
-      { id: "ind1", question: "Industry 4.0 is also known as:", options: ["Digital Revolution", "Fourth Industrial Revolution", "Smart Age", "AI Revolution"], correctIndex: 1, explanation: "Industry 4.0 = Fourth Industrial Revolution — smart manufacturing with IoT, AI, CPS.", difficulty: "easy", chapter: "Introduction" },
+      { id: "ind1", question: "Industry 4.0 is also known as:", options: ["Digital Revolution", "Fourth Industrial Revolution", "Smart Age", "AI Revolution"], correctIndex: 1, explanation: "Industry 4.0 = Fourth Industrial Revolution â€” smart manufacturing with IoT, AI, CPS.", difficulty: "easy", chapter: "Introduction" },
       { id: "ind2", question: "MQTT is used for:", options: ["Database queries", "Lightweight pub/sub messaging", "File transfer", "Video streaming"], correctIndex: 1, explanation: "MQTT is a lightweight publish-subscribe messaging protocol for IoT.", difficulty: "easy", chapter: "IoT" },
       { id: "ind3", question: "Edge computing processes data:", options: ["In the cloud only", "Near the data source", "On a single server", "Offline only"], correctIndex: 1, explanation: "Edge computing processes data near where it's generated, reducing latency.", difficulty: "easy", chapter: "Edge Computing" },
       { id: "ind4", question: "Digital Twin is:", options: ["A physical replica", "A virtual replica of a physical system", "A backup system", "A sensor"], correctIndex: 1, explanation: "A digital twin is a virtual model that mirrors a physical system in real-time.", difficulty: "easy", chapter: "Smart Manufacturing" },

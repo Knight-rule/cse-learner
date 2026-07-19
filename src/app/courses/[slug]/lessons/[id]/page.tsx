@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight, ArrowLeft, ArrowRight } from "lucide-react";
+import { ChevronRight, ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import { courses, getCourse } from "@/data/courses";
 import { notFound } from "next/navigation";
 import LessonContent from "@/components/LessonContent";
@@ -39,6 +39,20 @@ export default async function LessonPage({ params }: { params: { slug: string; i
           <ChevronRight size={14} />
           <span>{lesson.title}</span>
         </div>
+
+        {course.notesUrl && (
+          <div style={{ marginBottom: 24 }}>
+            <a
+              href={course.notesUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-outline"
+              style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, padding: "6px 14px" }}
+            >
+              <ExternalLink size={14} /> View Notes on NotesLink
+            </a>
+          </div>
+        )}
 
         <LessonContent
           lesson={lesson}

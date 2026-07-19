@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight, BookOpen, Brain, ArrowRight } from "lucide-react";
+import { ChevronRight, BookOpen, Brain, ArrowRight, ExternalLink } from "lucide-react";
 import { courses, getCourse } from "@/data/courses";
 import { notFound } from "next/navigation";
 
@@ -33,6 +33,17 @@ export default async function CoursePage({ params }: { params: { slug: string } 
           <div className="flex items-center gap-4 mt-6">
             <span className="badge badge-accent"><BookOpen size={14} /> {course.lessons.length} Lessons</span>
             <span className="badge badge-purple"><Brain size={14} /> {course.quiz.length} Quiz Questions</span>
+            {course.notesUrl && (
+              <a
+                href={course.notesUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="badge badge-purple"
+                style={{ textDecoration: "none" }}
+              >
+                <ExternalLink size={14} /> View Notes
+              </a>
+            )}
           </div>
         </div>
 
