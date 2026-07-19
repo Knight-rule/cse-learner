@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Play, RotateCcw, Copy, Check, ChevronDown, Terminal, Loader2, Wifi, WifiOff } from "lucide-react";
 import { trackCodeRun } from "@/lib/tracker";
 import { JavaScriptCompiler } from "@/lib/compilers/javascript";
@@ -27,6 +27,16 @@ const darkTheme = EditorView.theme({
   ".cm-matchingBracket": { backgroundColor: "#3b82f630", outline: "1px solid #3b82f650" },
 }, { dark: true });
 
+const lightTheme = EditorView.theme({
+  "&": { backgroundColor: "#ffffff", color: "#1e293b" },
+  ".cm-gutters": { backgroundColor: "#f8fafc", color: "#94a3b8", border: "none" },
+  ".cm-activeLineGutter": { backgroundColor: "#f1f5f9" },
+  ".cm-activeLine": { backgroundColor: "#f1f5f960" },
+  ".cm-selectionBackground": { backgroundColor: "#3b82f620 !important" },
+  ".cm-cursor": { borderLeftColor: "#2563eb" },
+  ".cm-matchingBracket": { backgroundColor: "#3b82f620", outline: "1px solid #3b82f640" },
+}, { dark: false });
+
 interface Language {
   id: string;
   name: string;
@@ -40,7 +50,7 @@ const languages: Language[] = [
   {
     id: "python",
     name: "Python",
-    icon: "🐍",
+    icon: "\ud83d\udc0d",
     mode: "local",
     extension: python,
     examples: [
@@ -53,7 +63,7 @@ const languages: Language[] = [
   {
     id: "javascript",
     name: "JavaScript",
-    icon: "📜",
+    icon: "\ud83d\udcdc",
     mode: "local",
     extension: javascript,
     examples: [
@@ -65,7 +75,7 @@ const languages: Language[] = [
   {
     id: "c",
     name: "C",
-    icon: "⚙️",
+    icon: "\u2699\ufe0f",
     mode: "cloud",
     extension: cpp,
     examples: [
@@ -77,7 +87,7 @@ const languages: Language[] = [
   {
     id: "cpp",
     name: "C++",
-    icon: "🔧",
+    icon: "\ud83d\udd27",
     mode: "cloud",
     extension: cpp,
     examples: [
@@ -109,6 +119,15 @@ export default function Playground() {
   const [isRunning, setIsRunning] = useState(false);
   const [showLangDropdown, setShowLangDropdown] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isLight, setIsLight] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsLight(document.documentElement.classList.contains("light"));
+    check();
+    const observer = new MutationObserver(check);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
 
   const onChange = useCallback((val: string) => {
     setCode(val);
@@ -134,7 +153,7 @@ export default function Playground() {
     }
 
     setIsRunning(true);
-    const modeLabel = selectedLang.mode === "cloud" ? "☁️ Cloud" : "💻 Local";
+    const modeLabel = selectedLang.mode === "cloud" ? "\u2601\ufe0f Cloud" : "\ud83d\udcbb Local";
     setOutput([`${modeLabel} Running ${selectedLang.name}...`]);
 
     try {
@@ -150,9 +169,9 @@ export default function Playground() {
           l.includes("error") || l.includes("Error") || l.includes("exception") || l.includes("Traceback")
         );
         if (hasError) {
-          lines.push("❌ Error:");
+          lines.push("\u274c Error:");
         } else {
-          lines.push("⚠️ Warnings:");
+          lines.push("\u26a0\ufe0f Warnings:");
         }
         lines.push(...errLines);
         lines.push("");
@@ -162,111 +181,110 @@ export default function Playground() {
       }
       setOutput(lines.length > 0 ? lines : ["(No output)"]);
     } catch (err: any) {
-      setOutput(["❌ " + (err.message || "Failed to run code")]);
+      setOutput(["\u274c " + (err.message || "Failed to run code")]);
     }
 
     setIsRunning(false);
   };
 
+  const getExt = () => {
+    if (selectedLang.id === "python") return "py";
+    if (selectedLang.id === "javascript") return "js";
+    if (selectedLang.id === "c") return "c";
+    return "cpp";
+  };
+
   return (
-    <div className="h-[calc(100vh-4rem)] flex flex-col">
+    <div className="playground-wrap" style={{ flex: 1 }}>
       {/* Toolbar */}
-      <div className="bg-white dark:bg-dark-800 border-b border-gray-200 dark:border-dark-700 px-4 py-2 flex items-center gap-3 flex-wrap">
-        <div className="relative">
+      <div className="playground-toolbar">
+        <div style={{ position: "relative" }}>
           <button
+            className="playground-toolbar-btn"
             onClick={() => setShowLangDropdown(!showLangDropdown)}
-            className="flex items-center gap-2 px-4 py-2 bg-dark-50 dark:bg-dark-700 rounded-lg hover:bg-dark-100 dark:hover:bg-dark-600 transition-colors font-medium text-sm"
           >
             <span>{selectedLang.icon}</span>
             <span>{selectedLang.name}</span>
-            <ChevronDown className="w-4 h-4 text-dark-400 dark:text-dark-500" />
+            <ChevronDown size={14} style={{ color: "var(--text-muted)" }} />
           </button>
           {showLangDropdown && (
-            <div className="absolute top-full left-0 mt-1 bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-dark-700 shadow-xl z-50 py-2 min-w-[200px]">
-              {languages.map((lang) => (
-                <button
-                  key={lang.id}
-                  onClick={() => selectLanguage(lang)}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors ${
-                    selectedLang.id === lang.id ? "bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 font-medium" : ""
-                  }`}
-                >
-                  <span className="text-lg">{lang.icon}</span>
-                  <span>{lang.name}</span>
-                  {lang.mode === "local" ? (
-                    <span className="ml-auto text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-2 py-0.5 rounded-full flex items-center gap-1">
-                      <Wifi className="w-3 h-3" /> In-Browser
+            <>
+              <div className="playground-close-overlay" onClick={() => setShowLangDropdown(false)} />
+              <div className="playground-dropdown">
+                {languages.map((lang) => (
+                  <button
+                    key={lang.id}
+                    onClick={() => selectLanguage(lang)}
+                    className={"playground-dropdown-item" + (selectedLang.id === lang.id ? " selected" : "")}
+                  >
+                    <span style={{ fontSize: 16 }}>{lang.icon}</span>
+                    <span>{lang.name}</span>
+                    <span className={"playground-mode-badge " + lang.mode} style={{ marginLeft: "auto" }}>
+                      {lang.mode === "local" ? <Wifi size={10} /> : <WifiOff size={10} />}
+                      {lang.mode === "local" ? "In-Browser" : "Cloud"}
                     </span>
-                  ) : (
-                    <span className="ml-auto text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full flex items-center gap-1">
-                      <WifiOff className="w-3 h-3" /> Cloud
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
+                  </button>
+                ))}
+              </div>
+            </>
           )}
         </div>
 
         <select
-          onChange={(e) => { setCode(selectedLang.examples[parseInt(e.target.value)].code); setOutput([]); }}
-          className="px-3 py-2 bg-dark-50 dark:bg-dark-700 rounded-lg text-sm border-0 focus:ring-2 focus:ring-primary-500 dark:text-dark-200"
+          className="playground-example-select"
+          onChange={(e) => {
+            setCode(selectedLang.examples[parseInt(e.target.value)].code);
+            setOutput([]);
+          }}
         >
           {selectedLang.examples.map((ex, i) => (
             <option key={i} value={i}>{ex.title}</option>
           ))}
         </select>
 
-        <div className="flex-1" />
+        <div className="playground-toolbar-spacer" />
 
         <button
+          className="playground-icon-btn"
           onClick={() => { navigator.clipboard.writeText(code); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
-          className="flex items-center gap-1.5 px-3 py-2 text-sm text-dark-500 dark:text-dark-400 hover:text-dark-700 dark:hover:text-dark-200 hover:bg-dark-50 dark:hover:bg-dark-700 rounded-lg transition-colors"
         >
-          {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+          {copied ? <Check size={14} style={{ color: "var(--accent-green)" }} /> : <Copy size={14} />}
           {copied ? "Copied!" : "Copy"}
         </button>
         <button
+          className="playground-icon-btn"
           onClick={() => { setCode(selectedLang.examples[0].code); setOutput([]); }}
-          className="flex items-center gap-1.5 px-3 py-2 text-sm text-dark-500 dark:text-dark-400 hover:text-dark-700 dark:hover:text-dark-200 hover:bg-dark-50 dark:hover:bg-dark-700 rounded-lg transition-colors"
         >
-          <RotateCcw className="w-4 h-4" /> Reset
+          <RotateCcw size={14} />
+          Reset
         </button>
-        <button
-          onClick={runCode}
-          disabled={isRunning}
-          className="flex items-center gap-2 px-5 py-2 bg-green-600 text-white rounded-lg font-medium text-sm hover:bg-green-700 transition-colors disabled:opacity-50 shadow-sm"
-        >
-          {isRunning ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" fill="currentColor" />}
+        <button className="playground-run-btn" onClick={runCode} disabled={isRunning}>
+          {isRunning ? <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} /> : <Play size={14} fill="currentColor" />}
           Run
-          <span className="text-green-300 text-xs ml-1">Ctrl+↵</span>
+          <kbd>Ctrl+Enter</kbd>
         </button>
       </div>
 
       {/* Editor + Output */}
-      <div className="flex-1 flex min-h-0">
-        <div className="flex-1 flex flex-col border-r border-gray-200 dark:border-dark-700">
-          <div className="bg-dark-900 px-4 py-2 flex items-center gap-2">
-            <div className="flex gap-1.5">
-              <div className="w-3 h-3 rounded-full bg-red-500" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500" />
-              <div className="w-3 h-3 rounded-full bg-green-500" />
+      <div className="playground-main">
+        <div className="playground-editor-pane">
+          <div className="playground-editor-header">
+            <div className="playground-editor-dots">
+              <div className="playground-editor-dot red" />
+              <div className="playground-editor-dot yellow" />
+              <div className="playground-editor-dot green" />
             </div>
-            <span className="text-dark-400 text-xs font-mono ml-2">main.{selectedLang.id === "python" ? "py" : selectedLang.id === "javascript" ? "js" : selectedLang.id === "c" ? "c" : "cpp"}</span>
-            <span className={`ml-auto text-xs px-2 py-0.5 rounded-full ${
-              selectedLang.mode === "local"
-                ? "bg-green-900 text-green-300"
-                : "bg-blue-900 text-blue-300"
-            }`}>
+            <span className="playground-editor-filename">main.{getExt()}</span>
+            <span className={"playground-editor-badge " + selectedLang.mode}>
               {selectedLang.mode === "local" ? "Runs in browser" : "Runs on cloud"}
             </span>
           </div>
-          <div className="flex-1 overflow-auto">
+          <div style={{ flex: 1, overflow: "auto" }}>
             <CodeMirror
               value={code}
               onChange={onChange}
               extensions={[selectedLang.extension(), EditorView.lineWrapping]}
-              theme={darkTheme}
+              theme={isLight ? lightTheme : darkTheme}
               basicSetup={{
                 lineNumbers: true,
                 highlightActiveLineGutter: true,
@@ -275,34 +293,45 @@ export default function Playground() {
                 bracketMatching: true,
                 autocompletion: false,
               }}
-              className="h-full text-sm"
+              style={{ height: "100%" }}
             />
           </div>
         </div>
 
-        <div className="w-[40%] flex flex-col bg-dark-950 min-w-[300px]">
-          <div className="bg-dark-900 px-4 py-2 flex items-center gap-2 border-b border-dark-800">
-            <Terminal className="w-4 h-4 text-green-400" />
-            <span className="text-dark-300 text-xs font-mono">Output</span>
+        <div className="playground-output-pane">
+          <div className="playground-output-header">
+            <Terminal size={14} style={{ color: "var(--accent-green)" }} />
+            <span>Output</span>
             {output.length > 0 && (
-              <button onClick={() => setOutput([])} className="ml-auto text-dark-500 hover:text-dark-300 text-xs">Clear</button>
+              <button
+                className="playground-icon-btn"
+                style={{ marginLeft: "auto", padding: "4px 8px", fontSize: 11 }}
+                onClick={() => setOutput([])}
+              >
+                Clear
+              </button>
             )}
           </div>
-          <div className="flex-1 p-4 overflow-auto font-mono text-sm">
+          <div className="playground-output-body">
             {output.length === 0 ? (
-              <div className="text-dark-600 flex flex-col items-center justify-center h-full gap-2">
-                <Terminal className="w-8 h-8" />
+              <div className="playground-output-empty">
+                <Terminal size={32} />
                 <p>Click &quot;Run&quot; or press Ctrl+Enter</p>
-                <p className="text-xs text-dark-700 mt-2">Python &amp; JavaScript run in your browser</p>
-                <p className="text-xs text-dark-700">C &amp; C++ compile on cloud</p>
+                <p style={{ fontSize: 11, marginTop: 8 }}>Python &amp; JavaScript run in your browser</p>
+                <p style={{ fontSize: 11 }}>C &amp; C++ compile on cloud</p>
               </div>
             ) : (
-              <div className="space-y-1">
+              <div>
                 {output.map((line, i) => (
-                  <div key={i} className={`whitespace-pre-wrap ${
-                    line.startsWith("❌") ? "text-red-400" :
-                    line.startsWith("⚠️") ? "text-yellow-400" : "text-green-300"
-                  }`}>{line}</div>
+                  <div
+                    key={i}
+                    className={
+                      "playground-output-line " +
+                      (line.startsWith("\u274c") ? "error" : line.startsWith("\u26a0\ufe0f") ? "warning" : "success")
+                    }
+                  >
+                    {line}
+                  </div>
                 ))}
               </div>
             )}
