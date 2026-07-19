@@ -141,16 +141,16 @@ export default function HomePage() {
       <section className="section" style={{ background: "var(--bg-secondary)" }}>
         <div className="container">
           <div className="text-center mb-12">
-            <span className="badge badge-accent mb-4" style={{ display: "inline-flex" }}>Featured Classes</span>
+            <span className="badge badge-accent mb-4" style={{ display: "inline-flex" }}>{courses.length} Courses</span>
             <h2 className="heading-xl mb-4">
-              Innovate &amp; Learn <span className="gradient-text">Featured CS Courses</span>
+              Innovate &amp; Learn <span className="gradient-text">All CS Courses</span>
             </h2>
             <p className="body-lg mx-auto" style={{ maxWidth: 560 }}>
               From fundamentals to advanced topics — master the skills that matter most.
             </p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: 24 }}>
-            {courses.slice(0, 6).map((course) => {
+            {courses.map((course) => {
               const colors = course.color.split(" ");
               return (
                 <Link

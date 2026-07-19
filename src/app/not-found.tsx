@@ -2,18 +2,15 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="min-h-[60vh] flex items-center justify-center px-4">
-      <div className="text-center">
-        <div className="text-6xl mb-4">🔍</div>
-        <h2 className="text-2xl font-bold mb-2">Page Not Found</h2>
-        <p className="text-dark-500 dark:text-dark-400 mb-6 max-w-md">
+    <div className="section" style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ textAlign: "center", padding: 32 }}>
+        <div style={{ fontSize: 80, marginBottom: 24, lineHeight: 1 }}>🔍</div>
+        <h2 className="heading-xl mb-4" style={{ fontSize: 48 }}>404</h2>
+        <p className="body-lg mb-8" style={{ maxWidth: 420, margin: "0 auto 32px" }}>
           The page you&apos;re looking for doesn&apos;t exist or has been moved.
         </p>
-        <Link
-          href="/"
-          className="px-6 py-3 bg-primary-600 text-white rounded-xl font-medium hover:bg-primary-700 transition-colors inline-block"
-        >
-          Go Home
+        <Link href="/" className="btn btn-primary" style={{ padding: "12px 32px" }}>
+          Back to Home
         </Link>
       </div>
     </div>
