@@ -571,22 +571,61 @@ img { max-width: 100%; display: block; }
 .playground-question {
   display: flex; gap: 14px; padding: 16px 20px;
   background: var(--bg-card); border-bottom: 1px solid var(--border);
+  max-height: 280px; overflow-y: auto;
 }
 .playground-question-icon {
   width: 36px; height: 36px; border-radius: var(--radius-md);
   background: var(--gradient-soft); color: var(--accent);
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
-.playground-question-content { min-width: 0; }
+.playground-question-content { min-width: 0; flex: 1; }
 .playground-question-label {
   font-size: 11px; font-weight: 600; text-transform: uppercase;
   letter-spacing: 0.05em; color: var(--accent); margin-bottom: 4px;
+  display: flex; align-items: center; gap: 8px;
 }
 .playground-question-title {
-  font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;
+  font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px;
 }
 .playground-question-text {
-  font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin: 0;
+  font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin: 0 0 10px;
+}
+.playground-difficulty {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 600; padding: 2px 8px;
+  border-radius: 10px; text-transform: capitalize;
+}
+.playground-difficulty.easy { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); }
+.playground-difficulty.medium { background: rgba(234, 179, 8, 0.1); color: #eab308; }
+.playground-difficulty.hard { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+.playground-expected {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 10px 14px; margin-top: 8px;
+}
+.playground-expected-label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 6px;
+}
+.playground-expected-code {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  line-height: 1.7; color: var(--accent-green); white-space: pre-wrap;
+}
+.playground-hint-toggle {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--accent); cursor: pointer;
+  background: none; border: none; padding: 0; margin-top: 8px;
+  font-family: inherit; transition: var(--transition);
+}
+.playground-hint-toggle:hover { opacity: 0.8; }
+.playground-hint {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 10px 14px; margin-top: 8px;
+  font-size: 12px; line-height: 1.6; color: var(--text-secondary);
+}
+.playground-exec-time {
+  margin-left: auto; font-size: 11px; color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  display: flex; align-items: center; gap: 4px;
 }
 .playground-wrap {
   min-height: calc(100vh - 68px); display: flex; flex-direction: column;
@@ -817,3 +856,8 @@ html.light .playground-mode-badge.local { background: rgba(16, 185, 129, 0.08); 
 html.light .playground-mode-badge.cloud { background: rgba(59, 130, 246, 0.08); }
 html.light .playground-question { background: var(--bg-card); border-bottom-color: var(--border); }
 html.light .playground-question-icon { background: rgba(249, 115, 22, 0.08); }
+html.light .playground-expected { background: var(--surface); border-color: var(--border); }
+html.light .playground-hint { background: var(--surface); border-color: var(--border); }
+html.light .playground-difficulty.easy { background: rgba(16, 185, 129, 0.08); }
+html.light .playground-difficulty.medium { background: rgba(234, 179, 8, 0.08); }
+html.light .playground-difficulty.hard { background: rgba(239, 68, 68, 0.08); }
