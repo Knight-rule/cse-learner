@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Code, Home, Brain, Bookmark, Sun, Moon, Menu, X } from "lucide-react";
+import { BookOpen, Code, Home, Brain, Bookmark, Sun, Moon, Menu, X, Map } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const navLinks = [
   { href: "/", label: "Home" },
+  { href: "/paths", label: "Paths", icon: Map },
   { href: "/courses", label: "Courses" },
   { href: "/languages", label: "Languages" },
   { href: "/playground", label: "Playground" },
@@ -62,6 +63,7 @@ export default function Navbar() {
                 onClick={() => setMobileOpen(false)}
                 className={"nav-link" + (active ? " active" : "")}
               >
+                {link.icon && <link.icon size={16} className="mr-2" />}
                 {link.label}
               </Link>
             );
