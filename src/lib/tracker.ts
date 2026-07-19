@@ -18,6 +18,10 @@ export interface LearnerStats {
   codeRuns: number;
   lessonsViewed: number;
   activities: Activity[];
+  dailyActivity: Record<string, number>; // YYYY-MM-DD -> count
+  lastActiveDate: string; // YYYY-MM-DD
+  currentStreak: number;
+  longestStreak: number;
 }
 
 const STORAGE_KEY = "cse-learner-data";
@@ -25,13 +29,29 @@ const SRS_STORAGE_KEY = "cse-learner-srs";
 
 function getData(): LearnerStats {
   if (typeof window === "undefined") {
-    return { coursesStarted: [], quizzesTaken: 0, totalScore: 0, totalQuestions: 0, codeRuns: 0, lessonsViewed: 0, activities: [] };
+    return { coursesStarted: [], quizzesTaken: 0, totalScore: 0, totalQuestions: 0, codeRuns: 0, lessonsViewed: 0, activities: [], dailyActivity: {}, lastActiveDate: "", currentStreak: 0, longestStreak: 0 };
   }
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      // Migration for existing data
+      return {
+        coursesStarted: parsed.coursesStarted || [],
+        quizzesTaken: parsed.quizzesTaken || 0,
+        totalScore: parsed.totalScore || 0,
+        totalQuestions: parsed.totalQuestions || 0,
+        codeRuns: parsed.codeRuns || 0,
+        lessonsViewed: parsed.lessonsViewed || 0,
+        activities: parsed.activities || [],
+        dailyActivity: parsed.dailyActivity || {},
+        lastActiveDate: parsed.lastActiveDate || "",
+        currentStreak: parsed.currentStreak || 0,
+        longestStreak: parsed.longestStreak || 0,
+      };
+    }
   } catch {}
-  return { coursesStarted: [], quizzesTaken: 0, totalScore: 0, totalQuestions: 0, codeRuns: 0, lessonsViewed: 0, activities: [] };
+  return { coursesStarted: [], quizzesTaken: 0, totalScore: 0, totalQuestions: 0, codeRuns: 0, lessonsViewed: 0, activities: [], dailyActivity: {}, lastActiveDate: "", currentStreak: 0, longestStreak: 0 };
 }
 
 function saveData(data: LearnerStats) {
@@ -53,6 +73,34 @@ function saveSRSData(cards: SRSCard[]) {
   try { localStorage.setItem(SRS_STORAGE_KEY, JSON.stringify(cards)); } catch {}
 }
 
+function getTodayString(): string {
+  const now = new Date();
+  return now.toISOString().split("T")[0];
+}
+
+function updateDailyActivity(data: LearnerStats) {
+  const today = getTodayString();
+  if (data.lastActiveDate === today) return data;
+
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayStr = yesterday.toISOString().split("T")[0];
+
+  // Increment today's count
+  data.dailyActivity[today] = (data.dailyActivity[today] || 0) + 1;
+
+  // Calculate streak
+  if (data.lastActiveDate === yesterdayStr) {
+    data.currentStreak += 1;
+  } else if (data.lastActiveDate !== today) {
+    data.currentStreak = 1;
+  }
+  data.longestStreak = Math.max(data.longestStreak, data.currentStreak);
+  data.lastActiveDate = today;
+
+  return data;
+}
+
 function addActivity(activity: Omit<Activity, "id" | "timestamp">) {
   const data = getData();
   data.activities.unshift({
@@ -61,6 +109,7 @@ function addActivity(activity: Omit<Activity, "id" | "timestamp">) {
     timestamp: Date.now(),
   });
   if (data.activities.length > 100) data.activities = data.activities.slice(0, 100);
+  updateDailyActivity(data);
   saveData(data);
 }
 
@@ -108,6 +157,35 @@ export function getAvgScore(): number {
   const data = getData();
   if (data.totalQuestions === 0) return 0;
   return Math.round((data.totalScore / data.totalQuestions) * 100);
+}
+
+export function getStreak(): { current: number; longest: number } {
+  const data = getData();
+  // Check if streak is broken (not active today or yesterday)
+  const today = getTodayString();
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayStr = yesterday.toISOString().split("T")[0];
+
+  let current = data.currentStreak;
+  if (data.lastActiveDate !== today && data.lastActiveDate !== yesterdayStr) {
+    current = 0;
+  }
+  return { current, longest: data.longestStreak };
+}
+
+export function getHeatmapData(days = 365): { date: string; count: number }[] {
+  const data = getData();
+  const result: { date: string; count: number }[] = [];
+  const today = new Date();
+
+  for (let i = days - 1; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+    const dateStr = date.toISOString().split("T")[0];
+    result.push({ date: dateStr, count: data.dailyActivity[dateStr] || 0 });
+  }
+  return result;
 }
 
 // SRS Functions
