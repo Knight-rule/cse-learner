@@ -13,14 +13,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} classic-layout`}>
+      <body className={inter.className}>
         <Navbar />
-        <main className="min-h-screen classic-main">{children}</main>
-        <footer className="bg-gray-800 text-gray-300 py-8">
-          <div className="container mx-auto px-4 text-center text-sm">
-            <p>CSE Learner — Built for Computer Science Students</p>
-          </div>
-        </footer>
+        <main className="min-h-screen">{children}</main>
       </body>
     </html>
   );

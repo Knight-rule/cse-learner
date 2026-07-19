@@ -19,10 +19,19 @@ export default function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dark, setDark] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const isDark = document.documentElement.classList.contains("dark");
     setDark(isDark);
+    
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const toggleDark = () => {
@@ -33,22 +42,25 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="classic-nav">
+    <nav className={`premium-nav ${scrolled ? "scrolled" : ""} ${dark ? "dark-mode" : ""}`}>
       <div className="nav-container">
         <Link href="/" className="logo">
           CSE Learner
         </Link>
 
         <button
-          className="md:hidden p-2 rounded hover:bg-blue-100"
+          className="md:hidden p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-expanded={mobileOpen}
           aria-label="Toggle navigation menu"
         >
-          {mobileOpen ? <span className="text-xl">×</span> : <span className="text-xl">☰</span>}
+          {mobileOpen ? 
+            <span className="text-xl text-dark">×</span> : 
+            <span className="text-xl text-dark">☰</span>
+          }
         </button>
 
-        <div className={`nav-links ${mobileOpen ? 'mobile-open' : ''}`}
+        <div className={`nav-links ${mobileOpen ? 'mobile-open' : ''}`
         >
           {navLinks.map((link) => {
             const Icon = link.icon;
@@ -58,10 +70,10 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 aria-current={active ? "page" : undefined}
-                className={`flex items-center gap-2 px-3 py-2 transition-colors ${
+                className={`flex items-center gap-2 px-3 py-2 transition-all ${
                   active
-                    ? "text-blue-600 bg-blue-50 border-b-2 border-blue-600"
-                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                    ? "text-blue font-medium"
+                    : "text-dark dark:text-gray-300 hover:text-blue hover:bg-gray-50 dark:hover:bg-gray-800"
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -71,16 +83,19 @@ export default function Navbar() {
           })}
           <button
             onClick={toggleDark}
-            className="p-2 rounded hover:bg-gray-200 transition-colors"
+            className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             aria-label="Toggle dark mode"
           >
-            {dark ? <Sun className="w-5 h-5 text-yellow-500" /> : <Moon className="w-5 h-5 text-blue-600" />}
+            {dark ? 
+              <Sun className="w-5 h-5 text-yellow-500" /> : 
+              <Moon className="w-5 h-5 text-blue-600" />
+            }
           </button>
         </div>
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden border-t border-gray-200 bg-white">
+        <div className="md:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-dark">
           {navLinks.map((link) => {
             const Icon = link.icon;
             const active = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
@@ -92,8 +107,8 @@ export default function Navbar() {
                 aria-current={active ? "page" : undefined}
                 className={`flex items-center gap-3 px-4 py-3 text-sm font-medium border-l-4 ${
                   active
-                    ? "border-blue-600 bg-blue-50 text-blue-600"
-                    : "border-transparent text-gray-700 hover:bg-gray-50"
+                    ? "border-blue bg-blue-50 dark:bg-blue-900/20 text-blue dark:text-blue-400"
+                    : "border-transparent text-dark dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                 }`}
               >
                 <Icon className="w-5 h-5" />
