@@ -2,6 +2,7 @@
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import type { Components } from "react-markdown";
 
 interface MarkdownContentProps {
   content: string;
@@ -20,7 +21,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
         ul: ({ children }) => <ul className="list-disc list-inside text-dark-600 dark:text-dark-300 mb-4 space-y-1">{children}</ul>,
         ol: ({ children }) => <ol className="list-decimal list-inside text-dark-600 dark:text-dark-300 mb-4 space-y-1">{children}</ol>,
         li: ({ children }) => <li className="text-dark-600 dark:text-dark-300">{children}</li>,
-        code: ({ inline, className, children, ...props }: any) => {
+        code: (({ inline, className, children, ...props }: React.ComponentPropsWithoutRef<"code"> & { inline?: boolean }) => {
           if (inline) {
             return (
               <code className="bg-dark-100 dark:bg-dark-700 text-primary-600 dark:text-primary-400 px-1.5 py-0.5 rounded text-sm font-mono" {...props}>
@@ -33,7 +34,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
               {children}
             </code>
           );
-        },
+        }) as Components["code"],
         pre: ({ children }) => <pre className="mb-4">{children}</pre>,
         blockquote: ({ children }) => (
           <blockquote className="border-l-4 border-primary-500 pl-4 italic text-dark-500 dark:text-dark-400 my-4">

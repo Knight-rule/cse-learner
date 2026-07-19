@@ -11,7 +11,6 @@ async function loadPyodide(): Promise<any> {
   if (!pyodideLoading) {
     pyodideLoading = true;
     try {
-      // Dynamically load Pyodide from CDN
       if (!(window as any).loadPyodide) {
         const script = document.createElement("script");
         script.src = "https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js";
@@ -26,13 +25,12 @@ async function loadPyodide(): Promise<any> {
       pyodideInstance = await (window as any).loadPyodide({
         indexURL: "https://cdn.jsdelivr.net/pyodide/v0.25.1/full/",
       });
-    } catch (e: any) {
-      pyodideError = e.message;
+    } catch (e: unknown) {
+      pyodideError = e instanceof Error ? e.message : String(e);
       throw e;
     }
   }
 
-  // Wait for loading to complete
   while (pyodideLoading && !pyodideInstance && !pyodideError) {
     await new Promise((r) => setTimeout(r, 100));
   }
@@ -46,7 +44,9 @@ export class PythonCompiler implements Compiler {
     try {
       const pyodide = await loadPyodide();
 
-      // Capture stdout/stderr
+      // Pass code as a global variable — no string interpolation/injection
+      pyodide.globals.set("__user_code__", code);
+
       const result = pyodide.runPython(`
 import sys
 from io import StringIO
@@ -57,7 +57,7 @@ sys.stdout = _stdout
 sys.stderr = _stderr
 
 try:
-    exec("""${code.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\n/g, "\\n")}""")
+    exec(__user_code__)
 except Exception as e:
     print(f"Error: {type(e).__name__}: {e}", file=sys.stderr)
 
@@ -69,8 +69,8 @@ sys.stderr = sys.__stderr__
 
       const [stdout, stderr] = result.toJs();
       return { stdout: stdout || "", stderr: stderr || "" };
-    } catch (e: any) {
-      return { stdout: "", stderr: `Python Error: ${e.message}` };
+    } catch (e: unknown) {
+      return { stdout: "", stderr: `Python Error: ${e instanceof Error ? e.message : String(e)}` };
     }
   }
 }

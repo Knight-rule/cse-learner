@@ -42,10 +42,11 @@ export class CloudCompiler implements Compiler {
         stdout: data.program_output || "",
         stderr: data.compiler_error || "",
       };
-    } catch (e: any) {
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
       return {
         stdout: "",
-        stderr: `Failed to connect to cloud compiler: ${e.message}. Check your internet connection.`,
+        stderr: `Failed to connect to cloud compiler: ${msg}. Check your internet connection.`,
       };
     }
   }

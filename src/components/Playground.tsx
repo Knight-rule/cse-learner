@@ -298,8 +298,8 @@ export default function Playground() {
         const expected = normalizeOutput(currentExample.expectedOutput);
         setOutputMatch(actual === expected ? "correct" : "wrong");
       }
-    } catch (err: any) {
-      setOutput(["\u274c " + (err.message || "Failed to run code")]);
+    } catch (err: unknown) {
+      setOutput(["\u274c " + (err instanceof Error ? err.message : "Failed to run code")]);
       setExecTime(null);
       setOutputMatch(null);
     }

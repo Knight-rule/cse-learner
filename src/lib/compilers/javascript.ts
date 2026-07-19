@@ -6,7 +6,6 @@ export class JavaScriptCompiler implements Compiler {
       const logs: string[] = [];
       const errors: string[] = [];
 
-      // Create sandboxed iframe
       const iframe = document.createElement("iframe");
       iframe.style.display = "none";
       iframe.sandbox = "allow-scripts";
@@ -20,11 +19,12 @@ export class JavaScriptCompiler implements Compiler {
       function cleanup() {
         clearTimeout(timeout);
         window.removeEventListener("message", handler);
-        document.body.removeChild(iframe);
+        try { document.body.removeChild(iframe); } catch {}
       }
 
       function handler(event: MessageEvent) {
         if (event.source !== iframe.contentWindow) return;
+        if (event.origin !== "null") return; // sandboxed iframes have origin "null"
 
         const data = event.data;
         if (data.type === "log") {
@@ -42,33 +42,47 @@ export class JavaScriptCompiler implements Compiler {
 
       window.addEventListener("message", handler);
 
-      // Sandboxed execution environment
+      // The sandboxed page receives code via postMessage — no interpolation
       const sandboxedCode = `
         <script>
-          const __logs = [];
-          const __origConsole = console.log;
-          console.log = (...args) => {
-            parent.postMessage({ type: "log", args: args.map(a => {
-              if (typeof a === 'object') return JSON.stringify(a, null, 2);
-              return String(a);
-            })}, "*");
-          };
-          console.error = (...args) => {
-            parent.postMessage({ type: "error", message: args.join(" ") }, "*");
-          };
-          console.warn = console.error;
-          console.info = console.log;
+          window.addEventListener("message", function(e) {
+            if (e.data && e.data.type === "run") {
+              var code = e.data.code;
+              try {
+                console.log = function() {
+                  parent.postMessage({ type: "log", args: Array.from(arguments).map(function(a) {
+                    return typeof a === "object" ? JSON.stringify(a, null, 2) : String(a);
+                  })}, "*");
+                };
+                console.error = function() {
+                  parent.postMessage({ type: "error", message: Array.from(arguments).join(" ") }, "*");
+                };
+                console.warn = console.error;
+                console.info = console.log;
 
-          try {
-            ${code}
-          } catch(e) {
-            parent.postMessage({ type: "error", message: e.toString() }, "*");
-          }
-          parent.postMessage({ type: "done" }, "*");
+                var fn = new Function(code);
+                fn();
+              } catch(err) {
+                parent.postMessage({ type: "error", message: err.toString() }, "*");
+              }
+              parent.postMessage({ type: "done" }, "*");
+            }
+          });
+          parent.postMessage({ type: "ready" }, "*");
         <\/script>
       `;
 
       iframe.srcdoc = sandboxedCode;
+
+      // Wait for iframe to be ready, then send code
+      function onReady(e: MessageEvent) {
+        if (e.source !== iframe.contentWindow) return;
+        if (e.data && e.data.type === "ready") {
+          window.removeEventListener("message", onReady);
+          iframe.contentWindow?.postMessage({ type: "run", code }, "*");
+        }
+      }
+      window.addEventListener("message", onReady);
     });
   }
 }

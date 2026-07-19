@@ -17,13 +17,13 @@ export default function BookmarkButton({ data }: { data: BookmarkData }) {
   useEffect(() => {
     const bookmarks = JSON.parse(localStorage.getItem("cse-bookmarks") || "[]");
     const key = `${data.slug}-${data.lessonId || "course"}`;
-    setBookmarked(bookmarks.some((b: any) => `${b.slug}-${b.lessonId || "course"}` === key));
+    setBookmarked(bookmarks.some((b: Record<string, unknown>) => `${b.slug}-${b.lessonId || "course"}` === key));
   }, [data]);
 
   const toggle = () => {
     const bookmarks = JSON.parse(localStorage.getItem("cse-bookmarks") || "[]");
     const key = `${data.slug}-${data.lessonId || "course"}`;
-    const idx = bookmarks.findIndex((b: any) => `${b.slug}-${b.lessonId || "course"}` === key);
+    const idx = bookmarks.findIndex((b: Record<string, unknown>) => `${b.slug}-${b.lessonId || "course"}` === key);
 
     if (idx > -1) {
       bookmarks.splice(idx, 1);
