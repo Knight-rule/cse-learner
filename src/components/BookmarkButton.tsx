@@ -11,28 +11,38 @@ interface BookmarkData {
   courseTitle: string;
 }
 
+function safeGetBookmarks(): Record<string, unknown>[] {
+  try {
+    return JSON.parse(localStorage.getItem("cse-bookmarks") || "[]");
+  } catch {
+    return [];
+  }
+}
+
 export default function BookmarkButton({ data }: { data: BookmarkData }) {
   const [bookmarked, setBookmarked] = useState(false);
 
   useEffect(() => {
-    const bookmarks = JSON.parse(localStorage.getItem("cse-bookmarks") || "[]");
+    const bookmarks = safeGetBookmarks();
     const key = `${data.slug}-${data.lessonId || "course"}`;
-    setBookmarked(bookmarks.some((b: Record<string, unknown>) => `${b.slug}-${b.lessonId || "course"}` === key));
+    setBookmarked(bookmarks.some((b) => `${b.slug}-${b.lessonId || "course"}` === key));
   }, [data]);
 
   const toggle = () => {
-    const bookmarks = JSON.parse(localStorage.getItem("cse-bookmarks") || "[]");
+    const bookmarks = safeGetBookmarks();
     const key = `${data.slug}-${data.lessonId || "course"}`;
-    const idx = bookmarks.findIndex((b: Record<string, unknown>) => `${b.slug}-${b.lessonId || "course"}` === key);
+    const idx = bookmarks.findIndex((b) => `${b.slug}-${b.lessonId || "course"}` === key);
 
     if (idx > -1) {
       bookmarks.splice(idx, 1);
       setBookmarked(false);
     } else {
-      bookmarks.push(data);
+      bookmarks.push(data as unknown as Record<string, unknown>);
       setBookmarked(true);
     }
-    localStorage.setItem("cse-bookmarks", JSON.stringify(bookmarks));
+    try {
+      localStorage.setItem("cse-bookmarks", JSON.stringify(bookmarks));
+    } catch {}
   };
 
   return (

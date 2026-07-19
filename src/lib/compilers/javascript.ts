@@ -11,20 +11,30 @@ export class JavaScriptCompiler implements Compiler {
       iframe.sandbox = "allow-scripts";
       document.body.appendChild(iframe);
 
+      let cleaned = false;
       const timeout = setTimeout(() => {
         cleanup();
         resolve({ stdout: logs.join("\n"), stderr: "Execution timed out (5s limit)" });
       }, 5000);
 
+      // Fallback: if iframe never sends "ready", clean up the onReady listener
+      const readyTimeout = setTimeout(() => {
+        window.removeEventListener("message", onReady);
+      }, 3000);
+
       function cleanup() {
+        if (cleaned) return;
+        cleaned = true;
         clearTimeout(timeout);
+        clearTimeout(readyTimeout);
         window.removeEventListener("message", handler);
+        window.removeEventListener("message", onReady);
         try { document.body.removeChild(iframe); } catch {}
       }
 
       function handler(event: MessageEvent) {
         if (event.source !== iframe.contentWindow) return;
-        if (event.origin !== "null") return; // sandboxed iframes have origin "null"
+        if (event.origin !== "null") return;
 
         const data = event.data;
         if (data.type === "log") {
@@ -42,8 +52,9 @@ export class JavaScriptCompiler implements Compiler {
 
       window.addEventListener("message", handler);
 
-      // The sandboxed page receives code via postMessage — no interpolation
+      // CSP inside iframe blocks network requests from user code
       const sandboxedCode = `
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline';">
         <script>
           window.addEventListener("message", function(e) {
             if (e.data && e.data.type === "run") {
@@ -74,10 +85,10 @@ export class JavaScriptCompiler implements Compiler {
 
       iframe.srcdoc = sandboxedCode;
 
-      // Wait for iframe to be ready, then send code
       function onReady(e: MessageEvent) {
         if (e.source !== iframe.contentWindow) return;
         if (e.data && e.data.type === "ready") {
+          clearTimeout(readyTimeout);
           window.removeEventListener("message", onReady);
           iframe.contentWindow?.postMessage({ type: "run", code }, "*");
         }

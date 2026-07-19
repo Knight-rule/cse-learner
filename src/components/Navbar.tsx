@@ -22,10 +22,12 @@ export default function Navbar() {
 
   useEffect(() => {
     setMounted(true);
-    const saved = localStorage.getItem("theme");
-    const isDark = saved ? saved === "dark" : true;
-    setDark(isDark);
-    document.documentElement.classList.toggle("light", !isDark);
+    try {
+      const saved = localStorage.getItem("theme");
+      const isDark = saved ? saved === "dark" : true;
+      setDark(isDark);
+      document.documentElement.classList.toggle("light", !isDark);
+    } catch {}
   }, []);
 
   useEffect(() => {
@@ -39,7 +41,7 @@ export default function Navbar() {
     const next = !dark;
     setDark(next);
     document.documentElement.classList.toggle("light", !next);
-    localStorage.setItem("theme", next ? "dark" : "light");
+    try { localStorage.setItem("theme", next ? "dark" : "light"); } catch {}
   };
 
   return (

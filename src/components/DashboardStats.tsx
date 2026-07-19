@@ -1,11 +1,17 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { BookOpen, Brain, Code, Trophy, TrendingUp, Target } from "lucide-react";
-import { getStats, getAvgScore } from "@/lib/tracker";
+import { getStats, getAvgScore, type LearnerStats } from "@/lib/tracker";
 
 export default function DashboardStats() {
-  const stats = getStats();
-  const avgScore = getAvgScore();
+  const [stats, setStats] = useState<LearnerStats>({ coursesStarted: [], quizzesTaken: 0, totalScore: 0, totalQuestions: 0, codeRuns: 0, lessonsViewed: 0, activities: [] });
+  const [avgScore, setAvgScore] = useState(0);
+
+  useEffect(() => {
+    setStats(getStats());
+    setAvgScore(getAvgScore());
+  }, []);
 
   const cards = [
     { icon: BookOpen, label: "Courses Started", value: stats.coursesStarted.length, color: "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400" },

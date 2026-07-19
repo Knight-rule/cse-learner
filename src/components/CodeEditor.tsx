@@ -23,8 +23,8 @@ const languageLabels: Record<string, string> = {
 export default function CodeEditor({ code, language = "typescript" }: CodeEditorProps) {
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(code);
+  const handleCopy = async () => {
+    try { await navigator.clipboard.writeText(code); } catch {}
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };

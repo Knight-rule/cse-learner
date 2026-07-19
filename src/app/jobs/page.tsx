@@ -60,8 +60,7 @@ export default function JobsPage() {
   }, [fetchCompanies]);
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("cse-saved-companies") || "[]");
-    setSavedCompanies(saved);
+    try { setSavedCompanies(JSON.parse(localStorage.getItem("cse-saved-companies") || "[]")); } catch { setSavedCompanies([]); }
   }, []);
 
   useEffect(() => {
@@ -84,7 +83,7 @@ export default function JobsPage() {
       ? savedCompanies.filter((s) => s !== slug)
       : [...savedCompanies, slug];
     setSavedCompanies(updated);
-    localStorage.setItem("cse-saved-companies", JSON.stringify(updated));
+    try { localStorage.setItem("cse-saved-companies", JSON.stringify(updated)); } catch {}
   };
 
   const filteredCompanies = savedTab

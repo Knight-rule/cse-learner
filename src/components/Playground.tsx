@@ -486,7 +486,7 @@ export default function Playground() {
 
         <button
           className="playground-icon-btn"
-          onClick={() => { navigator.clipboard.writeText(code); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
+          onClick={async () => { try { await navigator.clipboard.writeText(code); } catch {} setCopied(true); setTimeout(() => setCopied(false), 2000); }}
         >
           {copied ? <Check size={14} style={{ color: "var(--accent-green)" }} /> : <Copy size={14} />}
           {copied ? "Copied!" : "Copy"}

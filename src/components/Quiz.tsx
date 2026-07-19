@@ -21,6 +21,14 @@ export default function Quiz({ questions, courseSlug = "", quizTitle = "Quiz" }:
 
   const question = questions[current];
 
+  if (questions.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-dark-500 dark:text-dark-400">No questions available for this quiz.</p>
+      </div>
+    );
+  }
+
   useEffect(() => {
     if (current >= questions.length && !trackedRef.current && questions.length > 0) {
       trackedRef.current = true;

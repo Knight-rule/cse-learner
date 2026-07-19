@@ -7,7 +7,9 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
         <div className="text-6xl mb-4">💥</div>
         <h2 className="text-2xl font-bold mb-2">Something went wrong!</h2>
         <p className="text-dark-500 dark:text-dark-400 mb-6 max-w-md">
-          {error.message || "An unexpected error occurred. Please try again."}
+          {process.env.NODE_ENV === "development"
+            ? error.message || "An unexpected error occurred."
+            : "An unexpected error occurred. Please try again."}
         </p>
         <button
           onClick={reset}

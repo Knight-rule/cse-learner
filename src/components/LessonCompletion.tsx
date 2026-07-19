@@ -9,16 +9,24 @@ interface LessonCompletionProps {
   lessonTitle: string;
 }
 
+function safeGetCompleted(): string[] {
+  try {
+    return JSON.parse(localStorage.getItem("cse-completed-lessons") || "[]");
+  } catch {
+    return [];
+  }
+}
+
 export default function LessonCompletion({ courseSlug, lessonId, lessonTitle }: LessonCompletionProps) {
   const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
-    const completedLessons = JSON.parse(localStorage.getItem("cse-completed-lessons") || "[]");
+    const completedLessons = safeGetCompleted();
     setCompleted(completedLessons.includes(`${courseSlug}/${lessonId}`));
   }, [courseSlug, lessonId]);
 
   const toggle = () => {
-    const completedLessons = JSON.parse(localStorage.getItem("cse-completed-lessons") || "[]");
+    const completedLessons = safeGetCompleted();
     const key = `${courseSlug}/${lessonId}`;
     const idx = completedLessons.indexOf(key);
 
@@ -29,7 +37,9 @@ export default function LessonCompletion({ courseSlug, lessonId, lessonTitle }: 
       completedLessons.push(key);
       setCompleted(true);
     }
-    localStorage.setItem("cse-completed-lessons", JSON.stringify(completedLessons));
+    try {
+      localStorage.setItem("cse-completed-lessons", JSON.stringify(completedLessons));
+    } catch {}
   };
 
   return (

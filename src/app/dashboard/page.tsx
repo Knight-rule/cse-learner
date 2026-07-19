@@ -1,15 +1,22 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronRight, Briefcase, ArrowRight } from "lucide-react";
 import DashboardStats from "@/components/DashboardStats";
 import ActivityFeed from "@/components/ActivityFeed";
 import { courses } from "@/data/courses";
-import { getStats } from "@/lib/tracker";
+import { getStats, type LearnerStats } from "@/lib/tracker";
 
 export default function DashboardPage() {
-  const stats = getStats();
-  const enrolledCourses = courses.filter((c) => stats.coursesStarted.includes(c.slug));
+  const [stats, setStats] = useState<LearnerStats | null>(null);
+
+  useEffect(() => {
+    const s = getStats();
+    setStats(s);
+  }, []);
+
+  const enrolledCourses = stats ? courses.filter((c) => stats.coursesStarted.includes(c.slug)) : [];
 
   return (
     <div className="section">
@@ -42,7 +49,7 @@ export default function DashboardPage() {
               <div className="lesson-list">
                 {enrolledCourses.map((course) => {
                   const colors = course.color.split(" ");
-                  const quizzes = stats.activities.filter((a) => a.type === "quiz" && a.courseSlug === course.slug).length;
+                  const quizzes = stats?.activities.filter((a) => a.type === "quiz" && a.courseSlug === course.slug).length || 0;
                   return (
                     <Link key={course.slug} href={"/courses/" + course.slug} className="lesson-item">
                       <div style={{ width: 48, height: 48, borderRadius: "var(--radius-md)", background: "linear-gradient(135deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, flexShrink: 0 }}>

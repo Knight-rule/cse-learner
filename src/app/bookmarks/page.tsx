@@ -9,11 +9,13 @@ interface BookmarkItem { type: string; slug: string; lessonId?: string; title: s
 export default function BookmarksPage() {
   const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([]);
 
-  useEffect(() => { setBookmarks(JSON.parse(localStorage.getItem("cse-bookmarks") || "[]")); }, []);
+  useEffect(() => {
+    try { setBookmarks(JSON.parse(localStorage.getItem("cse-bookmarks") || "[]")); } catch { setBookmarks([]); }
+  }, []);
 
   const remove = (index: number) => {
     const updated = [...bookmarks]; updated.splice(index, 1); setBookmarks(updated);
-    localStorage.setItem("cse-bookmarks", JSON.stringify(updated));
+    try { localStorage.setItem("cse-bookmarks", JSON.stringify(updated)); } catch {}
   };
 
   return (

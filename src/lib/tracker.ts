@@ -33,7 +33,7 @@ function getData(): LearnerStats {
 
 function saveData(data: LearnerStats) {
   if (typeof window === "undefined") return;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
 }
 
 function addActivity(activity: Omit<Activity, "id" | "timestamp">) {

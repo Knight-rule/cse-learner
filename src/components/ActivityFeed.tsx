@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { BookOpen, Brain, Code, GraduationCap, Clock } from "lucide-react";
 import { getRecentActivity, type Activity } from "@/lib/tracker";
 
@@ -22,7 +23,11 @@ const typeConfig: Record<string, { icon: typeof Brain; color: string; label: str
 };
 
 export default function ActivityFeed() {
-  const activities = getRecentActivity(15);
+  const [activities, setActivities] = useState<Activity[]>([]);
+
+  useEffect(() => {
+    setActivities(getRecentActivity(15));
+  }, []);
 
   if (activities.length === 0) {
     return (
