@@ -568,6 +568,26 @@ img { max-width: 100%; display: block; }
 }
 
 /* ===== PLAYGROUND ===== */
+.playground-question {
+  display: flex; gap: 14px; padding: 16px 20px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+}
+.playground-question-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-md);
+  background: var(--gradient-soft); color: var(--accent);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.playground-question-content { min-width: 0; }
+.playground-question-label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--accent); margin-bottom: 4px;
+}
+.playground-question-title {
+  font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;
+}
+.playground-question-text {
+  font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin: 0;
+}
 .playground-wrap {
   min-height: calc(100vh - 68px); display: flex; flex-direction: column;
   background: var(--bg-primary);
@@ -795,3 +815,5 @@ html.light .playground-output-header { background: var(--surface); border-bottom
 html.light .playground-output-pane { background: var(--bg-secondary); }
 html.light .playground-mode-badge.local { background: rgba(16, 185, 129, 0.08); }
 html.light .playground-mode-badge.cloud { background: rgba(59, 130, 246, 0.08); }
+html.light .playground-question { background: var(--bg-card); border-bottom-color: var(--border); }
+html.light .playground-question-icon { background: rgba(249, 115, 22, 0.08); }

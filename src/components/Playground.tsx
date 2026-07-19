@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { Play, RotateCcw, Copy, Check, ChevronDown, Terminal, Loader2, Wifi, WifiOff } from "lucide-react";
+import { Play, RotateCcw, Copy, Check, ChevronDown, Terminal, Loader2, Wifi, WifiOff, BookOpen } from "lucide-react";
 import { trackCodeRun } from "@/lib/tracker";
 import { JavaScriptCompiler } from "@/lib/compilers/javascript";
 import { PythonCompiler } from "@/lib/compilers/python";
@@ -37,13 +37,19 @@ const lightTheme = EditorView.theme({
   ".cm-matchingBracket": { backgroundColor: "#3b82f620", outline: "1px solid #3b82f640" },
 }, { dark: false });
 
+interface Example {
+  title: string;
+  question: string;
+  code: string;
+}
+
 interface Language {
   id: string;
   name: string;
   icon: string;
   mode: "local" | "cloud";
   extension: () => any;
-  examples: { title: string; code: string }[];
+  examples: Example[];
 }
 
 const languages: Language[] = [
@@ -54,10 +60,26 @@ const languages: Language[] = [
     mode: "local",
     extension: python,
     examples: [
-      { title: "Hello World", code: `print("Hello, World!")\n\nname = "CSE Student"\nprint(f"Welcome, {name}!")` },
-      { title: "List Comprehension", code: `squares = [x**2 for x in range(1, 11)]\nprint("Squares:", squares)\n\nevens = [x for x in range(1, 21) if x % 2 == 0]\nprint("Evens:", evens)` },
-      { title: "Functions & Lambda", code: `def factorial(n):\n    return 1 if n <= 1 else n * factorial(n - 1)\n\nprint("5! =", factorial(5))\n\nadd = lambda a, b: a + b\nprint("3 + 4 =", add(3, 4))` },
-      { title: "Dictionary & Loops", code: `students = {\n    "Alice": 85,\n    "Bob": 92,\n    "Charlie": 78,\n    "Diana": 95\n}\n\nfor name, grade in students.items():\n    status = "Pass" if grade >= 80 else "Fail"\n    print(f"{name}: {grade} ({status})")\n\navg = sum(students.values()) / len(students)\nprint(f"\\nClass Average: {avg:.1f}")` },
+      {
+        title: "Hello World",
+        question: "Write a program that prints \"Hello, World!\" to the console. Then create a variable called `name` with your name and print a welcome message using an f-string.",
+        code: `print("Hello, World!")\n\nname = "CSE Student"\nprint(f"Welcome, {name}!")`,
+      },
+      {
+        title: "List Comprehension",
+        question: "Use list comprehension to generate a list of squares from 1 to 10. Then filter even numbers from 1 to 20 using a conditional in the comprehension. Print both results.",
+        code: `squares = [x**2 for x in range(1, 11)]\nprint("Squares:", squares)\n\nevens = [x for x in range(1, 21) if x % 2 == 0]\nprint("Evens:", evens)`,
+      },
+      {
+        title: "Functions & Lambda",
+        question: "Write a recursive function `factorial(n)` that returns n!. Test it with n=5. Then create a lambda function `add` that takes two arguments and returns their sum. Test with 3 and 4.",
+        code: `def factorial(n):\n    return 1 if n <= 1 else n * factorial(n - 1)\n\nprint("5! =", factorial(5))\n\nadd = lambda a, b: a + b\nprint("3 + 4 =", add(3, 4))`,
+      },
+      {
+        title: "Dictionary & Loops",
+        question: "Create a dictionary of students and their grades. Loop through it and print each student's name, grade, and whether they Pass (grade >= 80) or Fail. Then calculate and print the class average.",
+        code: `students = {\n    "Alice": 85,\n    "Bob": 92,\n    "Charlie": 78,\n    "Diana": 95\n}\n\nfor name, grade in students.items():\n    status = "Pass" if grade >= 80 else "Fail"\n    print(f"{name}: {grade} ({status})")\n\navg = sum(students.values()) / len(students)\nprint(f"\\nClass Average: {avg:.1f}")`,
+      },
     ],
   },
   {
@@ -67,9 +89,21 @@ const languages: Language[] = [
     mode: "local",
     extension: javascript,
     examples: [
-      { title: "Hello World", code: `console.log("Hello, World!");\n\nconst name = "CSE Student";\nconsole.log(\`Welcome, \${name}!\`);` },
-      { title: "Array Operations", code: `const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\n\nconst evens = nums.filter(n => n % 2 === 0);\nconsole.log("Evens:", evens);\n\nconst squares = nums.map(n => n * n);\nconsole.log("Squares:", squares);\n\nconst sum = nums.reduce((a, b) => a + b, 0);\nconsole.log("Sum:", sum);` },
-      { title: "Objects & Functions", code: `const student = {\n  name: "Alice",\n  age: 22,\n  grades: [85, 92, 78, 95]\n};\n\nconst avg = student.grades.reduce((a, b) => a + b, 0) / student.grades.length;\nconsole.log(\`\${student.name}: \${avg.toFixed(1)}\`);` },
+      {
+        title: "Hello World",
+        question: "Use `console.log` to print \"Hello, World!\". Then create a `name` variable and print a welcome message using a template literal (backticks).",
+        code: `console.log("Hello, World!");\n\nconst name = "CSE Student";\nconsole.log(\`Welcome, \${name}!\`);`,
+      },
+      {
+        title: "Array Operations",
+        question: "Given an array of numbers 1-10, use `.filter()` to get even numbers, `.map()` to get squares, and `.reduce()` to compute the sum. Print each result.",
+        code: `const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\n\nconst evens = nums.filter(n => n % 2 === 0);\nconsole.log("Evens:", evens);\n\nconst squares = nums.map(n => n * n);\nconsole.log("Squares:", squares);\n\nconst sum = nums.reduce((a, b) => a + b, 0);\nconsole.log("Sum:", sum);`,
+      },
+      {
+        title: "Objects & Functions",
+        question: "Create a `student` object with name, age, and a grades array. Calculate the average grade using `.reduce()` and print the student's name with their average (rounded to 1 decimal).",
+        code: `const student = {\n  name: "Alice",\n  age: 22,\n  grades: [85, 92, 78, 95]\n};\n\nconst avg = student.grades.reduce((a, b) => a + b, 0) / student.grades.length;\nconsole.log(\`\${student.name}: \${avg.toFixed(1)}\`);`,
+      },
     ],
   },
   {
@@ -79,9 +113,21 @@ const languages: Language[] = [
     mode: "cloud",
     extension: cpp,
     examples: [
-      { title: "Hello World", code: `#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    char name[] = "CSE Student";\n    printf("Welcome, %s!\\n", name);\n    return 0;\n}` },
-      { title: "Arrays & Pointers", code: `#include <stdio.h>\n\nint main() {\n    int nums[] = {10, 20, 30, 40, 50};\n    int n = sizeof(nums) / sizeof(nums[0]);\n    int *ptr = nums;\n    int sum = 0;\n    for (int i = 0; i < n; i++) {\n        sum += *(ptr + i);\n    }\n    printf("Sum: %d\\n", sum);\n    return 0;\n}` },
-      { title: "Struct & Functions", code: `#include <stdio.h>\n#include <string.h>\n\nstruct Student {\n    char name[50];\n    int age;\n    float gpa;\n};\n\nvoid display(struct Student s) {\n    printf("%s (age %d) GPA: %.1f\\n", s.name, s.age, s.gpa);\n}\n\nint main() {\n    struct Student s1 = {"Alice", 22, 3.8};\n    struct Student s2 = {"Bob", 23, 3.5};\n    display(s1);\n    display(s2);\n    return 0;\n}` },
+      {
+        title: "Hello World",
+        question: "Write a C program that prints \"Hello, World!\" using `printf`. Then create a character array `name` with your name and print a welcome message using `printf` with the `%s` format specifier.",
+        code: `#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    char name[] = "CSE Student";\n    printf("Welcome, %s!\\n", name);\n    return 0;\n}`,
+      },
+      {
+        title: "Arrays & Pointers",
+        question: "Create an integer array of 5 elements. Use a pointer to traverse the array and calculate the sum of all elements. Print the result using `printf`.",
+        code: `#include <stdio.h>\n\nint main() {\n    int nums[] = {10, 20, 30, 40, 50};\n    int n = sizeof(nums) / sizeof(nums[0]);\n    int *ptr = nums;\n    int sum = 0;\n    for (int i = 0; i < n; i++) {\n        sum += *(ptr + i);\n    }\n    printf("Sum: %d\\n", sum);\n    return 0;\n}`,
+      },
+      {
+        title: "Struct & Functions",
+        question: "Define a `Student` struct with name, age, and gpa fields. Write a `display` function that prints a student's info. Create two students and call `display` on each.",
+        code: `#include <stdio.h>\n#include <string.h>\n\nstruct Student {\n    char name[50];\n    int age;\n    float gpa;\n};\n\nvoid display(struct Student s) {\n    printf("%s (age %d) GPA: %.1f\\n", s.name, s.age, s.gpa);\n}\n\nint main() {\n    struct Student s1 = {"Alice", 22, 3.8};\n    struct Student s2 = {"Bob", 23, 3.5};\n    display(s1);\n    display(s2);\n    return 0;\n}`,
+      },
     ],
   },
   {
@@ -91,9 +137,21 @@ const languages: Language[] = [
     mode: "cloud",
     extension: cpp,
     examples: [
-      { title: "Hello World", code: `#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!" << endl;\n    vector<int> nums = {5, 2, 8, 1, 9};\n    sort(nums.begin(), nums.end());\n    cout << "Sorted: ";\n    for (int n : nums) cout << n << " ";\n    cout << endl;\n    return 0;\n}` },
-      { title: "STL & Lambda", code: `#include <iostream>\n#include <map>\n#include <algorithm>\n#include <vector>\nusing namespace std;\n\nint main() {\n    map<string, int> grades;\n    grades["Alice"] = 85;\n    grades["Bob"] = 92;\n    grades["Charlie"] = 78;\n    for (auto& [name, grade] : grades) {\n        cout << name << ": " << grade << endl;\n    }\n    vector<int> nums = {1, 2, 3, 4, 5, 6, 7, 8};\n    int evens = count_if(nums.begin(), nums.end(),\n        [](int x) { return x % 2 == 0; });\n    cout << "Even count: " << evens << endl;\n    return 0;\n}` },
-      { title: "Classes & Inheritance", code: `#include <iostream>\n#include <string>\nusing namespace std;\n\nclass Animal {\nprotected:\n    string name;\npublic:\n    Animal(string n) : name(n) {}\n    virtual void speak() = 0;\n    virtual ~Animal() {}\n};\n\nclass Dog : public Animal {\n    string breed;\npublic:\n    Dog(string n, string b) : Animal(n), breed(b) {}\n    void speak() override {\n        cout << name << " says Woof! (" << breed << ")" << endl;\n    }\n};\n\nint main() {\n    Dog d("Rex", "Labrador");\n    d.speak();\n    return 0;\n}` },
+      {
+        title: "Hello World",
+        question: "Write a C++ program that prints \"Hello, World!\" using `cout`. Create a `vector<int>` with 5 numbers, sort it with `std::sort`, and print the sorted result.",
+        code: `#include <iostream>\n#include <vector>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!" << endl;\n    vector<int> nums = {5, 2, 8, 1, 9};\n    sort(nums.begin(), nums.end());\n    cout << "Sorted: ";\n    for (int n : nums) cout << n << " ";\n    cout << endl;\n    return 0;\n}`,
+      },
+      {
+        title: "STL & Lambda",
+        question: "Use a `map<string, int>` to store student grades and iterate with a structured binding. Then use `count_if` with a lambda to count even numbers in a vector.",
+        code: `#include <iostream>\n#include <map>\n#include <algorithm>\n#include <vector>\nusing namespace std;\n\nint main() {\n    map<string, int> grades;\n    grades["Alice"] = 85;\n    grades["Bob"] = 92;\n    grades["Charlie"] = 78;\n    for (auto& [name, grade] : grades) {\n        cout << name << ": " << grade << endl;\n    }\n    vector<int> nums = {1, 2, 3, 4, 5, 6, 7, 8};\n    int evens = count_if(nums.begin(), nums.end(),\n        [](int x) { return x % 2 == 0; });\n    cout << "Even count: " << evens << endl;\n    return 0;\n}`,
+      },
+      {
+        title: "Classes & Inheritance",
+        question: "Create an abstract `Animal` class with a pure virtual `speak()` method. Derive a `Dog` class that overrides `speak()` to print the dog's name and breed. Create a Dog object and call `speak()`.",
+        code: `#include <iostream>\n#include <string>\nusing namespace std;\n\nclass Animal {\nprotected:\n    string name;\npublic:\n    Animal(string n) : name(n) {}\n    virtual void speak() = 0;\n    virtual ~Animal() {}\n};\n\nclass Dog : public Animal {\n    string breed;\npublic:\n    Dog(string n, string b) : Animal(n), breed(b) {}\n    void speak() override {\n        cout << name << " says Woof! (" << breed << ")" << endl;\n    }\n};\n\nint main() {\n    Dog d("Rex", "Labrador");\n    d.speak();\n    return 0;\n}`,
+      },
     ],
   },
 ];
@@ -114,6 +172,7 @@ function getCompiler(langId: string): Compiler {
 
 export default function Playground() {
   const [selectedLang, setSelectedLang] = useState(languages[0]);
+  const [selectedExample, setSelectedExample] = useState(0);
   const [code, setCode] = useState(languages[0].examples[0].code);
   const [output, setOutput] = useState<string[]>([]);
   const [isRunning, setIsRunning] = useState(false);
@@ -135,9 +194,16 @@ export default function Playground() {
 
   const selectLanguage = (lang: Language) => {
     setSelectedLang(lang);
+    setSelectedExample(0);
     setCode(lang.examples[0].code);
     setOutput([]);
     setShowLangDropdown(false);
+  };
+
+  const selectExample = (index: number) => {
+    setSelectedExample(index);
+    setCode(selectedLang.examples[index].code);
+    setOutput([]);
   };
 
   const runCode = async () => {
@@ -194,8 +260,22 @@ export default function Playground() {
     return "cpp";
   };
 
+  const currentExample = selectedLang.examples[selectedExample];
+
   return (
     <div className="playground-wrap" style={{ flex: 1 }}>
+      {/* Question Panel */}
+      <div className="playground-question">
+        <div className="playground-question-icon">
+          <BookOpen size={16} />
+        </div>
+        <div className="playground-question-content">
+          <div className="playground-question-label">Problem</div>
+          <div className="playground-question-title">{currentExample.title}</div>
+          <p className="playground-question-text">{currentExample.question}</p>
+        </div>
+      </div>
+
       {/* Toolbar */}
       <div className="playground-toolbar">
         <div style={{ position: "relative" }}>
@@ -232,10 +312,8 @@ export default function Playground() {
 
         <select
           className="playground-example-select"
-          onChange={(e) => {
-            setCode(selectedLang.examples[parseInt(e.target.value)].code);
-            setOutput([]);
-          }}
+          value={selectedExample}
+          onChange={(e) => selectExample(parseInt(e.target.value))}
         >
           {selectedLang.examples.map((ex, i) => (
             <option key={i} value={i}>{ex.title}</option>
@@ -253,7 +331,7 @@ export default function Playground() {
         </button>
         <button
           className="playground-icon-btn"
-          onClick={() => { setCode(selectedLang.examples[0].code); setOutput([]); }}
+          onClick={() => { setCode(selectedLang.examples[selectedExample].code); setOutput([]); }}
         >
           <RotateCcw size={14} />
           Reset
