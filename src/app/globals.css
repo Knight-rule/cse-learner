@@ -424,6 +424,8 @@ img { max-width: 100%; display: block; }
   font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;
   display: flex; align-items: flex-start; gap: 10px;
 }
+.testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
 .footer-bottom {
   padding-top: 32px; border-top: 1px solid var(--border);
   display: flex; justify-content: space-between; align-items: center;
@@ -582,6 +584,8 @@ img { max-width: 100%; display: block; }
   .pricing-card.featured { transform: none; }
   .pricing-card.featured:hover { transform: translateY(-4px); }
   .footer-grid { grid-template-columns: 1fr 1fr; }
+  .testimonial-grid { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
   .nav-center { display: none; }

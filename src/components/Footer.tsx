@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { BookOpen, Code, Brain, Home, Bookmark } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -19,9 +18,10 @@ export default function Footer() {
             <h4 className="footer-heading">Company</h4>
             <ul className="footer-links">
               <li><Link href="/">Home</Link></li>
-              <li><Link href="/courses">About</Link></li>
+              <li><Link href="/about">About</Link></li>
               <li><Link href="/courses">Courses</Link></li>
               <li><Link href="/dashboard">Dashboard</Link></li>
+              <li><Link href="/contact">Contact</Link></li>
             </ul>
           </div>
           <div>
@@ -46,7 +46,7 @@ export default function Footer() {
         <div className="footer-bottom">
           <p className="footer-copy">&copy; 2026 CSE Learner. All rights reserved.</p>
           <div className="footer-socials">
-            <a href="#" aria-label="GitHub">GH</a>
+            <a href="https://github.com/Knight-rule/cse-learner" target="_blank" rel="noopener noreferrer" aria-label="GitHub">GH</a>
             <a href="#" aria-label="Twitter">X</a>
             <a href="#" aria-label="LinkedIn">in</a>
           </div>

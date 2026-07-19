@@ -1,14 +1,14 @@
 import Link from "next/link";
-import { ArrowRight, ChevronRight, Users, GraduationCap, BookOpen, Trophy, Zap, Target, Award, Globe, Laptop, Briefcase } from "lucide-react";
+import { ArrowRight, ChevronRight, Zap, Code, BookOpen, Brain, Users, Trophy, Laptop, Target, GraduationCap, Rocket } from "lucide-react";
 import { courses } from "@/data/courses";
 
 const features = [
-  { icon: "🎓", title: "Expert Led Learning", desc: "Lessons designed by CS professionals and educators." },
-  { icon: "💻", title: "Hands On Projects", desc: "Build real projects with practical code examples." },
-  { icon: "📜", title: "Learn Certification", desc: "Earn certificates as you complete each course." },
-  { icon: "⏱️", title: "Flexible Learning", desc: "Study at your own pace, anytime, anywhere." },
-  { icon: "📚", title: "Up to Date Curriculum", desc: "Content aligned with current industry standards." },
-  { icon: "🚀", title: "Career & Networking", desc: "Prepare for interviews and connect with peers." },
+  { icon: <GraduationCap size={28} />, title: "Expert Led Learning", desc: "Lessons designed by CS professionals and educators.", color: "var(--accent)" },
+  { icon: <Code size={28} />, title: "Hands On Projects", desc: "Build real projects with practical code examples.", color: "var(--accent-purple)" },
+  { icon: <Trophy size={28} />, title: "Learn Certification", desc: "Earn certificates as you complete each course.", color: "var(--accent-blue)" },
+  { icon: <Target size={28} />, title: "Flexible Learning", desc: "Study at your own pace, anytime, anywhere.", color: "var(--accent-green)" },
+  { icon: <BookOpen size={28} />, title: "Up to Date Curriculum", desc: "Content aligned with current industry standards.", color: "var(--accent-pink)" },
+  { icon: <Rocket size={28} />, title: "Career & Networking", desc: "Prepare for interviews and connect with peers.", color: "var(--accent)" },
 ];
 
 const testimonials = [
@@ -18,10 +18,10 @@ const testimonials = [
 ];
 
 const stats = [
-  { icon: "👨‍🎓", value: "10K+", label: "Students" },
-  { icon: "👩‍🏫", value: "50+", label: "Mentors" },
-  { icon: "📖", value: "200+", label: "Lessons" },
-  { icon: "🏆", value: "5K+", label: "Certificates" },
+  { icon: <Users size={24} />, value: "10K+", label: "Students" },
+  { icon: <BookOpen size={24} />, value: "200+", label: "Lessons" },
+  { icon: <Brain size={24} />, value: "500+", label: "Quiz Questions" },
+  { icon: <Trophy size={24} />, value: "5K+", label: "Certificates" },
 ];
 
 const faqs = [
@@ -51,20 +51,34 @@ export default function HomePage() {
               </p>
               <div className="flex gap-4" style={{ flexWrap: "wrap" }}>
                 <Link href="/courses" className="btn btn-primary">
-                  Free Trial <ArrowRight size={16} />
+                  Start Learning <ArrowRight size={16} />
                 </Link>
-                <Link href="/courses" className="btn btn-outline">
-                  Get Started
+                <Link href="/quiz" className="btn btn-outline">
+                  Take a Quiz
                 </Link>
               </div>
             </div>
             <div className="hero-visual animate-fade-in-up delay-2">
-              <div className="hero-image-placeholder">
-                {"{ code }"}
+              <div style={{
+                width: "100%", maxWidth: 480, aspectRatio: "1",
+                borderRadius: "var(--radius-2xl)",
+                background: "linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(168, 85, 247, 0.1))",
+                border: "1px solid var(--border)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                position: "relative", overflow: "hidden"
+              }}>
+                <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 30% 30%, rgba(249, 115, 22, 0.08), transparent 60%)" }} />
+                <div style={{ position: "relative", textAlign: "center", padding: 40 }}>
+                  <div style={{ fontSize: 64, marginBottom: 16 }}>👩‍💻</div>
+                  <div style={{ fontFamily: "monospace", fontSize: 14, color: "var(--text-secondary)", lineHeight: 2 }}>
+                    <div><span style={{ color: "var(--accent-purple)" }}>const</span> <span style={{ color: "var(--accent)" }}>student</span> = {"{"}</div>
+                    <div style={{ paddingLeft: 20 }}>learn: <span style={{ color: "var(--accent-green)" }}>"DS & Algo"</span>,</div>
+                    <div style={{ paddingLeft: 20 }}>build: <span style={{ color: "var(--accent-green)" }}>"Projects"</span>,</div>
+                    <div style={{ paddingLeft: 20 }}>crack: <span style={{ color: "var(--accent-green)" }}>"Interviews"</span></div>
+                    <div>{"}"};</div>
+                  </div>
+                </div>
               </div>
-              <div className="hero-float" style={{ top: "10%", right: "5%", animationDelay: "0s" }}>{"</>"}</div>
-              <div className="hero-float" style={{ bottom: "15%", left: "0%", animationDelay: "2s" }}>{"{ }"}</div>
-              <div className="hero-float" style={{ top: "50%", right: "-5%", animationDelay: "4s" }}>[]</div>
             </div>
           </div>
         </div>
@@ -76,7 +90,7 @@ export default function HomePage() {
           <div className="stats-bar">
             {stats.map((s) => (
               <div key={s.label} className="stat-item animate-fade-in-up">
-                <div className="stat-icon">{s.icon}</div>
+                <div className="stat-icon" style={{ color: "var(--accent)" }}>{s.icon}</div>
                 <div className="stat-number">{s.value}</div>
                 <div className="stat-label">{s.label}</div>
               </div>
@@ -104,13 +118,19 @@ export default function HomePage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/courses" className="btn btn-primary">
+              <Link href="/about" className="btn btn-primary">
                 Discover More <ArrowRight size={16} />
               </Link>
             </div>
             <div className="animate-fade-in-up delay-2">
-              <div className="hero-image-placeholder" style={{ maxWidth: "100%", aspectRatio: "4/3" }}>
-                🎓
+              <div style={{
+                width: "100%", aspectRatio: "4/3", borderRadius: "var(--radius-2xl)",
+                background: "linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(249, 115, 22, 0.08))",
+                border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 80, position: "relative", overflow: "hidden"
+              }}>
+                <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 70% 70%, rgba(168, 85, 247, 0.06), transparent 60%)" }} />
+                <span style={{ position: "relative" }}>🎓</span>
               </div>
             </div>
           </div>
@@ -121,7 +141,7 @@ export default function HomePage() {
       <section className="section" style={{ background: "var(--bg-secondary)" }}>
         <div className="container">
           <div className="text-center mb-12">
-            <span className="badge badge-accent mb-4" style={{ display: "inline-flex" }}>Featured Class</span>
+            <span className="badge badge-accent mb-4" style={{ display: "inline-flex" }}>Featured Classes</span>
             <h2 className="heading-xl mb-4">
               Innovate &amp; Learn <span className="gradient-text">Featured CS Courses</span>
             </h2>
@@ -129,32 +149,40 @@ export default function HomePage() {
               From fundamentals to advanced topics — master the skills that matter most.
             </p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
-            {courses.slice(0, 3).map((course) => {
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: 24 }}>
+            {courses.slice(0, 6).map((course) => {
               const colors = course.color.split(" ");
-              const instructorNames = ["Dr. Emily Carter", "Michael Chen", "David Richardson"];
-              const instructorRoles = ["CS Research Scientist", "Algorithms Expert", "Systems Architect"];
-              const idx = courses.indexOf(course);
               return (
-                <div key={course.slug} className="course-card-aiv glass-card-glow">
-                  <div className="course-price gradient-text">Free</div>
-                  <h3 className="course-title">{course.title}</h3>
+                <Link
+                  key={course.slug}
+                  href={"/courses/" + course.slug}
+                  className="course-card-aiv glass-card-glow"
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
+                    <div style={{
+                      width: 56, height: 56, borderRadius: "var(--radius-lg)",
+                      background: "linear-gradient(135deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")",
+                      display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, flexShrink: 0
+                    }}>
+                      {course.icon}
+                    </div>
+                    <div>
+                      <h3 className="course-title" style={{ marginBottom: 0 }}>{course.title}</h3>
+                      <p className="body-sm">{course.lessons.length} lessons · {course.quiz.length} quiz questions</p>
+                    </div>
+                  </div>
                   <ul className="course-features">
                     {course.lessons.slice(0, 3).map((l) => (
                       <li key={l.id}>{l.title}</li>
                     ))}
                   </ul>
-                  <div className="course-instructor">
-                    <div className="instructor-avatar">{instructorNames[idx]?.[0] || "I"}</div>
-                    <div>
-                      <div className="instructor-name">{instructorNames[idx]}</div>
-                      <div className="instructor-role">{instructorRoles[idx]}</div>
-                    </div>
+                  <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--border)" }}>
+                    <span className="flex items-center gap-2" style={{ color: "var(--accent)", fontWeight: 600, fontSize: 14 }}>
+                      Start Learning <ChevronRight size={14} />
+                    </span>
                   </div>
-                  <Link href={"/courses/" + course.slug} className="btn btn-primary w-full justify-center" style={{ marginTop: 20 }}>
-                    Start Learning <ChevronRight size={16} />
-                  </Link>
-                </div>
+                </Link>
               );
             })}
           </div>
@@ -178,7 +206,7 @@ export default function HomePage() {
           <div className="features-grid">
             {features.map((f) => (
               <div key={f.title} className="feature-item">
-                <div className="feature-icon-wrap">{f.icon}</div>
+                <div className="feature-icon-wrap" style={{ color: f.color }}>{f.icon}</div>
                 <h3 className="heading-sm mb-2">{f.title}</h3>
                 <p className="body-md">{f.desc}</p>
               </div>
@@ -194,7 +222,7 @@ export default function HomePage() {
             <span className="badge badge-accent mb-4" style={{ display: "inline-flex" }}>Testimonials</span>
             <h2 className="heading-xl mb-4">Real Stories, Real Impact</h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+          <div className="testimonial-grid">
             {testimonials.map((t) => (
               <div key={t.name} className="testimonial-card">
                 <p className="testimonial-quote">{t.quote}</p>
