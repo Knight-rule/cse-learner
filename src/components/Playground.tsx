@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
-import { Play, RotateCcw, Copy, Check, ChevronDown, Terminal, Loader2, Wifi, WifiOff, BookOpen, Clock, Lightbulb, Eye, EyeOff } from "lucide-react";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { Play, RotateCcw, Copy, Check, ChevronDown, Terminal, Loader2, Wifi, WifiOff, BookOpen, Clock, Lightbulb, Eye, EyeOff, ChevronUp, ChevronRight } from "lucide-react";
 import { trackCodeRun } from "@/lib/tracker";
 import { JavaScriptCompiler } from "@/lib/compilers/javascript";
 import { PythonCompiler } from "@/lib/compilers/python";
@@ -212,6 +212,15 @@ function getCompiler(langId: string): Compiler {
   }
 }
 
+function normalizeOutput(str: string): string {
+  return str
+    .replace(/\r\n/g, "\n")
+    .replace(/\s+/g, " ")
+    .replace(/[""]/g, '"')
+    .trim()
+    .toLowerCase();
+}
+
 export default function Playground() {
   const [selectedLang, setSelectedLang] = useState(languages[0]);
   const [selectedExample, setSelectedExample] = useState(0);
@@ -224,6 +233,9 @@ export default function Playground() {
   const [showHint, setShowHint] = useState(false);
   const [showExpected, setShowExpected] = useState(false);
   const [execTime, setExecTime] = useState<number | null>(null);
+  const [questionCollapsed, setQuestionCollapsed] = useState(false);
+  const [outputMatch, setOutputMatch] = useState<"correct" | "wrong" | null>(null);
+  const runCodeRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     const check = () => setIsLight(document.documentElement.classList.contains("light"));
@@ -233,42 +245,7 @@ export default function Playground() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
-        e.preventDefault();
-        runCode();
-      }
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  });
-
-  const onChange = useCallback((val: string) => {
-    setCode(val);
-  }, []);
-
-  const selectLanguage = (lang: Language) => {
-    setSelectedLang(lang);
-    setSelectedExample(0);
-    setCode(lang.examples[0].code);
-    setOutput([]);
-    setShowLangDropdown(false);
-    setShowHint(false);
-    setShowExpected(false);
-    setExecTime(null);
-  };
-
-  const selectExample = (index: number) => {
-    setSelectedExample(index);
-    setCode(selectedLang.examples[index].code);
-    setOutput([]);
-    setShowHint(false);
-    setShowExpected(false);
-    setExecTime(null);
-  };
-
-  const runCode = async () => {
+  const runCode = useCallback(async () => {
     if (!checkRateLimit()) {
       setOutput(["Rate limit exceeded. Please wait a minute before trying again."]);
       return;
@@ -282,6 +259,7 @@ export default function Playground() {
 
     setIsRunning(true);
     setExecTime(null);
+    setOutputMatch(null);
     const modeLabel = selectedLang.mode === "cloud" ? "\u2601\ufe0f Cloud" : "\ud83d\udcbb Local";
     setOutput([`${modeLabel} Running ${selectedLang.name}...`]);
 
@@ -314,12 +292,69 @@ export default function Playground() {
         lines.push(...result.stdout.trim().split("\n"));
       }
       setOutput(lines.length > 0 ? lines : ["(No output)"]);
+
+      if (lines.length > 0 && !lines[0].startsWith("\u274c") && !lines[0].startsWith("\u26a0\ufe0f")) {
+        const actual = normalizeOutput(lines.join("\n"));
+        const expected = normalizeOutput(currentExample.expectedOutput);
+        setOutputMatch(actual === expected ? "correct" : "wrong");
+      }
     } catch (err: any) {
       setOutput(["\u274c " + (err.message || "Failed to run code")]);
       setExecTime(null);
+      setOutputMatch(null);
     }
 
     setIsRunning(false);
+  }, [code, selectedLang, selectedExample]);
+
+  runCodeRef.current = runCode;
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        e.preventDefault();
+        runCodeRef.current();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
+  const onChange = useCallback((val: string) => {
+    setCode(val);
+  }, []);
+
+  const selectLanguage = (lang: Language) => {
+    setSelectedLang(lang);
+    setSelectedExample(0);
+    setCode(lang.examples[0].code);
+    setOutput([]);
+    setShowLangDropdown(false);
+    setShowHint(false);
+    setShowExpected(false);
+    setExecTime(null);
+    setOutputMatch(null);
+  };
+
+  const selectExample = (index: number) => {
+    setSelectedExample(index);
+    setCode(selectedLang.examples[index].code);
+    setOutput([]);
+    setShowHint(false);
+    setShowExpected(false);
+    setExecTime(null);
+    setOutputMatch(null);
+  };
+
+  const goNextExample = () => {
+    if (selectedExample < selectedLang.examples.length - 1) {
+      selectExample(selectedExample + 1);
+    } else {
+      const langIndex = languages.findIndex((l) => l.id === selectedLang.id);
+      if (langIndex < languages.length - 1) {
+        selectLanguage(languages[langIndex + 1]);
+      }
+    }
   };
 
   const getExt = () => {
@@ -330,11 +365,13 @@ export default function Playground() {
   };
 
   const currentExample = selectedLang.examples[selectedExample];
+  const hasNext = selectedExample < selectedLang.examples.length - 1 ||
+    languages.findIndex((l) => l.id === selectedLang.id) < languages.length - 1;
 
   return (
     <div className="playground-wrap" style={{ flex: 1 }}>
       {/* Question Panel */}
-      <div className="playground-question">
+      <div className="playground-question" style={questionCollapsed ? { maxHeight: 56, overflow: "hidden" } : undefined}>
         <div className="playground-question-icon">
           <BookOpen size={16} />
         </div>
@@ -351,27 +388,54 @@ export default function Playground() {
             )}
           </div>
           <div className="playground-question-title">{currentExample.title}</div>
-          <p className="playground-question-text">{currentExample.question}</p>
+          {!questionCollapsed && (
+            <>
+              <p className="playground-question-text">{currentExample.question}</p>
 
-          <button className="playground-hint-toggle" onClick={() => setShowExpected(!showExpected)}>
-            {showExpected ? <EyeOff size={13} /> : <Eye size={13} />}
-            {showExpected ? "Hide Expected Output" : "Show Expected Output"}
-          </button>
-          {showExpected && (
-            <div className="playground-expected">
-              <div className="playground-expected-label">Expected Output</div>
-              <div className="playground-expected-code">{currentExample.expectedOutput}</div>
-            </div>
-          )}
+              <button className="playground-hint-toggle" onClick={() => setShowExpected(!showExpected)}>
+                {showExpected ? <EyeOff size={13} /> : <Eye size={13} />}
+                {showExpected ? "Hide Expected Output" : "Show Expected Output"}
+              </button>
+              {showExpected && (
+                <div className="playground-expected">
+                  <div className="playground-expected-label">Expected Output</div>
+                  <div className="playground-expected-code">{currentExample.expectedOutput}</div>
+                </div>
+              )}
 
-          <button className="playground-hint-toggle" onClick={() => setShowHint(!showHint)} style={{ marginTop: showExpected ? 4 : 0 }}>
-            <Lightbulb size={13} />
-            {showHint ? "Hide Hint" : "Need a Hint?"}
-          </button>
-          {showHint && (
-            <div className="playground-hint">{currentExample.hint}</div>
+              <button className="playground-hint-toggle" onClick={() => setShowHint(!showHint)} style={{ marginTop: showExpected ? 4 : 0 }}>
+                <Lightbulb size={13} />
+                {showHint ? "Hide Hint" : "Need a Hint?"}
+              </button>
+              {showHint && (
+                <div className="playground-hint">{currentExample.hint}</div>
+              )}
+
+              {outputMatch === "correct" && (
+                <div className="playground-match correct">
+                  <Check size={16} /> Output matches! Great job!
+                  {hasNext && (
+                    <button className="playground-next-btn" onClick={goNextExample}>
+                      Next Example <ChevronRight size={14} />
+                    </button>
+                  )}
+                </div>
+              )}
+              {outputMatch === "wrong" && (
+                <div className="playground-match wrong">
+                  Output doesn&apos;t match expected. Try again or check the hint.
+                </div>
+              )}
+            </>
           )}
         </div>
+        <button
+          className="playground-collapse-btn"
+          onClick={() => setQuestionCollapsed(!questionCollapsed)}
+          style={{ alignSelf: "flex-start", marginTop: 4 }}
+        >
+          {questionCollapsed ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
+        </button>
       </div>
 
       {/* Toolbar */}
@@ -429,13 +493,13 @@ export default function Playground() {
         </button>
         <button
           className="playground-icon-btn"
-          onClick={() => { setCode(selectedLang.examples[selectedExample].code); setOutput([]); setExecTime(null); }}
+          onClick={() => { setCode(selectedLang.examples[selectedExample].code); setOutput([]); setExecTime(null); setOutputMatch(null); }}
         >
           <RotateCcw size={14} />
           Reset
         </button>
         <button className="playground-run-btn" onClick={runCode} disabled={isRunning}>
-          {isRunning ? <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} /> : <Play size={14} fill="currentColor" />}
+          {isRunning ? <Loader2 size={14} className="animate-spin" /> : <Play size={14} fill="currentColor" />}
           Run
           <kbd>Ctrl+Enter</kbd>
         </button>
@@ -482,7 +546,7 @@ export default function Playground() {
               <button
                 className="playground-icon-btn"
                 style={{ marginLeft: "auto", padding: "4px 8px", fontSize: 11 }}
-                onClick={() => { setOutput([]); setExecTime(null); }}
+                onClick={() => { setOutput([]); setExecTime(null); setOutputMatch(null); }}
               >
                 Clear
               </button>
