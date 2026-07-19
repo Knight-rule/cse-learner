@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { Play, RotateCcw, Copy, Check, ChevronDown, Terminal, Loader2, Wifi, WifiOff, BookOpen, Clock, Lightbulb, Eye, EyeOff, ChevronUp, ChevronRight } from "lucide-react";
 import { trackCodeRun } from "@/lib/tracker";
 import { JavaScriptCompiler } from "@/lib/compilers/javascript";
@@ -222,6 +223,7 @@ function normalizeOutput(str: string): string {
 }
 
 export default function Playground() {
+  const searchParams = useSearchParams();
   const [selectedLang, setSelectedLang] = useState(languages[0]);
   const [selectedExample, setSelectedExample] = useState(0);
   const [code, setCode] = useState(languages[0].examples[0].code);
@@ -236,6 +238,25 @@ export default function Playground() {
   const [questionCollapsed, setQuestionCollapsed] = useState(false);
   const [outputMatch, setOutputMatch] = useState<"correct" | "wrong" | null>(null);
   const runCodeRef = useRef<() => void>(() => {});
+
+  // Initialize from query params
+  useEffect(() => {
+    const codeParam = searchParams.get("code");
+    const langParam = searchParams.get("lang");
+    if (codeParam) {
+      try {
+        const decodedCode = decodeURIComponent(codeParam);
+        setCode(decodedCode);
+      } catch {}
+    }
+    if (langParam) {
+      const lang = languages.find((l) => l.id === langParam);
+      if (lang) {
+        setSelectedLang(lang);
+        setSelectedExample(0);
+      }
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const check = () => setIsLight(document.documentElement.classList.contains("light"));

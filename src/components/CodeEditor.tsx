@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Copy, Check } from "lucide-react";
+import { Copy, Check, Play, ExternalLink } from "lucide-react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface CodeEditorProps {
   code: string;
@@ -20,13 +22,33 @@ const languageLabels: Record<string, string> = {
   tsx: "React TSX",
 };
 
+const playgroundLangs: Record<string, string> = {
+  typescript: "typescript",
+  javascript: "javascript",
+  python: "python",
+  c: "c",
+  cpp: "cpp",
+  html: "html",
+  css: "css",
+  tsx: "typescript",
+  sql: "sql",
+};
+
 export default function CodeEditor({ code, language = "typescript" }: CodeEditorProps) {
   const [copied, setCopied] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleCopy = async () => {
     try { await navigator.clipboard.writeText(code); } catch {}
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleOpenInPlayground = () => {
+    const playgroundLang = playgroundLangs[language] || "typescript";
+    const url = `/playground?code=${encodeURIComponent(code)}&lang=${playgroundLang}`;
+    router.push(url);
   };
 
   return (
@@ -42,13 +64,22 @@ export default function CodeEditor({ code, language = "typescript" }: CodeEditor
             {languageLabels[language] || language}
           </span>
         </div>
-        <button
-          onClick={handleCopy}
-          className="flex items-center gap-1 text-dark-400 hover:text-white text-xs transition-colors"
-        >
-          {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-          {copied ? "Copied!" : "Copy"}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleCopy}
+            className="flex items-center gap-1 text-dark-400 hover:text-white text-xs transition-colors"
+          >
+            {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? "Copied!" : "Copy"}
+          </button>
+          <Link
+            href={`/playground?code=${encodeURIComponent(code)}&lang=${playgroundLangs[language] || "typescript"}`}
+            className="flex items-center gap-1 text-dark-400 hover:text-accent-primary text-xs transition-colors"
+          >
+            <Play className="w-3.5 h-3.5" />
+            Try in Playground
+          </Link>
+        </div>
       </div>
       <pre className="bg-dark-950 p-4 overflow-x-auto text-sm leading-relaxed">
         <code className="text-dark-100 font-mono">{code}</code>
