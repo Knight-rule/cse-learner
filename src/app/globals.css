@@ -515,8 +515,7 @@ body {
 .font-bold { font-weight: 700; }
 
 .text-xs { font-size: 12px; }
-.text-sm { font-size: 14px;
-.font-normal }
+.text-sm { font-size: 14px; }
 .text-base { font-size: 17px; }
 .text-lg { font-size: 19px; }
 .text-xl { font-size: 21px; }
