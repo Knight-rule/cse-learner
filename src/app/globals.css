@@ -29,6 +29,21 @@
   --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+html.light {
+  --bg-primary: #f8f9fc;
+  --bg-secondary: #f0f1f5;
+  --bg-card: #ffffff;
+  --surface: rgba(0, 0, 0, 0.03);
+  --surface-hover: rgba(0, 0, 0, 0.06);
+  --border: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(0, 0, 0, 0.15);
+  --text-primary: #1a1a2e;
+  --text-secondary: #5a5a72;
+  --text-muted: #9898b0;
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.08);
+  --shadow-glow: 0 0 40px rgba(249, 115, 22, 0.06);
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
@@ -609,3 +624,26 @@ img { max-width: 100%; display: block; }
 ::-webkit-scrollbar-track { background: var(--bg-primary); }
 ::-webkit-scrollbar-thumb { background: var(--surface-hover); border-radius: 3px; }
 ::selection { background: rgba(249, 115, 22, 0.2); color: var(--text-primary); }
+
+/* ===== LIGHT MODE OVERRIDES ===== */
+html.light .nav { background: rgba(248, 249, 252, 0.85); border-bottom-color: rgba(0, 0, 0, 0.06); }
+html.light .nav.scrolled { background: rgba(248, 249, 252, 0.95); }
+html.light .glass-card { background: var(--bg-card); border-color: var(--border); box-shadow: var(--shadow-card); }
+html.light .glass-card-glow { box-shadow: var(--shadow-card); }
+html.light .glass-card-glow:hover { box-shadow: 0 8px 32px rgba(249, 115, 22, 0.1); }
+html.light .pricing-card { background: var(--bg-card); border-color: var(--border); }
+html.light .testimonial-card { background: var(--bg-card); border-color: var(--border); }
+html.light .faq-item { background: var(--bg-card); border-color: var(--border); }
+html.light .table-wrap { background: var(--bg-card); }
+html.light .table-wrap tr:nth-child(even) td { background: rgba(0, 0, 0, 0.02); }
+html.light .table-wrap tr:hover td { background: rgba(0, 0, 0, 0.04); }
+html.light .hero-badge { background: rgba(249, 115, 22, 0.08); }
+html.light .badge { background: rgba(249, 115, 22, 0.08); }
+html.light .btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 4px 16px rgba(249, 115, 22, 0.3); }
+html.light .btn-primary:hover { box-shadow: 0 6px 24px rgba(249, 115, 22, 0.4); }
+html.light .btn-outline { border-color: var(--border); color: var(--text-primary); }
+html.light .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+html.light .nav-center.open { background: rgba(248, 249, 252, 0.97); }
+html.light .mesh-bg { background: radial-gradient(ellipse at 20% 50%, rgba(249, 115, 22, 0.04), transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(168, 85, 247, 0.04), transparent 50%); }
+html.light .footer { background: var(--bg-secondary); border-top-color: var(--border); }
+html.light .gradient-text { background: linear-gradient(135deg, #e65100, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }

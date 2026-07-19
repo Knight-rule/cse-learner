@@ -18,6 +18,15 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dark, setDark] = useState(true);
   const [scrolled, setScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const saved = localStorage.getItem("theme");
+    const isDark = saved ? saved === "dark" : true;
+    setDark(isDark);
+    document.documentElement.classList.toggle("light", !isDark);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -25,6 +34,13 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const toggleTheme = () => {
+    const next = !dark;
+    setDark(next);
+    document.documentElement.classList.toggle("light", !next);
+    localStorage.setItem("theme", next ? "dark" : "light");
+  };
 
   return (
     <nav className={"nav" + (scrolled ? " scrolled" : "")}>
@@ -57,8 +73,8 @@ export default function Navbar() {
           <Link href="/courses" className="btn btn-primary btn-sm" style={{ display: "inline-flex" }}>
             Get Started
           </Link>
-          <button className="nav-theme" aria-label="Toggle theme">
-            <Sun size={18} />
+          <button className="nav-theme" onClick={toggleTheme} aria-label="Toggle theme">
+            {mounted ? (dark ? <Sun size={18} /> : <Moon size={18} />) : <Sun size={18} />}
           </button>
         </div>
 
