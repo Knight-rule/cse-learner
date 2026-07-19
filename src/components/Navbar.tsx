@@ -2,144 +2,71 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Code, Home, Brain, Bookmark, Sun, Moon } from "lucide-react";
+import { BookOpen, Code, Home, Brain, Bookmark, Sun, Moon, Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const navLinks = [
-  { href: "/", label: "Home", icon: Home, color: "#ff6b6b" },
-  { href: "/courses", label: "Courses", icon: BookOpen, color: "#4ecdc4" },
-  { href: "/languages", label: "Languages", icon: Code, color: "#9c27b0" },
-  { href: "/playground", label: "Playground", icon: Code, color: "#ffb347" },
-  { href: "/quiz", label: "Quiz", icon: Brain, color: "#42a5f5" },
-  { href: "/dashboard", label: "Dashboard", icon: Home, color: "#66bb6a" },
-  { href: "/bookmarks", label: "Bookmarks", icon: Bookmark, color: "#ff6fa8" },
+  { href: "/", label: "Home", icon: Home },
+  { href: "/courses", label: "Courses", icon: BookOpen },
+  { href: "/languages", label: "Languages", icon: Code },
+  { href: "/playground", label: "Playground", icon: Code },
+  { href: "/quiz", label: "Quiz", icon: Brain },
+  { href: "/dashboard", label: "Dashboard", icon: Home },
+  { href: "/bookmarks", label: "Bookmarks", icon: Bookmark },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const isDark = document.documentElement.classList.contains("dark");
-    setDark(isDark);
-
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-
+    const handleScroll = () => setScrolled(window.scrollY > 10);
     handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleDark = () => {
-    const next = !dark;
-    setDark(next);
-    document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem("cse-theme", next ? "dark" : "light");
-  };
-
-  const navClass = [
-    "premium-nav",
-    scrolled ? "scrolled" : "",
-    dark ? "dark-mode" : "",
-  ].filter(Boolean).join(" ");
+  const navClass = ["nav", scrolled ? "scrolled" : ""].filter(Boolean).join(" ");
 
   return (
     <nav className={navClass}>
-      <div className="nav-container">
-        <Link href="/" className="logo">
-          <span style={{ color: "#ff6b6b", fontWeight: "800" }}>CSE</span>
-          <span style={{ color: "#4ecdc4", fontWeight: "600" }}>Learner</span>
+      <div className="nav-inner">
+        <Link href="/" className="nav-logo">
+          <span className="cse">CSE</span>
+          <span className="learner">Learner</span>
         </Link>
 
-        <button
-          className="md:hidden p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-expanded={mobileOpen}
-          aria-label="Toggle navigation menu"
-        >
-          {mobileOpen ? (
-            <span className="text-xl text-dark font-bold">×</span>
-          ) : (
-            <span className="text-xl text-dark font-bold">☰</span>
-          )}
-        </button>
-
-        <div className={"nav-links" + (mobileOpen ? " mobile-open" : "")}>
+        <div className={"nav-links" + (mobileOpen ? " open" : "")}>
           {navLinks.map((link) => {
             const Icon = link.icon;
-            const active =
-              pathname === link.href ||
-              (link.href !== "/" && pathname.startsWith(link.href));
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                aria-current={active ? "page" : undefined}
-                className="flex items-center gap-2 px-3 py-2 transition-all rounded-lg"
-                style={
-                  active
-                    ? { background: link.color, color: "white", fontWeight: "600" }
-                    : {}
-                }
-              >
-                <Icon
-                  className="w-4 h-4"
-                  style={active ? { color: "white" } : { color: link.color }}
-                />
-                <span>{link.label}</span>
-              </Link>
-            );
-          })}
-          <button
-            onClick={toggleDark}
-            className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300"
-            aria-label="Toggle dark mode"
-          >
-            {dark ? (
-              <Sun className="w-5 h-5 text-yellow-500 animate-pulse" />
-            ) : (
-              <Moon className="w-5 h-5 text-blue-600 animate-pulse" />
-            )}
-          </button>
-        </div>
-      </div>
-
-      {mobileOpen && (
-        <div className="md:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-dark">
-          {navLinks.map((link) => {
-            const Icon = link.icon;
-            const active =
-              pathname === link.href ||
-              (link.href !== "/" && pathname.startsWith(link.href));
+            const active = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                aria-current={active ? "page" : undefined}
-                className="flex items-center gap-3 px-4 py-3 text-sm font-medium border-l-4"
-                style={
-                  active
-                    ? {
-                        borderColor: link.color,
-                        background: link.color + "15",
-                        color: link.color,
-                        fontWeight: "600",
-                      }
-                    : { borderColor: "transparent" }
-                }
+                className={"nav-link" + (active ? " active" : "")}
               >
-                <Icon className="w-5 h-5" style={active ? { color: link.color } : {}} />
-                <span>{link.label}</span>
+                <Icon size={15} />
+                {link.label}
               </Link>
             );
           })}
+          <button className="nav-theme-btn" aria-label="Toggle theme">
+            <Sun size={18} />
+          </button>
         </div>
-      )}
+
+        <button
+          className="nav-mobile-btn"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label="Toggle menu"
+        >
+          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
+      </div>
     </nav>
   );
 }

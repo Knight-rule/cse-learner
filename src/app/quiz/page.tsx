@@ -3,129 +3,117 @@
 import { useState, useMemo } from "react";
 import { ChevronRight, BookOpen, Filter } from "lucide-react";
 import Link from "next/link";
-import { courses, getCourse, type QuizQuestion } from "@/data/courses";
+import { courses, getCourse } from "@/data/courses";
 import Quiz from "@/components/Quiz";
 
 export default function QuizPage() {
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
-  const [selectedChapter, setSelectedChapter] = useState<string>("all");
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
+  const [selectedChapter, setSelectedChapter] = useState("all");
+  const [selectedDifficulty, setSelectedDifficulty] = useState("all");
 
   const course = selectedCourse ? getCourse(selectedCourse) : null;
 
   const chapters = useMemo(() => {
     if (!course) return [];
-    return Array.from(new Set(course.quiz.map((q) => q.chapter).filter((c): c is string => !!c)));
+    return Array.from(new Set(course.quiz.map((q) => q.chapter).filter(Boolean))) as string[];
   }, [course]);
 
   const filteredQuestions = useMemo(() => {
     if (!course) return [];
     let questions = course.quiz;
-    if (selectedChapter !== "all") {
-      questions = questions.filter((q) => q.chapter === selectedChapter);
-    }
-    if (selectedDifficulty !== "all") {
-      questions = questions.filter((q) => q.difficulty === selectedDifficulty);
-    }
+    if (selectedChapter !== "all") questions = questions.filter((q) => q.chapter === selectedChapter);
+    if (selectedDifficulty !== "all") questions = questions.filter((q) => q.difficulty === selectedDifficulty);
     return questions;
   }, [course, selectedChapter, selectedDifficulty]);
 
-  const getChapterQuestionCount = (chapter: string) => {
+  const getChapterCount = (ch: string) => course ? course.quiz.filter((q) => q.chapter === ch).length : 0;
+  const getDiffCount = (d: string) => {
     if (!course) return 0;
-    return course.quiz.filter((q) => q.chapter === chapter).length;
+    let q = course.quiz;
+    if (selectedChapter !== "all") q = q.filter((x) => x.chapter === selectedChapter);
+    return q.filter((x) => x.difficulty === d).length;
   };
 
-  const getDifficultyCount = (difficulty: string) => {
-    if (!course) return 0;
-    let questions = course.quiz;
-    if (selectedChapter !== "all") {
-      questions = questions.filter((q) => q.chapter === selectedChapter);
-    }
-    return questions.filter((q) => q.difficulty === difficulty).length;
-  };
-
-  const resetFilters = () => {
-    setSelectedChapter("all");
-    setSelectedDifficulty("all");
-  };
+  const resetFilters = () => { setSelectedChapter("all"); setSelectedDifficulty("all"); };
 
   return (
-    <div className="py-12 dark:bg-dark-900 min-h-screen">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-2 text-dark-400 dark:text-dark-500 text-sm mb-6">
-          <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">Home</Link>
-          <ChevronRight className="w-4 h-4" />
+    <div className="section">
+      <div className="container-sm">
+        <div className="breadcrumb">
+          <Link href="/">Home</Link>
+          <ChevronRight size={14} />
           <span>Quiz</span>
         </div>
 
-        <h1 className="text-4xl font-bold mb-4">Quiz Center</h1>
-        <p className="text-dark-500 dark:text-dark-400 text-lg mb-10">
+        <h1 className="heading-xl mb-4">
+          Quiz <span className="gradient-text">Center</span>
+        </h1>
+        <p className="body-lg mb-12">
           Test your knowledge chapter by chapter. Choose a course and filter by difficulty.
         </p>
 
         {!selectedCourse ? (
-          <div className="space-y-4">
-            {courses.map((c) => (
-              <button
-                key={c.slug}
-                onClick={() => setSelectedCourse(c.slug)}
-                className="w-full flex items-center gap-4 p-5 bg-white dark:bg-dark-800 rounded-xl border border-gray-100 dark:border-dark-700 shadow-sm hover:shadow-md hover:border-primary-200 dark:hover:border-primary-800 transition-all text-left"
-              >
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${c.color} flex items-center justify-center text-xl shrink-0`}>
-                  {c.icon}
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-lg">{c.title}</h3>
-                  <p className="text-dark-400 dark:text-dark-500 text-sm">
-                    {c.quiz.length} questions · {new Set(c.quiz.map((q) => q.chapter)).size} chapters
-                  </p>
-                </div>
-                <ChevronRight className="w-5 h-5 text-dark-300 dark:text-dark-600" />
-              </button>
-            ))}
+          <div className="lesson-list">
+            {courses.map((c) => {
+              const colors = c.color.split(" ");
+              return (
+                <button
+                  key={c.slug}
+                  onClick={() => setSelectedCourse(c.slug)}
+                  className="lesson-item"
+                  style={{ cursor: "pointer" }}
+                >
+                  <div
+                    className="flex items-center justify-center shrink-0"
+                    style={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: "var(--radius-md)",
+                      background: "linear-gradient(135deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")",
+                      fontSize: 24,
+                    }}
+                  >
+                    {c.icon}
+                  </div>
+                  <div className="flex-1 text-left">
+                    <h3 className="heading-sm">{c.title}</h3>
+                    <p className="body-sm" style={{ marginTop: 4 }}>
+                      {c.quiz.length} questions · {new Set(c.quiz.map((q) => q.chapter)).size} chapters
+                    </p>
+                  </div>
+                  <ChevronRight size={18} style={{ color: "var(--text-muted)" }} />
+                </button>
+              );
+            })}
           </div>
         ) : course ? (
-          <div className="bg-white dark:bg-dark-800 p-8 rounded-2xl border border-gray-100 dark:border-dark-700 shadow-sm">
+          <div className="glass-strong p-8" style={{ borderRadius: "var(--radius-xl)" }}>
             <div className="flex items-center justify-between mb-6">
               <div>
                 <button
                   onClick={() => { setSelectedCourse(null); resetFilters(); }}
-                  className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 mb-2"
+                  className="body-sm mb-4"
+                  style={{ color: "var(--accent-cyan)", cursor: "pointer", display: "block", marginBottom: 8 }}
                 >
                   ← Change Course
                 </button>
-                <h2 className="text-2xl font-bold">{course.title} Quiz</h2>
+                <h2 className="heading-md">{course.title} Quiz</h2>
               </div>
             </div>
 
             {/* Chapter Filter */}
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-3">
-                <BookOpen className="w-4 h-4 text-dark-500 dark:text-dark-400" />
-                <span className="text-sm font-medium text-dark-600 dark:text-dark-300">Chapter</span>
+                <BookOpen size={14} style={{ color: "var(--text-muted)" }} />
+                <span className="body-sm" style={{ fontWeight: 600, color: "var(--text-secondary)" }}>Chapter</span>
               </div>
               <div className="flex flex-wrap gap-2">
-                <button
-                  onClick={() => setSelectedChapter("all")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                    selectedChapter === "all"
-                      ? "bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 ring-1 ring-primary-300 dark:ring-primary-700"
-                      : "bg-dark-50 dark:bg-dark-700 text-dark-600 dark:text-dark-300 hover:bg-dark-100 dark:hover:bg-dark-600"
-                  }`}
-                >
+                <button onClick={() => setSelectedChapter("all")} className={"filter-pill" + (selectedChapter === "all" ? " active" : "")}>
                   All ({course.quiz.length})
                 </button>
                 {chapters.map((ch) => (
-                  <button
-                    key={ch}
-                    onClick={() => setSelectedChapter(ch)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                      selectedChapter === ch
-                        ? "bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 ring-1 ring-primary-300 dark:ring-primary-700"
-                        : "bg-dark-50 dark:bg-dark-700 text-dark-600 dark:text-dark-300 hover:bg-dark-100 dark:hover:bg-dark-600"
-                    }`}
-                  >
-                    {ch} ({getChapterQuestionCount(ch)})
+                  <button key={ch} onClick={() => setSelectedChapter(ch)} className={"filter-pill" + (selectedChapter === ch ? " active" : "")}>
+                    {ch} ({getChapterCount(ch)})
                   </button>
                 ))}
               </div>
@@ -134,71 +122,38 @@ export default function QuizPage() {
             {/* Difficulty Filter */}
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-3">
-                <Filter className="w-4 h-4 text-dark-500 dark:text-dark-400" />
-                <span className="text-sm font-medium text-dark-600 dark:text-dark-300">Difficulty</span>
+                <Filter size={14} style={{ color: "var(--text-muted)" }} />
+                <span className="body-sm" style={{ fontWeight: 600, color: "var(--text-secondary)" }}>Difficulty</span>
               </div>
               <div className="flex flex-wrap gap-2">
-                <button
-                  onClick={() => setSelectedDifficulty("all")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                    selectedDifficulty === "all"
-                      ? "bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 ring-1 ring-primary-300 dark:ring-primary-700"
-                      : "bg-dark-50 dark:bg-dark-700 text-dark-600 dark:text-dark-300 hover:bg-dark-100 dark:hover:bg-dark-600"
-                  }`}
-                >
-                  All
-                </button>
-                <button
-                  onClick={() => setSelectedDifficulty("easy")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                    selectedDifficulty === "easy"
-                      ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 ring-1 ring-green-300 dark:ring-green-700"
-                      : "bg-dark-50 dark:bg-dark-700 text-dark-600 dark:text-dark-300 hover:bg-dark-100 dark:hover:bg-dark-600"
-                  }`}
-                >
-                  Easy ({getDifficultyCount("easy")})
-                </button>
-                <button
-                  onClick={() => setSelectedDifficulty("medium")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                    selectedDifficulty === "medium"
-                      ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 ring-1 ring-yellow-300 dark:ring-yellow-700"
-                      : "bg-dark-50 dark:bg-dark-700 text-dark-600 dark:text-dark-300 hover:bg-dark-100 dark:hover:bg-dark-600"
-                  }`}
-                >
-                  Medium ({getDifficultyCount("medium")})
-                </button>
-                <button
-                  onClick={() => setSelectedDifficulty("hard")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                    selectedDifficulty === "hard"
-                      ? "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 ring-1 ring-red-300 dark:ring-red-700"
-                      : "bg-dark-50 dark:bg-dark-700 text-dark-600 dark:text-dark-300 hover:bg-dark-100 dark:hover:bg-dark-600"
-                  }`}
-                >
-                  Hard ({getDifficultyCount("hard")})
-                </button>
+                {(["all", "easy", "medium", "hard"] as const).map((d) => (
+                  <button
+                    key={d}
+                    onClick={() => setSelectedDifficulty(d)}
+                    className={"filter-pill" + (selectedDifficulty === d ? " active" : "")}
+                  >
+                    {d === "all" ? "All" : d.charAt(0).toUpperCase() + d.slice(1)} {d !== "all" ? "(" + getDiffCount(d) + ")" : ""}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Results count */}
-            <div className="mb-4 text-sm text-dark-500 dark:text-dark-400">
+            <div className="body-sm mb-4">
               Showing {filteredQuestions.length} question{filteredQuestions.length !== 1 ? "s" : ""}
-              {selectedChapter !== "all" && ` in ${selectedChapter}`}
-              {selectedDifficulty !== "all" && ` (${selectedDifficulty})`}
+              {selectedChapter !== "all" && " in " + selectedChapter}
+              {selectedDifficulty !== "all" && " (" + selectedDifficulty + ")"}
             </div>
 
-            {/* Quiz */}
             {filteredQuestions.length > 0 ? (
               <Quiz
                 questions={filteredQuestions}
                 courseSlug={course.slug}
-                quizTitle={`${course.title} Quiz${selectedChapter !== "all" ? ` - ${selectedChapter}` : ""}${selectedDifficulty !== "all" ? ` (${selectedDifficulty})` : ""}`}
+                quizTitle={course.title + " Quiz" + (selectedChapter !== "all" ? " - " + selectedChapter : "") + (selectedDifficulty !== "all" ? " (" + selectedDifficulty + ")" : "")}
               />
             ) : (
-              <div className="text-center py-10 text-dark-400 dark:text-dark-500">
-                <p className="font-medium">No questions match your filters</p>
-                <button onClick={resetFilters} className="mt-2 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">
+              <div className="empty-state" style={{ padding: 40 }}>
+                <p className="heading-sm" style={{ color: "var(--text-muted)" }}>No questions match your filters</p>
+                <button onClick={resetFilters} className="btn btn-ghost mt-4" style={{ color: "var(--accent-cyan)" }}>
                   Reset filters
                 </button>
               </div>

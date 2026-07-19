@@ -11,79 +11,99 @@ export default async function CoursePage({ params }: { params: { slug: string } 
   const course = getCourse(params.slug);
   if (!course) notFound();
 
+  const colors = course.color.split(" ");
+
   return (
-    <div className="py-12 dark:bg-dark-900 min-h-screen">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-dark-400 dark:text-dark-500 text-sm mb-6">
-          <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">Home</Link>
-          <ChevronRight className="w-4 h-4" />
-          <Link href="/courses" className="hover:text-primary-600 dark:hover:text-primary-400">Courses</Link>
-          <ChevronRight className="w-4 h-4" />
+    <div className="section">
+      <div className="container-sm">
+        <div className="breadcrumb">
+          <Link href="/">Home</Link>
+          <ChevronRight size={14} />
+          <Link href="/courses">Courses</Link>
+          <ChevronRight size={14} />
           <span>{course.title}</span>
         </div>
 
         {/* Header */}
         <div className="mb-12">
-          <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${course.color} flex items-center justify-center text-3xl mb-6`}>
+          <div
+            className="flex items-center justify-center mb-6"
+            style={{
+              width: 64,
+              height: 64,
+              borderRadius: "var(--radius-lg)",
+              background: "linear-gradient(135deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")",
+              fontSize: 32,
+            }}
+          >
             {course.icon}
           </div>
-          <h1 className="text-4xl font-bold mb-4">{course.title}</h1>
-          <p className="text-dark-500 dark:text-dark-400 text-lg max-w-2xl">{course.description}</p>
-          <div className="flex items-center gap-6 mt-6 text-sm text-dark-400 dark:text-dark-500">
-            <span className="flex items-center gap-1"><BookOpen className="w-4 h-4" /> {course.lessons.length} Lessons</span>
-            <span className="flex items-center gap-1"><Brain className="w-4 h-4" /> {course.quiz.length} Quiz Questions</span>
+          <h1 className="heading-xl mb-4">{course.title}</h1>
+          <p className="body-lg" style={{ maxWidth: 560 }}>{course.description}</p>
+          <div className="flex items-center gap-6 mt-6">
+            <span className="badge badge-cyan"><BookOpen size={14} /> {course.lessons.length} Lessons</span>
+            <span className="badge badge-purple"><Brain size={14} /> {course.quiz.length} Quiz Questions</span>
           </div>
         </div>
 
         {/* Lessons */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">Lessons</h2>
-          <div className="space-y-3">
+          <h2 className="heading-md mb-6">Lessons</h2>
+          <div className="lesson-list">
             {course.lessons.map((lesson, i) => (
               <Link
                 key={lesson.id}
-                href={`/courses/${course.slug}/lessons/${lesson.id}`}
-                className="group flex items-center gap-4 p-5 bg-white dark:bg-dark-800 rounded-xl border border-gray-100 dark:border-dark-700 shadow-sm hover:shadow-md hover:border-primary-200 dark:hover:border-primary-800 transition-all"
+                href={"/courses/" + course.slug + "/lessons/" + lesson.id}
+                className="lesson-item"
               >
-                <div className="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 flex items-center justify-center font-bold text-sm shrink-0">
+                <div
+                  className="lesson-num"
+                  style={{ background: colors[0] + "20", color: colors[0] }}
+                >
                   {i + 1}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-lg group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">{lesson.title}</h3>
-                  <p className="text-dark-400 dark:text-dark-500 text-sm truncate mt-0.5">
+                  <h3 className="heading-sm">{lesson.title}</h3>
+                  <p className="body-sm mt-4" style={{ marginTop: 4 }}>
                     {lesson.content.split("\n")[0].substring(0, 100)}...
                   </p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   {lesson.codeExample && (
-                    <span className="hidden sm:flex items-center gap-1 text-xs bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 px-2 py-1 rounded-full">
-                      <Play className="w-3 h-3" /> Code
-                    </span>
+                    <span className="badge badge-green"><Play size={12} /> Code</span>
                   )}
-                  <ArrowRight className="w-5 h-5 text-dark-300 dark:text-dark-600 group-hover:text-primary-500 group-hover:translate-x-1 transition-all" />
+                  <ArrowRight size={16} style={{ color: "var(--text-muted)" }} />
                 </div>
               </Link>
             ))}
           </div>
         </div>
 
-        {/* Quiz */}
-        <div className="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 rounded-2xl p-8 border border-primary-200 dark:border-primary-800">
+        {/* Quiz CTA */}
+        <div className="glass-strong p-8" style={{ borderRadius: "var(--radius-xl)" }}>
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-primary-600 rounded-xl flex items-center justify-center">
-              <Brain className="w-6 h-6 text-white" />
+            <div
+              className="flex items-center justify-center"
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: "var(--radius-md)",
+                background: "var(--accent-purple)",
+              }}
+            >
+              <Brain size={24} color="#fff" />
             </div>
             <div>
-              <h3 className="text-xl font-bold">Ready to Test Yourself?</h3>
-              <p className="text-primary-600 dark:text-primary-400 text-sm">{course.quiz.length} questions to check your understanding</p>
+              <h3 className="heading-sm">Ready to Test Yourself?</h3>
+              <p className="body-sm">{course.quiz.length} questions to check your understanding</p>
             </div>
           </div>
           <Link
-            href={`/quiz?course=${course.slug}`}
-            className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-primary-700 transition-colors"
+            href={"/quiz?course=" + course.slug}
+            className="btn btn-primary"
+            style={{ marginTop: 16 }}
           >
-            Take Quiz <ArrowRight className="w-4 h-4" />
+            Take Quiz <ArrowRight size={16} />
           </Link>
         </div>
       </div>

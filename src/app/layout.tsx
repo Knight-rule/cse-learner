@@ -14,6 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={inter.className}>
+        <div className="mesh-bg" />
         <Navbar />
         <main className="min-h-screen">{children}</main>
       </body>

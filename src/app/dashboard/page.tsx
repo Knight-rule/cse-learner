@@ -12,86 +12,86 @@ export default function DashboardPage() {
   const enrolledCourses = courses.filter((c) => stats.coursesStarted.includes(c.slug));
 
   return (
-    <div className="py-12 dark:bg-dark-900 min-h-screen">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-2 text-dark-400 dark:text-dark-500 text-sm mb-6">
-          <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">Home</Link>
-          <ChevronRight className="w-4 h-4" />
+    <div className="section">
+      <div className="container">
+        <div className="breadcrumb">
+          <Link href="/">Home</Link>
+          <ChevronRight size={14} />
           <span>Dashboard</span>
         </div>
 
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Your Dashboard</h1>
-          <p className="text-dark-500 dark:text-dark-400 text-lg">Track your learning progress and find opportunities</p>
+          <h1 className="heading-xl mb-4">Your Dashboard</h1>
+          <p className="body-lg">Track your learning progress and find opportunities</p>
         </div>
 
-        <div className="mb-10">
+        <div className="mb-12">
           <DashboardStats />
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-8">
-            <div>
-              <h2 className="text-2xl font-bold mb-4">Enrolled Courses</h2>
-              {enrolledCourses.length === 0 ? (
-                <div className="bg-white dark:bg-dark-800 p-8 rounded-xl border border-gray-100 dark:border-dark-700 shadow-sm text-center">
-                  <p className="text-dark-500 dark:text-dark-400 mb-4">You haven&apos;t started any courses yet</p>
-                  <Link
-                    href="/courses"
-                    className="inline-flex items-center gap-2 bg-primary-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-primary-700 transition-colors"
-                  >
-                    Browse Courses <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {enrolledCourses.map((course) => {
-                    const courseQuizzes = stats.activities.filter(
-                      (a) => a.type === "quiz" && a.courseSlug === course.slug
-                    ).length;
-                    return (
-                      <Link
-                        key={course.slug}
-                        href={`/courses/${course.slug}`}
-                        className="flex items-center gap-4 p-4 bg-white dark:bg-dark-800 rounded-xl border border-gray-100 dark:border-dark-700 shadow-sm hover:shadow-md transition-all"
-                      >
-                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${course.color} flex items-center justify-center text-2xl shrink-0`}>
-                          {course.icon}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-dark-900 dark:text-dark-100">{course.title}</h3>
-                          <p className="text-sm text-dark-400 dark:text-dark-500">{course.lessons.length} lessons · {courseQuizzes} quizzes taken</p>
-                        </div>
-                        <ArrowRight className="w-5 h-5 text-dark-300 dark:text-dark-600 shrink-0" />
-                      </Link>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold">Recent Activity</h2>
+        <div className="grid grid-3" style={{ gap: 32 }}>
+          <div style={{ gridColumn: "span 2" }}>
+            <h2 className="heading-md mb-6">Enrolled Courses</h2>
+            {enrolledCourses.length === 0 ? (
+              <div className="glass p-8 text-center" style={{ borderRadius: "var(--radius-lg)" }}>
+                <p className="body-md mb-4">You haven&apos;t started any courses yet</p>
+                <Link href="/courses" className="btn btn-primary">
+                  Browse Courses <ArrowRight size={16} />
+                </Link>
               </div>
+            ) : (
+              <div className="lesson-list">
+                {enrolledCourses.map((course) => {
+                  const colors = course.color.split(" ");
+                  const quizzes = stats.activities.filter((a) => a.type === "quiz" && a.courseSlug === course.slug).length;
+                  return (
+                    <Link key={course.slug} href={"/courses/" + course.slug} className="lesson-item">
+                      <div
+                        className="flex items-center justify-center shrink-0"
+                        style={{
+                          width: 48,
+                          height: 48,
+                          borderRadius: "var(--radius-md)",
+                          background: "linear-gradient(135deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")",
+                          fontSize: 24,
+                        }}
+                      >
+                        {course.icon}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="heading-sm">{course.title}</h3>
+                        <p className="body-sm" style={{ marginTop: 4 }}>{course.lessons.length} lessons · {quizzes} quizzes taken</p>
+                      </div>
+                      <ArrowRight size={16} style={{ color: "var(--text-muted)" }} />
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+
+            <div style={{ marginTop: 48 }}>
+              <h2 className="heading-md mb-6">Recent Activity</h2>
               <ActivityFeed />
             </div>
           </div>
 
           <div>
-            <div className="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 rounded-2xl p-6 border border-primary-200 dark:border-primary-800 sticky top-20">
-              <div className="w-12 h-12 bg-primary-600 rounded-xl flex items-center justify-center mb-4">
-                <Briefcase className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Find Opportunities</h3>
-              <p className="text-primary-700 dark:text-primary-300 text-sm mb-4">
-                Browse live internship and job listings updated automatically from top job boards.
-              </p>
-              <Link
-                href="/jobs"
-                className="inline-flex items-center gap-2 bg-primary-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-primary-700 transition-colors w-full justify-center"
+            <div className="glass-strong p-6" style={{ borderRadius: "var(--radius-xl)", position: "sticky", top: 80 }}>
+              <div
+                className="flex items-center justify-center mb-4"
+                style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: "var(--radius-md)",
+                  background: "var(--accent-cyan)",
+                }}
               >
-                View Jobs <ArrowRight className="w-4 h-4" />
+                <Briefcase size={24} color="#fff" />
+              </div>
+              <h3 className="heading-sm mb-2">Find Opportunities</h3>
+              <p className="body-sm mb-4">Browse live internship and job listings updated automatically.</p>
+              <Link href="/jobs" className="btn btn-primary w-full justify-center">
+                View Jobs <ArrowRight size={16} />
               </Link>
             </div>
           </div>

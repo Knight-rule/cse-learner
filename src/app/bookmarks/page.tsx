@@ -27,62 +27,59 @@ export default function BookmarksPage() {
   };
 
   return (
-    <div className="py-12 dark:bg-dark-900 min-h-screen">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-2 text-dark-400 dark:text-dark-500 text-sm mb-6">
-          <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">Home</Link>
-          <ChevronRight className="w-4 h-4" />
+    <div className="section">
+      <div className="container-sm">
+        <div className="breadcrumb">
+          <Link href="/">Home</Link>
+          <ChevronRight size={14} />
           <span>Bookmarks</span>
         </div>
 
-        <div className="flex items-center gap-3 mb-8">
-          <Bookmark className="w-8 h-8 text-yellow-500" fill="currentColor" />
-          <h1 className="text-4xl font-bold">Bookmarks</h1>
+        <div className="flex items-center gap-4 mb-12">
+          <Bookmark size={32} style={{ color: "var(--accent-amber)" }} fill="currentColor" />
+          <h1 className="heading-xl">Bookmarks</h1>
         </div>
 
         {bookmarks.length === 0 ? (
-          <div className="text-center py-16">
-            <div className="text-6xl mb-4">📚</div>
-            <h2 className="text-2xl font-bold mb-2">No bookmarks yet</h2>
-            <p className="text-dark-500 dark:text-dark-400 mb-6">
+          <div className="empty-state">
+            <div className="empty-icon">📚</div>
+            <h2 className="heading-md mb-4">No bookmarks yet</h2>
+            <p className="body-md mb-8">
               Save lessons you want to revisit later by clicking the bookmark icon.
             </p>
-            <Link
-              href="/courses"
-              className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-primary-700 transition-colors"
-            >
+            <Link href="/courses" className="btn btn-primary">
               Browse Courses
             </Link>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="lesson-list">
             {bookmarks.map((bm, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-4 p-5 bg-white dark:bg-dark-800 rounded-xl border border-gray-100 dark:border-dark-700 shadow-sm"
-              >
-                <Bookmark className="w-5 h-5 text-yellow-500 shrink-0" fill="currentColor" />
+              <div key={i} className="lesson-item">
+                <Bookmark size={18} style={{ color: "var(--accent-amber)", flexShrink: 0 }} fill="currentColor" />
                 <div className="flex-1 min-w-0">
                   <Link
-                    href={bm.lessonId ? `/courses/${bm.slug}/lessons/${bm.lessonId}` : `/courses/${bm.slug}`}
-                    className="font-semibold hover:text-primary-600 dark:hover:text-primary-400 transition-colors dark:text-dark-100"
+                    href={bm.lessonId ? "/courses/" + bm.slug + "/lessons/" + bm.lessonId : "/courses/" + bm.slug}
+                    className="heading-sm"
+                    style={{ fontSize: 15, display: "block" }}
                   >
                     {bm.title}
                   </Link>
-                  <p className="text-dark-400 dark:text-dark-500 text-sm">{bm.courseTitle}</p>
+                  <p className="body-sm" style={{ marginTop: 4 }}>{bm.courseTitle}</p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <Link
-                    href={bm.lessonId ? `/courses/${bm.slug}/lessons/${bm.lessonId}` : `/courses/${bm.slug}`}
-                    className="p-2 text-dark-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
+                    href={bm.lessonId ? "/courses/" + bm.slug + "/lessons/" + bm.lessonId : "/courses/" + bm.slug}
+                    className="btn btn-ghost"
+                    style={{ padding: 8 }}
                   >
-                    <ExternalLink className="w-4 h-4" />
+                    <ExternalLink size={16} />
                   </Link>
                   <button
                     onClick={() => remove(i)}
-                    className="p-2 text-dark-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                    className="btn btn-ghost"
+                    style={{ padding: 8, color: "var(--accent-pink)" }}
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 size={16} />
                   </button>
                 </div>
               </div>
