@@ -45,8 +45,9 @@ export default function QuizPage() {
           <span>Quiz</span>
         </div>
 
+        <span className="badge badge-accent mb-4" style={{ display: "inline-flex" }}>Quiz Center</span>
         <h1 className="heading-xl mb-4">
-          Quiz <span className="gradient-text">Center</span>
+          Test Your <span className="gradient-text">Knowledge</span>
         </h1>
         <p className="body-lg mb-12">
           Test your knowledge chapter by chapter. Choose a course and filter by difficulty.
@@ -61,47 +62,33 @@ export default function QuizPage() {
                   key={c.slug}
                   onClick={() => setSelectedCourse(c.slug)}
                   className="lesson-item"
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", textAlign: "left" }}
                 >
-                  <div
-                    className="flex items-center justify-center shrink-0"
-                    style={{
-                      width: 48,
-                      height: 48,
-                      borderRadius: "var(--radius-md)",
-                      background: "linear-gradient(135deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")",
-                      fontSize: 24,
-                    }}
-                  >
+                  <div style={{ width: 48, height: 48, borderRadius: "var(--radius-md)", background: "linear-gradient(135deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, flexShrink: 0 }}>
                     {c.icon}
                   </div>
-                  <div className="flex-1 text-left">
+                  <div className="flex-1">
                     <h3 className="heading-sm">{c.title}</h3>
                     <p className="body-sm" style={{ marginTop: 4 }}>
                       {c.quiz.length} questions · {new Set(c.quiz.map((q) => q.chapter)).size} chapters
                     </p>
                   </div>
-                  <ChevronRight size={18} style={{ color: "var(--text-muted)" }} />
+                  <ChevronRight size={18} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
                 </button>
               );
             })}
           </div>
         ) : course ? (
-          <div className="glass-strong p-8" style={{ borderRadius: "var(--radius-xl)" }}>
+          <div className="glass-card p-8">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <button
-                  onClick={() => { setSelectedCourse(null); resetFilters(); }}
-                  className="body-sm mb-4"
-                  style={{ color: "var(--accent-cyan)", cursor: "pointer", display: "block", marginBottom: 8 }}
-                >
+                <button onClick={() => { setSelectedCourse(null); resetFilters(); }} className="body-sm" style={{ color: "var(--accent)", cursor: "pointer", display: "block", marginBottom: 8 }}>
                   ← Change Course
                 </button>
                 <h2 className="heading-md">{course.title} Quiz</h2>
               </div>
             </div>
 
-            {/* Chapter Filter */}
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-3">
                 <BookOpen size={14} style={{ color: "var(--text-muted)" }} />
@@ -119,7 +106,6 @@ export default function QuizPage() {
               </div>
             </div>
 
-            {/* Difficulty Filter */}
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-3">
                 <Filter size={14} style={{ color: "var(--text-muted)" }} />
@@ -127,11 +113,7 @@ export default function QuizPage() {
               </div>
               <div className="flex flex-wrap gap-2">
                 {(["all", "easy", "medium", "hard"] as const).map((d) => (
-                  <button
-                    key={d}
-                    onClick={() => setSelectedDifficulty(d)}
-                    className={"filter-pill" + (selectedDifficulty === d ? " active" : "")}
-                  >
+                  <button key={d} onClick={() => setSelectedDifficulty(d)} className={"filter-pill" + (selectedDifficulty === d ? " active" : "")}>
                     {d === "all" ? "All" : d.charAt(0).toUpperCase() + d.slice(1)} {d !== "all" ? "(" + getDiffCount(d) + ")" : ""}
                   </button>
                 ))}
@@ -153,7 +135,7 @@ export default function QuizPage() {
             ) : (
               <div className="empty-state" style={{ padding: 40 }}>
                 <p className="heading-sm" style={{ color: "var(--text-muted)" }}>No questions match your filters</p>
-                <button onClick={resetFilters} className="btn btn-ghost mt-4" style={{ color: "var(--accent-cyan)" }}>
+                <button onClick={resetFilters} className="btn btn-ghost mt-4" style={{ color: "var(--accent)" }}>
                   Reset filters
                 </button>
               </div>

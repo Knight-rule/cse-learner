@@ -49,26 +49,16 @@ export default async function LessonPage({ params }: { params: { slug: string; i
 
         <div className="flex items-center justify-between pt-8 border-t" style={{ marginTop: 48 }}>
           {prevLesson ? (
-            <Link
-              href={"/courses/" + course.slug + "/lessons/" + prevLesson.id}
-              className="flex items-center gap-3"
-              style={{ color: "var(--text-secondary)" }}
-            >
+            <Link href={"/courses/" + course.slug + "/lessons/" + prevLesson.id} className="flex items-center gap-3" style={{ color: "var(--text-secondary)" }}>
               <ArrowLeft size={16} />
               <div>
                 <div className="body-sm">Previous</div>
                 <div className="heading-sm" style={{ fontSize: 15 }}>{prevLesson.title}</div>
               </div>
             </Link>
-          ) : (
-            <div />
-          )}
+          ) : <div />}
           {nextLesson ? (
-            <Link
-              href={"/courses/" + course.slug + "/lessons/" + nextLesson.id}
-              className="flex items-center gap-3 text-right"
-              style={{ color: "var(--text-secondary)" }}
-            >
+            <Link href={"/courses/" + course.slug + "/lessons/" + nextLesson.id} className="flex items-center gap-3 text-right" style={{ color: "var(--text-secondary)" }}>
               <div>
                 <div className="body-sm">Next</div>
                 <div className="heading-sm" style={{ fontSize: 15 }}>{nextLesson.title}</div>
@@ -76,10 +66,7 @@ export default async function LessonPage({ params }: { params: { slug: string; i
               <ArrowRight size={16} />
             </Link>
           ) : (
-            <Link
-              href={"/quiz?course=" + course.slug}
-              className="btn btn-primary"
-            >
+            <Link href={"/quiz?course=" + course.slug} className="btn btn-primary">
               Take Quiz <ArrowRight size={16} />
             </Link>
           )}

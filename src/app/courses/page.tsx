@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight, BookOpen } from "lucide-react";
+import { ChevronRight, BookOpen, ArrowRight } from "lucide-react";
 import { courses } from "@/data/courses";
 
 export default function CoursesPage() {
@@ -13,40 +13,39 @@ export default function CoursesPage() {
         </div>
 
         <div className="mb-12">
+          <span className="badge badge-accent mb-4" style={{ display: "inline-flex" }}>All Courses</span>
           <h1 className="heading-xl mb-4">
-            All <span className="gradient-text">Courses</span>
+            Explore Our <span className="gradient-text">CS Courses</span>
           </h1>
           <p className="body-lg" style={{ maxWidth: 560 }}>
             Choose a topic and start learning. Each course includes structured lessons, code examples, and quizzes.
           </p>
         </div>
 
-        <div className="courses-grid">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
           {courses.map((course) => {
             const colors = course.color.split(" ");
             return (
               <Link
                 key={course.slug}
                 href={"/courses/" + course.slug}
-                className="course-card glow-border"
+                className="course-card-aiv glass-card-glow"
+                style={{ textDecoration: "none", color: "inherit" }}
               >
-                <div
-                  className="course-thumb"
-                  style={{ background: "linear-gradient(135deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")" }}
-                >
-                  <span>{course.icon}</span>
-                </div>
-                <div className="course-body">
-                  <h2 className="heading-sm mb-2">{course.title}</h2>
-                  <p className="body-md" style={{ marginBottom: 16 }}>{course.description}</p>
-                  <div className="course-meta">
-                    <span className="body-sm flex items-center gap-2">
-                      <BookOpen size={14} /> {course.lessons.length} lessons
-                    </span>
-                    <span className="badge badge-cyan">
-                      Start <ChevronRight size={12} />
-                    </span>
-                  </div>
+                <div style={{ height: 6, borderRadius: 6, background: "linear-gradient(90deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")", marginBottom: 24 }} />
+                <div style={{ fontSize: 40, marginBottom: 16 }}>{course.icon}</div>
+                <h2 className="course-title">{course.title}</h2>
+                <p className="body-md" style={{ marginBottom: 16 }}>{course.description}</p>
+                <ul className="course-features">
+                  {course.lessons.slice(0, 3).map((l) => (
+                    <li key={l.id}>{l.title}</li>
+                  ))}
+                </ul>
+                <div className="flex items-center justify-between" style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--border)" }}>
+                  <span className="body-sm"><BookOpen size={14} style={{ display: "inline", verticalAlign: "middle", marginRight: 6 }} />{course.lessons.length} lessons</span>
+                  <span className="flex items-center gap-2" style={{ color: "var(--accent)", fontWeight: 600, fontSize: 14 }}>
+                    Start <ChevronRight size={14} />
+                  </span>
                 </div>
               </Link>
             );

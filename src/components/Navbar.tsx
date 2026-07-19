@@ -6,13 +6,11 @@ import { BookOpen, Code, Home, Brain, Bookmark, Sun, Moon, Menu, X } from "lucid
 import { useState, useEffect } from "react";
 
 const navLinks = [
-  { href: "/", label: "Home", icon: Home },
-  { href: "/courses", label: "Courses", icon: BookOpen },
-  { href: "/languages", label: "Languages", icon: Code },
-  { href: "/playground", label: "Playground", icon: Code },
-  { href: "/quiz", label: "Quiz", icon: Brain },
-  { href: "/dashboard", label: "Dashboard", icon: Home },
-  { href: "/bookmarks", label: "Bookmarks", icon: Bookmark },
+  { href: "/", label: "Home" },
+  { href: "/courses", label: "Courses" },
+  { href: "/languages", label: "Languages" },
+  { href: "/playground", label: "Playground" },
+  { href: "/quiz", label: "Quiz" },
 ];
 
 export default function Navbar() {
@@ -28,19 +26,16 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navClass = ["nav", scrolled ? "scrolled" : ""].filter(Boolean).join(" ");
-
   return (
-    <nav className={navClass}>
+    <nav className={"nav" + (scrolled ? " scrolled" : "")}>
       <div className="nav-inner">
         <Link href="/" className="nav-logo">
           <span className="cse">CSE</span>
           <span className="learner">Learner</span>
         </Link>
 
-        <div className={"nav-links" + (mobileOpen ? " open" : "")}>
+        <div className={"nav-center" + (mobileOpen ? " open" : "")}>
           {navLinks.map((link) => {
-            const Icon = link.icon;
             const active = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
             return (
               <Link
@@ -49,18 +44,26 @@ export default function Navbar() {
                 onClick={() => setMobileOpen(false)}
                 className={"nav-link" + (active ? " active" : "")}
               >
-                <Icon size={15} />
                 {link.label}
               </Link>
             );
           })}
-          <button className="nav-theme-btn" aria-label="Toggle theme">
+        </div>
+
+        <div className="nav-actions">
+          <Link href="/dashboard" className="btn btn-outline btn-sm" style={{ display: "inline-flex" }}>
+            Dashboard
+          </Link>
+          <Link href="/courses" className="btn btn-primary btn-sm" style={{ display: "inline-flex" }}>
+            Get Started
+          </Link>
+          <button className="nav-theme" aria-label="Toggle theme">
             <Sun size={18} />
           </button>
         </div>
 
         <button
-          className="nav-mobile-btn"
+          className="nav-mobile"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
         >
