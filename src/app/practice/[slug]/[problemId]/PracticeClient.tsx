@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Play, RotateCcw, Copy, Check, ChevronRight, ChevronDown, Lightbulb, Loader2, CheckCircle, XCircle } from "lucide-react";
+import { Play, RotateCcw, Copy, Check, ChevronRight, ChevronDown, Lightbulb, Loader2, CheckCircle, XCircle, Circle } from "lucide-react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import type { PracticeProblem } from "@/data/practice";
+import { markPracticeSolved, isPracticeSolved } from "@/lib/tracker";
 
 const CodeMirror = dynamic(() => import("@uiw/react-codemirror").then((mod) => mod.default), { ssr: false });
 
@@ -47,6 +48,18 @@ export default function PracticeClient({ problem, courseSlug, problemIndex, tota
   const [copied, setCopied] = useState(false);
   const [showHints, setShowHints] = useState(false);
   const [results, setResults] = useState<{ passed: boolean; actual: string; expected: string; input: string }[]>([]);
+  const [solved, setSolved] = useState<boolean>(() => {
+    try { return isPracticeSolved(problem.id); } catch { return false; }
+  });
+
+  const toggleSolved = () => {
+    if (!solved) {
+      markPracticeSolved(problem.id);
+      setSolved(true);
+    } else {
+      setSolved(false);
+    }
+  };
 
   const handleCopy = async () => {
     try { await navigator.clipboard.writeText(code); } catch {}
@@ -71,11 +84,13 @@ export default function PracticeClient({ problem, courseSlug, problemIndex, tota
         setResults(testResults);
         const passed = testResults.filter((r) => r.passed).length;
         setOutput(`\n✅ ${passed}/${testResults.length} tests passed\n`);
+        if (passed === testResults.length && testResults.length > 0) { markPracticeSolved(problem.id); setSolved(true); }
       } else if (problem.language === "python") {
         const testResults = await runPythonTests(code, problem.testCases);
         setResults(testResults);
         const passed = testResults.filter((r) => r.passed).length;
         setOutput(`\n✅ ${passed}/${testResults.length} tests passed\n`);
+        if (passed === testResults.length && testResults.length > 0) { markPracticeSolved(problem.id); setSolved(true); }
       } else {
         setResults([{ passed: false, actual: "", expected: "", input: "" }]);
         setOutput("\n⚠️ C/C++ execution not available in browser. Copy the code and run locally.\n");
@@ -182,6 +197,10 @@ export default function PracticeClient({ problem, courseSlug, problemIndex, tota
           <button onClick={runCode} disabled={isRunning} className="flex items-center gap-1 practice-run-btn">
             {isRunning ? <Loader2 size={14} className="animate-spin" /> : <Play size={14} />}
             {isRunning ? "Running..." : "Run Tests"}
+          </button>
+          <button onClick={toggleSolved} className={"flex items-center gap-1 practice-toolbar-btn" + (solved ? " solved" : "")} title="Mark as solved">
+            {solved ? <CheckCircle size={14} /> : <Circle size={14} />}
+            {solved ? "Solved" : "Mark Solved"}
           </button>
         </div>
 

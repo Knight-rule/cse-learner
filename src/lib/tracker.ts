@@ -209,3 +209,28 @@ export function getSRSStatsForCourse(courseSlug: string) {
 export function getAllSRSStats() {
   return getSRSStats(getSRSData());
 }
+
+// Practice solved tracking
+export function markPracticeSolved(problemId: string) {
+  const data = getData();
+  const key = "solved:" + problemId;
+  if (!data.dailyActivity[key]) {
+    data.dailyActivity[key] = 1;
+    data.codeRuns++;
+    saveData(data);
+  }
+}
+
+export function isPracticeSolved(problemId: string): boolean {
+  const data = getData();
+  return !!data.dailyActivity["solved:" + problemId];
+}
+
+export function getSolvedProblems(): Set<string> {
+  const data = getData();
+  const solved = new Set<string>();
+  for (const k of Object.keys(data.dailyActivity)) {
+    if (k.startsWith("solved:")) solved.add(k.slice(7));
+  }
+  return solved;
+}
