@@ -4,9 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 const rateLimitMap = new Map<string, number[]>();
 const RATE_LIMIT = 10;
 const RATE_WINDOW = 60000;
-const CLEANUP_INTERVAL = 300000; // 5 minutes
+const CLEANUP_INTERVAL = 300000;
 
-// Periodic cleanup to prevent memory leak
 setInterval(() => {
   const now = Date.now();
   Array.from(rateLimitMap.entries()).forEach(([ip, timestamps]) => {
@@ -40,45 +39,79 @@ function checkRateLimit(ip: string): boolean {
 
 const MAX_CODE_SIZE = 50 * 1024;
 
-const PISTON_INSTANCES = [
-  "https://emkc.org/api/v2/piston/execute",
-];
+// Judge0 language IDs: https://judge0.com/docs/supported-languages
+const JUDGE0_LANG_MAP: Record<string, number> = {
+  c: 5,       // C (GCC 9.2.0)
+  cpp: 12,    // C++ (GCC 9.2.0)
+};
 
-async function tryPiston(code: string, language: string): Promise<{ stdout: string; stderr: string } | null> {
+async function runViaJudge0(code: string, language: string): Promise<{ stdout: string; stderr: string } | null> {
+  const apiKey = process.env.JUDGE0_API_KEY;
+  const apiUrl = process.env.JUDGE0_API_URL || "https://judge0-ce.p.rapidapi.com";
+
+  if (!apiKey) return null;
+
+  const langId = JUDGE0_LANG_MAP[language];
+  if (!langId) return null;
+
+  try {
+    // Submit code
+    const submitRes = await fetch(`${apiUrl}/submissions?base64_encoded=false&wait=true`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
+      },
+      body: JSON.stringify({
+        language_id: langId,
+        source_code: code,
+      }),
+    });
+
+    if (!submitRes.ok) return null;
+
+    const data = await submitRes.json();
+
+    return {
+      stdout: data.stdout || "",
+      stderr: data.stderr || data.compile_output || "",
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function runViaPiston(code: string, language: string): Promise<{ stdout: string; stderr: string } | null> {
+  const pistonUrl = process.env.PISTON_API_URL;
+  if (!pistonUrl) return null;
+
   const langMap: Record<string, string> = { c: "c", cpp: "c++" };
   const extMap: Record<string, string> = { c: "c", cpp: "cpp" };
 
-  for (const url of PISTON_INSTANCES) {
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          language: langMap[language],
-          files: [{ name: `main.${extMap[language]}`, content: code }],
-        }),
-      });
+  try {
+    const response = await fetch(`${pistonUrl}/api/v2/piston/execute`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        language: langMap[language],
+        files: [{ name: `main.${extMap[language]}`, content: code }],
+      }),
+    });
 
-      const data = await response.json();
+    if (!response.ok) return null;
 
-      if (data.message && data.message.includes("whitelist")) {
-        continue;
-      }
+    const data = await response.json();
+    if (data.message) return null;
 
-      if (!response.ok) {
-        continue;
-      }
-
-      const run = data.run || {};
-      return {
-        stdout: run.stdout || "",
-        stderr: run.stderr || "",
-      };
-    } catch {
-      continue;
-    }
+    const run = data.run || {};
+    return {
+      stdout: run.stdout || "",
+      stderr: run.stderr || "",
+    };
+  } catch {
+    return null;
   }
-  return null;
 }
 
 export async function POST(request: NextRequest) {
@@ -104,14 +137,36 @@ export async function POST(request: NextRequest) {
     }
 
     if (language === "c" || language === "cpp") {
-      const result = await tryPiston(code, language);
-      if (result) {
-        return NextResponse.json(result);
+      // Try Judge0 first (RapidAPI free tier: 2000/day)
+      const judge0Result = await runViaJudge0(code, language);
+      if (judge0Result) {
+        return NextResponse.json(judge0Result);
+      }
+
+      // Try self-hosted Piston
+      const pistonResult = await runViaPiston(code, language);
+      if (pistonResult) {
+        return NextResponse.json(pistonResult);
       }
 
       return NextResponse.json({
         stdout: "",
-        stderr: "Cloud C/C++ compiler is temporarily unavailable. The external compilation service (Piston) requires API access. Try Python or JavaScript in the meantime — both run locally in your browser with no server needed.",
+        stderr: [
+          "C/C++ cloud compiler not configured yet.",
+          "",
+          "To enable C/C++ compilation, set one of these environment variables:",
+          "",
+          "Option 1 (Recommended) — Judge0 via RapidAPI (free 2000/day):",
+          "  1. Sign up at https://rapidapi.com/judge0-official/api/judge0-ce",
+          "  2. Subscribe to the free tier",
+          "  3. Set JUDGE0_API_KEY=<your-rapidapi-key>",
+          "",
+          "Option 2 — Self-hosted Piston:",
+          "  1. Deploy Piston: docker run -d -p 2000:2000 ghcr.io/engineer-man/piston:latest",
+          "  2. Set PISTON_API_URL=http://your-piston-host:2000",
+          "",
+          "In the meantime, try Python or JavaScript — both run locally in your browser!",
+        ].join("\n"),
       });
     }
 
