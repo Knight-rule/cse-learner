@@ -302,6 +302,92 @@ export function getContestResult(contestId: string): ContestResult | undefined {
   return getContestResults().find((r) => r.contestId === contestId);
 }
 
+// Discuss (local per-problem Q&A)
+export interface DiscussReply {
+  id: string;
+  body: string;
+  author: string;
+  createdAt: number;
+}
+
+export interface DiscussThread {
+  id: string;
+  problemId: string;
+  courseSlug: string;
+  problemTitle: string;
+  body: string;
+  author: string;
+  createdAt: number;
+  replies: DiscussReply[];
+}
+
+const DISCUSS_KEY = "cse-learner-discuss";
+
+function getDiscussThreads(): DiscussThread[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(DISCUSS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveDiscussThreads(threads: DiscussThread[]): void {
+  if (typeof window === "undefined") return;
+  try { localStorage.setItem(DISCUSS_KEY, JSON.stringify(threads)); } catch {}
+}
+
+export function getAllDiscussThreads(): DiscussThread[] {
+  return getDiscussThreads().sort((a, b) => b.createdAt - a.createdAt);
+}
+
+export function getDiscussThreadsByProblem(problemId: string): DiscussThread[] {
+  return getDiscussThreads()
+    .filter((t) => t.problemId === problemId)
+    .sort((a, b) => b.createdAt - a.createdAt);
+}
+
+export function getDiscussThreadCount(): number {
+  return getDiscussThreads().length;
+}
+
+export function addDiscussThread(input: {
+  problemId: string;
+  courseSlug: string;
+  problemTitle: string;
+  body: string;
+  author: string;
+}): DiscussThread {
+  const threads = getDiscussThreads();
+  const thread: DiscussThread = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    problemId: input.problemId,
+    courseSlug: input.courseSlug,
+    problemTitle: input.problemTitle,
+    body: input.body,
+    author: input.author || "Anonymous",
+    createdAt: Date.now(),
+    replies: [],
+  };
+  threads.push(thread);
+  saveDiscussThreads(threads);
+  return thread;
+}
+
+export function addDiscussReply(threadId: string, body: string, author: string): void {
+  const threads = getDiscussThreads();
+  const idx = threads.findIndex((t) => t.id === threadId);
+  if (idx === -1) return;
+  threads[idx].replies.push({
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    body,
+    author: author || "Anonymous",
+    createdAt: Date.now(),
+  });
+  saveDiscussThreads(threads);
+}
+
 // Learner name (used on certificates)
 export function getLearnerName(): string {
   if (typeof window === "undefined") return "CSE Learner";

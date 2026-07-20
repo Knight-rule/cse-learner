@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { Play, RotateCcw, Copy, Check, ChevronRight, ChevronDown, Lightbulb, Loader2, CheckCircle, XCircle, Circle } from "lucide-react";
 import Link from "next/link";
+import { MessageSquare } from "lucide-react";
 import dynamic from "next/dynamic";
 import type { PracticeProblem } from "@/data/practice";
 import { markPracticeSolved, isPracticeSolved } from "@/lib/tracker";
@@ -143,6 +144,12 @@ export default function PracticeClient({ problem, courseSlug, problemIndex, tota
           </div>
 
           {/* Hints */}
+          <div className="mt-6">
+            <Link href={`/discuss/${courseSlug}/${problem.id}`} className="flex items-center gap-2 body-sm discuss-link">
+              <MessageSquare size={16} /> Discuss this problem
+            </Link>
+          </div>
+
           <div className="mt-6">
             <button onClick={() => setShowHints(!showHints)} className="flex items-center gap-2 body-sm" style={{ color: "var(--accent)", fontWeight: 600 }}>
               <Lightbulb size={16} /> Hints {showHints ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
