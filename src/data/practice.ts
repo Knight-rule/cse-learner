@@ -7,12 +7,15 @@ export interface PracticeProblem {
   language: "javascript" | "python" | "c" | "cpp";
   testCases: { input: string; expected: string }[];
   hints: string[];
+  chapter?: string;
 }
 
 export interface CoursePractice {
   courseSlug: string;
   problems: PracticeProblem[];
 }
+
+import { cPracticeProblems } from "./c_practice";
 
 export const practiceData: CoursePractice[] = [
   // ─── Data Structures ───
@@ -99,14 +102,10 @@ export const practiceData: CoursePractice[] = [
       { id: "java-3", title: "Anagram Checker", description: "Check if two strings are anagrams of each other.\n\n**Example:**\n- Input: `\"listen\"`, `\"silent\"` → `true`\n- Input: `\"hello\"`, `\"world\"` → `false`", difficulty: "easy", language: "javascript", starterCode: "function isAnagram(a, b) {\n  // Your code here\n  \n}", testCases: [{ input: '"listen", "silent"', expected: "true" }, { input: '"hello", "world"', expected: "false" }], hints: ["Convert both to lowercase and remove spaces.", "Sort characters and compare."] },
     ],
   },
-  // ─── C Language ───
+  // ─── C Language (250 problems across 5 chapters) ───
   {
     courseSlug: "c-language",
-    problems: [
-      { id: "c-1", title: "Swap Two Numbers", description: "Swap two integers without using a temporary variable.\n\n**Example:**\n- Input: `a=5, b=10`\n- Output: `a=10, b=5`", difficulty: "easy", language: "c", starterCode: "#include <stdio.h>\n\nvoid swap(int *a, int *b) {\n    // Your code here\n}", testCases: [{ input: "5, 10", expected: "10, 5" }], hints: ["Use XOR: a ^= b; b ^= a; a ^= b;", "Or use arithmetic: a += b; b = a - b; a -= b;"] },
-      { id: "c-2", title: "String Length (Manual)", description: "Write a function that returns the length of a string without using strlen.\n\n**Example:**\n- Input: `\"hello\"`\n- Output: `5`", difficulty: "easy", language: "c", starterCode: "#include <stdio.h>\n\nint myStrlen(const char *s) {\n    // Your code here\n    \n}", testCases: [{ input: '"hello"', expected: "5" }, { input: '""', expected: "0" }], hints: ["Iterate through the string until you hit '\\0'.", "Count each character."] },
-      { id: "c-3", title: "Factorial (Recursive)", description: "Compute the factorial of n using recursion.\n\n**Example:**\n- Input: `5`\n- Output: `120`", difficulty: "easy", language: "c", starterCode: "#include <stdio.h>\n\nint factorial(int n) {\n    // Your code here\n    \n}", testCases: [{ input: "5", expected: "120" }, { input: "0", expected: "1" }, { input: "1", expected: "1" }], hints: ["Base case: n <= 1 returns 1.", "Recursive case: n * factorial(n-1)."] },
-    ],
+    problems: cPracticeProblems,
   },
   // ─── C++ ───
   {

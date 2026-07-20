@@ -77,6 +77,11 @@ export default async function PracticeCoursePage({ params }: { params: Promise<{
                   <span className={"badge " + diffColor} style={{ flexShrink: 0 }}>
                     {problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
                   </span>
+                  {problem.chapter && (
+                    <span className="badge" style={{ flexShrink: 0, background: "var(--surface)", color: "var(--text-secondary)", textTransform: "none", letterSpacing: "normal" }}>
+                      {problem.chapter}
+                    </span>
+                  )}
                   <ArrowRight size={16} style={{ color: "var(--text-muted)", flexShrink: 0 }} className="group-hover:text-accent transition-colors" />
                 </Link>
               );
