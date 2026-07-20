@@ -28,7 +28,7 @@ export default function LanguagesPage() {
           Master the most important programming languages for computer science.
         </p>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 24 }}>
+        <div className="languages-grid">
           {languages.map((lang) => (
             <Link key={lang.slug} href={"/courses/" + lang.slug} className="glass-card glass-card-glow" style={{ overflow: "hidden", display: "block" }}>
               <div style={{ height: 4, background: lang.gradient }} />

@@ -132,7 +132,7 @@ export default function DashboardPage() {
           <DashboardStats />
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 32 }}>
+        <div className="dashboard-layout">
           <div>
             <h2 className="heading-md mb-6">Enrolled Courses</h2>
             {enrolledCourses.length === 0 ? (

@@ -22,7 +22,7 @@ export default function ContactPage() {
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 48 }}>
+        <div className="contact-cards-grid" style={{ marginBottom: 48 }}>
           <div className="glass-card p-8 text-center">
             <div style={{ width: 56, height: 56, borderRadius: "var(--radius-lg)", background: "var(--gradient-soft)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", color: "var(--accent)" }}>
               <Mail size={24} />
@@ -46,7 +46,7 @@ export default function ContactPage() {
         <div className="glass-card p-8">
           <h2 className="heading-md mb-6">Send Us a Message</h2>
           <form onSubmit={(e) => e.preventDefault()} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+            <div className="contact-form-grid">
               <div>
                 <label className="body-sm" style={{ display: "block", marginBottom: 8, fontWeight: 600, color: "var(--text-secondary)" }}>Name</label>
                 <input

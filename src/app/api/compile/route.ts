@@ -6,17 +6,21 @@ const RATE_LIMIT = 10;
 const RATE_WINDOW = 60000;
 const CLEANUP_INTERVAL = 300000;
 
-setInterval(() => {
-  const now = Date.now();
-  Array.from(rateLimitMap.entries()).forEach(([ip, timestamps]) => {
-    const valid = timestamps.filter((t) => now - t < RATE_WINDOW);
-    if (valid.length === 0) {
-      rateLimitMap.delete(ip);
-    } else {
-      rateLimitMap.set(ip, valid);
-    }
-  });
-}, CLEANUP_INTERVAL);
+let cleanupStarted = false;
+if (!cleanupStarted) {
+  cleanupStarted = true;
+  setInterval(() => {
+    const now = Date.now();
+    Array.from(rateLimitMap.entries()).forEach(([ip, timestamps]) => {
+      const valid = timestamps.filter((t) => now - t < RATE_WINDOW);
+      if (valid.length === 0) {
+        rateLimitMap.delete(ip);
+      } else {
+        rateLimitMap.set(ip, valid);
+      }
+    });
+  }, CLEANUP_INTERVAL);
+}
 
 function getClientIp(request: NextRequest): string {
   const forwarded = request.headers.get("x-forwarded-for");

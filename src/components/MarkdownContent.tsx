@@ -21,8 +21,9 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
         ul: ({ children }) => <ul className="list-disc list-inside text-dark-600 dark:text-dark-300 mb-4 space-y-1">{children}</ul>,
         ol: ({ children }) => <ol className="list-decimal list-inside text-dark-600 dark:text-dark-300 mb-4 space-y-1">{children}</ol>,
         li: ({ children }) => <li className="text-dark-600 dark:text-dark-300">{children}</li>,
-        code: (({ inline, className, children, ...props }: React.ComponentPropsWithoutRef<"code"> & { inline?: boolean }) => {
-          if (inline) {
+        code: (({ className, children, ...props }: React.ComponentPropsWithoutRef<"code">) => {
+          const isBlock = className?.includes("language-") || String(children).includes("\n");
+          if (!isBlock) {
             return (
               <code className="bg-dark-100 dark:bg-dark-700 text-primary-600 dark:text-primary-400 px-1.5 py-0.5 rounded text-sm font-mono" {...props}>
                 {children}

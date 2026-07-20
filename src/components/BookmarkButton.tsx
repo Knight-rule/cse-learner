@@ -26,7 +26,7 @@ export default function BookmarkButton({ data }: { data: BookmarkData }) {
     const bookmarks = safeGetBookmarks();
     const key = `${data.slug}-${data.lessonId || "course"}`;
     setBookmarked(bookmarks.some((b) => `${b.slug}-${b.lessonId || "course"}` === key));
-  }, [data]);
+  }, [data.slug, data.lessonId]);
 
   const toggle = () => {
     const bookmarks = safeGetBookmarks();

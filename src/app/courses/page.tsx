@@ -22,7 +22,7 @@ export default function CoursesPage() {
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+        <div className="courses-grid">
           {courses.map((course) => {
             const colors = course.color.split(" ");
             return (

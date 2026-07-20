@@ -29,7 +29,7 @@ export default function AboutPage() {
         </div>
 
         {/* Mission */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center", marginBottom: 100 }}>
+        <div className="about-mission-grid" style={{ marginBottom: 100 }}>
           <div>
             <span className="badge badge-accent mb-4" style={{ display: "inline-flex" }}>Our Mission</span>
             <h2 className="heading-lg mb-4">Why We Built This</h2>

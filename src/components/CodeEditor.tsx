@@ -52,37 +52,37 @@ export default function CodeEditor({ code, language = "typescript" }: CodeEditor
   };
 
   return (
-    <div className="rounded-xl overflow-hidden border border-dark-200 dark:border-dark-700 shadow-lg">
-      <div className="flex items-center justify-between bg-dark-900 px-4 py-2">
+    <div className="rounded-xl overflow-hidden border code-editor-border code-editor-shadow">
+      <div className="flex items-center justify-between code-editor-header px-4 py-2">
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5">
             <div className="w-3 h-3 rounded-full bg-red-500" />
             <div className="w-3 h-3 rounded-full bg-yellow-500" />
             <div className="w-3 h-3 rounded-full bg-green-500" />
           </div>
-          <span className="text-dark-400 text-xs font-mono ml-2">
+          <span className="code-editor-label text-xs font-mono ml-2">
             {languageLabels[language] || language}
           </span>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1 text-dark-400 hover:text-white text-xs transition-colors"
+            className="flex items-center gap-1 code-editor-label hover:text-white text-xs transition-colors"
           >
             {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
             {copied ? "Copied!" : "Copy"}
           </button>
           <Link
             href={`/playground?code=${encodeURIComponent(code)}&lang=${playgroundLangs[language] || "typescript"}`}
-            className="flex items-center gap-1 text-dark-400 hover:text-accent-primary text-xs transition-colors"
+            className="flex items-center gap-1 code-editor-label hover:text-accent text-xs transition-colors"
           >
             <Play className="w-3.5 h-3.5" />
             Try in Playground
           </Link>
         </div>
       </div>
-      <pre className="bg-dark-950 p-4 overflow-x-auto text-sm leading-relaxed">
-        <code className="text-dark-100 font-mono">{code}</code>
+      <pre className="code-editor-body p-4 overflow-x-auto text-sm leading-relaxed">
+        <code className="code-editor-text font-mono">{code}</code>
       </pre>
     </div>
   );

@@ -21,20 +21,31 @@ export default function Quiz({ questions, courseSlug = "", quizTitle = "Quiz" }:
 
   const question = questions[current];
 
-  if (questions.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-dark-500 dark:text-dark-400">No questions available for this quiz.</p>
-      </div>
-    );
-  }
-
   useEffect(() => {
     if (current >= questions.length && !trackedRef.current && questions.length > 0) {
       trackedRef.current = true;
       trackQuizComplete(courseSlug, quizTitle, score, questions.length);
     }
   }, [current, questions.length, score, courseSlug, quizTitle]);
+
+  const handleSubmit = () => {
+    if (selected === null) return;
+    setShowResult(true);
+    const newAnswers = [...answers];
+    newAnswers[current] = selected;
+    setAnswers(newAnswers);
+    if (selected === question.correctIndex) {
+      setScore(s => s + 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (current < questions.length - 1) {
+      setCurrent(c => c + 1);
+      setSelected(null);
+      setShowResult(false);
+    }
+  };
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -62,30 +73,19 @@ export default function Quiz({ questions, courseSlug = "", quizTitle = "Quiz" }:
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [showResult, selected, current, questions.length, question]);
+  }, [showResult, selected, current, questions.length, question, handleSubmit, handleNext]);
+
+  if (questions.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-dark-500 dark:text-dark-400">No questions available for this quiz.</p>
+      </div>
+    );
+  }
 
   const handleSelect = (optionIndex: number) => {
     if (showResult) return;
     setSelected(optionIndex);
-  };
-
-  const handleSubmit = () => {
-    if (selected === null) return;
-    setShowResult(true);
-    const newAnswers = [...answers];
-    newAnswers[current] = selected;
-    setAnswers(newAnswers);
-    if (selected === question.correctIndex) {
-      setScore(s => s + 1);
-    }
-  };
-
-  const handleNext = () => {
-    if (current < questions.length - 1) {
-      setCurrent(c => c + 1);
-      setSelected(null);
-      setShowResult(false);
-    }
   };
 
   const handleRestart = () => {
