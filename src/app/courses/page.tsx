@@ -32,7 +32,7 @@ export default function CoursesPage() {
                 className="course-card-aiv glass-card-glow"
                 style={{ textDecoration: "none", color: "inherit" }}
               >
-                <div style={{ height: 6, borderRadius: 6, background: "linear-gradient(90deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")", marginBottom: 24 }} />
+                <div className="course-card-bar" style={{ height: 6, borderRadius: 6, background: "linear-gradient(90deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")", marginBottom: 24 }} />
                 <div style={{ fontSize: 40, marginBottom: 16 }}>{course.icon}</div>
                 <h2 className="course-title">{course.title}</h2>
                 <p className="body-md" style={{ marginBottom: 16 }}>{course.description}</p>

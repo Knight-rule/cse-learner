@@ -630,7 +630,12 @@ img { max-width: 100%; display: block; }
   .feature-card { padding: 20px; }
   .course-card { min-width: 0; }
   .footer { padding: 48px 0 24px; }
-  .courses-grid { grid-template-columns: 1fr; }
+  .courses-grid { grid-template-columns: 1fr; gap: 16px; }
+  .course-card-aiv { padding: 20px; border-radius: var(--radius-lg); }
+  .course-card-aiv .course-title { font-size: 18px; margin-bottom: 10px; word-break: break-word; }
+  .course-card-aiv .body-md { font-size: 14px; margin-bottom: 12px; word-break: break-word; overflow-wrap: anywhere; }
+  .course-features li { font-size: 13px; padding: 6px 0; }
+  .course-card-bar { margin-bottom: 16px !important; }
 }
 
 /* ===== SCROLLBAR ===== */
