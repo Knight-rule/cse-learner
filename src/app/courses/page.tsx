@@ -26,28 +26,24 @@ export default function CoursesPage() {
           {courses.map((course) => {
             const colors = course.color.split(" ");
             return (
-              <Link
-                key={course.slug}
-                href={"/courses/" + course.slug}
-                className="course-card-aiv glass-card-glow"
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <div className="course-card-bar" style={{ height: 6, borderRadius: 6, background: "linear-gradient(90deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")", marginBottom: 24 }} />
-                <div style={{ fontSize: 40, marginBottom: 16 }}>{course.icon}</div>
-                <h2 className="course-title">{course.title}</h2>
-                <p className="body-md" style={{ marginBottom: 16 }}>{course.description}</p>
-                <ul className="course-features">
-                  {course.lessons.slice(0, 3).map((l) => (
-                    <li key={l.id}>{l.title}</li>
-                  ))}
-                </ul>
-                <div className="flex items-center justify-between" style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--border)" }}>
-                  <span className="body-sm"><BookOpen size={14} style={{ display: "inline", verticalAlign: "middle", marginRight: 6 }} />{course.lessons.length} lessons</span>
-                  <span className="flex items-center gap-2" style={{ color: "var(--accent)", fontWeight: 600, fontSize: 14 }}>
-                    Start <ChevronRight size={14} />
-                  </span>
-                </div>
-              </Link>
+              <div key={course.slug} className="course-card-vertical glass-card-glow">
+                <Link
+                  href={"/courses/" + course.slug}
+                  style={{ textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", height: "100%" }}
+                >
+                  <div className="course-card-vertical-icon" style={{ background: "linear-gradient(135deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")" }}>
+                    {course.icon}
+                  </div>
+                  <h2 className="course-title">{course.title}</h2>
+                  <p className="body-md course-card-desc">{course.description}</p>
+                  <div className="course-card-meta">
+                    <span><BookOpen size={14} style={{ display: "inline", verticalAlign: "middle", marginRight: 5 }} />{course.lessons.length} lessons</span>
+                  </div>
+                </Link>
+                <Link href={"/courses/" + course.slug} className="btn btn-primary course-card-start">
+                  Start <ChevronRight size={14} />
+                </Link>
+              </div>
             );
           })}
         </div>

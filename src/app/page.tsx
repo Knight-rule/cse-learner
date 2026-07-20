@@ -149,50 +149,27 @@ export default function HomePage() {
               From fundamentals to advanced topics — master the skills that matter most.
             </p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: 24 }}>
+          <div className="home-courses-grid">
             {courses.map((course) => {
               const colors = course.color.split(" ");
               return (
-                <div key={course.slug} className="course-card-aiv glass-card-glow" style={{ position: "relative" }}>
+                <div key={course.slug} className="course-card-vertical glass-card-glow">
                   <Link
                     href={"/courses/" + course.slug}
-                    style={{ textDecoration: "none", color: "inherit", display: "block" }}
+                    style={{ textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", height: "100%" }}
                   >
-                    <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
-                      <div style={{
-                        width: 56, height: 56, borderRadius: "var(--radius-lg)",
-                        background: "linear-gradient(135deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")",
-                        display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, flexShrink: 0
-                      }}>
-                        {course.icon}
-                      </div>
-                      <div>
-                        <h3 className="course-title" style={{ marginBottom: 0 }}>{course.title}</h3>
-                        <p className="body-sm">{course.lessons.length} lessons</p>
-                      </div>
+                    <div className="course-card-vertical-icon" style={{ background: "linear-gradient(135deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")" }}>
+                      {course.icon}
                     </div>
-                    <ul className="course-features">
-                      {course.lessons.slice(0, 3).map((l) => (
-                        <li key={l.id}>{l.title}</li>
-                      ))}
-                    </ul>
-                    <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--border)" }}>
-                      <span className="flex items-center gap-2" style={{ color: "var(--accent)", fontWeight: 600, fontSize: 14 }}>
-                        Start Learning <ChevronRight size={14} />
-                      </span>
+                    <h3 className="course-title">{course.title}</h3>
+                    <p className="body-md course-card-desc">{course.description}</p>
+                    <div className="course-card-meta">
+                      <span><BookOpen size={14} style={{ display: "inline", verticalAlign: "middle", marginRight: 5 }} />{course.lessons.length} lessons</span>
                     </div>
                   </Link>
-                  {course.notesUrl && (
-                    <a
-                      href={course.notesUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1"
-                      style={{ color: "var(--accent-purple)", fontWeight: 600, fontSize: 13, textDecoration: "none", position: "absolute", top: 16, right: 16 }}
-                    >
-                      Notes <ExternalLink size={12} />
-                    </a>
-                  )}
+                  <Link href={"/courses/" + course.slug} className="btn btn-primary course-card-start">
+                    Start <ChevronRight size={14} />
+                  </Link>
                 </div>
               );
             })}
