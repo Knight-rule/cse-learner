@@ -1,12 +1,5 @@
 import { Compiler, CompileResult } from "./index";
 
-const WANDBOX_API = "https://wandbox.org/api/compile.json";
-
-const LANGUAGE_MAP: Record<string, string> = {
-  c: "gcc-head",
-  cpp: "gcc-head",
-};
-
 export class CloudCompiler implements Compiler {
   private language: string;
 
@@ -15,38 +8,31 @@ export class CloudCompiler implements Compiler {
   }
 
   async run(code: string): Promise<CompileResult> {
-    const compiler = LANGUAGE_MAP[this.language];
-    if (!compiler) {
-      return { stdout: "", stderr: `Unsupported language: ${this.language}` };
-    }
-
     try {
-      const response = await fetch(WANDBOX_API, {
+      const response = await fetch("/api/compile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          compiler,
+          language: this.language,
           code,
-          save: false,
         }),
       });
 
       const data = await response.json();
 
-      if (data.status !== "0" && data.status !== 0) {
-        const errors = [data.compiler_error, data.program_error].filter(Boolean).join("\n");
-        return { stdout: data.program_output || "", stderr: errors || "Compilation failed" };
+      if (!response.ok) {
+        return { stdout: "", stderr: data.error || data.stderr || `Compilation failed (HTTP ${response.status})` };
       }
 
       return {
-        stdout: data.program_output || "",
-        stderr: data.compiler_error || "",
+        stdout: data.stdout || "",
+        stderr: data.stderr || "",
       };
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : String(e);
       return {
         stdout: "",
-        stderr: `Failed to connect to cloud compiler: ${msg}. Check your internet connection.`,
+        stderr: `Failed to connect to compiler: ${msg}. Check your internet connection.`,
       };
     }
   }

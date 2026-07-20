@@ -20,11 +20,8 @@ setInterval(() => {
 }, CLEANUP_INTERVAL);
 
 function getClientIp(request: NextRequest): string {
-  // On Render, trust x-forwarded-for from the load balancer only once.
-  // Fall back to a generated session key to prevent header-spoofing bypass.
   const forwarded = request.headers.get("x-forwarded-for");
   if (forwarded) {
-    // Take the first IP (original client) — spoofing additional IPs won't help
     const firstIp = forwarded.split(",")[0].trim();
     if (firstIp) return firstIp;
   }
@@ -42,6 +39,47 @@ function checkRateLimit(ip: string): boolean {
 }
 
 const MAX_CODE_SIZE = 50 * 1024;
+
+const PISTON_INSTANCES = [
+  "https://emkc.org/api/v2/piston/execute",
+];
+
+async function tryPiston(code: string, language: string): Promise<{ stdout: string; stderr: string } | null> {
+  const langMap: Record<string, string> = { c: "c", cpp: "c++" };
+  const extMap: Record<string, string> = { c: "c", cpp: "cpp" };
+
+  for (const url of PISTON_INSTANCES) {
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          language: langMap[language],
+          files: [{ name: `main.${extMap[language]}`, content: code }],
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.message && data.message.includes("whitelist")) {
+        continue;
+      }
+
+      if (!response.ok) {
+        continue;
+      }
+
+      const run = data.run || {};
+      return {
+        stdout: run.stdout || "",
+        stderr: run.stderr || "",
+      };
+    } catch {
+      continue;
+    }
+  }
+  return null;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -66,38 +104,20 @@ export async function POST(request: NextRequest) {
     }
 
     if (language === "c" || language === "cpp") {
-      try {
-        const langMap: Record<string, string> = { c: "c", cpp: "c++" };
-        const extMap: Record<string, string> = { c: "c", cpp: "cpp" };
-
-        const response = await fetch("https://emkc.org/api/v2/piston/execute", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            language: langMap[language],
-            files: [{ name: `main.${extMap[language]}`, content: code }],
-          }),
-        });
-
-        if (!response.ok) {
-          return NextResponse.json({ stdout: "", stderr: `Cloud compiler error (${response.status})` });
-        }
-
-        const data = await response.json();
-        if (data.message) {
-          return NextResponse.json({ stdout: "", stderr: data.message });
-        }
-
-        const run = data.run || {};
-        return NextResponse.json({ stdout: run.stdout || "", stderr: run.stderr || "" });
-      } catch (e: unknown) {
-        return NextResponse.json({ stdout: "", stderr: "Cloud compiler unavailable. Check internet connection." });
+      const result = await tryPiston(code, language);
+      if (result) {
+        return NextResponse.json(result);
       }
+
+      return NextResponse.json({
+        stdout: "",
+        stderr: "Cloud C/C++ compiler is temporarily unavailable. The external compilation service (Piston) requires API access. Try Python or JavaScript in the meantime — both run locally in your browser with no server needed.",
+      });
     }
 
     return NextResponse.json({
       stdout: "",
-      stderr: "Please run Python and JavaScript directly in the browser (no server needed).",
+      stderr: "Python and JavaScript run directly in your browser — no server compilation needed.",
     });
   } catch (err: unknown) {
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
