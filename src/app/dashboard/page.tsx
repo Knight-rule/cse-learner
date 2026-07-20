@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ChevronRight, Briefcase, ArrowRight, Brain, Zap, Target, TrendingUp, BookOpen, Clock, Terminal } from "lucide-react";
+import { ChevronRight, Briefcase, ArrowRight, Brain, Zap, Target, TrendingUp, BookOpen, Terminal } from "lucide-react";
 import DashboardStats from "@/components/DashboardStats";
 import ActivityFeed from "@/components/ActivityFeed";
 import { courses } from "@/data/courses";
@@ -31,7 +31,6 @@ export default function DashboardPage() {
 
     const recommendations: Recommendation[] = [];
     const completedLessons = stats.activities.filter((a) => a.type === "lesson").length;
-    const completedQuizzes = stats.activities.filter((a) => a.type === "quiz").length;
     const codeRuns = stats.codeRuns;
 
     // 1. Next course in learning path
@@ -52,7 +51,7 @@ export default function DashboardPage() {
       }
     }
 
-    // 2. Courses with weak quiz performance
+    // 2. Courses with weak SRS performance
     for (const course of courses) {
       if (!stats.coursesStarted.includes(course.slug)) continue;
       const srsStats = getSRSStatsForCourse(course.slug);
@@ -103,7 +102,7 @@ export default function DashboardPage() {
       .reduce((sum, c) => sum + getSRSStatsForCourse(c.slug).due, 0);
     if (totalDue > 0) {
       recommendations.push({
-        course: { slug: "srs", title: "Spaced Repetition Review", icon: "🧠", color: "from-purple-500 to-pink-600", lessons: [], quiz: [] } as any,
+        course: { slug: "srs", title: "Spaced Repetition Review", icon: "🧠", color: "from-purple-500 to-pink-600", lessons: [] } as any,
         reason: `${totalDue} concepts due for review`,
         priority: 90,
         icon: <Brain size={20} style={{ color: "var(--accent-purple)" }} />,
@@ -146,7 +145,6 @@ export default function DashboardPage() {
               <div className="lesson-list">
                 {enrolledCourses.map((course) => {
                   const colors = course.color.split(" ");
-                  const quizzes = stats?.activities.filter((a) => a.type === "quiz" && a.courseSlug === course.slug).length || 0;
                   return (
                     <Link key={course.slug} href={"/courses/" + course.slug} className="lesson-item">
                       <div style={{ width: 48, height: 48, borderRadius: "var(--radius-md)", background: "linear-gradient(135deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, flexShrink: 0 }}>
@@ -154,7 +152,7 @@ export default function DashboardPage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="heading-sm">{course.title}</h3>
-                        <p className="body-sm" style={{ marginTop: 4 }}>{course.lessons.length} lessons · {quizzes} quizzes taken</p>
+                        <p className="body-sm" style={{ marginTop: 4 }}>{course.lessons.length} lessons</p>
                       </div>
                       <ArrowRight size={16} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
                     </Link>
@@ -173,7 +171,7 @@ export default function DashboardPage() {
                   {recommendations.map((rec, i) => (
                     <Link
                       key={rec.course.slug}
-                      href={rec.course.slug === "srs" ? "/quiz/srs" : "/courses/" + rec.course.slug}
+                      href={rec.course.slug === "srs" ? "/review" : "/courses/" + rec.course.slug}
                       className="glass-card p-5 hover:border-accent-primary/50 transition-colors group"
                     >
                       <div className="flex items-start gap-4">
@@ -219,27 +217,17 @@ export default function DashboardPage() {
                 Quick Stats
               </h3>
               <div className="space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span className="text-text-muted">Lessons completed</span>
-                  <span className="font-medium">{stats?.lessonsViewed || 0}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-text-muted">Quizzes taken</span>
-                  <span className="font-medium">{stats?.quizzesTaken || 0}</span>
-                </div>
-                <div className="flex justify-between text-sm">
+                  <div className="flex justify-between text-sm">
                   <span className="text-text-muted">Code runs</span>
                   <span className="font-medium">{stats?.codeRuns || 0}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-text-muted">Avg quiz score</span>
-                  <span className="font-medium">
-                    {(() => {
-                      const d = stats;
-                      if (!d || d.totalQuestions === 0) return "—";
-                      return Math.round((d.totalScore / d.totalQuestions) * 100) + "%";
-                    })()}
-                  </span>
+                  <span className="text-text-muted">Courses started</span>
+                  <span className="font-medium">{stats?.coursesStarted?.length || 0}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-text-muted">Lessons viewed</span>
+                  <span className="font-medium">{stats?.lessonsViewed || 0}</span>
                 </div>
               </div>
             </div>

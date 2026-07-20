@@ -1,32 +1,27 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { BookOpen, Brain, Code, Trophy, TrendingUp, Target, Flame, Calendar } from "lucide-react";
-import { getStats, getAvgScore, getStreak, getHeatmapData, type LearnerStats } from "@/lib/tracker";
+import { BookOpen, Code, Target, Flame, Calendar } from "lucide-react";
+import { getStats, getStreak, getHeatmapData, type LearnerStats } from "@/lib/tracker";
 
 export default function DashboardStats() {
   const [stats, setStats] = useState<LearnerStats>({
-    coursesStarted: [], quizzesTaken: 0, totalScore: 0, totalQuestions: 0, codeRuns: 0, lessonsViewed: 0, activities: [],
+    coursesStarted: [], codeRuns: 0, lessonsViewed: 0, activities: [],
     dailyActivity: {}, lastActiveDate: "", currentStreak: 0, longestStreak: 0,
   });
-  const [avgScore, setAvgScore] = useState(0);
   const [streak, setStreak] = useState({ current: 0, longest: 0 });
   const [heatmap, setHeatmap] = useState<{ date: string; count: number }[]>([]);
 
   useEffect(() => {
     setStats(getStats());
-    setAvgScore(getAvgScore());
     setStreak(getStreak());
     setHeatmap(getHeatmapData(84)); // 12 weeks
   }, []);
 
   const cards = [
     { icon: BookOpen, label: "Courses Started", value: stats.coursesStarted.length, color: "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400" },
-    { icon: Brain, label: "Quizzes Taken", value: stats.quizzesTaken, color: "bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400" },
-    { icon: Trophy, label: "Avg Score", value: `${avgScore}%`, color: "bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400" },
     { icon: Code, label: "Code Runs", value: stats.codeRuns, color: "bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400" },
     { icon: Target, label: "Lessons Viewed", value: stats.lessonsViewed, color: "bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400" },
-    { icon: TrendingUp, label: "Total Questions", value: stats.totalQuestions, color: "bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400" },
   ];
 
   // Streak card

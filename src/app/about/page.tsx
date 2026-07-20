@@ -58,7 +58,7 @@ export default function AboutPage() {
           <div className="features-grid">
             {[
               { icon: <BookOpen size={28} />, title: "Quality Content", desc: "Every lesson is carefully crafted with clear explanations, real code examples, and practical exercises." },
-              { icon: <Code size={28} />, title: "Learn by Doing", desc: "Interactive code playgrounds and quizzes ensure you actually understand the concepts, not just memorize them." },
+              { icon: <Code size={28} />, title: "Learn by Doing", desc: "Interactive code examples and practice problems ensure you actually understand the concepts, not just memorize them." },
               { icon: <Brain size={28} />, title: "Interview Ready", desc: "Our curriculum is aligned with what top tech companies ask in their coding interviews." },
               { icon: <Users size={28} />, title: "Student First", desc: "Built by students, for students. We understand the struggles and design for them." },
               { icon: <Trophy size={28} />, title: "Track Progress", desc: "Dashboards, bookmarks, and certificates help you see how far you've come." },

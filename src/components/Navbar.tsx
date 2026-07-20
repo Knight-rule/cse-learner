@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Code, Home, Brain, Bookmark, Sun, Moon, Menu, X, Map } from "lucide-react";
+import { BookOpen, Code, Home, Bookmark, Sun, Moon, Menu, X, Map } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const navLinks = [
@@ -10,8 +10,7 @@ const navLinks = [
   { href: "/paths", label: "Paths", icon: Map },
   { href: "/courses", label: "Courses" },
   { href: "/languages", label: "Languages" },
-  { href: "/playground", label: "Playground" },
-  { href: "/quiz", label: "Quiz" },
+  { href: "/practice", label: "Practice" },
 ];
 
 export default function Navbar() {

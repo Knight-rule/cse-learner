@@ -12,7 +12,7 @@ const features = [
 ];
 
 const testimonials = [
-  { name: "Sarah Mitchell", role: "Software Engineer", initials: "SM", quote: "CSE Learner helped me ace my data structures interview. The interactive quizzes and code examples are incredibly useful." },
+  { name: "Sarah Mitchell", role: "Software Engineer", initials: "SM", quote: "CSE Learner helped me ace my data structures interview. The practice problems and code examples are incredibly useful." },
   { name: "James Carter", role: "CS Student", initials: "JC", quote: "Best free platform for learning algorithms. The step-by-step lessons made complex topics easy to understand." },
   { name: "Amina Hassan", role: "Backend Developer", initials: "AH", quote: "I went from struggling with OS concepts to confidently explaining process scheduling. Highly recommend!" },
 ];
@@ -20,7 +20,7 @@ const testimonials = [
 const stats = [
   { icon: <Users size={24} />, value: "10K+", label: "Students" },
   { icon: <BookOpen size={24} />, value: "200+", label: "Lessons" },
-  { icon: <Brain size={24} />, value: "500+", label: "Quiz Questions" },
+  { icon: <Brain size={24} />, value: "80+", label: "Practice Problems" },
   { icon: <Trophy size={24} />, value: "5K+", label: "Certificates" },
 ];
 
@@ -28,8 +28,8 @@ const faqs = [
   { q: "What is CSE Learner?", a: "CSE Learner is a free, interactive learning platform designed for Computer Science students. We cover Data Structures, Algorithms, OS, DBMS, Networks, Web Development, and programming languages." },
   { q: "Do I need prior experience?", a: "No! Our courses are designed for all levels, from beginners to advanced students preparing for technical interviews." },
   { q: "Are the courses self-paced?", a: "Yes! All content is self-paced. Learn whenever you want, track your progress, and pick up where you left off." },
-  { q: "Do I get a certificate?", a: "Yes! Earn certificates as you complete courses and pass quizzes. Track your achievements on your dashboard." },
-  { q: "Is it really free?", a: "100% free. All courses, quizzes, and features are available at no cost. No hidden fees or premium tiers." },
+  { q: "Do I get a certificate?", a: "Yes! Earn certificates as you complete courses and practice challenges. Track your achievements on your dashboard." },
+  { q: "Is it really free?", a: "100% free. All courses, practice problems, and features are available at no cost. No hidden fees or premium tiers." },
 ];
 
 export default function HomePage() {
@@ -47,14 +47,14 @@ export default function HomePage() {
                 Empowering the Future with <span className="gradient-text">CS Education</span>
               </h1>
               <p className="body-lg mb-8" style={{ maxWidth: 520 }}>
-                Interactive lessons, real code examples, and quizzes to help CSE students master fundamentals and crack technical interviews.
+                Interactive lessons, real code examples, and practice problems to help CSE students master fundamentals and crack technical interviews.
               </p>
               <div className="flex gap-4" style={{ flexWrap: "wrap" }}>
                 <Link href="/courses" className="btn btn-primary">
                   Start Learning <ArrowRight size={16} />
                 </Link>
-                <Link href="/quiz" className="btn btn-outline">
-                  Take a Quiz
+                <Link href="/practice" className="btn btn-outline">
+                  Practice Problems
                 </Link>
               </div>
             </div>
@@ -112,7 +112,7 @@ export default function HomePage() {
                 We provide structured, interactive courses that help computer science students build strong foundations and excel in their careers.
               </p>
               <ul style={{ listStyle: "none", marginBottom: 32 }}>
-                {["Comprehensive CSE curriculum from basics to advanced", "Interactive code examples and hands-on practice", "Quizzes with instant feedback to track your progress"].map((item) => (
+                {["Comprehensive CSE curriculum from basics to advanced", "Interactive code examples and hands-on practice", "Practice problems with instant feedback to track your progress"].map((item) => (
                   <li key={item} style={{ padding: "8px 0", fontSize: 15, color: "var(--text-secondary)", display: "flex", alignItems: "center", gap: 10 }}>
                     <span style={{ color: "var(--accent)", fontWeight: 700 }}>✓</span> {item}
                   </li>
@@ -168,7 +168,7 @@ export default function HomePage() {
                       </div>
                       <div>
                         <h3 className="course-title" style={{ marginBottom: 0 }}>{course.title}</h3>
-                        <p className="body-sm">{course.lessons.length} lessons · {course.quiz.length} quiz questions</p>
+                        <p className="body-sm">{course.lessons.length} lessons</p>
                       </div>
                     </div>
                     <ul className="course-features">

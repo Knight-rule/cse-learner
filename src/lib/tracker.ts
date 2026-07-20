@@ -2,7 +2,7 @@ import { SRSCard, createSRSCard, calculateSM2, getDueCards, getSRSStats } from "
 
 export interface Activity {
   id: string;
-  type: "quiz" | "practice" | "lesson" | "course_start";
+  type: "practice" | "lesson" | "course_start";
   title: string;
   courseSlug: string;
   score?: number;
@@ -12,9 +12,6 @@ export interface Activity {
 
 export interface LearnerStats {
   coursesStarted: string[];
-  quizzesTaken: number;
-  totalScore: number;
-  totalQuestions: number;
   codeRuns: number;
   lessonsViewed: number;
   activities: Activity[];
@@ -29,7 +26,7 @@ const SRS_STORAGE_KEY = "cse-learner-srs";
 
 function getData(): LearnerStats {
   if (typeof window === "undefined") {
-    return { coursesStarted: [], quizzesTaken: 0, totalScore: 0, totalQuestions: 0, codeRuns: 0, lessonsViewed: 0, activities: [], dailyActivity: {}, lastActiveDate: "", currentStreak: 0, longestStreak: 0 };
+    return { coursesStarted: [], codeRuns: 0, lessonsViewed: 0, activities: [], dailyActivity: {}, lastActiveDate: "", currentStreak: 0, longestStreak: 0 };
   }
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -38,9 +35,6 @@ function getData(): LearnerStats {
       // Migration for existing data
       return {
         coursesStarted: parsed.coursesStarted || [],
-        quizzesTaken: parsed.quizzesTaken || 0,
-        totalScore: parsed.totalScore || 0,
-        totalQuestions: parsed.totalQuestions || 0,
         codeRuns: parsed.codeRuns || 0,
         lessonsViewed: parsed.lessonsViewed || 0,
         activities: parsed.activities || [],
@@ -51,7 +45,7 @@ function getData(): LearnerStats {
       };
     }
   } catch {}
-  return { coursesStarted: [], quizzesTaken: 0, totalScore: 0, totalQuestions: 0, codeRuns: 0, lessonsViewed: 0, activities: [], dailyActivity: {}, lastActiveDate: "", currentStreak: 0, longestStreak: 0 };
+  return { coursesStarted: [], codeRuns: 0, lessonsViewed: 0, activities: [], dailyActivity: {}, lastActiveDate: "", currentStreak: 0, longestStreak: 0 };
 }
 
 function saveData(data: LearnerStats) {
@@ -129,15 +123,6 @@ export function trackLessonView(courseSlug: string, lessonTitle: string) {
   addActivity({ type: "lesson", title: lessonTitle, courseSlug });
 }
 
-export function trackQuizComplete(courseSlug: string, quizTitle: string, score: number, total: number) {
-  const data = getData();
-  data.quizzesTaken++;
-  data.totalScore += score;
-  data.totalQuestions += total;
-  saveData(data);
-  addActivity({ type: "quiz", title: quizTitle, courseSlug, score });
-}
-
 export function trackCodeRun(courseSlug: string, language: string) {
   const data = getData();
   data.codeRuns++;
@@ -151,12 +136,6 @@ export function getStats(): LearnerStats {
 
 export function getRecentActivity(limit = 10): Activity[] {
   return getData().activities.slice(0, limit);
-}
-
-export function getAvgScore(): number {
-  const data = getData();
-  if (data.totalQuestions === 0) return 0;
-  return Math.round((data.totalScore / data.totalQuestions) * 100);
 }
 
 export function getStreak(): { current: number; longest: number } {

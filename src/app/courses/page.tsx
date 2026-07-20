@@ -18,7 +18,7 @@ export default function CoursesPage() {
             Explore Our <span className="gradient-text">CS Courses</span>
           </h1>
           <p className="body-lg" style={{ maxWidth: 560 }}>
-            Choose a topic and start learning. Each course includes structured lessons, code examples, and quizzes.
+            Choose a topic and start learning. Each course includes structured lessons and code examples.
           </p>
         </div>
 

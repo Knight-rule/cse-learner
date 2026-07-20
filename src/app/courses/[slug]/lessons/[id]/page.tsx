@@ -81,8 +81,8 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
               <ArrowRight size={16} />
             </Link>
           ) : (
-            <Link href={"/quiz?course=" + course.slug} className="btn btn-primary">
-              Take Quiz <ArrowRight size={16} />
+            <Link href={"/practice/" + course.slug} className="btn btn-primary">
+              Start Practice <ArrowRight size={16} />
             </Link>
           )}
         </div>

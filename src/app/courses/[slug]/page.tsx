@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight, BookOpen, Brain, ArrowRight, ExternalLink } from "lucide-react";
+import { ChevronRight, BookOpen, Code, ArrowRight, ExternalLink } from "lucide-react";
 import { courses, getCourse } from "@/data/courses";
 import { notFound } from "next/navigation";
 
@@ -33,7 +33,9 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
           <p className="body-lg" style={{ maxWidth: 560 }}>{course.description}</p>
           <div className="flex items-center gap-4 mt-6">
             <span className="badge badge-accent"><BookOpen size={14} /> {course.lessons.length} Lessons</span>
-            <span className="badge badge-purple"><Brain size={14} /> {course.quiz.length} Quiz Questions</span>
+            <Link href={"/practice/" + course.slug} className="badge badge-purple" style={{ textDecoration: "none" }}>
+              <Code size={14} /> Practice Problems
+            </Link>
             {course.notesUrl && (
               <a
                 href={course.notesUrl}
@@ -75,16 +77,16 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
         <div className="glass-card p-8" style={{ background: "var(--gradient-soft)", borderRadius: "var(--radius-xl)" }}>
           <div className="flex items-center gap-4 mb-4">
             <div style={{ width: 48, height: 48, borderRadius: "var(--radius-md)", background: "var(--gradient)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Brain size={24} color="#fff" />
+              <Code size={24} color="#fff" />
             </div>
             <div>
-              <h3 className="heading-sm">Ready to Test Yourself?</h3>
-              <p className="body-sm">{course.quiz.length} questions to check your understanding</p>
+              <h3 className="heading-sm">Ready to Practice?</h3>
+              <p className="body-sm">Solve coding challenges to check your understanding</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link href={"/quiz?course=" + course.slug} className="btn btn-primary">
-              Take Quiz <ArrowRight size={16} />
+            <Link href={"/practice/" + course.slug} className="btn btn-primary">
+              Start Practice <ArrowRight size={16} />
             </Link>
             <Link href={"/courses/" + course.slug + "/lessons/1"} className="btn btn-outline">
               Start Learning <ArrowRight size={16} />

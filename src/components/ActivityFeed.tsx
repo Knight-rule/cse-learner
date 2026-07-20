@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { BookOpen, Brain, Code, GraduationCap, Clock } from "lucide-react";
+import { BookOpen, Code, GraduationCap, Clock } from "lucide-react";
 import { getRecentActivity, type Activity } from "@/lib/tracker";
 
 function timeAgo(ts: number): string {
@@ -15,8 +15,7 @@ function timeAgo(ts: number): string {
   return `${days}d ago`;
 }
 
-const typeConfig: Record<string, { icon: typeof Brain; color: string; label: string }> = {
-  quiz: { icon: Brain, color: "bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400", label: "Quiz" },
+const typeConfig: Record<string, { icon: typeof BookOpen; color: string; label: string }> = {
   practice: { icon: Code, color: "bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400", label: "Practice" },
   lesson: { icon: BookOpen, color: "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400", label: "Lesson" },
   course_start: { icon: GraduationCap, color: "bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400", label: "Course Started" },
