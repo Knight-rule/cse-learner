@@ -15,11 +15,12 @@ export function generateStaticParams() {
   return params;
 }
 
-export default async function LessonPage({ params }: { params: { slug: string; id: string } }) {
-  const course = getCourse(params.slug);
+export default async function LessonPage({ params }: { params: Promise<{ slug: string; id: string }> }) {
+  const { slug, id } = await params;
+  const course = getCourse(slug);
   if (!course) notFound();
 
-  const lessonIndex = course.lessons.findIndex((l) => l.id === params.id);
+  const lessonIndex = course.lessons.findIndex((l) => l.id === id);
   if (lessonIndex === -1) notFound();
 
   const lesson = course.lessons[lessonIndex];

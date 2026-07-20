@@ -28,7 +28,7 @@ function getClientIp(request: NextRequest): string {
     const firstIp = forwarded.split(",")[0].trim();
     if (firstIp) return firstIp;
   }
-  return request.ip || "unknown";
+  return "anonymous";
 }
 
 function checkRateLimit(ip: string): boolean {

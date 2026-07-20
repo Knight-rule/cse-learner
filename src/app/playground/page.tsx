@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { ChevronRight } from "lucide-react";
 import Playground from "@/components/Playground";
 
@@ -25,7 +26,9 @@ export default function PlaygroundPage() {
           </p>
         </div>
       </div>
-      <Playground />
+      <Suspense fallback={<div className="section"><div className="container"><p>Loading playground...</p></div></div>}>
+        <Playground />
+      </Suspense>
     </div>
   );
 }
