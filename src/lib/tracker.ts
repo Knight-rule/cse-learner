@@ -266,6 +266,42 @@ export function getCertificateId(courseSlug: string): string {
   return "CSEL-" + courseSlug.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 12) + "-" + seed.toString(36).toUpperCase().slice(-6);
 }
 
+// Contest results
+export interface ContestResult {
+  contestId: string;
+  solved: number;
+  total: number;
+  completedAt: number;
+}
+
+const CONTESTS_KEY = "cse-learner-contests";
+
+export function saveContestResult(result: ContestResult): void {
+  if (typeof window === "undefined") return;
+  try {
+    const raw = localStorage.getItem(CONTESTS_KEY);
+    const all: ContestResult[] = raw ? JSON.parse(raw) : [];
+    const idx = all.findIndex((r) => r.contestId === result.contestId);
+    if (idx === -1) all.push(result);
+    else if (result.solved > all[idx].solved || result.completedAt > all[idx].completedAt) all[idx] = result;
+    localStorage.setItem(CONTESTS_KEY, JSON.stringify(all));
+  } catch {}
+}
+
+export function getContestResults(): ContestResult[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(CONTESTS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function getContestResult(contestId: string): ContestResult | undefined {
+  return getContestResults().find((r) => r.contestId === contestId);
+}
+
 // Learner name (used on certificates)
 export function getLearnerName(): string {
   if (typeof window === "undefined") return "CSE Learner";

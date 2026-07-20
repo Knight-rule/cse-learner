@@ -30,6 +30,7 @@ export default function Footer() {
               <li><Link href="/courses">All Courses</Link></li>
               <li><Link href="/languages">Languages</Link></li>
               <li><Link href="/practice">Practice</Link></li>
+              <li><Link href="/contests">Contests</Link></li>
               <li><Link href="/certificates">Certificates</Link></li>
               <li><Link href="/bookmarks">Bookmarks</Link></li>
             </ul>
