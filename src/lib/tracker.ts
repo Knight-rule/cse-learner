@@ -19,14 +19,22 @@ export interface LearnerStats {
   lastActiveDate: string; // YYYY-MM-DD
   currentStreak: number;
   longestStreak: number;
+  certificates: Certificate[];
+}
+
+export interface Certificate {
+  courseSlug: string;
+  title: string;
+  issuedAt: number;
 }
 
 const STORAGE_KEY = "cse-learner-data";
 const SRS_STORAGE_KEY = "cse-learner-srs";
+const NAME_KEY = "cse-learner-name";
 
 function getData(): LearnerStats {
   if (typeof window === "undefined") {
-    return { coursesStarted: [], codeRuns: 0, lessonsViewed: 0, activities: [], dailyActivity: {}, lastActiveDate: "", currentStreak: 0, longestStreak: 0 };
+    return { coursesStarted: [], codeRuns: 0, lessonsViewed: 0, activities: [], dailyActivity: {}, lastActiveDate: "", currentStreak: 0, longestStreak: 0, certificates: [] };
   }
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -42,10 +50,11 @@ function getData(): LearnerStats {
         lastActiveDate: parsed.lastActiveDate || "",
         currentStreak: parsed.currentStreak || 0,
         longestStreak: parsed.longestStreak || 0,
+        certificates: parsed.certificates || [],
       };
     }
   } catch {}
-  return { coursesStarted: [], codeRuns: 0, lessonsViewed: 0, activities: [], dailyActivity: {}, lastActiveDate: "", currentStreak: 0, longestStreak: 0 };
+  return { coursesStarted: [], codeRuns: 0, lessonsViewed: 0, activities: [], dailyActivity: {}, lastActiveDate: "", currentStreak: 0, longestStreak: 0, certificates: [] };
 }
 
 function saveData(data: LearnerStats) {
@@ -233,4 +242,43 @@ export function getSolvedProblems(): Set<string> {
     if (k.startsWith("solved:")) solved.add(k.slice(7));
   }
   return solved;
+}
+
+// Certificate tracking
+export function awardCertificate(courseSlug: string, title: string): void {
+  const data = getData();
+  if (data.certificates.some((c) => c.courseSlug === courseSlug)) return;
+  data.certificates.push({ courseSlug, title, issuedAt: Date.now() });
+  saveData(data);
+}
+
+export function getCertificates(): Certificate[] {
+  return getData().certificates;
+}
+
+export function hasCertificate(courseSlug: string): boolean {
+  return getData().certificates.some((c) => c.courseSlug === courseSlug);
+}
+
+export function getCertificateId(courseSlug: string): string {
+  const cert = getData().certificates.find((c) => c.courseSlug === courseSlug);
+  const seed = cert ? cert.issuedAt : Date.now();
+  return "CSEL-" + courseSlug.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 12) + "-" + seed.toString(36).toUpperCase().slice(-6);
+}
+
+// Learner name (used on certificates)
+export function getLearnerName(): string {
+  if (typeof window === "undefined") return "CSE Learner";
+  try {
+    return localStorage.getItem(NAME_KEY) || "CSE Learner";
+  } catch {
+    return "CSE Learner";
+  }
+}
+
+export function setLearnerName(name: string): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(NAME_KEY, name.trim() || "CSE Learner");
+  } catch {}
 }

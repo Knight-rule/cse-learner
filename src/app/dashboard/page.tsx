@@ -6,7 +6,7 @@ import { ChevronRight, Briefcase, ArrowRight, Brain, Zap, Target, TrendingUp, Bo
 import DashboardStats from "@/components/DashboardStats";
 import ActivityFeed from "@/components/ActivityFeed";
 import { courses } from "@/data/courses";
-import { getStats, getSRSStatsForCourse, type LearnerStats } from "@/lib/tracker";
+import { getStats, getSRSStatsForCourse, getCertificates, type LearnerStats } from "@/lib/tracker";
 
 interface Recommendation {
   course: typeof courses[0];
@@ -228,6 +228,10 @@ export default function DashboardPage() {
                 <div className="flex justify-between text-sm">
                   <span className="text-text-muted">Lessons viewed</span>
                   <span className="font-medium">{stats?.lessonsViewed || 0}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-text-muted">Certificates</span>
+                  <span className="font-medium">{getCertificates().length}</span>
                 </div>
               </div>
             </div>

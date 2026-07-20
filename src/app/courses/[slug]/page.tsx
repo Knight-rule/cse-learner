@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ChevronRight, BookOpen, Code, ArrowRight, ExternalLink } from "lucide-react";
 import { courses, getCourse } from "@/data/courses";
+import CertificateBadge from "@/components/CertificateBadge";
 import { notFound } from "next/navigation";
 
 export function generateStaticParams() {
@@ -91,6 +92,9 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
             <Link href={"/courses/" + course.slug + "/lessons/1"} className="btn btn-outline">
               Start Learning <ArrowRight size={16} />
             </Link>
+          </div>
+          <div style={{ marginTop: 16 }}>
+            <CertificateBadge courseSlug={course.slug} />
           </div>
         </div>
       </div>

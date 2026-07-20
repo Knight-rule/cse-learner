@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { ChevronRight, Search, CheckCircle2, Circle as CircleIcon, ArrowRight, BookOpen } from "lucide-react";
+import { ChevronRight, Search, CheckCircle2, Circle as CircleIcon, ArrowRight, BookOpen, Award } from "lucide-react";
 import type { PracticeProblem } from "@/data/practice";
 import { getSolvedProblems } from "@/lib/tracker";
 
@@ -45,6 +45,7 @@ export default function PracticeCourseClient({ slug, courseTitle, courseIcon, co
 
   const totalSolved = problems.filter((p) => solved.has(p.id)).length;
   const progress = problems.length > 0 ? Math.round((totalSolved / problems.length) * 100) : 0;
+  const courseComplete = problems.length > 0 && totalSolved === problems.length;
 
   return (
     <div>
@@ -74,6 +75,16 @@ export default function PracticeCourseClient({ slug, courseTitle, courseIcon, co
             <CheckCircle2 size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: 4, color: "var(--accent-green)" }} />
             {totalSolved} / {problems.length} solved ({progress}%)
           </p>
+          {courseComplete ? (
+            <Link href={"/certificates/" + slug} className="btn btn-primary mt-4" style={{ display: "inline-flex" }}>
+              <Award size={16} /> View Your Certificate
+            </Link>
+          ) : (
+            <p className="body-sm" style={{ marginTop: 8 }}>
+              <Award size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: 4, color: "var(--text-muted)" }} />
+              Solve all problems to earn your certificate
+            </p>
+          )}
         </div>
       </div>
 

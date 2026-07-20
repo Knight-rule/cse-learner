@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Code, Home, Bookmark, Sun, Moon, Menu, X, Map } from "lucide-react";
+import { BookOpen, Code, Home, Bookmark, Sun, Moon, Menu, X, Map, Award } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const navLinks = [
@@ -11,6 +11,7 @@ const navLinks = [
   { href: "/courses", label: "Courses" },
   { href: "/languages", label: "Languages" },
   { href: "/practice", label: "Practice" },
+  { href: "/certificates", label: "Certificates", icon: Award },
 ];
 
 export default function Navbar() {

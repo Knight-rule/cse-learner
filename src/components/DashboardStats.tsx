@@ -7,7 +7,7 @@ import { getStats, getStreak, getHeatmapData, type LearnerStats } from "@/lib/tr
 export default function DashboardStats() {
   const [stats, setStats] = useState<LearnerStats>({
     coursesStarted: [], codeRuns: 0, lessonsViewed: 0, activities: [],
-    dailyActivity: {}, lastActiveDate: "", currentStreak: 0, longestStreak: 0,
+    dailyActivity: {}, lastActiveDate: "", currentStreak: 0, longestStreak: 0, certificates: [],
   });
   const [streak, setStreak] = useState({ current: 0, longest: 0 });
   const [heatmap, setHeatmap] = useState<{ date: string; count: number }[]>([]);
