@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --bg-primary: #08080f;
@@ -833,12 +835,32 @@ img { max-width: 100%; display: block; }
     padding: 16px; gap: 4px; z-index: 999;
   }
   .nav-mobile { display: flex; }
+  .nav-actions { display: none; }
   .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 32px; }
   .features-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; gap: 32px; }
   .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
   .section { padding: 64px 0; }
   .cta-section { padding: 48px 24px; }
+  .about-grid { grid-template-columns: 1fr; }
+  .playground-toolbar { flex-wrap: wrap; gap: 8px; }
+  .playground-toolbar-spacer { display: none; }
+}
+@media (max-width: 480px) {
+  .heading-hero { font-size: clamp(32px, 9vw, 44px); letter-spacing: -1.5px; }
+  .hero-section { padding: 80px 0 40px; }
+  .container { padding: 0 16px; }
+  .section { padding: 48px 0; }
+  .stats-bar { grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 16px; }
+  .stat-card { padding: 16px; }
+  .features-grid { gap: 12px; }
+  .feature-card { padding: 20px; }
+  .playground-wrapper { gap: 0; }
+  .playground-toolbar { padding: 8px 12px; }
+  .playground-toolbar-btn span { display: none; }
+  .playground-question { padding: 12px 16px; }
+  .course-card { min-width: 0; }
+  .footer { padding: 48px 0 24px; }
 }
 
 /* ===== SCROLLBAR ===== */

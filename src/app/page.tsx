@@ -102,7 +102,7 @@ export default function HomePage() {
       {/* About */}
       <section className="section">
         <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center" }}>
+          <div className="about-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center" }}>
             <div className="animate-fade-in-up">
               <span className="badge badge-accent mb-4" style={{ display: "inline-flex" }}>About CSE Learner</span>
               <h2 className="heading-xl mb-4">
