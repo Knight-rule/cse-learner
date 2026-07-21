@@ -1290,6 +1290,7 @@ html.light .code-editor-border { border-color: rgba(0, 0, 0, 0.08); }
   .lb-row { grid-template-columns: 36px 1fr 70px; }
   .lb-bar { display: none; }
   .discuss-reply { padding-left: 10px; }
+  .paths-card-grid { grid-template-columns: 1fr; }
 }
 
 /* ===== AI MENTOR ===== */

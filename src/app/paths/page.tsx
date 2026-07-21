@@ -22,7 +22,7 @@ export default function PathsPage() {
           Each path combines courses in the optimal learning order with time estimates.
         </p>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(400px, 100%), 1fr))", gap: 24 }}>
+        <div className="paths-card-grid">
           {learningPaths.map((path) => {
             const pathCourses = path.courses.map((pc) =>
               courses.find((c) => c.slug === pc.slug)
