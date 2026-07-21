@@ -19,6 +19,7 @@ const GREETINGS = [
 ];
 
 export default function AIMentorPage() {
+  const [mounted, setMounted] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -28,6 +29,8 @@ export default function AIMentorPage() {
   const [showContext, setShowContext] = useState(true);
   const [greeting] = useState(() => GREETINGS[Math.floor(Math.random() * GREETINGS.length)]);
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => { setMounted(true); }, []);
 
   const selectedCourse = practiceData.find((p) => p.courseSlug === courseSlug);
   const problems = selectedCourse?.problems || [];
@@ -54,6 +57,9 @@ export default function AIMentorPage() {
     setIsLoading(true);
 
     try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 30000);
+
       const res = await fetch("/api/ai-mentor", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -67,13 +73,23 @@ export default function AIMentorPage() {
             language: problems.find((p) => p.id === problemId)?.language,
           },
         }),
+        signal: controller.signal,
       });
 
+      clearTimeout(timeout);
+
+      if (!res.ok) {
+        throw new Error(`Server returned ${res.status}`);
+      }
+
       const data = await res.json();
-      const assistantMsg: ChatMessage = { role: "assistant", content: data.response || "Hmm, I didn't get a response. Try rephrasing your question.", timestamp: Date.now() };
+      const assistantMsg: ChatMessage = { role: "assistant", content: data.response || "Hmm, I didn't get a response. Try rephrasing.", timestamp: Date.now() };
       setMessages((prev) => [...prev, assistantMsg]);
-    } catch {
-      setMessages((prev) => [...prev, { role: "assistant", content: "Oops — something went wrong on my end. If this keeps happening, make sure the API key is set up correctly.", timestamp: Date.now() }]);
+    } catch (err: unknown) {
+      const msg = err instanceof Error && err.name === "AbortError"
+        ? "Took too long — try a shorter question."
+        : "Oops — couldn't reach the AI. Check your connection and try again.";
+      setMessages((prev) => [...prev, { role: "assistant", content: msg, timestamp: Date.now() }]);
     } finally {
       setIsLoading(false);
     }
@@ -102,6 +118,12 @@ export default function AIMentorPage() {
 
       {/* Main Content */}
       <div className="container">
+        {!mounted ? (
+          <div className="mentor-loading">
+            <Loader2 size={32} className="animate-spin" />
+            <p>Loading...</p>
+          </div>
+        ) : (
         <div className="mentor-layout">
           {/* Sidebar */}
           <aside className="mentor-sidebar">
@@ -252,6 +274,7 @@ export default function AIMentorPage() {
             </div>
           </div>
         </div>
+        )}
       </div>
     </div>
   );

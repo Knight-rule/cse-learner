@@ -80,7 +80,7 @@ export default function Navbar() {
           <Link href="/courses" className="btn btn-primary btn-sm" style={{ display: "inline-flex" }}>
             Get Started
           </Link>
-          <button className="nav-theme" onClick={toggleTheme} aria-label="Toggle theme">
+          <button className="nav-theme" onClick={toggleTheme} aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}>
             {mounted ? (dark ? <Sun size={18} /> : <Moon size={18} />) : <Sun size={18} />}
           </button>
         </div>

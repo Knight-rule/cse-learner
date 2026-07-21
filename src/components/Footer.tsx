@@ -46,11 +46,11 @@ export default function Footer() {
           </div>
         </div>
         <div className="footer-bottom">
-          <p className="footer-copy">&copy; 2026 CSE Learner. All rights reserved.</p>
+          <p className="footer-copy">&copy; {new Date().getFullYear()} CSE Learner. All rights reserved.</p>
           <div className="footer-socials">
             <a href="https://github.com/Knight-rule/cse-learner" target="_blank" rel="noopener noreferrer" aria-label="GitHub">GH</a>
-            <a href="#" aria-label="Twitter">X</a>
-            <a href="#" aria-label="LinkedIn">in</a>
+            <a href="https://github.com/Knight-rule/cse-learner" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">X</a>
+            <a href="https://github.com/Knight-rule/cse-learner" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">in</a>
           </div>
         </div>
       </div>

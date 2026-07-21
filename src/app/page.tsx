@@ -85,7 +85,7 @@ export default function HomePage() {
       </section>
 
       {/* Stats Bar */}
-      <section className="section-sm" style={{ borderBottom: "1px solid var(--border)" }}>
+      <section className="section" style={{ borderBottom: "1px solid var(--border)", padding: "48px 0" }}>
         <div className="container">
           <div className="stats-bar">
             {stats.map((s) => (

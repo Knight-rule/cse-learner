@@ -49,7 +49,8 @@ export default function JobsPage() {
       setCategories(data.categories || []);
       setTotalPages(data.pagination?.totalPages || 1);
       setTotal(data.pagination?.total || 0);
-    } catch {
+    } catch (err) {
+      console.error("Failed to load companies:", err);
       setCompanies([]);
     }
     setLoading(false);
