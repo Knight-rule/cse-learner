@@ -211,6 +211,10 @@ img { max-width: 100%; display: block; }
 .nav-theme:hover { color: var(--accent); background: rgba(249, 115, 22, 0.08); }
 .nav-mobile { display: none; padding: 8px; color: var(--text-muted); }
 
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+}
+
 /* ===== STATS BAR ===== */
 .stats-bar {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
@@ -325,7 +329,7 @@ img { max-width: 100%; display: block; }
   width: 100%; justify-content: center; padding: 11px 16px; font-size: 14px;
 }
 .home-courses-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 24px;
 }
 .instructor-avatar {
   width: 40px; height: 40px; border-radius: 50%;
@@ -733,7 +737,7 @@ html.light .code-editor-border { border-color: rgba(0, 0, 0, 0.08); }
   text-align: center; padding: 80px 24px 40px;
 }
 .practice-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;
 }
 .practice-card {
   background: var(--bg-card); border: 1px solid var(--border);
@@ -944,6 +948,11 @@ html.light .code-editor-border { border-color: rgba(0, 0, 0, 0.08); }
 .practice-chapter-pill.active .practice-chapter-count { color: var(--accent); }
 
 .practice-col-chapter { width: 150px; flex-shrink: 0; }
+.pt-col-num { width: 48px; flex-shrink: 0; text-align: center; }
+.pt-col-title { flex: 1; min-width: 0; }
+.pt-col-diff { width: 110px; flex-shrink: 0; text-align: center; }
+.pt-col-status { width: 90px; flex-shrink: 0; text-align: center; }
+.pt-col-arrow { width: 40px; flex-shrink: 0; text-align: center; }
 .practice-chapter-badge {
   display: inline-block; padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 600;
   background: var(--surface); color: var(--text-secondary); border: 1px solid var(--border);
@@ -988,12 +997,12 @@ html.light .code-editor-border { border-color: rgba(0, 0, 0, 0.08); }
   .practice-table-row {
     flex-wrap: wrap; padding: 14px 16px; gap: 8px;
   }
-  .practice-table-row > span:nth-child(1) { width: auto !important; }
   .practice-problem-name { flex-basis: 100%; order: 1; }
   .practice-col-chapter { width: auto !important; flex-basis: 100%; order: 2; }
-  .practice-table-row > span[style*="width: 110px"],
-  .practice-table-row > span[style*="width: 90px"] { width: auto !important; text-align: left !important; }
-  .practice-table-row > span:last-child { width: auto !important; margin-left: auto; }
+  .pt-col-num { width: auto !important; text-align: left !important; order: 0; }
+  .pt-col-diff { width: auto !important; text-align: left !important; }
+  .pt-col-status { width: auto !important; text-align: left !important; }
+  .pt-col-arrow { width: auto !important; margin-left: auto; }
   .practice-controls { flex-direction: column; align-items: stretch; }
   .practice-filters { justify-content: space-between; }
   .practice-filter-btn { flex: 1; text-align: center; }
@@ -1119,7 +1128,7 @@ html.light .code-editor-border { border-color: rgba(0, 0, 0, 0.08); }
 
 /* ===== CONTESTS ===== */
 .contest-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 24px;
 }
 .contest-card {
   background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg);

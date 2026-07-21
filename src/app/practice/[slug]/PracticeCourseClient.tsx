@@ -196,12 +196,12 @@ export default function PracticeCourseClient({ slug, courseTitle, courseIcon, co
               {sorted.length > 0 && (
                 <div className="practice-table">
                   <div className="practice-table-head">
-                    <span style={{ width: 48 }}>#</span>
-                    <span style={{ flex: 1 }}>Problem</span>
+                    <span className="pt-col-num">#</span>
+                    <span className="pt-col-title">Problem</span>
                     <span className="practice-col-chapter">Chapter</span>
-                    <span style={{ width: 110, textAlign: "center" }}>Difficulty</span>
-                    <span style={{ width: 90, textAlign: "center" }}>Status</span>
-                    <span style={{ width: 40 }} />
+                    <span className="pt-col-diff">Difficulty</span>
+                    <span className="pt-col-status">Status</span>
+                    <span className="pt-col-arrow" />
                   </div>
 
                   {pageItems.map((problem, i) => {
@@ -215,19 +215,19 @@ export default function PracticeCourseClient({ slug, courseTitle, courseIcon, co
                         className="practice-table-row group"
                         style={{ textDecoration: "none", color: "inherit" }}
                       >
-                        <span style={{ width: 48, color: "var(--text-muted)", fontWeight: 700 }}>{globalIndex}</span>
-                        <span style={{ flex: 1, minWidth: 0 }} className="practice-problem-name">
+                        <span className="pt-col-num" style={{ color: "var(--text-muted)", fontWeight: 700 }}>{globalIndex}</span>
+                        <span className="pt-col-title practice-problem-name" style={{ minWidth: 0 }}>
                           <span className="heading-sm">{problem.title}</span>
                         </span>
                         <span className="practice-col-chapter">
                           <span className="practice-chapter-badge">{problem.chapter || "General"}</span>
                         </span>
-                        <span style={{ width: 110, textAlign: "center" }}>
+                        <span className="pt-col-diff">
                           <span className={"badge " + diffClass} style={{ fontSize: 11 }}>
                             {problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
                           </span>
                         </span>
-                        <span style={{ width: 90, textAlign: "center" }}>
+                        <span className="pt-col-status">
                           {isSolved ? (
                             <span style={{ color: "var(--accent-green)", display: "inline-flex", alignItems: "center", gap: 4, fontSize: 13, fontWeight: 600 }}>
                               <CheckCircle2 size={14} /> Solved
@@ -238,7 +238,7 @@ export default function PracticeCourseClient({ slug, courseTitle, courseIcon, co
                             </span>
                           )}
                         </span>
-                        <span style={{ width: 40, textAlign: "center" }}>
+                        <span className="pt-col-arrow">
                           <ArrowRight size={16} style={{ color: "var(--text-muted)" }} className="group-hover:text-accent transition-colors" />
                         </span>
                       </Link>
