@@ -1,285 +1,245 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Brain, Wrench, Lightbulb, Send, Sparkles, X } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Brain, Send, Sparkles, ChevronDown, BookOpen, Code, HelpCircle, Loader2, Bot, User } from "lucide-react";
 import { practiceData } from "@/data/practice";
-import { getLearnerName } from "@/lib/tracker";
+import { courses as courseList } from "@/data/courses";
 
-interface AIMentorPrompt {
-  id: string;
-  userId?: string;
-  question: string;
-  context: {
-    courseSlug: string;
-    problemId?: string;
-    problemTitle?: string;
-    difficulty?: string;
-    language?: string;
-    code?: string;
-  };
-  hintLevel: "none" | "minimal" | "moderate" | "full";
-  createdAt: number;
-  updatedAt: number;
-}
-
-interface AIMentorResponse {
-  id: string;
-  promptId: string;
-  userId?: string;
-  response: string;
-  explanation?: string;
-  relatedConcepts?: string[];
-  difficultyLevel: "easy" | "medium" | "hard";
-  codeSnippet?: string;
-  createdAt: number;
+interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+  timestamp: number;
 }
 
 export default function AIMentorPage() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [context, setContext] = useState<AIMentorPrompt['context']>({ courseSlug: 'data-structures' });
-  const [promptText, setPromptText] = useState('');
-  const [hintLevel, setHintLevel] = useState<AIMentorPrompt['hintLevel']>('moderate');
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [response, setResponse] = useState<AIMentorResponse | null>(null);
-  const [learnerName, setLearnerName] = useState('');
+  const [courseSlug, setCourseSlug] = useState("data-structures");
+  const [problemId, setProblemId] = useState("");
+  const [hintLevel, setHintLevel] = useState<"none" | "minimal" | "moderate" | "full">("moderate");
+  const [showContext, setShowContext] = useState(true);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  const selectedCourse = practiceData.find((p) => p.courseSlug === courseSlug);
+  const problems = selectedCourse?.problems || [];
+  const courseTitle = courseList.find((c) => c.slug === courseSlug)?.title || courseSlug;
 
   useEffect(() => {
-    setLearnerName(getLearnerName());
-  }, []);
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
-  const courses = practiceData.map((p) => p.courseSlug);
-  const selectedCourse = practiceData.find((p) => p.courseSlug === context.courseSlug);
-  const problems = selectedCourse?.problems || [];
+  const quickPrompts = [
+    { icon: <BookOpen size={16} />, text: "Explain linked lists and when to use them" },
+    { icon: <Code size={16} />, text: "How does binary search work step by step?" },
+    { icon: <HelpCircle size={16} />, text: "What's the difference between stack and queue?" },
+    { icon: <Sparkles size={16} />, text: "Help me understand recursion with an example" },
+  ];
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!promptText.trim()) return;
+  const send = async (question?: string) => {
+    const q = (question || input).trim();
+    if (!q || isLoading) return;
 
+    const userMsg: ChatMessage = { role: "user", content: q, timestamp: Date.now() };
+    setMessages((prev) => [...prev, userMsg]);
+    setInput("");
     setIsLoading(true);
-    setResponse(null);
 
     try {
-      const prompt: AIMentorPrompt = {
-        id: Date.now().toString(36) + Math.random().toString(36).slice(2, 10),
-        question: promptText,
-        context,
-        hintLevel,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-      };
-
-      const res = await fetch('/api/ai-mentor', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(prompt),
+      const res = await fetch("/api/ai-mentor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question: q,
+          hintLevel,
+          context: {
+            courseSlug,
+            problemId: problemId || undefined,
+            problemTitle: problems.find((p) => p.id === problemId)?.title,
+            language: problems.find((p) => p.id === problemId)?.language,
+          },
+        }),
       });
-
-      if (!res.ok) {
-        const error = await res.text();
-        throw new Error(error || 'Failed to get AI mentor response');
-      }
 
       const data = await res.json();
-      setResponse(data);
-    } catch (err) {
-      console.error('Error:', err);
-      setResponse({
-        id: Date.now().toString(36),
-        promptId: '',
-        response: `⚠️ Error: ${(err as Error).message}\n\n` +
-          'This feature requires a Gemini API key. If you have one, please configure it in the environment.\n\n' +
-          'In the meantime, you can try asking a simpler question like \"How do I reverse an array?\"',
-        explanation: undefined,
-        relatedConcepts: [],
-        difficultyLevel: 'medium',
-        createdAt: Date.now(),
-      });
+      const assistantMsg: ChatMessage = { role: "assistant", content: data.response || "No response.", timestamp: Date.now() };
+      setMessages((prev) => [...prev, assistantMsg]);
+    } catch {
+      setMessages((prev) => [...prev, { role: "assistant", content: "Error reaching AI Mentor. Make sure GOOGLE_GENAI_API_KEY is set.", timestamp: Date.now() }]);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="section">
-      <div className="container container-narrow">
-        <div className="page-head">
-          <span className="eyebrow">
-            <Sparkles size={14} /> AI Mentor
-          </span>
-          <h1 className="heading-xl">AI-Powered Learning Assistant</h1>
-          <p className="lede">
-            Your personal AI tutor that explains concepts, hints at solutions, and adapts to your learning style.
-            Ask anything about your course material, programming problems, or CS concepts.
-          </p>
-        </div>
-
-        <div className="ai-mentor-layout">
-          <aside className="ai-mentor-sidebar">
-            <div className="ai-card">
-              <h3 className="heading-sm">Quick Start</h3>
-              <ul className="ai-tips">
-                <li>💡 Ask for explanations of concepts you find confusing</li>
-                <li>🔍 Get hints for specific problems</li>
-                <li>🧠 Learn why a solution works, not just how</li>
-                <li>📚 Get related concepts to explore</li>
-              </ul>
+    <div className="mentor-page">
+      {/* Hero */}
+      <div className="mentor-hero">
+        <div className="mentor-hero-glow" />
+        <div className="container">
+          <div className="mentor-hero-content">
+            <div className="mentor-hero-icon">
+              <Brain size={32} />
             </div>
+            <h1 className="mentor-hero-title">
+              AI-Powered <span className="text-gradient">Learning Assistant</span>
+            </h1>
+            <p className="mentor-hero-sub">
+              Your personal AI tutor that explains concepts, hints at solutions, and adapts to your learning style.
+            </p>
+          </div>
+        </div>
+      </div>
 
-            <div className="ai-card">
-              <h3 className="heading-sm">Course Context</h3>
-              <div className="ai-context-select">
-                <label>Course</label>
-                <select
-                  value={context.courseSlug}
-                  onChange={(e) => setContext((c) => ({ ...c, courseSlug: e.target.value }))}
-                >
-                  {courses.map((c) => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
-                </select>
+      {/* Main Content */}
+      <div className="container">
+        <div className="mentor-layout">
+          {/* Sidebar */}
+          <aside className="mentor-sidebar">
+            {/* Context Card */}
+            <div className="mentor-card">
+              <div className="mentor-card-header" onClick={() => setShowContext(!showContext)}>
+                <h3>Course Context</h3>
+                <ChevronDown size={16} style={{ transform: showContext ? "rotate(180deg)" : "rotate(0)", transition: "0.2s" }} />
               </div>
-
-              {problems.length > 0 && (
-                <div className="ai-context-select">
-                  <label>Problem (optional)</label>
-                  <select
-                    value={context.problemId || ''}
-                    onChange={(e) => setContext((c) => ({
-                      ...c,
-                      problemId: e.target.value || undefined,
-                      problemTitle: e.target.value ? problems.find(p => p.id === e.target.value)?.title : undefined,
-                    }))}
-                  >
-                    <option value="">-- Any Problem --</option>
-                    {problems.map((p) => (
-                      <option key={p.id} value={p.id}>{p.title}</option>
+              {showContext && (
+                <div className="mentor-card-body">
+                  <label className="mentor-label">Course</label>
+                  <select className="mentor-select" value={courseSlug} onChange={(e) => { setCourseSlug(e.target.value); setProblemId(""); }}>
+                    {courseList.map((c) => (
+                      <option key={c.slug} value={c.slug}>{c.title}</option>
                     ))}
                   </select>
+
+                  {problems.length > 0 && (
+                    <>
+                      <label className="mentor-label">Problem (optional)</label>
+                      <select className="mentor-select" value={problemId} onChange={(e) => setProblemId(e.target.value)}>
+                        <option value="">Any Problem</option>
+                        {problems.map((p) => (
+                          <option key={p.id} value={p.id}>{p.title}</option>
+                        ))}
+                      </select>
+                    </>
+                  )}
+
+                  <label className="mentor-label">Hint Level</label>
+                  <div className="mentor-hint-pills">
+                    {(["moderate", "full", "minimal", "none"] as const).map((level) => (
+                      <button key={level} className={"mentor-hint-pill" + (hintLevel === level ? " active" : "")} onClick={() => setHintLevel(level)}>
+                        {level === "moderate" ? "Hints" : level === "full" ? "Full Guide" : level === "minimal" ? "Quick" : "No Hints"}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
+            </div>
 
-              <div className="ai-context-select">
-                <label>Hint Level</label>
-                <select
-                  value={hintLevel}
-                  onChange={(e) => setHintLevel(e.target.value as any)}
-                >
-                  <option value="none">None - Get full solution</option>
-                  <option value="minimal">Minimal - Just the answer</option>
-                  <option value="moderate">Moderate - Strategic hints</option>
-                  <option value="full">Full - Step-by-step guidance</option>
-                </select>
+            {/* Quick Start */}
+            <div className="mentor-card">
+              <div className="mentor-card-header">
+                <h3>Quick Start</h3>
+              </div>
+              <div className="mentor-card-body">
+                {quickPrompts.map((qp, i) => (
+                  <button key={i} className="mentor-quick-btn" onClick={() => send(qp.text)}>
+                    {qp.icon}
+                    <span>{qp.text}</span>
+                  </button>
+                ))}
               </div>
             </div>
 
-            <div className="ai-card">
-              <h3 className="heading-sm">Example Prompts</h3>
-              <ul className="ai-examples">
-                <li>\"Explain what a linked list is and when to use it\"</li>
-                <li>\"How do I solve binary search problems?\"</li>
-                <li>\"Why does quicksort have O(n log n) average case?\"</li>
-                <li>\"Help me debug this code: [paste code]\"</li>
-                <li>\"What's the difference between tree and graph traversal?\"</li>
-              </ul>
+            {/* Tips */}
+            <div className="mentor-card">
+              <div className="mentor-card-header">
+                <h3>Tips</h3>
+              </div>
+              <div className="mentor-card-body">
+                <div className="mentor-tip">💡 Ask for explanations of concepts you find confusing</div>
+                <div className="mentor-tip">🔍 Get hints for specific problems you are stuck on</div>
+                <div className="mentor-tip">🧠 Learn why a solution works, not just how</div>
+                <div className="mentor-tip">📚 Explore related concepts to deepen understanding</div>
+              </div>
             </div>
           </aside>
 
-          <main className="ai-mentor-main">
-            <button
-              className="ai-mentor-toggle"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              {isOpen ? <X size={20} /> : <Brain size={20} />}
-              <span>{isOpen ? 'Close' : 'Open'} AI Mentor</span>
-            </button>
-
-            <div className={`ai-mentor-window ${isOpen ? 'open' : ''}`}
-                 style={{ transition: 'all 0.3s ease' }}
-            >
-              <div className="ai-mentor-header">
-                <div className="ai-avatar">
-                  <Sparkles size={20} />
-                </div>
-                <div>
-                  <h3>AI Mentor</h3>
-                  <p>Here to help you learn CS concepts</p>
-                </div>
+          {/* Chat Area */}
+          <div className="mentor-chat">
+            <div className="mentor-chat-header">
+              <div className="mentor-chat-avatar">
+                <Sparkles size={18} />
               </div>
+              <div>
+                <h3>AI Mentor</h3>
+                <p>{courseTitle} &middot; {hintLevel} hints</p>
+              </div>
+            </div>
 
-              {response && (
-                <div className="ai-response-container">
-                  <div className="ai-response-header">
-                    <span className="ai-response-label">AI Response</span>
-                    <span className="ai-difficulty-tag" style={{
-                      backgroundColor: response.difficultyLevel === 'easy' ? '#dcfce7' :
-                        response.difficultyLevel === 'medium' ? '#fed7aa' : '#fca5a5',
-                      color: response.difficultyLevel === 'easy' ? '#166534' :
-                        response.difficultyLevel === 'medium' ? '#92400e' : '#991b1b'
-                    }}>
-                      {response.difficultyLevel} difficulty
-                    </span>
+            {/* Messages */}
+            <div className="mentor-messages">
+              {messages.length === 0 && (
+                <div className="mentor-empty">
+                  <div className="mentor-empty-icon">
+                    <Brain size={48} />
                   </div>
-                  <div className="ai-response-content">
-                    <pre>{response.response}</pre>
-                  </div>
-
-                  {response.explanation && (
-                    <div className="ai-response-section">
-                      <h4>Detailed Explanation</h4>
-                      <pre>{response.explanation}</pre>
-                    </div>
-                  )}
-
-                  {response.relatedConcepts && response.relatedConcepts.length > 0 && (
-                    <div className="ai-response-section">
-                      <h4>Related Concepts to Explore</h4>
-                      <ul className="ai-concepts-list">
-                        {response.relatedConcepts.map((concept, i) => (
-                          <li key={i}>📚 {concept}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {response.codeSnippet && (
-                    <div className="ai-response-section">
-                      <h4>Code Example</h4>
-                      <pre className="code-snippet">{response.codeSnippet}</pre>
-                    </div>
-                  )}
+                  <h3>Ask me anything about CS</h3>
+                  <p>Explain concepts, debug code, get hints, or explore topics in {courseTitle}.</p>
                 </div>
               )}
 
-              <div className="ai-input-container">
-                <textarea
-                  className="ai-textarea"
-                  placeholder="Ask about your course material, a specific problem, or any CS concept..."
-                  value={promptText}
-                  onChange={(e) => setPromptText(e.target.value)}
-                  rows={3}
-                />
-
-                <div className="ai-input-footer">
-                  <span className="ai-input-help">
-                    Hint level: {hintLevel} {hintLevel === 'none' ? '(full solution)' : hintLevel === 'minimal' ? '(just answer)' : hintLevel === 'moderate' ? '(strategic hints)' : '(step-by-step)'}
-                  </span>
-
-                  <button
-                    className="btn btn-primary"
-                    onClick={handleSubmit}
-                    disabled={isLoading || !promptText.trim()}
-                  >
-                    {isLoading ? (
-                      <Wrench size={18} className="animate-spin" />
-                    ) : (
-                      <Send size={18} />
-                    )}
-                    <span>{isLoading ? 'Thinking...' : 'Ask AI'}</span>
-                  </button>
+              {messages.map((msg, i) => (
+                <div key={i} className={"mentor-msg " + msg.role}>
+                  <div className="mentor-msg-avatar">
+                    {msg.role === "user" ? <User size={16} /> : <Bot size={16} />}
+                  </div>
+                  <div className="mentor-msg-content">
+                    <div className="mentor-msg-meta">
+                      <span>{msg.role === "user" ? "You" : "AI Mentor"}</span>
+                      <span>{new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
+                    </div>
+                    <div className="mentor-msg-text">
+                      <pre>{msg.content}</pre>
+                    </div>
+                  </div>
                 </div>
+              ))}
+
+              {isLoading && (
+                <div className="mentor-msg assistant">
+                  <div className="mentor-msg-avatar"><Bot size={16} /></div>
+                  <div className="mentor-msg-content">
+                    <div className="mentor-typing">
+                      <Loader2 size={16} className="animate-spin" />
+                      <span>Thinking...</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div ref={chatEndRef} />
+            </div>
+
+            {/* Input */}
+            <div className="mentor-input-area">
+              <div className="mentor-input-row">
+                <textarea
+                  className="mentor-input"
+                  placeholder="Ask about course material, a specific problem, or any CS concept..."
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
+                  rows={2}
+                />
+                <button className="mentor-send-btn" onClick={() => send()} disabled={isLoading || !input.trim()}>
+                  {isLoading ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
+                </button>
+              </div>
+              <div className="mentor-input-hint">
+                Press Enter to send &middot; Shift+Enter for new line
               </div>
             </div>
-          </main>
+          </div>
         </div>
       </div>
     </div>
