@@ -1501,3 +1501,50 @@ html.light .code-editor-border { border-color: rgba(0, 0, 0, 0.08); }
   padding: 80px 20px; gap: 16px; color: var(--text-muted);
 }
 
+/* ===== MOBILE OVERRIDES (375px and below) ===== */
+@media (max-width: 480px) {
+  /* Touch targets: ensure 44px minimum */
+  .btn-sm { padding: 12px 20px; min-height: 44px; font-size: 14px; }
+  .nav-link { padding: 12px 16px; min-height: 44px; font-size: 15px; }
+  .nav-mobile { padding: 12px; min-width: 44px; min-height: 44px; }
+  .nav-theme { padding: 10px; min-width: 44px; min-height: 44px; }
+  .course-card-start { padding: 12px 20px; min-height: 44px; }
+  .footer-socials a { width: 44px; height: 44px; }
+  .filter-pill { padding: 10px 16px; min-height: 44px; }
+  .practice-toolbar-btn { padding: 10px 16px; min-height: 44px; font-size: 14px; }
+  .practice-chapter-pill { padding: 12px 14px; min-height: 44px; }
+  .practice-page-btn { min-width: 44px; height: 44px; }
+  .discuss-reply-btn { padding: 10px 16px; min-height: 44px; font-size: 14px; }
+  .mentor-select { padding: 12px 14px; min-height: 44px; font-size: 15px; }
+  .mentor-hint-pill { padding: 10px 8px; min-height: 44px; font-size: 13px; }
+  .mentor-quick-btn { padding: 14px 14px; min-height: 44px; font-size: 14px; }
+  .practice-run-btn { padding: 12px 20px; min-height: 44px; }
+  .practice-filter-btn { padding: 10px 16px; min-height: 44px; }
+
+  /* Font sizes: ensure minimum 12px */
+  .practice-chapter-count { font-size: 12px; }
+  .practice-chapter-badge { font-size: 12px; }
+  .contest-badge { font-size: 12px; }
+  .mentor-quick-label { font-size: 11px; }
+
+  /* Overflow fixes */
+  .practice-grid { grid-template-columns: 1fr; }
+  .cert-grid { grid-template-columns: 1fr; }
+  .contest-grid { grid-template-columns: 1fr; }
+  .home-courses-grid { grid-template-columns: 1fr; }
+  .practice-search { min-width: 0; }
+
+  /* Cert document: reduce inner padding for small screens */
+  .cert-document-inner { padding: 24px 20px; }
+
+  /* Stats: single column on very small screens */
+  .stats-bar { grid-template-columns: 1fr; }
+  .lb-stats { grid-template-columns: 1fr; }
+
+  /* AI Mentor: taller chat, collapsible sidebar */
+  .mentor-chat { height: 60vh; min-height: 300px; }
+  .mentor-sidebar { max-height: 240px; overflow-y: auto; }
+  .mentor-msg-content { max-width: 85%; }
+  .mentor-msg-text { padding: 12px 14px; font-size: 13px; }
+}
+
