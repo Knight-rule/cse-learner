@@ -169,7 +169,7 @@ img { max-width: 100%; display: block; }
   background: transparent; color: var(--text-secondary);
 }
 .btn-ghost:hover { color: var(--text-primary); background: var(--surface); }
-.btn-sm { padding: 10px 20px; font-size: 13px; }
+.btn-sm { padding: 8px 16px; font-size: 13px; }
 
 /* ===== NAV ===== */
 .nav {
@@ -185,17 +185,17 @@ img { max-width: 100%; display: block; }
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
 }
 .nav-inner {
-  max-width: 1200px; margin: 0 auto; padding: 0 24px;
-  display: flex; justify-content: space-between; align-items: center; height: 68px;
+  max-width: 1400px; margin: 0 auto; padding: 0 24px;
+  display: flex; justify-content: space-between; align-items: center; height: 68px; gap: 16px;
 }
-.nav-logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; gap: 2px; }
+.nav-logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
 .nav-logo .cse { color: var(--accent); }
 .nav-logo .learner { color: var(--text-primary); }
-.nav-center { display: flex; align-items: center; gap: 6px; }
+.nav-center { display: flex; align-items: center; gap: 2px; }
 .nav-link {
-  padding: 8px 16px; border-radius: var(--radius-sm);
-  font-size: 14px; font-weight: 500; color: var(--text-secondary);
-  transition: var(--transition); position: relative;
+  padding: 6px 12px; border-radius: var(--radius-sm);
+  font-size: 13.5px; font-weight: 500; color: var(--text-secondary);
+  transition: var(--transition); position: relative; white-space: nowrap;
 }
 .nav-link:hover { color: var(--text-primary); background: var(--surface); }
 .nav-link.active { color: var(--accent); }
@@ -203,7 +203,7 @@ img { max-width: 100%; display: block; }
   content: ''; position: absolute; bottom: -2px; left: 50%; transform: translateX(-50%);
   width: 20px; height: 2px; background: var(--accent); border-radius: 2px;
 }
-.nav-actions { display: flex; align-items: center; gap: 8px; }
+.nav-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .nav-theme {
   padding: 8px; border-radius: var(--radius-sm); color: var(--text-muted);
   transition: var(--transition); display: flex; align-items: center;
