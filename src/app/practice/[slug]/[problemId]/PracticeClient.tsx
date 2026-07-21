@@ -92,9 +92,15 @@ export default function PracticeClient({ problem, courseSlug, problemIndex, tota
         const passed = testResults.filter((r) => r.passed).length;
         setOutput(`\n✅ ${passed}/${testResults.length} tests passed\n`);
         if (passed === testResults.length && testResults.length > 0) { markPracticeSolved(problem.id); setSolved(true); }
+      } else if (problem.language === "c" || problem.language === "cpp") {
+        const testResults = await runCCTests(code, problem.testCases, problem.language);
+        setResults(testResults);
+        const passed = testResults.filter((r) => r.passed).length;
+        setOutput(`\n✅ ${passed}/${testResults.length} tests passed\n`);
+        if (passed === testResults.length && testResults.length > 0) { markPracticeSolved(problem.id); setSolved(true); }
       } else {
         setResults([{ passed: false, actual: "", expected: "", input: "" }]);
-        setOutput("\n⚠️ C/C++ execution not available in browser. Copy the code and run locally.\n");
+        setOutput("\n⚠️ Unsupported language.\n");
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
@@ -317,4 +323,39 @@ async function loadPyodide() {
   const pyodideGlobal = (window as unknown as Record<string, unknown>)["loadPyodide"] as (opts: { indexURL: string }) => Promise<unknown>;
   pyodideInstance = await pyodideGlobal({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.25.0/full/" });
   return pyodideInstance;
+}
+
+async function runCCTests(code: string, testCases: { input: string; expected: string }[], language: "c" | "cpp") {
+  const results: { passed: boolean; actual: string; expected: string; input: string }[] = [];
+
+  for (const tc of testCases) {
+    try {
+      const res = await fetch("/api/execute", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ language, code, stdin: tc.input }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        results.push({ passed: false, actual: err.error || "API error", expected: tc.expected, input: tc.input });
+        continue;
+      }
+
+      const data = await res.json();
+
+      if (data.exitCode !== 0) {
+        results.push({ passed: false, actual: data.stderr || data.stdout || "Runtime error", expected: tc.expected, input: tc.input });
+        continue;
+      }
+
+      const stdout = data.stdout.trim();
+      const expected = tc.expected.trim();
+      results.push({ passed: stdout === expected, actual: stdout, expected, input: tc.input });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      results.push({ passed: false, actual: "Error: " + msg, expected: tc.expected, input: tc.input });
+    }
+  }
+  return results;
 }
