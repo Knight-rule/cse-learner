@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { contests, getContest, resolveContestProblem } from "@/data/contests";
+import { courses } from "@/data/courses";
+import { practiceData } from "@/data/practice";
 import ContestTakeClient from "./ContestTakeClient";
+import { getContest, contests } from "@/data/contests";
 
 export function generateStaticParams() {
   return contests.map((c) => ({ id: c.id }));
@@ -29,13 +31,15 @@ export default async function ContestPage({ params }: { params: Promise<{ id: st
   }
 
   const resolved = contest.problems.map((ref) => {
-    const { problem, course } = resolveContestProblem(ref);
+    const cp = practiceData.find((p) => p.courseSlug === ref.courseSlug);
+    const problem = cp?.problems.find((p) => p.id === ref.problemId);
+    const course = courses.find((c) => c.slug === ref.courseSlug);
     return {
       courseSlug: ref.courseSlug,
       problemId: ref.problemId,
       title: problem?.title || ref.problemId,
       difficulty: problem?.difficulty || "easy",
-      courseTitle: course ? course.courseSlug : ref.courseSlug,
+      courseTitle: course ? course.title : ref.courseSlug,
       href: `/practice/${ref.courseSlug}/${ref.problemId}`,
     };
   });
