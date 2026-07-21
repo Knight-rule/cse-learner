@@ -11,6 +11,13 @@ interface ChatMessage {
   timestamp: number;
 }
 
+const GREETINGS = [
+  "Hey! What are you working on today?",
+  "Stuck on something? I can help.",
+  "Let's figure this out together.",
+  "What's on your mind?",
+];
+
 export default function AIMentorPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -19,6 +26,7 @@ export default function AIMentorPage() {
   const [problemId, setProblemId] = useState("");
   const [hintLevel, setHintLevel] = useState<"none" | "minimal" | "moderate" | "full">("moderate");
   const [showContext, setShowContext] = useState(true);
+  const [greeting] = useState(() => GREETINGS[Math.floor(Math.random() * GREETINGS.length)]);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   const selectedCourse = practiceData.find((p) => p.courseSlug === courseSlug);
@@ -30,10 +38,10 @@ export default function AIMentorPage() {
   }, [messages]);
 
   const quickPrompts = [
-    { icon: <BookOpen size={16} />, text: "Explain linked lists and when to use them" },
-    { icon: <Code size={16} />, text: "How does binary search work step by step?" },
-    { icon: <HelpCircle size={16} />, text: "What's the difference between stack and queue?" },
-    { icon: <Sparkles size={16} />, text: "Help me understand recursion with an example" },
+    { icon: <BookOpen size={16} />, text: "I keep confusing stacks and queues — can you break it down?", label: "Concepts" },
+    { icon: <Code size={16} />, text: "Walk me through binary search like I'm 12", label: "Algorithms" },
+    { icon: <HelpCircle size={16} />, text: "Why does my linked list insert crash?", label: "Debugging" },
+    { icon: <Sparkles size={16} />, text: "Give me a trick to remember time complexities", label: "Tips & Tricks" },
   ];
 
   const send = async (question?: string) => {
@@ -62,10 +70,10 @@ export default function AIMentorPage() {
       });
 
       const data = await res.json();
-      const assistantMsg: ChatMessage = { role: "assistant", content: data.response || "No response.", timestamp: Date.now() };
+      const assistantMsg: ChatMessage = { role: "assistant", content: data.response || "Hmm, I didn't get a response. Try rephrasing your question.", timestamp: Date.now() };
       setMessages((prev) => [...prev, assistantMsg]);
     } catch {
-      setMessages((prev) => [...prev, { role: "assistant", content: "Error reaching AI Mentor. Make sure GOOGLE_GENAI_API_KEY is set.", timestamp: Date.now() }]);
+      setMessages((prev) => [...prev, { role: "assistant", content: "Oops — something went wrong on my end. If this keeps happening, make sure the API key is set up correctly.", timestamp: Date.now() }]);
     } finally {
       setIsLoading(false);
     }
@@ -82,10 +90,11 @@ export default function AIMentorPage() {
               <Brain size={32} />
             </div>
             <h1 className="mentor-hero-title">
-              AI-Powered <span className="text-gradient">Learning Assistant</span>
+              Your CS Study <span className="text-gradient">Buddy</span>
             </h1>
             <p className="mentor-hero-sub">
-              Your personal AI tutor that explains concepts, hints at solutions, and adapts to your learning style.
+              Ask anything — concepts, code, debugging, or "explain this like I'm new."
+              No question is too basic or too weird.
             </p>
           </div>
         </div>
@@ -99,12 +108,12 @@ export default function AIMentorPage() {
             {/* Context Card */}
             <div className="mentor-card">
               <div className="mentor-card-header" onClick={() => setShowContext(!showContext)}>
-                <h3>Course Context</h3>
+                <h3>What are you studying?</h3>
                 <ChevronDown size={16} style={{ transform: showContext ? "rotate(180deg)" : "rotate(0)", transition: "0.2s" }} />
               </div>
               {showContext && (
                 <div className="mentor-card-body">
-                  <label className="mentor-label">Course</label>
+                  <label className="mentor-label">Subject</label>
                   <select className="mentor-select" value={courseSlug} onChange={(e) => { setCourseSlug(e.target.value); setProblemId(""); }}>
                     {courseList.map((c) => (
                       <option key={c.slug} value={c.slug}>{c.title}</option>
@@ -113,9 +122,9 @@ export default function AIMentorPage() {
 
                   {problems.length > 0 && (
                     <>
-                      <label className="mentor-label">Problem (optional)</label>
+                      <label className="mentor-label">Stuck on a problem?</label>
                       <select className="mentor-select" value={problemId} onChange={(e) => setProblemId(e.target.value)}>
-                        <option value="">Any Problem</option>
+                        <option value="">Nah, just chatting</option>
                         {problems.map((p) => (
                           <option key={p.id} value={p.id}>{p.title}</option>
                         ))}
@@ -123,11 +132,11 @@ export default function AIMentorPage() {
                     </>
                   )}
 
-                  <label className="mentor-label">Hint Level</label>
+                  <label className="mentor-label">How much help do you want?</label>
                   <div className="mentor-hint-pills">
                     {(["moderate", "full", "minimal", "none"] as const).map((level) => (
                       <button key={level} className={"mentor-hint-pill" + (hintLevel === level ? " active" : "")} onClick={() => setHintLevel(level)}>
-                        {level === "moderate" ? "Hints" : level === "full" ? "Full Guide" : level === "minimal" ? "Quick" : "No Hints"}
+                        {level === "moderate" ? "Nudge me" : level === "full" ? "Show everything" : level === "minimal" ? "Just answer" : "I'll figure it out"}
                       </button>
                     ))}
                   </div>
@@ -138,13 +147,16 @@ export default function AIMentorPage() {
             {/* Quick Start */}
             <div className="mentor-card">
               <div className="mentor-card-header">
-                <h3>Quick Start</h3>
+                <h3>Try asking</h3>
               </div>
               <div className="mentor-card-body">
                 {quickPrompts.map((qp, i) => (
                   <button key={i} className="mentor-quick-btn" onClick={() => send(qp.text)}>
                     {qp.icon}
-                    <span>{qp.text}</span>
+                    <div>
+                      <span className="mentor-quick-label">{qp.label}</span>
+                      <span>{qp.text}</span>
+                    </div>
                   </button>
                 ))}
               </div>
@@ -153,13 +165,12 @@ export default function AIMentorPage() {
             {/* Tips */}
             <div className="mentor-card">
               <div className="mentor-card-header">
-                <h3>Tips</h3>
+                <h3>Pro tip</h3>
               </div>
               <div className="mentor-card-body">
-                <div className="mentor-tip">💡 Ask for explanations of concepts you find confusing</div>
-                <div className="mentor-tip">🔍 Get hints for specific problems you are stuck on</div>
-                <div className="mentor-tip">🧠 Learn why a solution works, not just how</div>
-                <div className="mentor-tip">📚 Explore related concepts to deepen understanding</div>
+                <div className="mentor-tip">Paste your broken code and say "why doesn't this work?" — way better than guessing.</div>
+                <div className="mentor-tip">Pick a specific problem above and I'll give you hints tailored to it.</div>
+                <div className="mentor-tip">Use "Nudge me" when you want to learn, "Show everything" when you're stuck for real.</div>
               </div>
             </div>
           </aside>
@@ -172,7 +183,7 @@ export default function AIMentorPage() {
               </div>
               <div>
                 <h3>AI Mentor</h3>
-                <p>{courseTitle} &middot; {hintLevel} hints</p>
+                <p>{courseTitle} &middot; {hintLevel === "moderate" ? "nudge mode" : hintLevel === "full" ? "full guide" : hintLevel === "minimal" ? "quick answers" : "no hints"}</p>
               </div>
             </div>
 
@@ -183,8 +194,8 @@ export default function AIMentorPage() {
                   <div className="mentor-empty-icon">
                     <Brain size={48} />
                   </div>
-                  <h3>Ask me anything about CS</h3>
-                  <p>Explain concepts, debug code, get hints, or explore topics in {courseTitle}.</p>
+                  <h3>{greeting}</h3>
+                  <p>I can help with {courseTitle} — or anything else CS-related. Just type below.</p>
                 </div>
               )}
 
@@ -211,7 +222,7 @@ export default function AIMentorPage() {
                   <div className="mentor-msg-content">
                     <div className="mentor-typing">
                       <Loader2 size={16} className="animate-spin" />
-                      <span>Thinking...</span>
+                      <span>Let me think about that...</span>
                     </div>
                   </div>
                 </div>
@@ -225,7 +236,7 @@ export default function AIMentorPage() {
               <div className="mentor-input-row">
                 <textarea
                   className="mentor-input"
-                  placeholder="Ask about course material, a specific problem, or any CS concept..."
+                  placeholder="Type your question here..."
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
@@ -236,7 +247,7 @@ export default function AIMentorPage() {
                 </button>
               </div>
               <div className="mentor-input-hint">
-                Press Enter to send &middot; Shift+Enter for new line
+                Enter to send &middot; Shift+Enter for a new line
               </div>
             </div>
           </div>

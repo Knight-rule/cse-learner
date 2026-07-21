@@ -1358,7 +1358,7 @@ html.light .code-editor-border { border-color: rgba(0, 0, 0, 0.08); }
 }
 
 .mentor-quick-btn {
-  display: flex; align-items: center; gap: 10px; width: 100%;
+  display: flex; align-items: flex-start; gap: 10px; width: 100%;
   padding: 10px 12px; border-radius: var(--radius-md);
   background: var(--bg-primary); border: 1px solid var(--border);
   color: var(--text-secondary); font-size: 13px; font-family: inherit;
@@ -1366,6 +1366,8 @@ html.light .code-editor-border { border-color: rgba(0, 0, 0, 0.08); }
 }
 .mentor-quick-btn:first-child { margin-top: 0; }
 .mentor-quick-btn:hover { border-color: var(--accent); color: var(--text-primary); background: var(--bg-secondary); }
+.mentor-quick-btn div { display: flex; flex-direction: column; gap: 2px; }
+.mentor-quick-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent); }
 .mentor-quick-btn span { line-height: 1.4; }
 
 .mentor-tip {
