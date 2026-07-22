@@ -95,7 +95,7 @@ export default function JobsPage() {
 
   return (
     <div className="py-12 dark:bg-dark-900 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="flex items-center gap-2 text-dark-400 dark:text-dark-500 text-sm mb-6">
           <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">Home</Link>
           <ChevronRight className="w-4 h-4" />
