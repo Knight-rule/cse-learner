@@ -120,7 +120,7 @@ export default function CertificateViewPage({ params }: { params: Promise<{ slug
             <div className="cert-sign-line" />
             <span>CSE Learner Academy</span>
           </div>
-          <p className="cert-foot">Verify at cse-learner.onrender.com/certificates/{slug}</p>
+          <p className="cert-foot">Verify at {typeof window !== "undefined" ? window.location.host : "cse-learner.onrender.com"}/certificates/{slug}</p>
         </div>
       </div>
     </div>

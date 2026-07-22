@@ -92,12 +92,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(response, { status: 200 });
   } catch (error) {
     console.error("AI Mentor API Error:", error);
-    const msg = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
       {
         id: Math.random().toString(36).slice(2),
         promptId: "",
-        response: "Error: " + msg,
+        response: "Something went wrong. Please try again later.",
         explanation: undefined,
         relatedConcepts: [],
         difficultyLevel: "medium",
