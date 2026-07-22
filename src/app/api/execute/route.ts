@@ -1,32 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const PISTON_URL = "https://emkc.org/api/v2/piston/execute";
+const JUDGE0_URL = "https://api.judge0.com/submissions?base64_encoded=false&wait=true";
 
-interface PistonFile {
-  name?: string;
-  content: string;
-}
-
-interface PistonRequest {
-  language: string;
-  version?: string;
-  files: PistonFile[];
-  stdin?: string;
-}
-
-interface PistonResponse {
-  run: {
-    stdout: string;
-    stderr: string;
-    code: number;
-    signal: string | null;
-  };
-  compile?: {
-    stdout: string;
-    stderr: string;
-    code: number;
-    signal: string | null;
-  };
+interface Judge0Response {
+  stdout: string;
+  stderr: string;
+  status: { id: number; description: string };
+  compile_outputs?: string;
 }
 
 export async function POST(req: NextRequest) {
@@ -38,24 +18,25 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "language and code are required" }, { status: 400 });
     }
 
-    const langMap: Record<string, { pistonLang: string; version: string; filename: string }> = {
-      c: { pistonLang: "c", version: "10.2.0", filename: "main.c" },
-      cpp: { pistonLang: "cpp", version: "10.2.0", filename: "main.cpp" },
+    const langMap: Record<string, number> = {
+      c: 50,
+      cpp: 54,
     };
 
-    const config = langMap[language];
-    if (!config) {
+    const languageId = langMap[language];
+    if (!languageId) {
       return NextResponse.json({ error: `Unsupported language: ${language}` }, { status: 400 });
     }
 
-    const payload: PistonRequest = {
-      language: config.pistonLang,
-      version: config.version,
-      files: [{ name: config.filename, content: code }],
-      ...(stdin ? { stdin } : {}),
+    const payload: Record<string, unknown> = {
+      language_id: languageId,
+      source_code: code,
     };
+    if (stdin) {
+      payload.stdin = stdin;
+    }
 
-    const res = await fetch(PISTON_URL, {
+    const res = await fetch(JUDGE0_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -63,20 +44,21 @@ export async function POST(req: NextRequest) {
 
     if (!res.ok) {
       const errText = await res.text();
-      return NextResponse.json({ error: `Piston API error: ${res.status} ${errText}` }, { status: 502 });
+      return NextResponse.json({ error: `Judge0 API error: ${res.status} ${errText}` }, { status: 502 });
     }
 
-    const data: PistonResponse = await res.json();
+    const data: Judge0Response = await res.json();
 
-    const compileError = data.compile && data.compile.code !== 0 ? data.compile.stderr : "";
-    const runtimeError = data.run.code !== 0 ? data.run.stderr : "";
-    const stdout = data.run.stdout;
+    const stdout = data.stdout || "";
+    const stderr = data.stderr || "";
+    const compileOutput = data.compile_outputs || "";
+    const exitCode = data.status?.id === 3 ? 1 : 0;
 
     return NextResponse.json({
       stdout,
-      stderr: compileError || runtimeError,
-      exitCode: data.run.code,
-      compileError,
+      stderr: compileOutput || stderr,
+      exitCode,
+      compileError: compileOutput,
     });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
