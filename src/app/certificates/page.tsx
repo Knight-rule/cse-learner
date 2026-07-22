@@ -2,10 +2,11 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { ChevronRight, Award, ArrowRight, Pencil, Lock } from "lucide-react";
+import { ChevronRight, Award, ArrowRight, Pencil, Lock, ExternalLink, Search } from "lucide-react";
 import { courses } from "@/data/courses";
 import { practiceData } from "@/data/practice";
 import { getSolvedProblems, awardCertificate, getCertificates, getLearnerName, setLearnerName } from "@/lib/tracker";
+import { freeCertifications, freeCertProviders } from "@/data/free-certifications";
 
 interface CourseProgress {
   slug: string;
@@ -23,6 +24,8 @@ export default function CertificatesPage() {
   const [name, setName] = useState("CSE Learner");
   const [editingName, setEditingName] = useState(false);
   const [nameDraft, setNameDraft] = useState("");
+  const [extSearch, setExtSearch] = useState("");
+  const [extProvider, setExtProvider] = useState("");
 
   useEffect(() => {
     const s = getSolvedProblems();
@@ -59,6 +62,14 @@ export default function CertificatesPage() {
   const earned = progress.filter((p) => p.earned);
   const inProgress = progress.filter((p) => !p.earned && p.solved > 0).sort((a, b) => b.solved / b.total - a.solved / a.total);
   const notStarted = progress.filter((p) => p.solved === 0);
+
+  const filteredExtCerts = useMemo(() => {
+    return freeCertifications.filter((c) => {
+      const matchesSearch = !extSearch || c.name.toLowerCase().includes(extSearch.toLowerCase()) || c.description.toLowerCase().includes(extSearch.toLowerCase()) || c.tags.some((t) => t.toLowerCase().includes(extSearch.toLowerCase()));
+      const matchesProvider = !extProvider || c.provider === extProvider;
+      return matchesSearch && matchesProvider;
+    });
+  }, [extSearch, extProvider]);
 
   const saveName = () => {
     setLearnerName(nameDraft);
@@ -195,6 +206,111 @@ export default function CertificatesPage() {
             </div>
           </div>
         )}
+
+        {/* External Free Certifications */}
+        <div style={{ marginTop: 64, paddingTop: 48, borderTop: "1px solid var(--border)" }}>
+          <div className="mb-8">
+            <span className="badge badge-accent mb-4" style={{ display: "inline-flex" }}>🎉 Free Certifications</span>
+            <h2 className="heading-xl mb-3">
+              Free Certification <span className="gradient-text">Programs</span>
+            </h2>
+            <p className="body-lg" style={{ maxWidth: 600 }}>
+              Earn industry-recognized certifications from Google, AWS, Meta, IBM, Microsoft and more — all 100% free.
+            </p>
+          </div>
+
+          {/* Search + Provider filter */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginBottom: 24 }}>
+            <div style={{ position: "relative", flex: "1 1 280px", maxWidth: 400 }}>
+              <Search size={16} style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
+              <input
+                type="text"
+                placeholder="Search certifications..."
+                value={extSearch}
+                onChange={(e) => setExtSearch(e.target.value)}
+                style={{
+                  width: "100%", padding: "10px 12px 10px 36px", borderRadius: "var(--radius-md)",
+                  background: "var(--surface)", border: "1px solid var(--border)",
+                  color: "var(--text-primary)", fontSize: 14, fontFamily: "inherit", outline: "none"
+                }}
+              />
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              <button
+                onClick={() => setExtProvider("")}
+                style={{
+                  padding: "6px 14px", borderRadius: 20, fontSize: 13, fontWeight: 500, cursor: "pointer", border: "1px solid var(--border)",
+                  background: !extProvider ? "var(--accent)" : "var(--surface)", color: !extProvider ? "#fff" : "var(--text-secondary)", transition: "var(--transition)"
+                }}
+              >
+                All
+              </button>
+              {freeCertProviders.map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setExtProvider(extProvider === p ? "" : p)}
+                  style={{
+                    padding: "6px 14px", borderRadius: 20, fontSize: 13, fontWeight: 500, cursor: "pointer", border: "1px solid var(--border)",
+                    background: extProvider === p ? "var(--accent)" : "var(--surface)", color: extProvider === p ? "#fff" : "var(--text-secondary)", transition: "var(--transition)"
+                  }}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Results count */}
+          <p className="body-sm mb-4" style={{ color: "var(--text-muted)" }}>
+            {filteredExtCerts.length} free certification{filteredExtCerts.length === 1 ? "" : "s"} available
+          </p>
+
+          {/* Certification cards grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(320px, 100%), 1fr))", gap: 16 }}>
+            {filteredExtCerts.map((cert, i) => (
+              <a
+                key={i}
+                href={cert.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "flex", flexDirection: "column", padding: 20, borderRadius: "var(--radius-xl)",
+                  background: "var(--bg-card)", border: "1px solid var(--border)", textDecoration: "none", color: "inherit",
+                  transition: "var(--transition)"
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.transform = "none"; }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                  <span style={{ fontSize: 22 }}>{cert.providerIcon}</span>
+                  <span style={{
+                    fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5,
+                    padding: "2px 8px", borderRadius: 12, background: "rgba(34, 197, 94, 0.1)", color: "#22c55e"
+                  }}>
+                    Free
+                  </span>
+                  <span style={{ fontSize: 12, color: "var(--text-muted)" }}>{cert.provider}</span>
+                </div>
+                <h3 style={{ fontSize: 15, fontWeight: 600, marginBottom: 6, lineHeight: 1.3 }}>{cert.name}</h3>
+                <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.5, flex: 1 }}>{cert.description}</p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 10, marginBottom: 12 }}>
+                  {cert.tags.map((tag) => (
+                    <span key={tag} style={{ fontSize: 11, padding: "2px 8px", borderRadius: 8, background: "var(--surface)", color: "var(--text-muted)" }}>{tag}</span>
+                  ))}
+                </div>
+                <span style={{ fontSize: 13, fontWeight: 600, color: "var(--accent)", display: "flex", alignItems: "center", gap: 4 }}>
+                  Enroll Now <ExternalLink size={13} />
+                </span>
+              </a>
+            ))}
+          </div>
+
+          {filteredExtCerts.length === 0 && (
+            <div style={{ textAlign: "center", padding: "40px 0", color: "var(--text-muted)" }}>
+              <p>No certifications match your search. Try a different keyword or provider.</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
