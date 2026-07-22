@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Code, Home, Bookmark, Sun, Moon, Menu, X, Map, Award, Trophy, MessageSquare, Brain } from "lucide-react";
+import { BookOpen, Code, Home, Bookmark, Sun, Moon, Menu, X, Map, Award, Trophy, MessageSquare, Brain, Briefcase } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const navLinks = [
@@ -12,6 +12,7 @@ const navLinks = [
   { href: "/languages", label: "Languages" },
   { href: "/practice", label: "Practice" },
   { href: "/certificates", label: "Certificates", icon: Award },
+  { href: "/internships", label: "Internships", icon: Briefcase },
   { href: "/contests", label: "Contests", icon: Trophy },
   { href: "/discuss", label: "Discuss", icon: MessageSquare },
   { href: "/ai-mentor", label: "AI Mentor", icon: Brain },

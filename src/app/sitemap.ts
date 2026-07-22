@@ -7,7 +7,7 @@ const BASE = "https://cse-learner.onrender.com";
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  const staticPages = ["", "/about", "/courses", "/practice", "/languages", "/jobs", "/contests", "/discuss", "/certificates", "/leaderboard", "/dashboard", "/ai-mentor", "/contact", "/paths", "/bookmarks"].map((path) => ({
+  const staticPages = ["", "/about", "/courses", "/practice", "/languages", "/jobs", "/contests", "/discuss", "/certificates", "/internships", "/leaderboard", "/dashboard", "/ai-mentor", "/contact", "/paths", "/bookmarks"].map((path) => ({
     url: BASE + path,
     lastModified: now,
     changeFrequency: "weekly" as const,
