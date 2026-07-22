@@ -32,6 +32,11 @@ export default function AIMentorPage() {
 
   useEffect(() => { setMounted(true); }, []);
 
+  useEffect(() => {
+    const timer = setTimeout(() => setMounted(true), 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const selectedCourse = practiceData.find((p) => p.courseSlug === courseSlug);
   const problems = selectedCourse?.problems || [];
   const courseTitle = courseList.find((c) => c.slug === courseSlug)?.title || courseSlug;

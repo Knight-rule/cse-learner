@@ -43,7 +43,8 @@ export default function JobsPage() {
       params.set("page", String(page));
       params.set("limit", "50");
 
-      const res = await fetch(`/api/jobs?${params}`);
+      const res = await fetch(`/api/jobs?${params.toString()}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       setCompanies(data.companies || []);
       setCategories(data.categories || []);
@@ -52,6 +53,7 @@ export default function JobsPage() {
     } catch (err) {
       console.error("Failed to load companies:", err);
       setCompanies([]);
+      setTotal(0);
     }
     setLoading(false);
   }, [query, selectedCategory, page]);

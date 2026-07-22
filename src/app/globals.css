@@ -417,6 +417,7 @@ img { max-width: 100%; display: block; }
   margin-bottom: 24px; font-style: italic;
 }
 .testimonial-quote::before { content: '"'; color: var(--accent); font-size: 24px; font-weight: 800; }
+.testimonial-quote::after { content: '"'; color: var(--accent); font-size: 24px; font-weight: 800; }
 .testimonial-author { display: flex; align-items: center; gap: 12px; }
 .testimonial-avatar {
   width: 44px; height: 44px; border-radius: 50%;
@@ -1375,7 +1376,7 @@ html.light .code-editor-border { border-color: rgba(0, 0, 0, 0.08); }
   cursor: pointer; transition: var(--transition); text-align: left; margin-top: 8px;
 }
 .mentor-quick-btn:first-child { margin-top: 0; }
-.mentor-quick-btn:hover { border-color: var(--accent); color: var(--text-primary); background: var(--bg-secondary); }
+.mentor-quick-btn:hover { border-color: var(--accent); color: var(--text-primary); background: var(--bg-secondary); cursor: pointer; transform: translateY(-1px); }
 .mentor-quick-btn div { display: flex; flex-direction: column; gap: 2px; }
 .mentor-quick-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent); }
 .mentor-quick-btn span { line-height: 1.4; }

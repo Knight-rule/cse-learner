@@ -38,6 +38,7 @@ export default function DiscussPage() {
             {" "}
             {count === 0 ? "no threads yet. Start one below!" : `${count} thread${count === 1 ? "" : "s"} so far.`}
           </p>
+          <Link href="/practice" className="btn btn-primary btn-sm" style={{ marginTop: 16, display: "inline-flex" }}>Start a Discussion</Link>
         </div>
 
         {threads.length === 0 ? (

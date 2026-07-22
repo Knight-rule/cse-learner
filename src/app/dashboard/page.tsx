@@ -205,7 +205,7 @@ export default function DashboardPage() {
                 <Briefcase size={24} color="#fff" />
               </div>
               <h3 className="heading-sm mb-2">Find Opportunities</h3>
-              <p className="body-sm mb-4">Browse live internship and job listings updated automatically.</p>
+              <p className="body-sm mb-4">Browse 80+ top tech companies with direct career page links.</p>
               <Link href="/jobs" className="btn btn-primary w-full justify-center">
                 View Jobs <ArrowRight size={16} />
               </Link>
