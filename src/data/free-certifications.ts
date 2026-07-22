@@ -49,7 +49,7 @@ export const freeCertifications: FreeCert[] = [
   // Salesforce
   { name: "Salesforce Administrator Certificate", provider: "Salesforce", providerIcon: "☁️", category: "CRM", description: "Salesforce configuration, user management, security, automation, and reporting.", url: "https://trailhead.salesforce.com/content/learn/trails/force_com_admin_beginner", tags: ["CRM", "Salesforce", "Admin"] },
   { name: "Salesforce Platform Developer Basics", provider: "Salesforce", providerIcon: "☁️", category: "Dev", description: "Apex, Visualforce, Lightning components, and Salesforce development fundamentals.", url: "https://trailhead.salesforce.com/content/learn/trails/force_com_platform_developer_beginner", tags: ["Dev", "Apex", "Lightning"] },
-  { name: "Salesforce AI Associate", provider: "Salesforce", providerIcon: "☁️", category: "AI", description: "Responsible AI, Einstein AI tools, and AI-driven CRM workflows.", url: "https://trailhead.salesforce.com/en/content/learn/trails/ai associate", tags: ["AI", "CRM", "Einstein"] },
+  { name: "Salesforce AI Associate", provider: "Salesforce", providerIcon: "☁️", category: "AI", description: "Responsible AI, Einstein AI tools, and AI-driven CRM workflows.", url: "https://trailhead.salesforce.com/en/content/learn/trails/ai-associate", tags: ["AI", "CRM", "Einstein"] },
 
   // HubSpot
   { name: "HubSpot Inbound Marketing Certification", provider: "HubSpot", providerIcon: "🟠", category: "Marketing", description: "Inbound methodology, content strategy, conversion optimization, and lead nurturing.", url: "https://academy.hubspot.com/courses/inbound-marketing", tags: ["Marketing", "Inbound", "Content"] },
