@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight, Zap, Code, BookOpen, Brain, Users, Trophy, Laptop, Target, GraduationCap, Rocket, ExternalLink } from "lucide-react";
 import { courses } from "@/data/courses";
+import StatsBar from "@/components/StatsBar";
 
 const features = [
   { icon: <GraduationCap size={28} />, title: "Expert Led Learning", desc: "Lessons designed by CS professionals and educators.", color: "var(--accent)" },
@@ -15,13 +16,6 @@ const testimonials = [
   { name: "Sarah Mitchell", role: "Software Engineer", initials: "SM", quote: "CSE Learner helped me ace my data structures interview. The practice problems and code examples are incredibly useful." },
   { name: "James Carter", role: "CS Student", initials: "JC", quote: "Best free platform for learning algorithms. The step-by-step lessons made complex topics easy to understand." },
   { name: "Amina Hassan", role: "Backend Developer", initials: "AH", quote: "I went from struggling with OS concepts to confidently explaining process scheduling. Highly recommend!" },
-];
-
-const stats = [
-  { icon: <Users size={24} />, value: "10K+", label: "Students" },
-  { icon: <BookOpen size={24} />, value: "200+", label: "Lessons" },
-  { icon: <Brain size={24} />, value: "80+", label: "Practice Problems" },
-  { icon: <Trophy size={24} />, value: "5K+", label: "Certificates" },
 ];
 
 const faqs = [
@@ -85,19 +79,7 @@ export default function HomePage() {
       </section>
 
       {/* Stats Bar */}
-      <section className="section" style={{ borderBottom: "1px solid var(--border)", padding: "48px 0", marginBottom: 0 }}>
-        <div className="container">
-          <div className="stats-bar">
-            {stats.map((s) => (
-              <div key={s.label} className="stat-item animate-fade-in-up">
-                <div className="stat-icon" style={{ color: "var(--accent)" }}>{s.icon}</div>
-                <div className="stat-number">{s.value}</div>
-                <div className="stat-label">{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <StatsBar />
 
       {/* About */}
       <section className="section">
