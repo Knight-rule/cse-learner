@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
-import { ArrowRight, ChevronRight, Zap, Code, BookOpen, Brain, Users, Trophy, Laptop, Target, GraduationCap, Rocket, ExternalLink } from "lucide-react";
+import { ArrowRight, ChevronRight, Zap, Code, BookOpen, Brain, Users, Trophy, Laptop, Target, GraduationCap, Rocket, ExternalLink, Building2 } from "lucide-react";
 import { courses } from "@/data/courses";
+import { companies } from "@/lib/companies";
 import StatsBar from "@/components/StatsBar";
 
 const features = [
@@ -181,6 +184,54 @@ export default function HomePage() {
                 <p className="body-md">{f.desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Top Companies */}
+      <section className="section" style={{ background: "var(--bg-secondary)" }}>
+        <div className="container">
+          <div className="text-center mb-12">
+            <span className="badge badge-accent mb-4" style={{ display: "inline-flex" }}><Building2 size={14} /> Top Companies</span>
+            <h2 className="heading-xl mb-4">
+              Where Our Students <span className="gradient-text">Work &amp; Intern</span>
+            </h2>
+            <p className="body-lg mx-auto" style={{ maxWidth: 560 }}>
+              Explore career opportunities at {companies.length}+ top tech companies across the globe.
+            </p>
+          </div>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
+            gap: 16,
+            marginBottom: 40,
+          }}>
+            {companies.slice(0, 18).map((company) => (
+              <a
+                key={company.slug}
+                href={company.applyLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="company-card-home"
+              >
+                <img
+                  src={company.logo}
+                  alt={company.name}
+                  width={48}
+                  height={48}
+                  style={{ borderRadius: 10, objectFit: "contain", background: "var(--surface)", padding: 4 }}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect width="48" height="48" rx="10" fill="%23374151"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="system-ui" font-size="18" font-weight="600" fill="%239ca3af">${company.name.charAt(0)}</text></svg>`)}`;
+                  }}
+                />
+                <span style={{ fontSize: 13, fontWeight: 500, textAlign: "center", color: "var(--text-primary)" }}>{company.name}</span>
+              </a>
+            ))}
+          </div>
+          <div className="text-center">
+            <Link href="/jobs" className="btn btn-primary">
+              View All {companies.length} Companies <ArrowRight size={16} />
+            </Link>
           </div>
         </div>
       </section>
