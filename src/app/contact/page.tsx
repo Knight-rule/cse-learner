@@ -30,7 +30,7 @@ export default function ContactPage() {
               <Mail size={24} />
             </div>
             <h3 className="heading-sm mb-2">Email Us</h3>
-            <p className="body-md">support@cselearner.com</p>
+            <p className="body-md">prashantbhandari988@gmail.com</p>
             <p className="body-sm" style={{ marginTop: 8 }}>We typically respond within 24 hours</p>
           </div>
           <div className="glass-card p-8 text-center">
