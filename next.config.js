@@ -25,7 +25,7 @@ const nextConfig = {
             "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://emkc.org https://wandbox.org",
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
             "font-src 'self' https://fonts.gstatic.com",
-            "img-src 'self' data: blob: https://logo.clearbit.com",
+            "img-src 'self' data: blob: https://www.google.com",
             "connect-src 'self' https://cdn.jsdelivr.net https://emkc.org https://wandbox.org https://api.judge0.com https://generativelanguage.googleapis.com",
             "frame-src 'self' blob:",
             "frame-ancestors 'none'",
