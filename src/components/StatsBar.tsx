@@ -49,7 +49,7 @@ const stats: Stat[] = [
   { value: 29, label: "Courses" },
   { value: 123, label: "Lessons" },
   { value: 334, label: "Practice Problems" },
-  { value: 1500, label: "Students", suffix: "+" },
+  { value: 60, label: "Hours of Content", suffix: "+" },
 ];
 
 export default function StatsBar() {

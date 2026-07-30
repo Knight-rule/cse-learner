@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
 import { ChevronRight, Loader2, Building2, Search, X, ExternalLink, Bookmark, BookmarkCheck } from "lucide-react";
-import { Company } from "@/lib/companies";
+import { Company, companies as allCompanies } from "@/lib/companies";
 
 const popularCategories = [
   "FAANG+",
@@ -28,7 +28,7 @@ export default function JobsPage() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [total, setTotal] = useState(0);
+  const [total, setTotal] = useState(allCompanies.length);
   const [loading, setLoading] = useState(true);
   const [savedTab, setSavedTab] = useState(false);
   const [savedCompanies, setSavedCompanies] = useState<string[]>([]);

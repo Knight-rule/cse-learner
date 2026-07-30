@@ -40,14 +40,15 @@ export default function Footer() {
           <div>
             <h4 className="footer-heading">Contact Us</h4>
             <ul className="footer-links footer-contact">
-              <li>{process.env.NEXT_PUBLIC_CONTACT_EMAIL || "prashantbhandari988@gmail.com"}</li>
+              <li>{process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact [at] cse-learner [dot] com"}</li>
               <li>Built for Computer Science Students</li>
               <li>Free &amp; Open Learning Platform</li>
             </ul>
           </div>
         </div>
-        <div className="footer-bottom">
+        <div className="footer-bottom" style={{ flexDirection: "column", gap: 8 }}>
           <p className="footer-copy">&copy; {new Date().getFullYear()} CSE Learner. All rights reserved.</p>
+          <p className="footer-copy" style={{ fontSize: 12, opacity: 0.7 }}>Progress data stored locally in your browser only. No accounts, no servers.</p>
           <div className="footer-socials">
             <a href="https://github.com/Knight-rule/cse-learner" target="_blank" rel="noopener noreferrer" aria-label="GitHub">GH</a>
             <a href="https://x.com/cselearner" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">X</a>

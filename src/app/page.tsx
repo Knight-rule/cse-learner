@@ -16,9 +16,9 @@ const features = [
 ];
 
 const testimonials = [
-  { name: "Sarah Mitchell", role: "Software Engineer", initials: "SM", quote: "CSE Learner helped me ace my data structures interview. The practice problems and code examples are incredibly useful." },
-  { name: "James Carter", role: "CS Student", initials: "JC", quote: "Best free platform for learning algorithms. The step-by-step lessons made complex topics easy to understand." },
-  { name: "Amina Hassan", role: "Backend Developer", initials: "AH", quote: "I went from struggling with OS concepts to confidently explaining process scheduling. Highly recommend!" },
+  { name: "Students & Educators", role: "CSE Community", initials: "CS", quote: "A growing collection of CS learning resources — from data structures to system design. Built by students, for students." },
+  { name: "Open Curriculum", role: "Computer Science", initials: "OC", quote: "Structured lessons covering core CSE topics with hands-on code examples and practice problems across 29+ subjects." },
+  { name: "Peer Reviewed", role: "Learning Platform", initials: "PR", quote: "Content aligned with standard university curricula. Practice problems with instant feedback to help reinforce concepts." },
 ];
 
 const faqs = [
@@ -285,7 +285,7 @@ export default function HomePage() {
               CS is the Future. Be a Part of It!
             </h2>
             <p className="body-lg mb-8 mx-auto" style={{ maxWidth: 500, position: "relative", zIndex: 2 }}>
-              Join thousands of students mastering computer science concepts and landing their dream tech jobs.
+              Start mastering computer science concepts with structured lessons and hands-on practice — completely free.
             </p>
             <Link href="/courses" className="btn btn-primary" style={{ position: "relative", zIndex: 2 }}>
               Join Now <ArrowRight size={16} />

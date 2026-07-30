@@ -5,3 +5,14 @@ out/
 .env.local
 .env.production
 npm-debug.log*
+test-results/
+test-results.json
+playwright-report/
+.cache/
+e2e/
+playwright.config.ts
+pnpm-lock.yaml
+pnpm-workspace.yaml
+AI-Mentor-Sketch.md
+tsconfig.tsbuildinfo
+scripts/

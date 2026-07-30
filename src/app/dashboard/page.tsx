@@ -6,6 +6,7 @@ import { ChevronRight, Briefcase, ArrowRight, Brain, Zap, Target, TrendingUp, Bo
 import DashboardStats from "@/components/DashboardStats";
 import ActivityFeed from "@/components/ActivityFeed";
 import { courses } from "@/data/courses";
+import { companies } from "@/lib/companies";
 import { getStats, getSRSStatsForCourse, getCertificates, type LearnerStats } from "@/lib/tracker";
 
 interface Recommendation {
@@ -205,7 +206,7 @@ export default function DashboardPage() {
                 <Briefcase size={24} color="#fff" />
               </div>
               <h3 className="heading-sm mb-2">Find Opportunities</h3>
-              <p className="body-sm mb-4">Browse 80+ top tech companies with direct career page links.</p>
+              <p className="body-sm mb-4">Browse {companies.length}+ top tech companies with direct career page links.</p>
               <Link href="/jobs" className="btn btn-primary w-full justify-center">
                 View Jobs <ArrowRight size={16} />
               </Link>

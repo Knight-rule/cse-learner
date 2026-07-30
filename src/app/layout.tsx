@@ -31,13 +31,16 @@ export const metadata: Metadata = {
     siteName: "CSE Learner",
     title: "CSE Learner - Master Computer Science",
     description: "Free interactive learning platform for CSE students. Practice problems, certificates, AI mentoring, and more.",
-    images: [{ url: "/og-image.svg", width: 1200, height: 630, alt: "CSE Learner" }],
+    images: [
+      { url: "/og-image.png", width: 1200, height: 630, alt: "CSE Learner" },
+      { url: "/og-image.svg", width: 1200, height: 630, alt: "CSE Learner" },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "CSE Learner - Master Computer Science",
     description: "Free interactive learning platform for CSE students.",
-    images: ["/og-image.svg"],
+    images: ["/og-image.png", "/og-image.svg"],
   },
   robots: { index: true, follow: true },
   icons: { icon: "/favicon.svg", apple: "/apple-touch-icon.svg" },

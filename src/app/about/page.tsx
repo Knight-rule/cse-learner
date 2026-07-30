@@ -1,5 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight, ArrowRight, BookOpen, Code, Brain, Users, Trophy, Target } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "About CSE Learner",
+  description: "Free interactive CSE learning platform built by students. Master Data Structures, Algorithms, OS, DBMS, Networks, and more with hands-on practice.",
+  openGraph: { title: "About CSE Learner", description: "Free interactive CSE learning platform. Master DSA, OS, DBMS, Networks and more." },
+  twitter: { title: "About CSE Learner", description: "Free interactive CSE learning platform." },
+};
 
 const team = [
   { name: "Built by Students", role: "For Students", icon: "👩‍💻" },
@@ -77,7 +85,7 @@ export default function AboutPage() {
         <div className="cta-section">
           <h2 className="heading-lg mb-4" style={{ position: "relative", zIndex: 2 }}>Ready to Start Learning?</h2>
           <p className="body-lg mb-6 mx-auto" style={{ maxWidth: 480, position: "relative", zIndex: 2 }}>
-            Join thousands of students already mastering computer science.
+            Start mastering computer science with structured lessons and hands-on practice.
           </p>
           <Link href="/courses" className="btn btn-primary" style={{ position: "relative", zIndex: 2 }}>
             Browse Courses <ArrowRight size={16} />
