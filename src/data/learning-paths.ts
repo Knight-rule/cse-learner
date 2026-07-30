@@ -19,6 +19,28 @@ export interface LearningPath {
 
 export const learningPaths: LearningPath[] = [
   {
+    id: "zero-to-placement",
+    title: "Zero to Placement (Complete Roadmap)",
+    description: "From absolute beginner to placement-ready. Follow this single track to master Python, C, Data Structures, Algorithms, OS, DBMS, Networks, and interview patterns — everything you need to crack TCS, Infosys, Wipro, and product company interviews.",
+    icon: "🎯",
+    color: "from-rose-500 to-pink-600",
+    targetAudience: "1st-4th Year / All Students",
+    estimatedTotalHours: 300,
+    courses: [
+      { slug: "python", order: 1, required: true, estimatedHours: 20 },
+      { slug: "c-language", order: 2, required: true, estimatedHours: 25 },
+      { slug: "c-pointers-memory", order: 3, required: true, estimatedHours: 10 },
+      { slug: "data-structures", order: 4, required: true, estimatedHours: 30 },
+      { slug: "algorithms", order: 5, required: true, estimatedHours: 25 },
+      { slug: "operating-systems", order: 6, required: true, estimatedHours: 30 },
+      { slug: "dbms", order: 7, required: true, estimatedHours: 25 },
+      { slug: "computer-networks", order: 8, required: true, estimatedHours: 25 },
+      { slug: "sql-mastery", order: 9, required: false, estimatedHours: 10 },
+      { slug: "oop", order: 10, required: true, estimatedHours: 15 },
+      { slug: "interview-dsa-patterns", order: 11, required: false, estimatedHours: 20, comingSoon: true },
+    ],
+  },
+  {
     id: "cs-fundamentals",
     title: "CS Fundamentals (Year 1)",
     description: "Core computer science concepts every student must master. Covers programming basics, data structures, and computer organization.",

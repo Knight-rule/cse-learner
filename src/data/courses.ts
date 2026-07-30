@@ -7800,6 +7800,376 @@ console.log("Metrics:", line.getMetrics());`,
 
     ],
 
+  },
+
+  {
+
+    slug: "c-pointers-memory",
+
+    title: "C Pointers & Memory",
+
+    description: "Master pointers, memory management, and low-level C programming concepts.",
+
+    icon: "📍",
+
+    color: "from-orange-500 to-red-600",
+    category: "Languages",
+
+    lessons: [
+
+      {
+
+        id: "1",
+
+        title: "What Are Pointers",
+
+        content: "A pointer is a variable that stores the memory address of another variable, not the value itself. Think of it like a street address — the address tells you where to find the house, but it is not the house. In C, every variable lives at a specific address in RAM, and the address-of operator & gives you that location. The dereference operator * reads the value stored at that address. Declaration: `int x = 10; int *p = &x;` — here p holds the address of x, and *p reads 10.\n\nCommon confusion: the * means two different things depending on context. In declaration `int *p`, it says \"p is a pointer to int.\" In expression `*p = 20`, it means \"write to the address p points to.\" This dual meaning trips up every beginner.\n\nNULL pointers are critical: a pointer that does not point to anything valid is dangerous. Dereferencing NULL causes a segmentation fault — your program crashes. Always initialize pointers: either assign them a valid address or set them to NULL. Check for NULL before dereferencing.\n\nInterview trap: \"What is a void pointer?\" A void* can point to any data type but cannot be dereferenced directly — you must cast it first. It is used extensively in malloc's return type and generic functions.\n\nMemory layout insight: local variables live on the stack (fast, automatic cleanup), while dynamically allocated memory lives on the heap (manual management). Pointers let you cross the boundary between these regions — understanding this distinction prevents 90% of memory bugs in C.",
+
+        codeExample: `#include <stdio.h>\n\nint main() {\n    int x = 42;\n    int *p = &x;       // p stores address of x\n\n    printf("x value: %d\\n", x);       // 42\n    printf("x address: %p\\n", &x);    // some address\n    printf("p value: %p\\n", p);       // same address\n    printf("p dereference: %d\\n", *p); // 42\n\n    *p = 100;          // write through pointer\n    printf("x now: %d\\n", x);         // 100\n\n    // NULL pointer check\n    int *q = NULL;\n    if (q != NULL) {\n        printf("%d\\n", *q);\n    } else {\n        printf("q is NULL, cannot dereference\\n");\n    }\n\n    return 0;\n}`,
+
+        language: "c"
+
+      },
+
+      {
+
+        id: "2",
+
+        title: "Pointer Arithmetic",
+
+        content: "Pointer arithmetic is not regular math — it scales by the size of the pointed-to type. When you increment an int* by 1, the address advances by sizeof(int), typically 4 bytes. An increment of char* moves by 1 byte. This is why `p + 1` does not always mean \"next byte\" — it means \"next element.\" Understanding this is essential for traversing arrays and buffers.\n\nSubtracting two pointers of the same type gives you the number of elements between them, not bytes. If p1 points to arr[3] and p2 points to arr[7], then p2 - p1 equals 4 (elements), even though the byte difference might be 16 bytes for ints. This is one of the few cases where pointer subtraction is defined by the C standard.\n\nDanger zone: pointer arithmetic on different arrays is undefined behavior. You can only meaningfully compare or subtract pointers that point into the same array (or one past the end). Comparing pointers from different malloc calls or different stack variables is meaningless and may produce garbage.\n\nCommon bug: iterating past array bounds. If arr has 5 elements (indices 0-4), then `p = arr + 5` points one past the end — this is valid to create but never to dereference. Dereferencing arr[5] reads random memory. Valgrind and AddressSanitizer catch these.\n\nInterview question: \"What does `*(arr + i)` equal?\" It equals arr[i]. The array name decays to a pointer to its first element, so arr + i points to the i-th element, and dereferencing it gives the value. This equivalence is fundamental to understanding C arrays.\n\nPractical tip: pointer arithmetic is the engine behind efficient string parsing, buffer processing, and implementing your own memory allocators.",
+
+        codeExample: `#include <stdio.h>\n\nint main() {\n    int arr[] = {10, 20, 30, 40, 50};\n    int *p = arr;       // points to arr[0]\n\n    // Traverse with pointer arithmetic\n    for (int i = 0; i < 5; i++) {\n        printf("arr[%d] = %d (addr: %p)\\n", i, *(p + i), (void*)(p + i));\n    }\n\n    // Increment pointer directly\n    printf("\\nFirst: %d\\n", *p);    // 10\n    p++;                              // now points to arr[1]\n    printf("After ++: %d\\n", *p);   // 20\n\n    // Pointer difference = element count\n    int *start = &arr[0];\n    int *end = &arr[4];\n    printf("Distance: %ld elements\\n", end - start); // 4\n\n    // char pointer arithmetic (moves by 1 byte)\n    char str[] = "Hello";\n    char *cp = str;\n    printf("Char: %c, next: %c\\n", *cp, *(cp + 1)); // H, e\n\n    // ⚠ DANGER: pointer comparison across arrays is undefined\n    // int a[5], b[5]; if (&a[4] > &b[0]) ... // UNDEFINED\n\n    return 0;\n}`,
+
+        language: "c"
+
+      },
+
+      {
+
+        id: "3",
+
+        title: "Dynamic Memory (malloc/free)",
+
+        content: "Stack memory is limited and automatically freed when a function returns. Heap memory, allocated with malloc, calloc, or realloc, persists until you explicitly free it. This gives you flexibility — arrays sized at runtime, data structures that grow and shrink — but demands discipline. Every malloc must have exactly one matching free. Miss the free and you leak memory. Free twice and you corrupt the heap.\n\nmalloc(size) allocates size bytes and returns a void* — always check for NULL before using it. If the system runs out of memory, malloc returns NULL. calloc(n, size) allocates n elements of size bytes each, initialized to zero — useful for arrays where zero-initialization matters. realloc(ptr, newSize) resizes a previous allocation; it may move the data to a new location, so always use the returned pointer, never the old one.\n\nCommon trap: allocating inside a function and returning the pointer. If you allocate on the stack (int arr[100]), it is destroyed when the function returns. You must malloc for heap allocation. Another trap: forgetting to free in error paths. If malloc succeeds but a later operation fails, you must free before returning.\n\nInterview question: \"What is a memory leak?\" It is allocated memory that is no longer reachable — no pointer references it. The program cannot free it, and the memory is wasted. Tools like Valgrind's memcheck detect leaks.\n\nPractical rule: always have a clear ownership model. Who allocated the memory? Who is responsible for freeing it? Document this in comments or use a consistent pattern (caller frees, or library frees). Mixed ownership causes 80% of memory bugs.",
+
+        codeExample: `#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n\nchar* create_greeting(const char* name) {\n    // +1 for null terminator\n    size_t len = strlen("Hello, ") + strlen(name) + 2;\n    char* greeting = malloc(len);\n    if (!greeting) {\n        fprintf(stderr, "malloc failed\\n");\n        return NULL;\n    }\n    snprintf(greeting, len, "Hello, %s!", name);\n    return greeting;  // caller must free()\n}\n\nint main() {\n    // malloc: raw allocation\n    int *arr = malloc(5 * sizeof(int));\n    if (!arr) return 1;\n    for (int i = 0; i < 5; i++) arr[i] = i * 10;\n\n    // realloc: resize\n    int *tmp = realloc(arr, 10 * sizeof(int));\n    if (!tmp) { free(arr); return 1; }\n    arr = tmp;\n\n    // calloc: zero-initialized\n    int *zeros = calloc(5, sizeof(int));\n    if (!zeros) { free(arr); return 1; }\n    // zeros[0] through zeros[4] are all 0\n\n    char *msg = create_greeting("World");\n    if (msg) {\n        printf("%s\\n", msg);\n        free(msg);    // must free what malloc returned\n    }\n\n    free(arr);\n    free(zeros);\n    return 0;\n}`,
+
+        language: "c"
+
+      },
+
+      {
+
+        id: "4",
+
+        title: "Arrays & Pointers Relationship",
+
+        content: "In C, an array name decays into a pointer to its first element in most contexts. When you write `int arr[5]`, arr behaves like `int* const arr` — a constant pointer to arr[0]. This is why you can pass arr to a function expecting int*: the decay happens automatically. But there are critical exceptions: sizeof(arr) returns the full array size (5 * sizeof(int)), not the pointer size. Once decayed to a pointer, sizeof gives you 4 or 8 bytes (pointer size), losing the array length.\n\nThis decay is the root cause of the \"arrays don't know their own size\" problem. When you pass an array to a function, you must also pass the length. Functions like `void process(int arr[], int len)` — the arr[] syntax is just syntactic sugar for int*.\n\nPointer-to-array vs array-of-pointers: `int (*p)[5]` is a pointer to an array of 5 ints. `int *p[5]` is an array of 5 int pointers. The parentheses change the meaning entirely. This distinction matters for 2D arrays and dynamic allocation.\n\nCommon bug: using sizeof on a pointer parameter. If you write `void foo(int arr[]) { int n = sizeof(arr); }`, n will be 4 or 8 (pointer size), not the array size. This is the most common array bug in C.\n\nInterview trap: \"What is the difference between arr and &arr?\" Both point to the same address, but arr decays to int* (pointer to first element), while &arr is int (*)[5] (pointer to the entire array). Pointer arithmetic behaves differently: arr + 1 moves by sizeof(int), &arr + 1 moves by 5*sizeof(int).\n\nEngineering tip: when allocating 2D arrays, malloc a single block and compute indices manually — this avoids pointer chasing and improves cache performance.",
+
+        codeExample: `#include <stdio.h>\n\nvoid print_array(int *arr, int len) {\n    // arr is a pointer here, sizeof(arr) = 8 (ptr size)\n    for (int i = 0; i < len; i++) {\n        printf("%d ", arr[i]);\n    }\n    printf("\\n");\n}\n\nint main() {\n    int arr[5] = {10, 20, 30, 40, 50};\n\n    // Array decays to pointer\n    int *p = arr;        // decay: arr -> &arr[0]\n    printf("arr[2] = %d\\n", arr[2]);     // 30\n    printf("*(p+2) = %d\\n", *(p + 2));   // 30\n    printf("p[2] = %d\\n", p[2]);         // 30\n\n    // sizeof trap\n    printf("sizeof(arr) = %zu\\n", sizeof(arr));   // 20 (5*4)\n    printf("sizeof(p) = %zu\\n", sizeof(p));       // 8  (pointer)\n\n    // &arr vs arr\n    printf("arr   = %p\\n", (void*)arr);\n    printf("&arr  = %p\\n", (void*)&arr);  // same address\n    printf("arr+1 = %p\\n", (void*)(arr + 1));   // +4 bytes\n    printf("&arr+1= %p\\n", (void*)(&arr + 1));  // +20 bytes\n\n    // Pass to function (decays to pointer)\n    print_array(arr, 5);\n\n    return 0;\n}`,
+
+        language: "c"
+
+      },
+
+      {
+
+        id: "5",
+
+        title: "Structs & Pointers",
+
+        content: "Structs group related data under one name. When you pass a struct by value, the entire struct is copied — expensive for large structs. Passing by pointer avoids the copy and allows the function to modify the original. The arrow operator -> combines dereference and member access: `p->name` is equivalent to `(*p).name`. This syntax is everywhere in C codebases.\n\nDefining a struct creates a new type, but memory is not allocated until you declare a variable of that type. A common pattern is defining a struct and a pointer to it simultaneously:\n\nStruct layout in memory matters for performance. Members are laid out in declaration order with padding for alignment. A struct with char, int, char uses 12 bytes (1 + 3 padding + 4 + 1 + 3 padding), not 6. Reorder members from largest to smallest to minimize padding.\n\nLinked list nodes are the classic use case for struct pointers: each node contains data and a pointer to the next node. Without pointers, you would need a contiguous array — linked lists exist precisely because pointers let you connect scattered heap allocations.\n\nCommon mistake: returning a pointer to a local struct. The struct lives on the stack and is destroyed when the function returns — the pointer becomes dangling. Always malloc the struct if you need to return it.\n\nInterview question: \"Implement a linked list insert at head.\" You allocate a new node, set its next to the current head, and update head to point to the new node. Three pointer assignments, all O(1).\n\nPractical tip: in large C projects, structs are often accessed through pointers exclusively. You will see function signatures like `void update_employee(Employee *emp)` everywhere — this is idiomatic C for pass-by-reference.",
+
+        codeExample: `#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n\ntypedef struct {\n    char name[50];\n    int age;\n    double salary;\n} Employee;\n\n// Pass by pointer to avoid copy\nvoid print_employee(const Employee *e) {\n    printf("%s (age %d): $%.2f\\n", e->name, e->age, e->salary);\n}\n\nvoid give_raise(Employee *e, double amount) {\n    e->salary += amount;  // modifies original\n}\n\n// Linked list node\ntypedef struct Node {\n    int data;\n    struct Node *next;    // pointer to same type\n} Node;\n\nNode* insert_head(Node *head, int val) {\n    Node *new_node = malloc(sizeof(Node));\n    if (!new_node) return head;\n    new_node->data = val;\n    new_node->next = head;\n    return new_node;     // new head\n}\n\nint main() {\n    Employee emp = {"Alice", 30, 75000.0};\n    print_employee(&emp);        // pass address\n    give_raise(&emp, 5000.0);\n    print_employee(&emp);        // salary increased\n\n    // Build linked list: 3 -> 2 -> 1\n    Node *list = NULL;\n    for (int i = 1; i <= 3; i++) {\n        list = insert_head(list, i);\n    }\n    for (Node *cur = list; cur; cur = cur->next) {\n        printf("%d -> ", cur->data);\n    }\n    printf("NULL\\n");\n\n    return 0;\n}`,
+
+        language: "c"
+
+      },
+
+      {
+
+        id: "6",
+
+        title: "Common Memory Bugs",
+
+        content: "Memory bugs in C are silent — your program compiles and runs, producing wrong results or crashing intermittently. The four most common bugs are memory leaks, dangling pointers, double frees, and buffer overflows.\n\nMemory leak: you malloc but never free. The memory is lost forever. Leaks accumulate over time; a server with a 1-byte-per-request leak serving 1000 requests/second loses ~86 MB/day. Valgrind's memcheck tool reports leaks with exact line numbers.\n\nDangling pointer: you free memory but continue using the pointer. The pointer still holds the old address, but that memory may now be used by something else. Reading it gives garbage; writing it corrupts another variable. Set pointers to NULL after freeing — dereferencing NULL crashes immediately (good), while dereferencing dangling memory silently corrupts data (bad).\n\nDouble free: calling free() on the same pointer twice. The heap manager tracks free blocks in a linked list; freeing twice corrupts this list, enabling heap exploitation attacks. This is a real security vulnerability.\n\nBuffer overflow: writing past the end of an allocated block. `malloc(10); arr[10] = 5;` writes into memory you do not own. This can corrupt adjacent heap data, overwrite return addresses (stack overflow), or cause crashes. It is the #1 exploited vulnerability in C code.\n\nPrevention checklist: (1) always check malloc return for NULL, (2) always pair malloc with free, (3) set pointers to NULL after free, (4) use size_t for indices and lengths (never signed), (5) always pass array length separately, (6) use AddressSanitizer (-fsanitize=address) during development.\n\nInterview question: \"What is use-after-free?\" It is accessing memory after it has been freed. Modern browsers (Chrome, Firefox) have had critical vulnerabilities from use-after-free in their C++ codebases. Understanding this bug is essential for both systems programming and security.",
+
+        codeExample: `#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n\nint main() {\n    // 1. Memory leak\n    char *leak = malloc(100);\n    strcpy(leak, "I am leaked");\n    // forgot free(leak) -- memory lost!\n\n    // 2. Dangling pointer\n    int *p = malloc(sizeof(int));\n    *p = 42;\n    free(p);\n    // p is now dangling -- *p is UNDEFINED\n    p = NULL;   // FIX: nullify after free\n\n    // 3. Double free (AVOID THIS)\n    int *q = malloc(sizeof(int));\n    *q = 10;\n    free(q);\n    // free(q);  // ⚠ DOUBLE FREE -- heap corruption!\n    q = NULL;   // FIX: nullify\n\n    // 4. Buffer overflow\n    int *buf = malloc(5 * sizeof(int));\n    for (int i = 0; i < 5; i++) buf[i] = i;\n    // buf[5] = 100;  // ⚠ OVERFLOW -- writes past allocation\n    free(buf);\n\n    // Safe pattern: always check malloc + track size\n    size_t capacity = 10;\n    int *safe_buf = malloc(capacity * sizeof(int));\n    if (!safe_buf) {\n        fprintf(stderr, "Out of memory\\n");\n        return 1;\n    }\n    size_t len = 0;\n    // Grow if needed\n    if (len == capacity) {\n        capacity *= 2;\n        int *tmp = realloc(safe_buf, capacity * sizeof(int));\n        if (!tmp) { free(safe_buf); return 1; }\n        safe_buf = tmp;\n    }\n    safe_buf[len++] = 42;\n\n    free(safe_buf);\n    return 0;\n}`,
+
+        language: "c"
+
+      },
+
+    ],
+
+  },
+
+  {
+
+    slug: "sql-mastery",
+
+    title: "SQL Mastery",
+
+    description: "Write efficient SQL queries from basics to advanced analytics.",
+
+    icon: "🗃️",
+
+    color: "from-blue-500 to-indigo-600",
+    category: "Systems",
+
+    lessons: [
+
+      {
+
+        id: "1",
+
+        title: "SELECT & Filtering",
+
+        content: "SQL queries always follow the same structure: SELECT what you want, FROM where it lives, WHERE which rows to keep, and ORDER BY how to sort. The database engine executes in a different order internally — FROM first, then WHERE, then SELECT, then ORDER BY. Understanding this execution order prevents logical errors.\n\nWHERE clauses support comparison operators (=, !=, <, >, <=, >=), logical operators (AND, OR, NOT), and special predicates: LIKE for pattern matching (% matches any string, _ matches one character), BETWEEN for ranges (inclusive on both ends), IN for set membership, and IS NULL / IS NOT NULL for missing values.\n\nCommon mistake: writing `WHERE salary = NULL`. NULL represents missing data, and nothing equals NULL — not even NULL. You must use IS NULL. This is because NULL is not a value; it is the absence of a value. Three-valued logic (TRUE, FALSE, UNKNOWN) governs all NULL comparisons.\n\nDISTINCT eliminates duplicate rows from results. But DISTINCT applies to the entire SELECT list, not individual columns. If you want unique combinations of (department, role), use `SELECT DISTINCT department, role` — not DISTINCT on just one.\n\nInterview tip: LIMIT and OFFSET control result pagination. `LIMIT 10 OFFSET 20` skips 20 rows and returns the next 10. But OFFSET-based pagination degrades for large offsets because the database still scans and discards skipped rows. Keyset pagination (WHERE id > last_seen_id) is faster for large datasets.",
+
+        codeExample: `-- Basic SELECT with filtering\nSELECT \n    employee_id,\n    first_name,\n    last_name,\n    salary,\n    department\nFROM employees\nWHERE department = 'Engineering'\n    AND salary >= 80000\n    AND hire_date BETWEEN '2022-01-01' AND '2024-12-31'\nORDER BY salary DESC\nLIMIT 20;\n\n-- Pattern matching with LIKE\nSELECT * FROM employees\nWHERE last_name LIKE 'Sm%'      -- starts with Sm\n   OR email LIKE '%@gmail.com'; -- Gmail users\n\n-- NULL checks\nSELECT * FROM employees\nWHERE manager_id IS NULL        -- top-level employees\n  AND termination_date IS NULL; -- still active\n\n-- DISTINCT for unique values\nSELECT DISTINCT department, role\nFROM employees\nORDER BY department;\n\n-- Pagination: page 3 (items 21-30)\nSELECT * FROM products\nWHERE category = 'Electronics'\nORDER BY product_id\nLIMIT 10 OFFSET 20;\n\n-- Keyset pagination (faster for large datasets)\nSELECT * FROM products\nWHERE category = 'Electronics'\n    AND product_id > 12345  -- last seen ID\nORDER BY product_id\nLIMIT 10;`,
+
+        language: "javascript"
+
+      },
+
+      {
+
+        id: "2",
+
+        title: "JOINs (INNER, LEFT, RIGHT, FULL)",
+
+        content: "JOINs combine rows from two tables based on a related column. The JOIN type determines which rows appear in the result when there is no match on one side.\n\nINNER JOIN returns only rows with matches in both tables. If a customer has no orders, they disappear from the result. This is the most common join and the default in most queries.\n\nLEFT JOIN (or LEFT OUTER JOIN) returns all rows from the left table and matched rows from the right. When there is no match, right-side columns are NULL. Use this when you need all customers, even those without orders — the order columns will be NULL.\n\nRIGHT JOIN is the mirror: all rows from the right table, matched from the left. You can always rewrite a RIGHT JOIN as a LEFT JOIN by swapping table order, so RIGHT JOIN is rarely used in practice.\n\nFULL OUTER JOIN returns all rows from both tables. Unmatched rows from either side get NULL. This is useful for reconciliation — finding records that exist in one system but not the other.\n\nCROSS JOIN produces the Cartesian product: every row from table A paired with every row from table B. A table with 100 rows CROSS JOINed with 50 rows produces 5,000 rows. Useful for generating combinations (e.g., all product-size-color variants).\n\nCommon mistake: forgetting the ON clause. `FROM A JOIN B` without ON produces a CROSS JOIN, which is usually not what you want. Always specify the join condition.\n\nInterview trap: \"Find customers who placed no orders.\" This is a LEFT JOIN + WHERE right-side IS NULL pattern. People often say \"use NOT EXISTS\" — both work, but LEFT JOIN + IS NULL is often clearer and sometimes faster.",
+
+        codeExample: `-- INNER JOIN: only matching rows\nSELECT c.name, o.order_date, o.total\nFROM customers c\nINNER JOIN orders o ON c.id = o.customer_id\nWHERE o.total > 100;\n\n-- LEFT JOIN: all customers, even without orders\nSELECT c.name, COALESCE(SUM(o.total), 0) AS lifetime_value\nFROM customers c\nLEFT JOIN orders o ON c.id = o.customer_id\nGROUP BY c.id, c.name;\n\n-- Find customers with NO orders\nSELECT c.name\nFROM customers c\nLEFT JOIN orders o ON c.id = o.customer_id\nWHERE o.id IS NULL;\n\n-- CROSS JOIN: all combinations\nSELECT p.name AS product, s.size\nFROM products p\nCROSS JOIN sizes s;\n\n-- SELF JOIN: find employees and their managers\nSELECT \n    e.name AS employee,\n    m.name AS manager\nFROM employees e\nLEFT JOIN employees m ON e.manager_id = m.id;\n\n-- JOIN 3 tables\nSELECT \n    o.id AS order_id,\n    c.name AS customer,\n    p.name AS product,\n    oi.quantity\nFROM orders o\nJOIN customers c ON o.customer_id = c.id\nJOIN order_items oi ON o.id = oi.order_id\nJOIN products p ON oi.product_id = p.id\nWHERE o.order_date >= '2024-01-01';`,
+
+        language: "javascript"
+
+      },
+
+      {
+
+        id: "3",
+
+        title: "GROUP BY & Aggregation",
+
+        content: "GROUP BY collapses rows with the same value in the grouped column(s) into single summary rows. Aggregate functions (COUNT, SUM, AVG, MIN, MAX) then operate on each group. The result has one row per group.\n\nRule: every column in SELECT must either be in the GROUP BY clause or wrapped in an aggregate function. `SELECT department, name FROM employees GROUP BY department` is invalid in standard SQL because name varies within each department. You can GROUP BY department, name (both columns) or use an aggregate on name.\n\nHAVING filters after grouping, while WHERE filters before. `WHERE salary > 50000` filters individual rows before grouping. `HAVING COUNT(*) > 5` filters groups after aggregation. You cannot use WHERE to filter on aggregate results — that requires HAVING.\n\nCOUNT(*) counts all rows including NULLs. COUNT(column) counts only non-NULL values. COUNT(DISTINCT column) counts unique non-NULL values. This distinction matters: a table with 10 rows where 3 have NULL department gives COUNT(*) = 10 but COUNT(department) = 7.\n\nGROUP BY with multiple columns creates nested groups: `GROUP BY department, role` groups by unique (department, role) combinations. ROLLUP and CUBE extensions add subtotals: ROLLUP creates hierarchical totals (department total, grand total), while CUBE creates all possible subtotal combinations.\n\nInterview question: \"What is the difference between WHERE and HAVING?\" WHERE filters individual rows before grouping; HAVING filters groups after aggregation. You cannot use aggregate functions in WHERE (except in subqueries). This is the most common SQL interview question.\n\nPractical tip: always alias aggregates for readability: `SELECT department, COUNT(*) AS headcount FROM employees GROUP BY department`. Future you will thank present you.",
+
+        codeExample: `-- Basic aggregation\nSELECT \n    department,\n    COUNT(*) AS headcount,\n    AVG(salary) AS avg_salary,\n    MAX(salary) AS top_salary,\n    MIN(salary) AS min_salary\nFROM employees\nGROUP BY department\nORDER BY headcount DESC;\n\n-- HAVING filters groups\nSELECT \n    department,\n    AVG(salary) AS avg_salary\nFROM employees\nGROUP BY department\nHAVING AVG(salary) > 90000;\n\n-- COUNT(*) vs COUNT(column)\nSELECT \n    COUNT(*) AS total_rows,        -- counts all\n    COUNT(manager_id) AS has_manager -- NULLs excluded\nFROM employees;\n\n-- GROUP BY multiple columns\nSELECT \n    department,\n    role,\n    COUNT(*) AS count,\n    AVG(salary) AS avg_salary\nFROM employees\nGROUP BY department, role\nHAVING COUNT(*) >= 3\nORDER BY department, avg_salary DESC;\n\n-- ROLLUP for subtotals\nSELECT \n    COALESCE(department, 'ALL') AS department,\n    COALESCE(role, 'ALL') AS role,\n    COUNT(*) AS headcount,\n    SUM(salary) AS total_salary\nFROM employees\nGROUP BY ROLLUP (department, role)\nORDER BY department, role;`,
+
+        language: "javascript"
+
+      },
+
+      {
+
+        id: "4",
+
+        title: "Subqueries & CTEs",
+
+        content: "A subquery (nested query) is a SELECT statement inside another query. Subqueries can appear in WHERE, FROM, and SELECT clauses. In WHERE, they filter results: `WHERE salary > (SELECT AVG(salary) FROM employees)`. The inner query runs first, producing a single value or set that the outer query uses.\n\nScalar subqueries return a single value and work anywhere a value is expected. Correlated subqueries reference the outer query and execute once per outer row — they are powerful but slow on large datasets because the database cannot optimize them easily. Always prefer JOINs over correlated subqueries when possible.\n\nEXISTS returns TRUE if the subquery finds any row: `WHERE EXISTS (SELECT 1 FROM orders WHERE orders.customer_id = customers.id)`. EXISTS short-circuits — it stops at the first match, making it faster than IN for large result sets. Use NOT EXISTS to find rows with no matching records.\n\nCTEs (Common Table Expressions), introduced with the WITH keyword, are named temporary result sets that exist for one query. They make complex queries readable by breaking them into logical steps. `WITH regional_sales AS (...), top_regions AS (...) SELECT ... FROM regional_sales JOIN top_regions ...`. Each CTE can reference previous CTEs.\n\nRecursive CTEs use UNION ALL with a base case and recursive step to traverse hierarchical data (org charts, tree structures, graph paths). They are the standard way to query parent-child relationships in relational databases.\n\nInterview question: \"Find the second highest salary.\" Classic approaches: subquery with MAX, LIMIT/OFFSET, or CTE with DENSE_RANK. The CTE approach is most general and handles ties correctly.\n\nPractical tip: use CTEs to make complex queries self-documenting. A query with 5 CTEs reads like a narrative: \"first compute this, then join with that, finally filter.\" Future maintainers will understand your intent.",
+
+        codeExample: `-- Subquery in WHERE\nSELECT name, salary\nFROM employees\nWHERE salary > (SELECT AVG(salary) FROM employees)\nORDER BY salary DESC;\n\n-- Correlated subquery: employees earning more than their dept avg\nSELECT name, department, salary\nFROM employees e1\nWHERE salary > (\n    SELECT AVG(salary)\n    FROM employees e2\n    WHERE e2.department = e1.department\n);\n\n-- EXISTS\nSELECT c.name\nFROM customers c\nWHERE EXISTS (\n    SELECT 1 FROM orders o\n    WHERE o.customer_id = c.id\n    AND o.total > 500\n);\n\n-- CTE: step-by-step readable query\nWITH dept_stats AS (\n    SELECT \n        department,\n        COUNT(*) AS headcount,\n        AVG(salary) AS avg_salary\n    FROM employees\n    GROUP BY department\n),\ntop_depts AS (\n    SELECT department\n    FROM dept_stats\n    WHERE headcount > 5\n)\nSELECT e.name, e.department, e.salary\nFROM employees e\nJOIN top_depts t ON e.department = t.department\nWHERE e.salary > 100000;\n\n-- Recursive CTE: org chart\nWITH RECURSIVE org AS (\n    SELECT id, name, manager_id, 1 AS level\n    FROM employees\n    WHERE manager_id IS NULL\n    UNION ALL\n    SELECT e.id, e.name, e.manager_id, o.level + 1\n    FROM employees e\n    JOIN org o ON e.manager_id = o.id\n)\nSELECT * FROM org ORDER BY level, name;`,
+
+        language: "javascript"
+
+      },
+
+      {
+
+        id: "5",
+
+        title: "Indexes & Performance",
+
+        content: "An index is a data structure (usually B-tree) that speeds up data retrieval at the cost of extra storage and slower writes. Without an index, every SELECT with a WHERE clause scans the entire table (full table scan). With an index on the filtered column, the database jumps directly to matching rows.\n\nB-tree indexes work by maintaining a sorted tree of values. Looking up a value is O(log n) instead of O(n). They support equality (=), range (<, >, BETWEEN), and ORDER BY on the indexed column. A composite index on (department, salary) supports queries filtering on department alone or (department, salary) together, but not salary alone — the leftmost prefix rule.\n\nEXPLAIN (or EXPLAIN ANALYZE in PostgreSQL) shows the query plan. Look for sequential scans on large tables — that usually means a missing index. Key fields: rows examined vs rows returned (high ratio = inefficient), type of join (nested loop vs hash vs merge), and whether the index is actually used.\n\nCovering indexes include all columns needed by the query, so the database never touches the table data. `CREATE INDEX idx ON employees(department, salary)` covers `SELECT salary FROM employees WHERE department = 'Eng'` entirely from the index.\n\nWhen NOT to index: small tables (< 1000 rows), columns with low cardinality (boolean, gender), and tables with heavy write load where index maintenance overhead is significant. Every index slows INSERT/UPDATE/DELETE because the index must be updated too.\n\nInterview question: \"When would you use a hash index vs B-tree?\" Hash indexes are faster for exact equality lookups (O(1) vs O(log n)) but cannot do range queries. Most databases default to B-tree because it handles both.\n\nPractical tip: before adding an index, measure with EXPLAIN. After adding it, measure query time before and after. Numbers beat intuition.",
+
+        codeExample: `-- Create indexes\nCREATE INDEX idx_emp_dept ON employees(department);\nCREATE INDEX idx_emp_salary ON employees(salary);\n\n-- Composite index (leftmost prefix rule)\nCREATE INDEX idx_emp_dept_salary ON employees(department, salary);\n-- ✅ This query uses the index:\nSELECT * FROM employees WHERE department = 'Engineering';\n-- ✅ This too:\nSELECT * FROM employees WHERE department = 'Engineering' AND salary > 100000;\n-- ❌ This does NOT (skips leftmost column):\nSELECT * FROM employees WHERE salary > 100000;\n\n-- Covering index: all data in the index\nCREATE INDEX idx_covering ON employees(department, salary, name);\n-- Query is satisfied entirely from index (no table access):\nSELECT name, salary FROM employees WHERE department = 'Engineering';\n\n-- EXPLAIN to check query plan\nEXPLAIN ANALYZE\nSELECT e.name, d.budget\nFROM employees e\nJOIN departments d ON e.department = d.name\nWHERE e.salary > 90000;\n-- Look for: Seq Scan (bad on large tables) vs Index Scan (good)\n\n-- Unique index: enforces no duplicates\nCREATE UNIQUE INDEX idx_unique_email ON users(email);\n\n-- Partial index (PostgreSQL)\nCREATE INDEX idx_active ON employees(salary)\nWHERE termination_date IS NULL;\n-- Index only active employees -- smaller, faster`,
+
+        language: "javascript"
+
+      },
+
+    ],
+
+  },
+
+  {
+
+    slug: "linux-command-line",
+
+    title: "Linux Command Line",
+
+    description: "Navigate, manipulate files, and automate tasks in the Linux terminal.",
+
+    icon: "🐧",
+
+    color: "from-gray-500 to-slate-600",
+    category: "Software Dev",
+
+    lessons: [
+
+      {
+
+        id: "1",
+
+        title: "File Operations (ls, cd, pwd, mkdir)",
+
+        content: "The Linux filesystem is a single tree rooted at /, unlike Windows with separate drive letters. Everything — files, directories, devices, processes — is a file in this tree. The pwd command shows your current location (print working directory). cd changes directory: `cd /home/user` goes to an absolute path, `cd ..` goes up one level, `cd ~` goes to your home directory, and `cd -` toggles between the current and previous directory.\n\nls lists directory contents. Key flags: -l (long format with permissions, size, date), -a (show hidden files starting with .), -h (human-readable sizes like 4K, 2M), -t (sort by modification time), -R (recursive listing). The output of ls -l shows file type, permissions, owner, group, size, date, and name.\n\nmkdir creates directories. Use -p to create nested directories in one command: `mkdir -p projects/web/src` creates all three levels. Without -p, it fails if the parent does not exist. rmdir removes empty directories; rm -rf removes directories and their contents recursively (dangerous — no undo).\n\nCommon pattern: `ls -lah` to see everything with human sizes, `tree -L 2` to visualize directory structure (install tree if missing). Tab completion is your best friend — press Tab to auto-complete file and directory names. Double-Tab shows all possibilities.\n\nFile creation shortcuts: touch creates an empty file or updates the timestamp. cp copies files (cp -r for directories). mv moves or renames. rm deletes permanently (no trash can).\n\nInterview/OS tip: understand the Filesystem Hierarchy Standard. /etc has config files, /var has logs and variable data, /tmp has temporary files, /usr has user programs, /home has user directories. Knowing where things live makes you efficient.",
+
+        codeExample: `# Navigate filesystem\npwd                          # /home/user\nls                           # list current directory\nls -lah                      # long format, hidden, human sizes\ncd projects                  # go into projects\ncd ..                        # go up one level\ncd /var/log                  # absolute path\ncd -                         # toggle previous directory\n\n# Create and remove directories\nmkdir myproject\nmkdir -p src/components/utils  # nested creation\nrmdir empty_dir               # only if empty\n\n# Copy, move, rename\ncp file.txt backup.txt\ncp -r src/ src_backup/        # recursive directory copy\nmv old_name.txt new_name.txt  # rename\nmv file.txt /tmp/             # move\n\n# Remove files (CAREFUL!)\nrm temp.txt\ncache/\nrm -rf old_project/           # ⚠ recursive force delete\n\n# View file contents\ncat README.md                 # print entire file\nhead -20 log.txt              # first 20 lines\ntail -20 log.txt              # last 20 lines\ntail -f /var/log/syslog       # follow new lines in real-time\n\n# File info\nfile mystery.dat              # identify file type\nstat file.txt                 # detailed metadata\ndu -sh *                      # disk usage per item`,
+
+        language: "javascript"
+
+      },
+
+      {
+
+        id: "2",
+
+        title: "Text Processing (grep, sed, awk)",
+
+        content: "Linux text processing tools are the Swiss Army knife of data manipulation. They excel at filtering, transforming, and extracting text from files and streams. Master these three and you can handle almost any text task without writing a program.\n\ngrep searches for patterns in text. Basic syntax: `grep 'pattern' file`. Key flags: -i (case-insensitive), -r (recursive search in directories), -n (show line numbers), -v (invert match — show non-matching lines), -c (count matches), -E (extended regex for +, ?, |, ()). The pattern supports regular expressions: `grep -E 'error|warning' log.txt` finds lines containing either word.\n\nsed (stream editor) performs find-and-replace on text streams. The basic form is `sed 's/old/new/g' file` — substitute 'old' with 'new' globally on each line. Use -i to edit files in place. sed can delete lines (`sed '/pattern/d' file`), insert text, and extract specific lines (`sed -n '10,20p' file` prints lines 10-20).\n\nawk is a full text-processing language. It splits each line by whitespace (or a custom delimiter), assigns fields to $1, $2, etc., and executes actions on matching patterns. `awk '{print $1, $3}' file` prints the first and third columns. `awk -F: '{print $1}' /etc/passwd` uses colon as delimiter.\n\nPiping these tools together is the Unix philosophy: `grep 'ERROR' app.log | awk '{print $4}' | sort | uniq -c | sort -rn` — find errors, extract timestamps, count unique, sort by frequency.\n\nInterview tip: know the difference between grep -E and egrep (they are the same), and between sed 's///' and sed -i 's///'. The -i flag modifies the file; without it, output goes to stdout.\n\nPractical example: quickly clean a CSV: `sed 's/,/|/g' data.csv` replaces commas with pipes.",
+
+        codeExample: `# grep: search patterns\ngrep 'error' /var/log/syslog           # basic search\ngrep -i 'warning' app.log              # case-insensitive\ngrep -rn 'TODO' src/                    # recursive with line numbers\ngrep -c '404' access.log                # count matches\ngrep -v 'DEBUG' app.log                 # exclude lines\ngrep -E 'error|panic|fatal' app.log     # extended regex\n\n# sed: stream editor\nsed 's/foo/bar/g' file.txt              # replace foo with bar\nsed -i 's/old/new/g' config.txt         # edit in-place\nsed -n '10,20p' file.txt                # print lines 10-20\nsed '/^#/d' config.txt                  # remove comment lines\necho 'hello world' | sed 's/world/!/'\n\n# awk: column processing\ncat data.csv | awk -F, '{print $1, $3}' # columns 1 and 3\nawk '$3 > 100 {print $1, $3}' sales.txt # filter by column value\nawk '{print NR, $0}' file.txt           # add line numbers\nawk '/pattern/ {count++} END {print count}' log.txt  # count\n\n# Pipes: combine tools\n# Find top 5 error types in a log\ngrep -oE 'Error\\[[A-Z]+\\]' app.log | sort | uniq -c | sort -rn | head -5\n\n# Extract IPs from access logs and count unique\nawk '{print $1}' access.log | sort | uniq -c | sort -rn | head -10`,
+
+        language: "javascript"
+
+      },
+
+      {
+
+        id: "3",
+
+        title: "Permissions & Users",
+
+        content: "Linux is a multi-user system where every file and process belongs to a user and a group. Permissions control who can read (r), write (w), and execute (x) a file. Understanding the permission model is essential for system administration, deployment, and security.\n\nls -l shows permissions as a 10-character string: first char is file type (- for file, d for directory, l for link), followed by three sets of rwx for user (owner), group, and others. `rwxr-xr--` means owner can read/write/execute, group can read/execute, others can read only. Octal notation: r=4, w=2, x=1, so rwx=7, r-x=5, r--=4. `chmod 755 file` sets rwxr-xr-x.\n\nchmod changes permissions: `chmod +x script.sh` adds execute. `chmod 644 file.txt` sets rw-r--r--. Recursive: `chmod -R 755 directory/` applies to all files inside. chown changes ownership: `chown user:group file`. You need root (sudo) to change ownership.\n\nThe sticky bit (chmod +t or 1xxx) on directories like /tmp means only the file owner can delete their own files inside. The setuid bit (4xxx) on executables runs them as the file owner — this is how sudo works. The setgid bit (2xxx) on directories makes new files inherit the directory's group.\n\nCommon scenario: a deploy script fails because the web server user (www-data or nginx) cannot read files owned by the deploy user. Fix: either chown the files to the web server user, or add the user to the file's group and grant group read permission.\n\nInterview question: \"What does chmod 777 do?\" It gives everyone full access — read, write, execute. This is a security anti-pattern. Files should have the minimum permissions needed. Use 644 for files, 755 for directories.\n\nSecurity tip: never use 777 in production. Use named groups to manage access: create a webteam group, add users to it, and set group permissions on shared directories.",
+
+        codeExample: `# View permissions\nls -la /etc/passwd\n# -rw-r--r-- 1 root root 2847 Jan 15 10:30 /etc/passwd\n\n# chmod: change permissions\nchmod 755 script.sh          # rwxr-xr-x\nchmod 644 config.txt         # rw-r--r--\nchmod +x deploy.sh           # add execute\nchmod -R 600 secrets/        # owner read/write only\n\n# Octal reference\n# r=4 w=2 x=1\n# 755 = rwxr-xr-x (dirs)\n# 644 = rw-r--r-- (files)\n# 700 = rwx------ (private dir)\n# 600 = rw------- (private file)\n\n# chown: change ownership\nsudo chown alice:developers app.log\nsudo chown -R www-data:www-data /var/www/html\n\n# Special bits\nchmod +t /tmp              # sticky bit: only owner can delete\nchmod u+s /usr/bin/passwd  # setuid: run as root\nchmod g+s shared/          # setgid: inherit group\n\n# Find files with specific permissions\nfind / -perm -777 -type f 2>/dev/null  # world-writable files\nfind . -perm 755 -type d              # directories with 755\n\n# Safe deployment pattern\nsudo useradd -r -s /bin/false appuser\nsudo chown -R appuser:appuser /opt/app\nsudo chmod -R 750 /opt/app`,
+
+        language: "javascript"
+
+      },
+
+      {
+
+        id: "4",
+
+        title: "Process Management (ps, kill, background jobs)",
+
+        content: "Every running program is a process with a unique Process ID (PID). The ps command lists processes: `ps aux` shows all processes with user, CPU%, MEM%, and command. `ps aux | grep nginx` finds nginx processes. top (or htop) shows real-time process monitoring sorted by CPU or memory usage.\n\nKilling processes: `kill PID` sends SIGTERM (15) — a polite request to terminate. The process can clean up and exit gracefully. `kill -9 PID` sends SIGKILL — an immediate forced kill with no cleanup. Always try SIGTERM first; only use SIGKILL if the process is unresponsive. `killall name` kills all processes with that name.\n\nBackground jobs: append & to run a command in the background: `python server.py &`. The shell returns the PID. Jobs lists background jobs with job numbers. `fg %1` brings job 1 to the foreground. `bg %1` resumes a stopped job in the background. Ctrl+Z suspends the current foreground job; bg then resumes it.\n\nnohup runs a command immune to hangups (survives terminal close): `nohup python server.py &`. Output goes to nohup.out by default. For production processes, use systemd or pm2 instead — they handle auto-restart, logging, and monitoring.\n\nProcess signals: SIGTERM (15) graceful shutdown, SIGKILL (9) force kill, SIGHUP (1) reload config (for servers that support it), SIGSTOP (19) pause, SIGCONT (18) resume.\n\nPractical workflow: start a long-running task, realize you need the terminal, Ctrl+Z to suspend, bg to run in background, disown to detach from the shell. Or just use nohup from the start.\n\nInterview question: \"How do you find what process is using a port?\" `lsof -i :8080` or `ss -tlnp | grep 8080` shows the process using that port. Essential for debugging \"port already in use\" errors.",
+
+        codeExample: `# List processes\nps aux                           # all processes\nps aux | grep node               # find node processes\nps -ef --forest                  # process tree\n\n# Real-time monitoring\ntop                              # live process monitor\nhtop                             # better top (install if needed)\n\n# Kill processes\nkill 1234                        # SIGTERM (graceful)\nkill -9 1234                     # SIGKILL (force)\nkillall node                     # kill all node processes\npkill -f \"python server\"        # kill by pattern\n\n# Background jobs\npython server.py &               # run in background\njobs                             # list background jobs\nfg %1                            # bring job 1 to foreground\nbg %1                            # resume job 1 in background\ndisown %1                        # detach from terminal\n\n# nohup: survive terminal close\nnohup python worker.py &         # output to nohup.out\nnohup python worker.py > out.log 2>&1 &  # custom output\n\n# Check port usage\nlsof -i :8080                   # who uses port 8080\nss -tlnp | grep 8080            # alternative\nnetstat -tlnp | grep 8080       # another alternative\n\n# System resource info\nfree -h                          # memory usage\ndf -h                            # disk usage\nuptime                           # load average`,
+
+        language: "javascript"
+
+      },
+
+      {
+
+        id: "5",
+
+        title: "Shell Scripting Basics",
+
+        content: "Shell scripts combine commands into reusable programs. A script starts with a shebang line: `#!/bin/bash` tells the system which interpreter to use. Without it, the script runs in the current shell, which may have different behavior. Always start with the shebang.\n\nVariables: `NAME=\"Alice\"` (no spaces around =), `echo $NAME` or `echo ${NAME}` to use them. Quoting matters: `\"$NAME\"` preserves spaces, `$NAME` without quotes splits on whitespace. Use double quotes around variables 99% of the time to prevent word splitting.\n\nConditionals: `if [ \"$NAME\" = \"Alice\" ]; then echo hi; fi`. Test commands use brackets: -f checks if file exists, -d checks directory, -z checks empty string, -n checks non-empty. The [[ ]] construct is safer than [ ] — it handles empty variables and pattern matching without quoting.\n\nLoops: `for f in *.txt; do echo $f; done` iterates over files. `while read -r line; do echo $line; done < file.txt` reads a file line by line. `while true; do sleep 1; done` creates an infinite loop.\n\nFunctions: `greet() { echo \"Hello $1\"; }` — $1 is the first argument. Call with `greet Alice`. Functions share the global scope by default; use local for variables: `local x=5`.\n\nError handling: `set -e` exits on any error. `set -u` errors on undefined variables. `set -o pipefail` catches errors in piped commands. Use these at the top of every serious script.\n\nInterview/production tip: use shellcheck (shellcheck.net) to catch common bugs: unquoted variables, missing shebang, deprecated syntax. It catches 80% of shell script bugs statically.",
+
+        codeExample: `#!/bin/bash\nset -euo pipefail  # exit on error, undefined vars, pipe errors\n\n# Variables\nNAME=\"Alice\"\nAGE=30\necho \"Hello $NAME, you are $AGE years old\"\n\n# Conditional\nif [ -f \"/etc/passwd\" ]; then\n    echo \"Password file exists\"\nelif [ -d \"/opt\" ]; then\n    echo \"/opt exists\"\nelse\n    echo \"Neither found\"\nfi\n\n# String comparison\nif [[ \"$NAME\" == \"Alice\" ]]; then\n    echo \"Welcome back, Alice\"\nfi\n\n# For loop\nfor file in *.txt; do\n    echo \"Processing: $file\"\n    wc -l \"$file\"\ndone\n\n# While loop\nCOUNT=0\nwhile [ $COUNT -lt 5 ]; do\n    echo \"Count: $COUNT\"\n    ((COUNT++))\ndone\n\n# Function\ncalculate() {\n    local a=$1\n    local b=$2\n    echo $((a + b))\n}\n\nRESULT=$(calculate 3 4)\necho \"3 + 4 = $RESULT\"\n\n# Read file line by line\nwhile IFS= read -r line; do\n    echo \"Line: $line\"\ndone < data.txt`,
+
+        language: "javascript"
+
+      },
+
+    ],
+
+  },
+
+  {
+
+    slug: "git-version-control",
+
+    title: "Git & Version Control",
+
+    description: "Track changes, collaborate, and manage code history with Git.",
+
+    icon: "🔀",
+
+    color: "from-amber-500 to-orange-600",
+    category: "Software Dev",
+
+    lessons: [
+
+      {
+
+        id: "1",
+
+        title: "Init, Add, Commit",
+
+        content: "Git is a distributed version control system that tracks snapshots of your project, not diffs. Every commit captures the entire state of tracked files at that moment. This makes branching, merging, and history inspection fast and reliable.\n\n`git init` creates a .git directory that stores all version history. `git clone` copies an existing repository. `git add file.txt` stages changes — Git only commits what you stage, giving you precise control over each commit. `git commit -m \"description\"` creates a snapshot of staged changes with a message.\n\nThe three-file model: Working Directory (your files), Staging Area (index — what will be committed), Repository (.git — committed history). `git status` shows all three states. `git diff` shows unstaged changes, `git diff --staged` shows staged changes.\n\nCommit messages matter. A good message explains WHY, not WHAT. `\"Fix login validation\"` is better than `\"Update index.js\"` because the code shows what changed. Use imperative mood: \"Add feature\" not \"Added feature\". Keep under 72 characters for the first line.\n\n.gitignore prevents files from being tracked. Essential entries: node_modules/, .env, *.log, dist/, .DS_Store. Create .gitignore before your first commit — removing tracked files later is messy.\n\nCommon mistake: committing too many changes in one commit or committing too often with trivial changes. Aim for logical commits: each commit should be a complete, self-contained change that could be reverted independently.\n\nInterview question: \"What is the difference between git reset and git revert?\" Reset moves HEAD backward (rewrites history), revert creates a new commit that undoes changes (preserves history). On shared branches, always use revert.",
+
+        codeExample: `# Initialize repository\ngit init\n\n# Check status\ngit status\n\n# Stage specific files\ngit add README.md\n\n# Stage all changes\ngit add .\n\n# Commit with message\ngit commit -m \"Initial commit: project setup\"\n\n# See what changed\ngit diff                    # unstaged changes\ngit diff --staged           # staged changes\ngit diff HEAD               # all changes since last commit\n\n# View history\ngit log --oneline           # compact log\ngit log --graph --oneline   # with branch graph\ngit log --stat              # with file changes\n\n# Amend last commit\ngit commit --amend -m \"Better message\"\n\n# Undo working directory changes\ngit checkout -- file.txt    # discard changes\ngit restore file.txt        # modern equivalent\n\n# Unstage a file\ngit reset HEAD file.txt     # keep changes, unstage\ngit restore --staged file.txt  # modern equivalent\n\n# .gitignore example\necho \"node_modules/\" > .gitignore\necho \".env\" >> .gitignore\necho \"*.log\" >> .gitignore\ngit add .gitignore\ngit commit -m \"Add .gitignore\"`,
+
+        language: "javascript"
+
+      },
+
+      {
+
+        id: "2",
+
+        title: "Branching & Merging",
+
+        content: "Branches are lightweight pointers to commits. The default branch is main (or master). Creating a branch copies this pointer — it does not copy the entire codebase. This is why branching in Git is nearly instant.\n\n`git branch feature` creates a new branch. `git checkout feature` (or `git switch feature`) switches to it. All new commits go to the current branch. `git branch -d feature` deletes a merged branch. `git branch -D feature` force-deletes an unmerged branch.\n\nFast-forward merge: when the target branch has no new commits since the source branched off, Git simply moves the pointer forward. `git checkout main; git merge feature` — if main has not moved, the merge is instant with no merge commit.\n\nThree-way merge: when both branches have new commits, Git creates a merge commit with two parents. This preserves the history of both branches. Git automatically resolves non-conflicting changes; conflicting changes require manual resolution.\n\nRebase replays commits from one branch onto another, creating a linear history. `git checkout feature; git rebase main` moves feature's commits to sit on top of main. This avoids merge commits but rewrites history — never rebase shared branches.\n\nBranch strategy: feature branches for new work, develop for integration, main for production. Create feature branches from develop, merge back via pull request. Release branches for version stabilization.\n\nCommon mistake: committing directly to main. Always work on a feature branch — even for small fixes. This protects the main branch and enables code review.\n\nInterview question: \"When would you use merge vs rebase?\" Merge preserves history and is safe for shared branches. Rebase creates clean linear history and is ideal for local feature branches before sharing.",
+
+        codeExample: `# Create and switch to branch\ngit switch -c feature-login    # create + switch\n\n# List branches\ngit branch                     # local branches\ngit branch -r                  # remote branches\ngit branch -a                  # all branches\n\n# Work on feature branch\ngit add .\ngit commit -m \"Add login form\"\ngit commit -m \"Add validation\"\n\n# Merge to main\ngit switch main\ngit merge feature-login        # fast-forward or 3-way merge\n\n# Delete branch after merge\ngit branch -d feature-login\n\n# Rebase: linear history\ngit switch feature-login\ngit rebase main                # replay on top of main\n# resolve any conflicts, then:\ngit push origin feature-login --force-with-lease\n\n# Interactive rebase: clean up commits\ngit rebase -i HEAD~3           # last 3 commits\n# pick   = keep commit\n# squash = combine with previous\n# drop   = remove commit\n\n# Merge conflicts (see next lesson)\ngit merge feature-branch\n# CONFLICT (content): Merge conflict in file.js\ngit status                     # shows conflicted files\n# edit files, then:\ngit add .\ngit commit                     # complete the merge`,
+
+        language: "javascript"
+
+      },
+
+      {
+
+        id: "3",
+
+        title: "Remote Repos & Push/Pull",
+
+        content: "A remote is a version of your repository hosted elsewhere (GitHub, GitLab, Bitbucket). `git remote -v` shows configured remotes. The default remote is origin, set when you clone a repository. You can add multiple remotes for different purposes.\n\n`git push origin main` uploads your local commits to the remote. `git push -u origin feature` pushes and sets upstream tracking — future pushes from that branch need only `git push`. `git push` without arguments pushes the current branch to its upstream.\n\n`git pull` is fetch + merge: it downloads remote changes and merges them into your current branch. `git fetch` downloads changes without merging — inspect them with `git log main..origin/main` before merging. This two-step approach gives you control over when to integrate.\n\n`git clone` copies the entire repository history. `git clone --depth 1 repo` creates a shallow clone with only the latest commit — useful for CI/CD where you do not need full history.\n\nTracking branches: `git branch -vv` shows which remote branch each local branch tracks. When you push, Git updates the remote tracking branch. When you fetch, Git updates remote tracking branches to reflect the remote's current state.\n\nCommon scenario: you pull and get a merge commit that says \"Merge origin/main into main.\" This happens when you committed locally while the remote had new commits. To avoid this, rebase before pushing: `git pull --rebase origin main` replays your local commits on top of remote changes.\n\nSecurity: never hardcode credentials in code. Use SSH keys or credential managers. GitHub's CLI (gh) simplifies authentication.\n\nInterview question: \"What is the difference between git fetch and git pull?\" Fetch downloads changes to remote tracking branches without modifying your working directory. Pull fetches AND merges into your current branch. Fetch is safer for inspection.",
+
+        codeExample: `# Remote management\ngit remote -v                     # list remotes\ngit remote add upstream https://github.com/org/repo.git\ngit remote remove old-origin\n\n# Push\ngit push origin main              # push main\ngit push origin feature-login     # push branch\n\n# First time: set upstream\ngit push -u origin feature-login  # push + track\n# Now just: git push\n\n# Fetch and merge\ngit fetch origin                  # download changes\ngit log main..origin/main         # preview remote changes\ngit merge origin/main             # merge remote changes\n\n# Or: pull with rebase (cleaner)\ngit pull --rebase origin main     # rebase on remote\n\n# Shallow clone (for CI)\ngit clone --depth 1 https://github.com/org/repo.git\ngit clone --depth 50 --single-branch https://github.com/org/repo.git\n\n# See all branches and tracking\ngit branch -vv\n# * feature-login abc1234 [origin/feature-login] Add login\n#   main          def5678 [origin/main] Latest main\n\n# Force push (use carefully)\ngit push --force-with-lease origin feature  # safer than --force\n\n# Pull with autostash (saves uncommitted work)\ngit pull --autostash origin main`,
+
+        language: "javascript"
+
+      },
+
+      {
+
+        id: "4",
+
+        title: "Merge Conflicts & Resolution",
+
+        content: "Merge conflicts occur when Git cannot automatically reconcile changes from two branches. This happens when the same line is modified in both branches, when one branch deletes a file the other modifies, or when both branches add a file with the same name.\n\nWhen a conflict happens, Git marks the conflicting sections with conflict markers: <<<<<<< HEAD (your changes), ======= (separator), >>>>>>> branch-name (their changes). Your job is to manually choose the correct version, remove the markers, and commit the result.\n\nResolution workflow: (1) Open the conflicted file, (2) find all <<<<<<< markers, (3) decide which version to keep (or combine both), (4) remove all conflict markers, (5) git add the resolved files, (6) git commit to complete the merge.\n\nPreventing conflicts: keep feature branches short-lived. The longer a branch lives, the more likely it conflicts with main. Pull main into your feature branch frequently (git pull --rebase origin main) to resolve conflicts incrementally.\n\nMerge vs rebase conflict handling: merge creates a merge commit and may produce multiple conflict points resolved in one commit. Rebase replays commits one by one, so you resolve conflicts per commit — this is often easier because each conflict is smaller.\n\nTools for conflict resolution: VS Code highlights conflicts inline with Accept Current/Accept Incoming buttons. Git mergetool launches a visual diff tool. For simple conflicts, VS Code or vim is fine; for complex ones, a visual tool helps.\n\nCommon mistake: accidentally keeping both versions (left the conflict markers in). Always search for <<<<<<< before committing. Some CI pipelines have a pre-commit check for conflict markers.\n\nInterview question: \"How do you abort a merge in progress?\" `git merge --abort` resets to the state before the merge started. For rebase: `git rebase --abort`.",
+
+        codeExample: `# Start a merge that conflicts\ngit merge feature-new-ui\n# CONFLICT (content): Merge conflict in src/App.js\n# Automatic merge failed; fix conflicts and then commit.\n\n# See conflicted files\ngit status\n# both modified: src/App.js\n\n# Open file and resolve conflicts\n# File shows:\n# <<<<<<< HEAD\n# const theme = 'dark';\n# =======\n# const theme = 'light';\n# >>>>>>> feature-new-ui\n\n# After manual edit, file becomes:\n# const theme = getPreferredTheme();\n\n# Complete the merge\ngit add src/App.js\ngit commit -m \"Merge feature-new-ui, resolve theme conflict\"\n\n# Or abort if too messy\ngit merge --abort\n\n# For rebase conflicts\ngit rebase main\n# CONFLICT in file.js\n# edit file, then:\ngit add file.js\ngit rebase --continue          # or --abort\n\n# See conflict history\ngit log --merge --oneline      # commits involved in merges\ngit diff --name-only --diff-filter=U  # conflicted files\n\n# rerere: remember conflict resolutions\nrerere                         # reuse recorded resolution\ngit config rerere.enabled true # auto-apply past resolutions`,
+
+        language: "javascript"
+
+      },
+
+      {
+
+        id: "5",
+
+        title: "Git Workflow (Feature Branch, PR)",
+
+        content: "The feature branch workflow is the standard for team development. Every change lives on a dedicated branch, gets reviewed via a pull request (PR), and merges into main after approval. This keeps main always deployable.\n\nWorkflow: (1) Create a feature branch from main: `git switch -c feature/user-profile`. (2) Make commits with clear messages. (3) Push the branch: `git push -u origin feature/user-profile`. (4) Open a PR in GitHub/GitLab. (5) Address review comments with additional commits. (6) Merge after approval (squash merge or merge commit).\n\nSquash merge compresses all feature branch commits into one commit on main. This keeps main history clean: each PR is one commit. Use rebase merge for preserving individual commits when they tell a story. Avoid regular merge commits for features — they pollute main history with merge noise.\n\nPR best practices: keep PRs small (under 400 lines), write descriptive titles and descriptions, link to issues, add screenshots for UI changes, request specific reviewers, and ensure CI passes before requesting review.\n\nConventional commits format: `feat: add user profile page`, `fix: resolve login timeout`, `docs: update API reference`, `refactor: extract validation logic`. Tools like commitlint enforce this format and auto-generate changelogs.\n\nBranch naming conventions: feature/user-auth, bugfix/login-error, hotfix/security-patch, chore/update-deps. Include the ticket number: feature/PROJ-123-user-auth.\n\nCode review checklist: does it work? Is it tested? Is it readable? Does it follow conventions? Are there security concerns? Is error handling complete? Review the diff, not just the final state — context matters.\n\nInterview question: \"Describe your Git workflow.\" Feature branch from main, small focused PRs, code review, squash merge, CI/CD pipeline, deploy from main. Mention specific practices: conventional commits, branch naming, PR templates.",
+
+        codeExample: `# Feature branch workflow\ngit switch main\ngit pull origin main\ngit switch -c feature/user-profile\n\n# Make changes and commit\ngit add .\ngit commit -m \"feat: add user profile page\"\ngit commit -m \"feat: add profile editing\"\ngit commit -m \"fix: validate avatar upload size\"\n\n# Push and create PR\ngit push -u origin feature/user-profile\n# Then create PR on GitHub/GitLab\n\n# Address review feedback\ngit add .\ngit commit -m \"fix: address review comments\"\ngit push  # PR updates automatically\n\n# After PR is approved, merge via UI (squash merge)\n\n# Clean up after merge\ngit switch main\ngit pull origin main\ngit branch -d feature/user-profile\n\n# Branch naming examples\n# feature/PROJ-123-user-auth\n# bugfix/fix-login-timeout\n# hotfix/security-patch-v2\n# chore/update-dependencies\n\n# Conventional commits\ngit commit -m \"feat(auth): add OAuth2 support\"\ngit commit -m \"fix(api): handle null response\"\ngit commit -m \"docs(readme): add setup instructions\"\ngit commit -m \"refactor(db): optimize query builder\"\n\n# Stash work-in-progress\ngit stash push -m \"WIP: profile form\"\ngit stash list\ngit stash pop                    # apply and remove`,
+
+        language: "javascript"
+
+      },
+
+    ],
+
   }
 
 ];
