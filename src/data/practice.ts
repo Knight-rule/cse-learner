@@ -381,4 +381,230 @@ export const practiceData: CoursePractice[] = [
       { id: "i4-3", title: "Predictive Maintenance Score", description: "Calculate a health score for equipment based on sensor readings.\n\n**Formula:** `score = 100 - (vibration*2 + temperature*0.5 + errorCount*10)`\n**Clamp to [0, 100].**", difficulty: "easy", language: "javascript", chapter: "Predictive Analytics", starterCode: "function healthScore(vibration, temperature, errorCount) {\n  // Your code here\n  \n}", testCases: [{ input: "5, 80, 2", expected: "70" }, { input: "20, 100, 10", expected: "0" }], hints: ["Apply the formula.", "Use Math.max(0, Math.min(100, score)) to clamp."] },
     ],
   },
+  // ─── HTML ───
+  {
+    courseSlug: "html",
+    problems: [
+      {
+          id: "html-1",
+          title: "Create a Basic HTML Document Structure",
+          description: "Create a valid HTML5 document with DOCTYPE, html, head, and body elements.",
+          difficulty: "easy",
+          language: "javascript",
+          chapter: "Introduction",
+          starterCode: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Document</title>\n</head>\n<body>\n  <!-- Your content here -->\n</body>\n</html>",
+          testCases: [{input: "", expected: "Document contains <!DOCTYPE html>, <html>, <head>, <body>"}],
+          hints: ["Use <!DOCTYPE html> as the first line.", "The html element should have lang attribute."]
+      },
+      {
+          id: "html-2",
+          title: "HTML Headings Hierarchy",
+          description: "Create proper heading hierarchy from h1 to h6 in order.",
+          difficulty: "easy",
+          language: "javascript",
+          chapter: "Elements",
+          starterCode: "<body>\n  <!-- Add headings h1 through h6 -->\n</body>",
+          testCases: [{input: "", expected: "Contains h1, h2, h3, h4, h5, h6 in order"}],
+          hints: ["Use <h1> for main title, <h2> for sections, etc.", "Never skip heading levels."]
+      },
+      {
+          id: "html-3",
+          title: "Paragraphs and Line Breaks",
+          description: "Create paragraphs with proper structure and use <br> for line breaks within paragraphs.",
+          difficulty: "easy",
+          language: "javascript",
+          chapter: "Elements",
+          starterCode: "<body>\n  <!-- Create two paragraphs and use br for line breaks -->\n</body>",
+          testCases: [{input: "", expected: "Contains at least 2 <p> tags and 1 <br>"}],
+          hints: ["Use <p> for paragraphs.", "Use <br> only for line breaks within existing content."]
+      },
+      {
+          id: "html-4",
+          title: "HTML Comments",
+          description: "Add HTML comments to explain code sections without affecting rendering.",
+          difficulty: "easy",
+          language: "javascript",
+          chapter: "Introduction",
+          starterCode: "<body>\n  <!-- Main content section -->\n  <p>Hello World</p>\n  <!-- TODO: Add footer here -->\n</body>",
+          testCases: [{input: "", expected: "Contains at least one <!-- comment -->"}],
+          hints: ["Comments start with <!-- and end with -->.", "Comments are invisible to users."]
+      },
+      {
+          id: "html-5",
+          title: "HTML Entities",
+          description: "Use HTML entities to display special characters that would otherwise be interpreted as HTML.",
+          difficulty: "easy",
+          language: "javascript",
+          chapter: "Introduction",
+          starterCode: "<p>\n  <!-- Display these characters: < > & \" ©\n  Use entities: &lt; &gt; &amp; &quot; &copy;\n</p>",
+          testCases: [{input: "", expected: "Contains &lt;, &gt;, &amp;, &copy; entities"}],
+          hints: ["Use &lt; for less-than, &gt; for greater-than.", "Use &amp; for ampersand."]
+      },
+      {
+          id: "html-6",
+          title: "Creating Hyperlinks",
+          description: "Create links to external pages, internal sections, and email addresses.",
+          difficulty: "easy",
+          language: "javascript",
+          chapter: "Links",
+          starterCode: "<nav>\n  <!-- Add links here -->\n</nav>",
+          testCases: [{input: "", expected: "Contains at least 3 <a> tags with href"}],
+          hints: ["Use href attribute for URL.", "Use mailto: for email links."]
+      },
+      {
+          id: "html-7",
+          title: "Link Targets and Attributes",
+          description: "Add target, rel, and title attributes to links for security and accessibility.",
+          difficulty: "medium",
+          language: "javascript",
+          chapter: "Links",
+          starterCode: "<a href=\"https://example.com\">External Link</a>",
+          testCases: [{input: "", expected: "Link has target=\"_blank\" and rel=\"noopener noreferrer\""}],
+          hints: ["Always use rel=\"noopener\" with target=\"_blank\".", "Add title for tooltip text."]
+      },
+      {
+          id: "html-8",
+          title: "Embedding Images",
+          description: "Add images with proper src, alt, width, and height attributes.",
+          difficulty: "easy",
+          language: "javascript",
+          chapter: "Images",
+          starterCode: "<figure>\n  <!-- Add an image with alt text -->\n</figure>",
+          testCases: [{input: "", expected: "Contains <img> with src and alt attributes"}],
+          hints: ["Always include alt text for accessibility.", "Set width and height to prevent layout shift."]
+      },
+      {
+          id: "html-9",
+          title: "Image Alt Text Best Practices",
+          description: "Write appropriate alt text for informative and decorative images.",
+          difficulty: "medium",
+          language: "javascript",
+          chapter: "Images",
+          starterCode: "<img src=\"photo.jpg\" alt=\"\">\n<img src=\"chart.png\" alt=\"\">",
+          testCases: [{input: "", expected: "Decorative image has empty alt, informative image has descriptive alt"}],
+          hints: ["Decorative images: alt=\"\".", "Informative images: describe content and function."]
+      },
+      {
+          id: "html-10",
+          title: "Responsive Images with srcset",
+          description: "Use srcset and sizes attributes to serve appropriate images for different viewports.",
+          difficulty: "hard",
+          language: "javascript",
+          chapter: "Images",
+          starterCode: "<img src=\"photo.jpg\" alt=\"Responsive image\">\n<!-- Add srcset and sizes -->",
+          testCases: [{input: "", expected: "Contains srcset and sizes attributes"}],
+          hints: ["Provide multiple image URLs with width descriptors.", "Use sizes to define breakpoints."]
+      },
+      {
+          id: "html-11",
+          title: "Basic HTML Table",
+          description: "Create a table with thead, tbody, and proper header cells with scope.",
+          difficulty: "easy",
+          language: "javascript",
+          chapter: "Tables",
+          starterCode: "<table>\n  <!-- Create table with headers and data cells -->\n</table>",
+          testCases: [{input: "", expected: "Contains thead, tbody, th with scope=\"col\""}],
+          hints: ["Use <th> for headers.", "Add scope=\"col\" for column headers."]
+      },
+      {
+          id: "html-12",
+          title: "Table Colspan and Rowspan",
+          description: "Use colspan and rowspan to merge cells in an HTML table.",
+          difficulty: "medium",
+          language: "javascript",
+          chapter: "Tables",
+          starterCode: "<table>\n  <tr>\n    <td>A</td><td>B</td><td>C</td>\n  </tr>\n  <tr>\n    <td>D</td><td>E</td><td>F</td>\n  </tr>\n</table>\n<!-- Make cell A span 2 columns -->",
+          testCases: [{input: "", expected: "Contains colspan or rowspan attribute"}],
+          hints: ["colspan merges columns horizontally.", "rowspan merges rows vertically."]
+      },
+      {
+          id: "html-13",
+          title: "Ordered and Unordered Lists",
+          description: "Create both ordered (numbered) and unordered (bulleted) lists.",
+          difficulty: "easy",
+          language: "javascript",
+          chapter: "Lists",
+          starterCode: "<nav>\n  <!-- Add one ordered and one unordered list -->\n</nav>",
+          testCases: [{input: "", expected: "Contains <ol> and <ul> with at least 3 items each"}],
+          hints: ["Use <ol> for numbered lists.", "Use <ul> for bulleted lists."]
+      },
+      {
+          id: "html-14",
+          title: "Nested Lists",
+          description: "Create a nested list structure with sub-items.",
+          difficulty: "medium",
+          language: "javascript",
+          chapter: "Lists",
+          starterCode: "<ul>\n  <li>Item 1\n    <!-- Add nested sub-items -->\n  </li>\n</ul>",
+          testCases: [{input: "", expected: "Contains nested <ul> or <ol> inside <li>"}],
+          hints: ["Place nested list inside the parent <li>.", "Indentation helps readability."]
+      },
+      {
+          id: "html-15",
+          title: "Description List",
+          description: "Create a description list with terms and descriptions.",
+          difficulty: "easy",
+          language: "javascript",
+          chapter: "Lists",
+          starterCode: "<!-- Create a description list for a glossary -->",
+          testCases: [{input: "", expected: "Contains <dl>, <dt>, and <dd> elements"}],
+          hints: ["Use <dl> for the list.", "Use <dt> for terms, <dd> for descriptions."]
+      },
+      {
+          id: "html-16",
+          title: "Basic Form Structure",
+          description: "Create a form with proper structure, labels, and input fields.",
+          difficulty: "easy",
+          language: "javascript",
+          chapter: "Forms",
+          starterCode: "<form>\n  <!-- Add name, email, and submit button -->\n</form>",
+          testCases: [{input: "", expected: "Contains form, label, input, and button elements"}],
+          hints: ["Always pair <label> with <input> using for/id.", "Use type=\"submit\" for submit button."]
+      },
+      {
+          id: "html-17",
+          title: "Input Types",
+          description: "Use appropriate HTML5 input types for different data (email, number, date, etc.).",
+          difficulty: "medium",
+          language: "javascript",
+          chapter: "Forms",
+          starterCode: "<form>\n  <!-- Add email, number, date, and checkbox inputs -->\n</form>",
+          testCases: [{input: "", expected: "Contains input types: email, number, date, checkbox"}],
+          hints: ["Use type=\"email\" for email addresses.", "Use type=\"number\" for numeric input."]
+      },
+      {
+          id: "html-18",
+          title: "Form Validation Attributes",
+          description: "Add HTML5 form validation attributes (required, minlength, pattern, etc.).",
+          difficulty: "medium",
+          language: "javascript",
+          chapter: "Forms",
+          starterCode: "<form>\n  <input type=\"text\" name=\"username\">\n  <input type=\"email\" name=\"email\">\n  <input type=\"password\" name=\"password\">\n</form>",
+          testCases: [{input: "", expected: "Inputs have validation attributes: required, minlength, pattern"}],
+          hints: ["Add required to make fields mandatory.", "Use pattern for custom validation."]
+      },
+      {
+          id: "html-19",
+          title: "Semantic HTML Structure",
+          description: "Use semantic HTML5 elements (header, nav, main, article, section, footer) to structure a page.",
+          difficulty: "medium",
+          language: "javascript",
+          chapter: "Semantic HTML",
+          starterCode: "<body>\n  <!-- Replace divs with semantic elements -->\n  <div class=\"header\"></div>\n  <div class=\"nav\"></div>\n  <div class=\"main\"></div>\n  <div class=\"footer\"></div>\n</body>",
+          testCases: [{input: "", expected: "Contains header, nav, main, footer elements"}],
+          hints: ["Use <header> for page headers.", "Use <main> for main content.", "Use <footer> for footers."]
+      },
+      {
+          id: "html-20",
+          title: "Block vs Inline Elements",
+          description: "Identify and demonstrate the difference between block-level and inline elements.",
+          difficulty: "medium",
+          language: "javascript",
+          chapter: "Elements",
+          starterCode: "<body>\n  <!-- Create one block element and one inline element -->\n</body>",
+          testCases: [{input: "", expected: "Contains at least one block element (div/p) and one inline (span/a)"}],
+          hints: ["Block elements: div, p, h1-h6.", "Inline elements: span, a, strong, em."]
+      }
+    ],
+  },
 ];
