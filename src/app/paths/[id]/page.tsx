@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ChevronRight, CheckCircle, Clock, BookOpen, ArrowLeft, Lock, Target } from "lucide-react";
+import { ChevronRight, CheckCircle, Clock, BookOpen, ArrowLeft, Lock, Target, Sparkles } from "lucide-react";
 import { learningPaths, getLearningPath, getCoursesInPath } from "@/data/learning-paths";
 import { courses } from "@/data/courses";
 
@@ -34,7 +34,7 @@ export default async function LearningPathDetailPage({ params }: PageProps) {
     .map((slug) => courses.find((c) => c.slug === slug))
     .filter(Boolean);
 
-  const totalHours = pathCourses.reduce((sum, c) => sum + (c?.lessons.length || 0) * 0.5, 0); // rough estimate
+  const totalHours = pathCourses.reduce((sum, c) => sum + (c?.lessons.length || 0) * 0.5, 0);
 
   return (
     <div className="section">
@@ -73,19 +73,25 @@ export default async function LearningPathDetailPage({ params }: PageProps) {
           {path.courses.map((courseInfo, index) => {
             const course = courses.find((c) => c.slug === courseInfo.slug);
             const isRequired = courseInfo.required !== false;
+            const isComingSoon = courseInfo.comingSoon === true;
+            const isMissing = !course && !isComingSoon;
+
             return (
-              <Link
+              <div
                 key={courseInfo.slug}
-                href={course ? `/courses/${course.slug}` : "#"}
-                className="flex items-center gap-6 glass-card p-6 group transition-all hover:border-accent-primary/50"
-                style={{ opacity: course ? 1 : 0.5 }}
+                className="flex items-center gap-6 glass-card p-6 group"
+                style={{ opacity: isComingSoon || isMissing ? 0.6 : 1 }}
               >
                 <div className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg" style={{ background: "var(--gradient)" }}>
                   {courseInfo.order}
                 </div>
 
                 {course && (
-                  <div className="flex-1 min-w-0">
+                  <Link
+                    href={`/courses/${course.slug}`}
+                    className="flex-1 min-w-0"
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
                     <div className="flex items-center gap-3 mb-2">
                       <span style={{ fontSize: 24 }}>{course.icon}</span>
                       <h3 className="heading-sm group-hover:text-accent-primary transition-colors">{course.title}</h3>
@@ -94,10 +100,31 @@ export default async function LearningPathDetailPage({ params }: PageProps) {
                       )}
                     </div>
                     <p className="body-sm text-text-muted line-clamp-2">{course.description}</p>
+                  </Link>
+                )}
+
+                {isComingSoon && (
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 mb-2">
+                      <span style={{ fontSize: 24 }}>🔮</span>
+                      <h3 className="heading-sm text-text-muted">
+                        {courseInfo.slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")}
+                      </h3>
+                      <span className="px-2 py-0.5 text-xs rounded-full" style={{
+                        background: "rgba(168, 85, 247, 0.12)",
+                        color: "var(--accent-purple)",
+                      }}>
+                        Coming soon
+                      </span>
+                      {!isRequired && (
+                        <span className="px-2 py-0.5 text-xs rounded-full glass-card text-text-muted">Optional</span>
+                      )}
+                    </div>
+                    <p className="body-sm text-text-muted">This course is planned but not yet available.</p>
                   </div>
                 )}
 
-                {!course && (
+                {isMissing && (
                   <div className="flex-1 min-w-0 text-text-muted">
                     <p className="body-sm">Course not found: {courseInfo.slug}</p>
                   </div>
@@ -113,10 +140,12 @@ export default async function LearningPathDetailPage({ params }: PageProps) {
                     {course?.lessons.length || 0} lessons
                   </span>
                   {course && (
-                    <ChevronRight size={18} className="group-hover:text-accent-primary transition-colors" />
+                    <Link href={`/courses/${course.slug}`} className="flex items-center gap-1 group-hover:text-accent-primary transition-colors">
+                      <ChevronRight size={18} />
+                    </Link>
                   )}
                 </div>
-              </Link>
+              </div>
             );
           })}
         </div>
@@ -125,7 +154,7 @@ export default async function LearningPathDetailPage({ params }: PageProps) {
           <h3 className="heading-md mb-4">Ready to Start?</h3>
           <p className="body-md text-text-muted mb-6 max-w-lg mx-auto">
             Begin with Course 1 and progress sequentially. Track your completion on the
-            <Link href="/dashboard" className="text-accent-primary hover:underline">Dashboard</Link>.
+            <Link href="/dashboard" className="text-accent-primary hover:underline"> Dashboard</Link>.
           </p>
           <Link
             href={pathCourses[0] ? `/courses/${pathCourses[0].slug}` : "/courses"}

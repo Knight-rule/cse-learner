@@ -3,46 +3,26 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ChevronRight, BookOpen, Search, Sparkles } from "lucide-react";
-import { courses } from "@/data/courses";
+import { courses, type Course } from "@/data/courses";
 import PremiumCourseCard from "@/components/PremiumCourseCard";
 
-const courseCategories: Record<string, { label: string; slugs: string[]; icon: string }> = {
-  "all": { label: "All Courses", slugs: [], icon: "📚" },
-  "core-cs": {
-    label: "Core CS", icon: "🧮",
-    slugs: ["data-structures", "algorithms", "computer-architecture", "discrete-structures", "digital-system-design", "automata-formal-languages", "probability-statistics"],
-  },
-  "systems": {
-    label: "Systems", icon: "🖥️",
-    slugs: ["operating-systems", "dbms", "computer-networks", "compiler-design", "distributed-os", "hpc", "multicore-programming"],
-  },
-  "programming": {
-    label: "Programming", icon: "💻",
-    slugs: ["python", "java", "c-language", "cpp", "javascript", "oop"],
-  },
-  "ai-ml": {
-    label: "AI & ML", icon: "🤖",
-    slugs: ["artificial-intelligence", "machine-learning", "data-mining-warehousing", "image-processing"],
-  },
-  "software-dev": {
-    label: "Software Dev", icon: "🚀",
-    slugs: ["web-development", "software-engineering", "software-project-management"],
-  },
-  "advanced": {
-    label: "Advanced", icon: "⚡",
-    slugs: ["advanced-microprocessor", "industry-4-0"],
-  },
+const categoryOrder: Course["category"][] = ["Core CS", "Languages", "Systems", "Software Dev", "AI & ML", "Electives"];
+const categoryIcons: Record<Course["category"], string> = {
+  "Core CS": "🧮",
+  "Languages": "💻",
+  "Systems": "🖥️",
+  "Software Dev": "🚀",
+  "AI & ML": "🤖",
+  "Electives": "⚡",
 };
 
-const categoryKeys = Object.keys(courseCategories);
-
 export default function CoursesPage() {
-  const [activeCategory, setActiveCategory] = useState("all");
+  const [activeCategory, setActiveCategory] = useState<Course["category"] | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
 
   const filtered = activeCategory === "all"
     ? courses
-    : courses.filter((c) => courseCategories[activeCategory].slugs.includes(c.slug));
+    : courses.filter((c) => c.category === activeCategory);
 
   const searched = searchQuery
     ? filtered.filter((c) =>
@@ -52,6 +32,15 @@ export default function CoursesPage() {
     : filtered;
 
   const totalLessons = courses.reduce((sum, c) => sum + c.lessons.length, 0);
+
+  // Group courses by category for section view
+  const grouped = categoryOrder
+    .map((cat) => ({
+      category: cat,
+      icon: categoryIcons[cat],
+      courses: searched.filter((c) => c.category === cat),
+    }))
+    .filter((g) => g.courses.length > 0);
 
   return (
     <div style={{ minHeight: "100vh" }}>
@@ -127,14 +116,36 @@ export default function CoursesPage() {
       <div className="container" style={{ padding: "32px 20px 80px" }}>
         {/* Category filters */}
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 32 }}>
-          {categoryKeys.map((key) => {
-            const cat = courseCategories[key];
-            const isActive = activeCategory === key;
-            const count = key === "all" ? courses.length : cat.slugs.length;
+          <button
+            onClick={() => setActiveCategory("all")}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 6,
+              padding: "10px 18px",
+              borderRadius: "var(--radius-lg)",
+              background: activeCategory === "all" ? "var(--gradient)" : "var(--bg-card)",
+              border: `1px solid ${activeCategory === "all" ? "transparent" : "var(--border)"}`,
+              color: activeCategory === "all" ? "#fff" : "var(--text-secondary)",
+              fontSize: 14, fontWeight: activeCategory === "all" ? 600 : 500,
+              cursor: "pointer",
+              transition: "all 0.2s",
+              boxShadow: activeCategory === "all" ? "0 4px 16px rgba(249, 115, 22, 0.2)" : "none",
+            }}
+          >
+            📚 All
+            <span style={{
+              fontSize: 11, fontWeight: 700,
+              padding: "2px 6px", borderRadius: 6,
+              background: activeCategory === "all" ? "rgba(255,255,255,0.2)" : "var(--surface)",
+              color: activeCategory === "all" ? "#fff" : "var(--text-muted)",
+            }}>{courses.length}</span>
+          </button>
+          {categoryOrder.map((cat) => {
+            const count = courses.filter((c) => c.category === cat).length;
+            const isActive = activeCategory === cat;
             return (
               <button
-                key={key}
-                onClick={() => setActiveCategory(key)}
+                key={cat}
+                onClick={() => setActiveCategory(isActive ? "all" : cat)}
                 style={{
                   display: "inline-flex", alignItems: "center", gap: 6,
                   padding: "10px 18px",
@@ -148,8 +159,8 @@ export default function CoursesPage() {
                   boxShadow: isActive ? "0 4px 16px rgba(249, 115, 22, 0.2)" : "none",
                 }}
               >
-                <span>{cat.icon}</span>
-                {cat.label}
+                <span>{categoryIcons[cat]}</span>
+                {cat}
                 <span style={{
                   fontSize: 11, fontWeight: 700,
                   padding: "2px 6px", borderRadius: 6,
@@ -167,24 +178,60 @@ export default function CoursesPage() {
           {searchQuery && <span> matching &ldquo;{searchQuery}&rdquo;</span>}
         </div>
 
-        {/* Course grid */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-          gap: 20,
-        }}>
-          {searched.map((course) => (
-            <PremiumCourseCard
-              key={course.slug}
-              slug={course.slug}
-              title={course.title}
-              description={course.description}
-              icon={course.icon}
-              color={course.color}
-              lessonCount={course.lessons.length}
-            />
-          ))}
-        </div>
+        {/* Grouped sections when "all" is active */}
+        {activeCategory === "all" && !searchQuery ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
+            {grouped.map((group) => (
+              <div key={group.category}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+                  <span style={{ fontSize: 22 }}>{group.icon}</span>
+                  <h2 style={{ fontSize: 20, fontWeight: 700, color: "var(--text-primary)" }}>{group.category}</h2>
+                  <span style={{
+                    fontSize: 12, fontWeight: 600, color: "var(--text-muted)",
+                    padding: "2px 8px", borderRadius: 6,
+                    background: "var(--surface)",
+                  }}>{group.courses.length}</span>
+                </div>
+                <div style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+                  gap: 20,
+                }}>
+                  {group.courses.map((course) => (
+                    <PremiumCourseCard
+                      key={course.slug}
+                      slug={course.slug}
+                      title={course.title}
+                      description={course.description}
+                      icon={course.icon}
+                      color={course.color}
+                      lessonCount={course.lessons.length}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          /* Flat grid when filtering */
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+            gap: 20,
+          }}>
+            {searched.map((course) => (
+              <PremiumCourseCard
+                key={course.slug}
+                slug={course.slug}
+                title={course.title}
+                description={course.description}
+                icon={course.icon}
+                color={course.color}
+                lessonCount={course.lessons.length}
+              />
+            ))}
+          </div>
+        )}
 
         {searched.length === 0 && (
           <div style={{

@@ -26,6 +26,8 @@ export interface Course {
 
   color: string;
 
+  category: "Core CS" | "Languages" | "Systems" | "AI & ML" | "Software Dev" | "Electives";
+
   notesUrl?: string;
 
   lessons: Lesson[];
@@ -49,6 +51,7 @@ export const courses: Course[] = [
     notesUrl: "https://noteslink.in/product/ds-data-structure-kiit/",
 
     color: "from-emerald-500 to-teal-600",
+    category: "Core CS",
 
     lessons: [
 
@@ -209,6 +212,7 @@ export const courses: Course[] = [
     notesUrl: "https://noteslink.in/product/daa-design-and-analysis-of-algorithm-kiit/",
 
     color: "from-amber-500 to-orange-600",
+    category: "Core CS",
 
     lessons: [
 
@@ -369,6 +373,7 @@ export const courses: Course[] = [
     notesUrl: "https://noteslink.in/product/os-notes/",
 
     color: "from-violet-500 to-purple-600",
+    category: "Systems",
 
     lessons: [
 
@@ -501,6 +506,7 @@ export const courses: Course[] = [
     notesUrl: "https://noteslink.in/product/dbms-notes-kiit/",
 
     color: "from-rose-500 to-pink-600",
+    category: "Systems",
 
     lessons: [
 
@@ -577,6 +583,7 @@ export const courses: Course[] = [
     notesUrl: "https://noteslink.in/product/cn-computer-networks-notes-kiit-copy/",
 
     color: "from-cyan-500 to-blue-600",
+    category: "Systems",
 
     lessons: [
 
@@ -707,6 +714,7 @@ export const courses: Course[] = [
     icon: "💻",
 
     color: "from-indigo-500 to-blue-600",
+    category: "Software Dev",
 
     lessons: [
 
@@ -839,6 +847,7 @@ export const courses: Course[] = [
     notesUrl: "https://noteslink.in/product/oopj-notes-kiit/",
 
     color: "from-teal-500 to-emerald-600",
+    category: "Core CS",
 
     lessons: [
 
@@ -1214,6 +1223,7 @@ console.log(login(new JwtAuth(), "eyJhbGci..."));`,
     icon: "🐍",
 
     color: "from-yellow-400 to-yellow-600",
+    category: "Languages",
 
     lessons: [
 
@@ -1288,6 +1298,7 @@ console.log(login(new JwtAuth(), "eyJhbGci..."));`,
     icon: "☕",
 
     color: "from-red-500 to-red-700",
+    category: "Languages",
 
     lessons: [
 
@@ -1362,6 +1373,7 @@ console.log(login(new JwtAuth(), "eyJhbGci..."));`,
     icon: "⚙️",
 
     color: "from-blue-500 to-indigo-600",
+    category: "Languages",
 
     lessons: [
 
@@ -1450,6 +1462,7 @@ console.log(login(new JwtAuth(), "eyJhbGci..."));`,
     icon: "🔷",
 
     color: "from-indigo-500 to-purple-600",
+    category: "Languages",
 
     lessons: [
 
@@ -1524,6 +1537,7 @@ console.log(login(new JwtAuth(), "eyJhbGci..."));`,
     icon: "📜",
 
     color: "from-yellow-400 to-amber-500",
+    category: "Languages",
 
     lessons: [
 
@@ -1600,6 +1614,7 @@ console.log(login(new JwtAuth(), "eyJhbGci..."));`,
     notesUrl: "https://noteslink.in/product/coa-computer-architecture-notes/",
 
     color: "from-cyan-500 to-blue-600",
+    category: "Core CS",
 
     lessons: [
 
@@ -1880,6 +1895,7 @@ console.log("x3 =", cpu.registers[3]);`,
     notesUrl: "https://noteslink.in/product/de-la-notes-kiit/",
 
     color: "from-violet-500 to-purple-600",
+    category: "Core CS",
 
     lessons: [
 
@@ -2168,6 +2184,7 @@ console.log(boolOps(true, false));`,
     notesUrl: "https://noteslink.in/product/dsd-digital-system-design-notes-kiit/",
 
     color: "from-amber-500 to-orange-600",
+    category: "Systems",
 
     lessons: [
 
@@ -2440,6 +2457,7 @@ console.log("Read 0x05:", mem.read(0x05).toString(16));`,
     notesUrl: "https://noteslink.in/product/afl-automata-formal-language-kiit/",
 
     color: "from-rose-500 to-pink-600",
+    category: "Electives",
 
     lessons: [
 
@@ -2786,6 +2804,7 @@ console.log("TM result:", tm.run());`,
     notesUrl: "https://noteslink.in/product/ps-probability-and-statics-notes-kiit-copy/",
 
     color: "from-lime-500 to-green-600",
+    category: "Core CS",
 
     lessons: [
 
@@ -3112,6 +3131,7 @@ console.log("Predict 9 hours:", model.predict(9).toFixed(1));`,
     notesUrl: "https://noteslink.in/product/artificial-intelligence-notes-kiit/",
 
     color: "from-fuchsia-500 to-pink-600",
+    category: "AI & ML",
 
     lessons: [
 
@@ -3598,6 +3618,7 @@ console.log("Output:", nn.forward([0.5, 0.3]).map(x => x.toFixed(3)));`,
     notesUrl: "https://noteslink.in/product/machine-learning-notes-kiit/",
 
     color: "from-sky-500 to-indigo-600",
+    category: "AI & ML",
 
     lessons: [
 
@@ -3992,6 +4013,7 @@ xorData.forEach(([x, y]) =>
     notesUrl: "https://noteslink.in/product/compiler-design-kiit/",
 
     color: "from-teal-500 to-emerald-600",
+    category: "Electives",
 
     lessons: [
 
@@ -4396,6 +4418,7 @@ console.log("Reduced:", Optimizer.strengthReduce(code));`,
     notesUrl: "https://noteslink.in/product/se-software-engineering-kiit/",
 
     color: "from-orange-500 to-red-600",
+    category: "Software Dev",
 
     lessons: [
 
@@ -4758,6 +4781,7 @@ runner.report();`,
     notesUrl: "https://noteslink.in/product/dmdw-data-mining-data-warehousing-kiit/",
 
     color: "from-yellow-500 to-amber-600",
+    category: "AI & ML",
 
     lessons: [
 
@@ -5098,6 +5122,7 @@ console.log("Predict:", nb.predict(["sunny", "hot"]));`,
     notesUrl: "https://noteslink.in/product/dos-distributed-operating-system-kiit/",
 
     color: "from-indigo-500 to-violet-600",
+    category: "Systems",
 
     lessons: [
 
@@ -5438,6 +5463,7 @@ console.log("Word count:", Object.fromEntries(wordCount));`,
     notesUrl: "https://noteslink.in/product/hpc-high-performances-computing-notes-kiit/",
 
     color: "from-red-500 to-rose-600",
+    category: "Electives",
 
     lessons: [
 
@@ -5796,6 +5822,7 @@ console.log("GPU result:", Array.from(result));`,
     notesUrl: "https://noteslink.in/product/ipa-image-processing-applications-notes-kiit/",
 
     color: "from-pink-500 to-fuchsia-600",
+    category: "AI & ML",
 
     lessons: [
 
@@ -6184,6 +6211,7 @@ console.log("HOG:", FeatureExtractor.histogramOfGradients(image, 1));`,
     notesUrl: "https://noteslink.in/product/mcp-multicore-programming-notes-kiit/",
 
     color: "from-emerald-500 to-teal-600",
+    category: "Electives",
 
     lessons: [
 
@@ -6606,6 +6634,7 @@ console.log("Scan:", ParallelPatterns.scan(arr));`,
     notesUrl: "https://noteslink.in/product/arm-advanced-microprocessor-notes-kiit/",
 
     color: "from-zinc-500 to-gray-600",
+    category: "Electives",
 
     lessons: [
 
@@ -7002,6 +7031,7 @@ console.log("Stats:", tlb.getStats());`,
     notesUrl: "https://noteslink.in/product/software-project-management-notes-kiit/",
 
     color: "from-cyan-500 to-blue-600",
+    category: "Software Dev",
 
     lessons: [
 
@@ -7388,6 +7418,7 @@ console.log("LOC:", CodeMetrics.linesOfCode(code));`,
     notesUrl: "https://noteslink.in/product/ind-4-0-noteskiit/",
 
     color: "from-violet-500 to-purple-600",
+    category: "Electives",
 
     lessons: [
 

@@ -3,6 +3,7 @@ export interface LearningPathCourse {
   order: number;
   required: boolean;
   estimatedHours: number;
+  comingSoon?: boolean;
 }
 
 export interface LearningPath {
@@ -27,10 +28,10 @@ export const learningPaths: LearningPath[] = [
     estimatedTotalHours: 120,
     courses: [
       { slug: "python", order: 1, required: true, estimatedHours: 20 },
-      { slug: "c", order: 2, required: true, estimatedHours: 25 },
+      { slug: "c-language", order: 2, required: true, estimatedHours: 25 },
       { slug: "data-structures", order: 3, required: true, estimatedHours: 30 },
       { slug: "algorithms", order: 4, required: true, estimatedHours: 25 },
-      { slug: "computer-organization", order: 5, required: true, estimatedHours: 20 },
+      { slug: "computer-architecture", order: 5, required: true, estimatedHours: 20 },
     ],
   },
   {
@@ -47,7 +48,7 @@ export const learningPaths: LearningPath[] = [
       { slug: "computer-networks", order: 3, required: true, estimatedHours: 30 },
       { slug: "cpp", order: 4, required: false, estimatedHours: 20 },
       { slug: "software-engineering", order: 5, required: true, estimatedHours: 20 },
-      { slug: "system-design", order: 6, required: false, estimatedHours: 15 },
+      { slug: "system-design", order: 6, required: false, estimatedHours: 15, comingSoon: true },
     ],
   },
   {
@@ -60,12 +61,12 @@ export const learningPaths: LearningPath[] = [
     estimatedTotalHours: 200,
     courses: [
       { slug: "machine-learning", order: 1, required: false, estimatedHours: 35 },
-      { slug: "deep-learning", order: 2, required: false, estimatedHours: 30 },
+      { slug: "deep-learning", order: 2, required: false, estimatedHours: 30, comingSoon: true },
       { slug: "web-development", order: 3, required: false, estimatedHours: 30 },
-      { slug: "mobile-development", order: 4, required: false, estimatedHours: 25 },
-      { slug: "cyber-security", order: 5, required: false, estimatedHours: 30 },
-      { slug: "cloud-computing", order: 6, required: false, estimatedHours: 25 },
-      { slug: "devops", order: 7, required: false, estimatedHours: 25 },
+      { slug: "mobile-development", order: 4, required: false, estimatedHours: 25, comingSoon: true },
+      { slug: "cyber-security", order: 5, required: false, estimatedHours: 30, comingSoon: true },
+      { slug: "cloud-computing", order: 6, required: false, estimatedHours: 25, comingSoon: true },
+      { slug: "devops", order: 7, required: false, estimatedHours: 25, comingSoon: true },
     ],
   },
   {
@@ -79,8 +80,8 @@ export const learningPaths: LearningPath[] = [
     courses: [
       { slug: "data-structures", order: 1, required: true, estimatedHours: 15 },
       { slug: "algorithms", order: 2, required: true, estimatedHours: 20 },
-      { slug: "system-design", order: 3, required: true, estimatedHours: 25 },
-      { slug: "competitive-programming", order: 4, required: false, estimatedHours: 20 },
+      { slug: "system-design", order: 3, required: true, estimatedHours: 25, comingSoon: true },
+      { slug: "competitive-programming", order: 4, required: false, estimatedHours: 20, comingSoon: true },
     ],
   },
   {
@@ -96,7 +97,7 @@ export const learningPaths: LearningPath[] = [
       { slug: "javascript", order: 2, required: true, estimatedHours: 20 },
       { slug: "python", order: 3, required: false, estimatedHours: 15 },
       { slug: "dbms", order: 4, required: true, estimatedHours: 20 },
-      { slug: "devops", order: 5, required: false, estimatedHours: 15 },
+      { slug: "devops", order: 5, required: false, estimatedHours: 15, comingSoon: true },
     ],
   },
   {
@@ -109,12 +110,12 @@ export const learningPaths: LearningPath[] = [
     estimatedTotalHours: 150,
     courses: [
       { slug: "python", order: 1, required: true, estimatedHours: 20 },
-      { slug: "data-science", order: 2, required: true, estimatedHours: 25 },
+      { slug: "data-science", order: 2, required: true, estimatedHours: 25, comingSoon: true },
       { slug: "machine-learning", order: 3, required: true, estimatedHours: 35 },
-      { slug: "deep-learning", order: 4, required: true, estimatedHours: 30 },
+      { slug: "deep-learning", order: 4, required: true, estimatedHours: 30, comingSoon: true },
       { slug: "data-structures", order: 5, required: false, estimatedHours: 15 },
       { slug: "algorithms", order: 6, required: false, estimatedHours: 15 },
-      { slug: "cloud-computing", order: 7, required: false, estimatedHours: 10 },
+      { slug: "cloud-computing", order: 7, required: false, estimatedHours: 10, comingSoon: true },
     ],
   },
 ];
