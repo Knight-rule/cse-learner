@@ -1,19 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, ChevronRight, Zap, Code, BookOpen, Brain, Users, Trophy, Laptop, Target, GraduationCap, Rocket, ExternalLink, Building2 } from "lucide-react";
+import { ArrowRight, ChevronRight, Zap, Code, BookOpen, Brain, Trophy, Target, GraduationCap, Rocket, Building2, Sparkles } from "lucide-react";
 import { courses } from "@/data/courses";
 import { companies } from "@/lib/companies";
-import StatsBar from "@/components/StatsBar";
-
-const features = [
-  { icon: <GraduationCap size={28} />, title: "Expert Led Learning", desc: "Lessons designed by CS professionals and educators.", color: "var(--accent)" },
-  { icon: <Code size={28} />, title: "Hands On Projects", desc: "Build real projects with practical code examples.", color: "var(--accent-purple)" },
-  { icon: <Trophy size={28} />, title: "Learn Certification", desc: "Earn certificates as you complete each course.", color: "var(--accent-blue)" },
-  { icon: <Target size={28} />, title: "Flexible Learning", desc: "Study at your own pace, anytime, anywhere.", color: "var(--accent-green)" },
-  { icon: <BookOpen size={28} />, title: "Up to Date Curriculum", desc: "Content aligned with current industry standards.", color: "var(--accent-pink)" },
-  { icon: <Rocket size={28} />, title: "Career & Networking", desc: "Prepare for interviews and connect with peers.", color: "var(--accent)" },
-];
+import FloatingCodeVisual from "@/components/FloatingCodeVisual";
+import PremiumStatsBar from "@/components/PremiumStatsBar";
+import PremiumCourseCard from "@/components/PremiumCourseCard";
+import LearningFeatures from "@/components/LearningFeatures";
 
 const testimonials = [
   { name: "Students & Educators", role: "CSE Community", initials: "CS", quote: "A growing collection of CS learning resources — from data structures to system design. Built by students, for students." },
@@ -32,134 +26,120 @@ const faqs = [
 export default function HomePage() {
   return (
     <div>
-      {/* Hero */}
-      <section className="hero">
-        <div className="container">
+      {/* ═══════════ HERO ═══════════ */}
+      <section className="hero" style={{ position: "relative", overflow: "hidden", minHeight: "90vh", display: "flex", alignItems: "center" }}>
+        {/* Depth layer 0: Background gradient mesh */}
+        <div style={{
+          position: "absolute", inset: 0, zIndex: 0,
+          background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(249,115,22,0.06) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 50%, rgba(168,85,247,0.04) 0%, transparent 50%)",
+        }} />
+
+        {/* Depth layer 1: Floating orbs */}
+        <div style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none" }}>
+          <div style={{
+            position: "absolute", top: "10%", left: "5%",
+            width: 300, height: 300,
+            background: "radial-gradient(circle, rgba(249,115,22,0.08), transparent 70%)",
+            borderRadius: "50%", filter: "blur(60px)",
+            animation: "heroFloat 8s ease-in-out infinite",
+          }} />
+          <div style={{
+            position: "absolute", bottom: "10%", right: "10%",
+            width: 250, height: 250,
+            background: "radial-gradient(circle, rgba(168,85,247,0.06), transparent 70%)",
+            borderRadius: "50%", filter: "blur(50px)",
+            animation: "heroFloat 10s ease-in-out infinite reverse",
+          }} />
+        </div>
+
+        <div className="container" style={{ position: "relative", zIndex: 2 }}>
           <div className="hero-grid">
-            <div className="hero-content animate-fade-in-up">
+            <div className="hero-content" style={{ animation: "fadeInUp 0.8s ease-out" }}>
               <span className="badge badge-accent" style={{ marginBottom: 24, display: "inline-flex" }}>
-                <Zap size={12} /> Welcome to CSE Learner
+                <Sparkles size={12} /> Welcome to CSE Learner
               </span>
-              <h1 className="heading-hero mb-6">
-                Empowering the Future with <span className="gradient-text">CS Education</span>
+              <h1 className="heading-hero" style={{ marginBottom: 24, lineHeight: 1.1 }}>
+                Master <span className="gradient-text">Computer Science</span> with Visual Learning
               </h1>
-              <p className="body-lg mb-8" style={{ maxWidth: 520 }}>
-                Interactive lessons, real code examples, and practice problems to help CSE students master fundamentals and crack technical interviews.
+              <p className="body-lg" style={{ maxWidth: 520, marginBottom: 32, lineHeight: 1.7 }}>
+                Interactive lessons with concept maps, live code examples, and practice problems. Built by CSE students, for CSE students.
               </p>
-              <div className="flex gap-4" style={{ flexWrap: "wrap" }}>
-                <Link href="/courses" className="btn btn-primary">
-                  Start Learning <ArrowRight size={16} />
+              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                <Link href="/courses" className="btn btn-primary" style={{ fontSize: 16, padding: "14px 28px" }}>
+                  Start Learning <ArrowRight size={18} />
                 </Link>
-                <Link href="/practice" className="btn btn-outline">
+                <Link href="/practice" className="btn btn-outline" style={{ fontSize: 16, padding: "14px 28px" }}>
                   Practice Problems
                 </Link>
               </div>
-            </div>
-            <div className="hero-visual animate-fade-in-up delay-2">
-              <div style={{
-                width: "100%", maxWidth: 480, aspectRatio: "1",
-                borderRadius: "var(--radius-2xl)",
-                background: "linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(168, 85, 247, 0.1))",
-                border: "1px solid var(--border)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                position: "relative", overflow: "hidden"
-              }}>
-                <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 30% 30%, rgba(249, 115, 22, 0.08), transparent 60%)" }} />
-                <div style={{ position: "relative", textAlign: "center", padding: 40 }}>
-                  <div style={{ fontSize: 64, marginBottom: 16 }}>👩‍💻</div>
-                  <div style={{ fontFamily: "monospace", fontSize: 14, color: "var(--text-secondary)", lineHeight: 2 }}>
-                    <div><span style={{ color: "var(--accent-purple)" }}>const</span> <span style={{ color: "var(--accent)" }}>student</span> = {"{"}</div>
-                    <div style={{ paddingLeft: 20 }}>learn: <span style={{ color: "var(--accent-green)" }}>"DS & Algo"</span>,</div>
-                    <div style={{ paddingLeft: 20 }}>build: <span style={{ color: "var(--accent-green)" }}>"Projects"</span>,</div>
-                    <div style={{ paddingLeft: 20 }}>crack: <span style={{ color: "var(--accent-green)" }}>"Interviews"</span></div>
-                    <div>{"}"};</div>
-                  </div>
-                </div>
+
+              {/* Trust badges */}
+              <div style={{ display: "flex", gap: 24, marginTop: 40, opacity: 0.6 }}>
+                <span style={{ fontSize: 13, display: "flex", alignItems: "center", gap: 6 }}>
+                  <BookOpen size={14} /> {courses.length} Courses
+                </span>
+                <span style={{ fontSize: 13, display: "flex", alignItems: "center", gap: 6 }}>
+                  <Code size={14} /> 100% Free
+                </span>
+                <span style={{ fontSize: 13, display: "flex", alignItems: "center", gap: 6 }}>
+                  <Target size={14} /> Interview Ready
+                </span>
               </div>
+            </div>
+
+            <div style={{ animation: "fadeInUp 0.8s ease-out 0.2s both" }}>
+              <FloatingCodeVisual />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Stats Bar */}
-      <StatsBar />
+      {/* ═══════════ STATS ═══════════ */}
+      <PremiumStatsBar />
 
-      {/* About */}
-      <section className="section">
-        <div className="container">
-          <div className="about-grid">
-            <div className="animate-fade-in-up">
-              <span className="badge badge-accent mb-4" style={{ display: "inline-flex" }}>About CSE Learner</span>
-              <h2 className="heading-xl mb-4">
-                Empowering Minds, Transforming the Future
-              </h2>
-              <p className="body-lg mb-6">
-                We provide structured, interactive courses that help computer science students build strong foundations and excel in their careers.
-              </p>
-              <ul style={{ listStyle: "none", marginBottom: 32 }}>
-                {["Comprehensive CSE curriculum from basics to advanced", "Interactive code examples and hands-on practice", "Practice problems with instant feedback to track your progress"].map((item) => (
-                  <li key={item} style={{ padding: "8px 0", fontSize: 15, color: "var(--text-secondary)", display: "flex", alignItems: "center", gap: 10 }}>
-                    <span style={{ color: "var(--accent)", fontWeight: 700 }}>✓</span> {item}
-                  </li>
-                ))}
-              </ul>
-              <Link href="/about" className="btn btn-primary">
-                Discover More <ArrowRight size={16} />
-              </Link>
-            </div>
-            <div className="animate-fade-in-up delay-2">
-              <div style={{
-                width: "100%", aspectRatio: "4/3", borderRadius: "var(--radius-2xl)",
-                background: "linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(249, 115, 22, 0.08))",
-                border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 80, position: "relative", overflow: "hidden"
-              }}>
-                <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 70% 70%, rgba(168, 85, 247, 0.06), transparent 60%)" }} />
-                <span style={{ position: "relative" }}>🎓</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ═══════════ LEARNING FEATURES ═══════════ */}
+      <LearningFeatures />
 
-      {/* Featured Courses */}
-      <section className="section" style={{ background: "var(--bg-secondary)" }}>
+      {/* ═══════════ FEATURED COURSES ═══════════ */}
+      <section className="section" style={{ background: "var(--bg-secondary)", position: "relative" }}>
+        {/* Section divider glow */}
+        <div style={{
+          position: "absolute", top: 0, left: "10%", right: "10%", height: 1,
+          background: "linear-gradient(90deg, transparent, rgba(249,115,22,0.15), transparent)",
+        }} />
+
         <div className="container">
-          <div className="text-center mb-12">
-            <span className="badge badge-accent mb-4" style={{ display: "inline-flex" }}>{courses.length} Courses</span>
-            <h2 className="heading-xl mb-4">
-              Innovate &amp; Learn <span className="gradient-text">All CS Courses</span>
+          <div style={{ textAlign: "center", marginBottom: 48 }}>
+            <span className="badge badge-accent" style={{ display: "inline-flex", marginBottom: 16 }}>
+              {courses.length} Courses
+            </span>
+            <h2 className="heading-xl" style={{ marginBottom: 16 }}>
+              All <span className="gradient-text">CS Courses</span>
             </h2>
-            <p className="body-lg mx-auto" style={{ maxWidth: 560 }}>
+            <p className="body-lg" style={{ maxWidth: 500, margin: "0 auto" }}>
               From fundamentals to advanced topics — master the skills that matter most.
             </p>
           </div>
-          <div className="home-courses-grid">
-            {courses.map((course) => {
-              const colors = course.color.split(" ");
-              return (
-                <div key={course.slug} className="course-card-vertical glass-card-glow">
-                  <Link
-                    href={"/courses/" + course.slug}
-                    style={{ textDecoration: "none", color: "inherit", display: "flex", flexDirection: "column", height: "100%" }}
-                  >
-                    <div className="course-card-vertical-icon" style={{ background: "linear-gradient(135deg, " + colors[0] + ", " + (colors[1] || colors[0]) + ")" }}>
-                      {course.icon}
-                    </div>
-                    <h3 className="course-title">{course.title}</h3>
-                    <p className="body-md course-card-desc">{course.description}</p>
-                    <div className="course-card-meta">
-                      <span><BookOpen size={14} style={{ display: "inline", verticalAlign: "middle", marginRight: 5 }} />{course.lessons.length} lessons</span>
-                    </div>
-                  </Link>
-                  <Link href={"/courses/" + course.slug} className="btn btn-primary course-card-start">
-                    Start <ChevronRight size={14} />
-                  </Link>
-                </div>
-              );
-            })}
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+            gap: 20,
+          }}>
+            {courses.map((course) => (
+              <PremiumCourseCard
+                key={course.slug}
+                slug={course.slug}
+                title={course.title}
+                description={course.description}
+                icon={course.icon}
+                color={course.color}
+                lessonCount={course.lessons.length}
+              />
+            ))}
           </div>
-          <div className="text-center" style={{ marginTop: 40 }}>
+
+          <div style={{ textAlign: "center", marginTop: 40 }}>
             <Link href="/courses" className="btn btn-outline">
               View All Courses <ArrowRight size={16} />
             </Link>
@@ -167,43 +147,25 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Why Choose Us */}
-      <section className="section">
+      {/* ═══════════ TOP COMPANIES ═══════════ */}
+      <section className="section" style={{ position: "relative" }}>
         <div className="container">
-          <div className="text-center mb-12">
-            <span className="badge badge-accent mb-4" style={{ display: "inline-flex" }}>Why Choose Us</span>
-            <h2 className="heading-xl mb-4">
-              Elevate Your CS Skills with the Best
-            </h2>
-          </div>
-          <div className="features-grid">
-            {features.map((f) => (
-              <div key={f.title} className="feature-item">
-                <div className="feature-icon-wrap" style={{ color: f.color }}>{f.icon}</div>
-                <h3 className="heading-sm mb-2">{f.title}</h3>
-                <p className="body-md">{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Top Companies */}
-      <section className="section" style={{ background: "var(--bg-secondary)" }}>
-        <div className="container">
-          <div className="text-center mb-12">
-            <span className="badge badge-accent mb-4" style={{ display: "inline-flex" }}><Building2 size={14} /> Top Companies</span>
-            <h2 className="heading-xl mb-4">
+          <div style={{ textAlign: "center", marginBottom: 48 }}>
+            <span className="badge badge-accent" style={{ display: "inline-flex", marginBottom: 16 }}>
+              <Building2 size={14} /> Top Companies
+            </span>
+            <h2 className="heading-xl" style={{ marginBottom: 16 }}>
               Where Our Students <span className="gradient-text">Work &amp; Intern</span>
             </h2>
-            <p className="body-lg mx-auto" style={{ maxWidth: 560 }}>
-              Explore career opportunities at {companies.length}+ top tech companies across the globe.
+            <p className="body-lg" style={{ maxWidth: 500, margin: "0 auto" }}>
+              Explore career opportunities at {companies.length}+ top tech companies.
             </p>
           </div>
+
           <div style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
-            gap: 16,
+            gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
+            gap: 12,
             marginBottom: 40,
           }}>
             {companies.slice(0, 18).map((company) => (
@@ -212,23 +174,40 @@ export default function HomePage() {
                 href={company.applyLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="company-card-home"
+                style={{
+                  display: "flex", flexDirection: "column",
+                  alignItems: "center", gap: 8,
+                  padding: "16px 8px",
+                  borderRadius: "var(--radius-lg)",
+                  background: "var(--bg-card)",
+                  border: "1px solid var(--border)",
+                  textDecoration: "none",
+                  transition: "all 0.3s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "var(--border-hover)";
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "var(--border)";
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}
               >
                 <img
                   src={company.logo}
                   alt={company.name}
-                  width={48}
-                  height={48}
-                  style={{ borderRadius: 10, objectFit: "contain", background: "var(--surface)", padding: 4 }}
+                  width={40} height={40}
+                  style={{ borderRadius: 8, objectFit: "contain", background: "var(--surface)", padding: 4 }}
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect width="48" height="48" rx="10" fill="%23374151"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="system-ui" font-size="18" font-weight="600" fill="%239ca3af">${company.name.charAt(0)}</text></svg>`)}`;
+                    (e.target as HTMLImageElement).src = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><rect width="40" height="40" rx="8" fill="%23374151"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="system-ui" font-size="16" font-weight="600" fill="%239ca3af">${company.name.charAt(0)}</text></svg>`)}`;
                   }}
                 />
-                <span style={{ fontSize: 13, fontWeight: 500, textAlign: "center", color: "var(--text-primary)" }}>{company.name}</span>
+                <span style={{ fontSize: 12, fontWeight: 500, color: "var(--text-secondary)", textAlign: "center" }}>{company.name}</span>
               </a>
             ))}
           </div>
-          <div className="text-center">
+
+          <div style={{ textAlign: "center" }}>
             <Link href="/jobs" className="btn btn-primary">
               View All {companies.length} Companies <ArrowRight size={16} />
             </Link>
@@ -236,22 +215,40 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* ═══════════ TESTIMONIALS ═══════════ */}
       <section className="section" style={{ background: "var(--bg-secondary)" }}>
         <div className="container">
-          <div className="text-center mb-12">
-            <span className="badge badge-accent mb-4" style={{ display: "inline-flex" }}>Testimonials</span>
-            <h2 className="heading-xl mb-4">Real Stories, Real Impact</h2>
+          <div style={{ textAlign: "center", marginBottom: 48 }}>
+            <span className="badge badge-accent" style={{ display: "inline-flex", marginBottom: 16 }}>About</span>
+            <h2 className="heading-xl">What We Offer</h2>
           </div>
-          <div className="testimonial-grid">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
             {testimonials.map((t) => (
-              <div key={t.name} className="testimonial-card">
-                <p className="testimonial-quote">{t.quote}</p>
-                <div className="testimonial-author">
-                  <div className="testimonial-avatar">{t.initials}</div>
+              <div key={t.name} style={{
+                padding: 28,
+                borderRadius: "var(--radius-xl)",
+                background: "var(--bg-card)",
+                border: "1px solid var(--border)",
+                position: "relative",
+              }}>
+                <div style={{
+                  fontSize: 48, position: "absolute", top: 16, right: 20,
+                  color: "var(--accent)", opacity: 0.1, fontFamily: "Georgia, serif",
+                  lineHeight: 1,
+                }}>&ldquo;</div>
+                <p style={{ fontSize: 15, color: "var(--text-secondary)", lineHeight: 1.7, marginBottom: 20, position: "relative", zIndex: 1 }}>
+                  {t.quote}
+                </p>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <div style={{
+                    width: 40, height: 40, borderRadius: "var(--radius-md)",
+                    background: "var(--gradient-soft)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 14, fontWeight: 700, color: "var(--accent)",
+                  }}>{t.initials}</div>
                   <div>
-                    <div className="testimonial-name">{t.name}</div>
-                    <div className="testimonial-role">{t.role}</div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)" }}>{t.name}</div>
+                    <div style={{ fontSize: 12, color: "var(--text-muted)" }}>{t.role}</div>
                   </div>
                 </div>
               </div>
@@ -260,37 +257,59 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* ═══════════ FAQ ═══════════ */}
       <section className="section">
-        <div className="container-sm">
-          <div className="text-center mb-12">
-            <span className="badge badge-accent mb-4" style={{ display: "inline-flex" }}>FAQs</span>
-            <h2 className="heading-xl mb-4">Frequently Asked Questions</h2>
+        <div className="container" style={{ maxWidth: 700 }}>
+          <div style={{ textAlign: "center", marginBottom: 48 }}>
+            <span className="badge badge-accent" style={{ display: "inline-flex", marginBottom: 16 }}>FAQs</span>
+            <h2 className="heading-xl">Frequently Asked Questions</h2>
           </div>
           {faqs.map((faq, i) => (
-            <details key={i} className="faq-item">
-              <summary className="faq-question">{faq.q}</summary>
-              <div className="faq-answer">{faq.a}</div>
+            <details key={i} style={{
+              marginBottom: 12,
+              borderRadius: "var(--radius-lg)",
+              background: "var(--bg-card)",
+              border: "1px solid var(--border)",
+              overflow: "hidden",
+            }}>
+              <summary style={{
+                padding: "18px 24px",
+                fontSize: 16, fontWeight: 600,
+                color: "var(--text-primary)",
+                cursor: "pointer",
+                listStyle: "none",
+                display: "flex", justifyContent: "space-between", alignItems: "center",
+              }}>
+                {faq.q}
+                <ChevronRight size={18} style={{ color: "var(--text-muted)", transition: "transform 0.3s", flexShrink: 0 }} />
+              </summary>
+              <div style={{ padding: "0 24px 18px", fontSize: 15, color: "var(--text-secondary)", lineHeight: 1.7 }}>
+                {faq.a}
+              </div>
             </details>
           ))}
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="section-sm">
-        <div className="container">
-          <div className="cta-section">
-            <span className="badge badge-accent mb-4" style={{ display: "inline-flex", position: "relative", zIndex: 2 }}>Get Started</span>
-            <h2 className="heading-xl mb-4" style={{ position: "relative", zIndex: 2 }}>
-              CS is the Future. Be a Part of It!
-            </h2>
-            <p className="body-lg mb-8 mx-auto" style={{ maxWidth: 500, position: "relative", zIndex: 2 }}>
-              Start mastering computer science concepts with structured lessons and hands-on practice — completely free.
-            </p>
-            <Link href="/courses" className="btn btn-primary" style={{ position: "relative", zIndex: 2 }}>
-              Join Now <ArrowRight size={16} />
-            </Link>
-          </div>
+      {/* ═══════════ CTA ═══════════ */}
+      <section style={{ padding: "80px 0", position: "relative", overflow: "hidden" }}>
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(135deg, rgba(249,115,22,0.05), rgba(168,85,247,0.05))",
+          borderTop: "1px solid var(--border)",
+          borderBottom: "1px solid var(--border)",
+        }} />
+        <div className="container" style={{ position: "relative", textAlign: "center" }}>
+          <span className="badge badge-accent" style={{ display: "inline-flex", marginBottom: 16 }}>Get Started</span>
+          <h2 className="heading-xl" style={{ marginBottom: 16 }}>
+            Ready to Master CS?
+          </h2>
+          <p className="body-lg" style={{ maxWidth: 500, margin: "0 auto 32px" }}>
+            Start learning with visual diagrams, interactive code, and structured notes — completely free.
+          </p>
+          <Link href="/courses" className="btn btn-primary" style={{ fontSize: 16, padding: "16px 32px" }}>
+            Start Learning <ArrowRight size={18} />
+          </Link>
         </div>
       </section>
     </div>

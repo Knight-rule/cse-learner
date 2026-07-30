@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
+import { ChevronRight, ArrowLeft, ArrowRight, ExternalLink, BookOpen, Code, CheckCircle2 } from "lucide-react";
 import { courses, getCourse } from "@/data/courses";
 import { notFound } from "next/navigation";
 import LessonContent from "@/components/LessonContent";
@@ -44,35 +44,99 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
   const lesson = course.lessons[lessonIndex];
   const prevLesson = lessonIndex > 0 ? course.lessons[lessonIndex - 1] : null;
   const nextLesson = lessonIndex < course.lessons.length - 1 ? course.lessons[lessonIndex + 1] : null;
+  const colors = course.color.split(" ");
+  const progress = Math.round(((lessonIndex + 1) / course.lessons.length) * 100);
 
   return (
-    <div className="section">
+    <div style={{ minHeight: "100vh" }}>
       <LessonTracker courseSlug={course.slug} courseTitle={course.title} lessonTitle={lesson.title} />
-      <div className="container-sm">
-        <div className="breadcrumb">
-          <Link href="/">Home</Link>
-          <ChevronRight size={14} />
-          <Link href="/courses">Courses</Link>
-          <ChevronRight size={14} />
-          <Link href={"/courses/" + course.slug}>{course.title}</Link>
-          <ChevronRight size={14} />
-          <span>{lesson.title}</span>
-        </div>
 
-        {course.notesUrl && (
-          <div style={{ marginBottom: 24 }}>
-            <a
-              href={course.notesUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-outline"
-              style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, padding: "6px 14px" }}
-            >
-              <ExternalLink size={14} /> View Notes on NotesLink
-            </a>
+      {/* ═══ Premium Lesson Header ═══ */}
+      <div style={{
+        background: `linear-gradient(135deg, ${colors[0]}08, ${colors[1] || colors[0]}05)`,
+        borderBottom: "1px solid var(--border)",
+        padding: "32px 0 24px",
+      }}>
+        <div className="container-sm">
+          {/* Breadcrumb */}
+          <div className="breadcrumb" style={{ marginBottom: 20 }}>
+            <Link href="/">Home</Link>
+            <ChevronRight size={14} />
+            <Link href="/courses">Courses</Link>
+            <ChevronRight size={14} />
+            <Link href={"/courses/" + course.slug} style={{ color: colors[0] }}>{course.title}</Link>
+            <ChevronRight size={14} />
+            <span>{lesson.title}</span>
           </div>
-        )}
 
+          {/* Course context bar */}
+          <div style={{
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            flexWrap: "wrap", gap: 16,
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div style={{
+                width: 44, height: 44, borderRadius: "var(--radius-md)",
+                background: `linear-gradient(135deg, ${colors[0]}22, ${colors[1] || colors[0]}22)`,
+                border: `1px solid ${colors[0]}33`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 22,
+              }}>{course.icon}</div>
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)" }}>{course.title}</div>
+                <div style={{ fontSize: 12, color: "var(--text-muted)", display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                    <BookOpen size={12} /> Lesson {lessonIndex + 1} of {course.lessons.length}
+                  </span>
+                  <span>•</span>
+                  <span>{progress}% complete</span>
+                </div>
+              </div>
+            </div>
+
+            {course.notesUrl && (
+              <a
+                href={course.notesUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 6,
+                  padding: "8px 14px",
+                  borderRadius: "var(--radius-md)",
+                  background: "var(--surface)",
+                  border: "1px solid var(--border)",
+                  color: "var(--text-secondary)",
+                  fontSize: 13, fontWeight: 500,
+                  textDecoration: "none",
+                  transition: "all 0.2s",
+                }}
+              >
+                <ExternalLink size={14} /> View Notes
+              </a>
+            )}
+          </div>
+
+          {/* Progress bar */}
+          <div style={{
+            marginTop: 16,
+            height: 3,
+            borderRadius: 2,
+            background: "var(--border)",
+            overflow: "hidden",
+          }}>
+            <div style={{
+              height: "100%",
+              width: `${progress}%`,
+              background: `linear-gradient(90deg, ${colors[0]}, ${colors[1] || colors[0]})`,
+              borderRadius: 2,
+              transition: "width 0.5s ease",
+            }} />
+          </div>
+        </div>
+      </div>
+
+      {/* ═══ Lesson Content ═══ */}
+      <div className="container-sm" style={{ padding: "40px 20px 80px" }}>
         <LessonContent
           lesson={lesson}
           course={{ slug: course.slug, title: course.title }}
@@ -80,26 +144,114 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
           totalLessons={course.lessons.length}
         />
 
-        <div className="flex items-center justify-between pt-8 border-t" style={{ marginTop: 48 }}>
+        {/* ═══ Lesson Sidebar Outline (below content on mobile) ═══ */}
+        <div style={{
+          marginTop: 48,
+          padding: 24,
+          borderRadius: "var(--radius-xl)",
+          background: "var(--bg-card)",
+          border: "1px solid var(--border)",
+        }}>
+          <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-primary)", marginBottom: 16 }}>
+            Course Outline
+          </h3>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            {course.lessons.map((l, i) => {
+              const isCurrent = l.id === lesson.id;
+              const isPast = i < lessonIndex;
+              return (
+                <Link
+                  key={l.id}
+                  href={"/courses/" + course.slug + "/lessons/" + l.id}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 10,
+                    padding: "10px 12px",
+                    borderRadius: "var(--radius-md)",
+                    background: isCurrent ? `${colors[0]}12` : "transparent",
+                    border: isCurrent ? `1px solid ${colors[0]}22` : "1px solid transparent",
+                    color: isCurrent ? colors[0] : isPast ? "var(--text-muted)" : "var(--text-secondary)",
+                    fontSize: 14, fontWeight: isCurrent ? 600 : 400,
+                    textDecoration: "none",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  <span style={{
+                    width: 24, height: 24, borderRadius: "50%",
+                    background: isPast ? `${colors[0]}22` : isCurrent ? colors[0] : "var(--surface)",
+                    color: isPast ? colors[0] : isCurrent ? "#fff" : "var(--text-muted)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 11, fontWeight: 700, flexShrink: 0,
+                  }}>
+                    {isPast ? "✓" : i + 1}
+                  </span>
+                  <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {l.title}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* ═══ Navigation ═══ */}
+        <div style={{
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          marginTop: 48, paddingTop: 24,
+          borderTop: "1px solid var(--border)",
+        }}>
           {prevLesson ? (
-            <Link href={"/courses/" + course.slug + "/lessons/" + prevLesson.id} className="flex items-center gap-3" style={{ color: "var(--text-secondary)" }}>
+            <Link
+              href={"/courses/" + course.slug + "/lessons/" + prevLesson.id}
+              style={{
+                display: "flex", alignItems: "center", gap: 10,
+                padding: "12px 16px",
+                borderRadius: "var(--radius-lg)",
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                color: "var(--text-secondary)",
+                textDecoration: "none",
+                transition: "all 0.2s",
+              }}
+            >
               <ArrowLeft size={16} />
               <div>
-                <div className="body-sm">Previous</div>
-                <div className="heading-sm" style={{ fontSize: 15 }}>{prevLesson.title}</div>
+                <div style={{ fontSize: 11, color: "var(--text-muted)" }}>Previous</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)" }}>{prevLesson.title}</div>
               </div>
             </Link>
           ) : <div />}
           {nextLesson ? (
-            <Link href={"/courses/" + course.slug + "/lessons/" + nextLesson.id} className="flex items-center gap-3 text-right" style={{ color: "var(--text-secondary)" }}>
-              <div>
-                <div className="body-sm">Next</div>
-                <div className="heading-sm" style={{ fontSize: 15 }}>{nextLesson.title}</div>
+            <Link
+              href={"/courses/" + course.slug + "/lessons/" + nextLesson.id}
+              style={{
+                display: "flex", alignItems: "center", gap: 10,
+                padding: "12px 16px",
+                borderRadius: "var(--radius-lg)",
+                background: `linear-gradient(135deg, ${colors[0]}, ${colors[1] || colors[0]})`,
+                color: "#fff",
+                textDecoration: "none",
+                transition: "all 0.2s",
+              }}
+            >
+              <div style={{ textAlign: "right" }}>
+                <div style={{ fontSize: 11, opacity: 0.8 }}>Next Lesson</div>
+                <div style={{ fontSize: 14, fontWeight: 600 }}>{nextLesson.title}</div>
               </div>
               <ArrowRight size={16} />
             </Link>
           ) : (
-            <Link href={"/practice/" + course.slug} className="btn btn-primary">
+            <Link
+              href={"/practice/" + course.slug}
+              style={{
+                display: "flex", alignItems: "center", gap: 10,
+                padding: "12px 20px",
+                borderRadius: "var(--radius-lg)",
+                background: "var(--gradient)",
+                color: "#fff",
+                textDecoration: "none",
+                fontWeight: 600,
+              }}
+            >
               Start Practice <ArrowRight size={16} />
             </Link>
           )}
