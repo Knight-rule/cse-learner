@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
-import { ChevronRight, Loader2, Building2, Search, X, ExternalLink, Bookmark, BookmarkCheck } from "lucide-react";
+import { ChevronRight, Loader2, Building2, Search, X, ExternalLink, Bookmark, BookmarkCheck, Briefcase, Sparkles } from "lucide-react";
 import { Company, companies as allCompanies } from "@/lib/companies";
 
 const popularCategories = [
@@ -93,25 +93,61 @@ export default function JobsPage() {
     : companies;
 
   return (
-    <div className="py-12 dark:bg-dark-900 min-h-screen">
-      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
-        <div className="flex items-center gap-2 text-dark-400 dark:text-dark-500 text-sm mb-6">
-          <Link href="/" className="hover:text-primary-600 dark:hover:text-primary-400">Home</Link>
-          <ChevronRight className="w-4 h-4" />
-          <span>Companies & Careers</span>
-        </div>
+    <div style={{ minHeight: "100vh" }}>
+      {/* ═══ Premium Hero ═══ */}
+      <div style={{
+        background: "linear-gradient(135deg, rgba(59, 130, 246, 0.06), rgba(16, 185, 129, 0.04), transparent)",
+        borderBottom: "1px solid var(--border)",
+        padding: "48px 0 40px",
+        position: "relative",
+        overflow: "hidden",
+      }}>
+        <div style={{
+          position: "absolute", top: 0, right: 0, bottom: 0, left: 0,
+          backgroundImage: "radial-gradient(circle at 60% 30%, rgba(59, 130, 246, 0.06), transparent 60%)",
+          pointerEvents: "none",
+        }} />
 
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <Building2 className="w-8 h-8 text-primary-600" />
-            <h1 className="text-4xl font-bold">Companies & Careers</h1>
+        <div className="container" style={{ position: "relative", zIndex: 1 }}>
+          <div className="breadcrumb" style={{ marginBottom: 24 }}>
+            <Link href="/">Home</Link>
+            <ChevronRight size={14} />
+            <span>Companies & Careers</span>
           </div>
-          <p className="text-dark-500 dark:text-dark-400 text-lg">Direct career page links — apply on the company site</p>
-        </div>
 
-        <div className="bg-gradient-to-br from-primary-50 to-primary-100/50 dark:from-primary-900/20 dark:to-primary-800/10 rounded-2xl p-6 mb-8">
-          <div className="relative max-w-2xl mx-auto">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-400 dark:text-dark-500" />
+          <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 8 }}>
+            <Briefcase size={24} style={{ color: "var(--accent-blue)" }} />
+            <h1 style={{
+              fontSize: "clamp(28px, 5vw, 36px)",
+              fontWeight: 800,
+              color: "var(--text-primary)",
+              lineHeight: 1.2,
+            }}>Companies & Careers</h1>
+          </div>
+          <p style={{ fontSize: 16, color: "var(--text-secondary)", lineHeight: 1.6, maxWidth: 520 }}>
+            Direct career page links — apply on the company site. {total}+ companies across every tech category.
+          </p>
+        </div>
+      </div>
+
+      {/* ═══ Content ═══ */}
+      <div className="container" style={{ padding: "32px 20px 80px" }}>
+        {/* Search */}
+        <div style={{
+          background: "var(--bg-card)",
+          border: "1px solid var(--border)",
+          borderRadius: "var(--radius-xl)",
+          padding: 20,
+          marginBottom: 20,
+        }}>
+          <div style={{
+            display: "flex", alignItems: "center", gap: 10,
+            padding: "12px 16px",
+            borderRadius: "var(--radius-lg)",
+            background: "var(--surface)",
+            border: "1px solid var(--border)",
+          }}>
+            <Search size={18} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
             <input
               type="text"
               placeholder="Search companies... (e.g. Google, AI, Fintech, India)"
@@ -123,24 +159,35 @@ export default function JobsPage() {
                   setQuery(inputValue);
                 }
               }}
-              className="w-full pl-12 pr-12 py-4 bg-white dark:bg-dark-800 rounded-xl text-base border-0 shadow-lg focus:ring-2 focus:ring-primary-500 transition-shadow dark:text-dark-100 dark:placeholder-dark-500"
+              style={{
+                flex: 1, border: "none", outline: "none",
+                background: "transparent", color: "var(--text-primary)",
+                fontSize: 15,
+              }}
             />
             {inputValue && (
-              <button onClick={clearSearch} className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-400 hover:text-dark-600 dark:hover:text-dark-300">
-                <X className="w-5 h-5" />
+              <button onClick={clearSearch} style={{
+                background: "none", border: "none", cursor: "pointer",
+                color: "var(--text-muted)", padding: 4,
+              }}>
+                <X size={18} />
               </button>
             )}
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2 mb-6">
+        {/* Categories */}
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
           <button
             onClick={() => setSelectedCategory("")}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              !selectedCategory
-                ? "bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 ring-1 ring-primary-300 dark:ring-primary-700"
-                : "bg-white dark:bg-dark-800 text-dark-600 dark:text-dark-300 hover:bg-dark-50 dark:hover:bg-dark-700 border border-gray-200 dark:border-dark-600"
-            }`}
+            style={{
+              padding: "8px 16px", borderRadius: "var(--radius-lg)",
+              background: !selectedCategory ? "var(--gradient)" : "var(--bg-card)",
+              border: `1px solid ${!selectedCategory ? "transparent" : "var(--border)"}`,
+              color: !selectedCategory ? "#fff" : "var(--text-secondary)",
+              fontSize: 13, fontWeight: 600, cursor: "pointer",
+              transition: "all 0.2s",
+            }}
           >
             All ({total})
           </button>
@@ -148,108 +195,184 @@ export default function JobsPage() {
             <button
               key={cat}
               onClick={() => setSelectedCategory(selectedCategory === cat ? "" : cat)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                selectedCategory === cat
-                  ? "bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 ring-1 ring-primary-300 dark:ring-primary-700"
-                  : "bg-white dark:bg-dark-800 text-dark-600 dark:text-dark-300 hover:bg-dark-50 dark:hover:bg-dark-700 border border-gray-200 dark:border-dark-600"
-              }`}
+              style={{
+                padding: "8px 16px", borderRadius: "var(--radius-lg)",
+                background: selectedCategory === cat ? "var(--gradient)" : "var(--bg-card)",
+                border: `1px solid ${selectedCategory === cat ? "transparent" : "var(--border)"}`,
+                color: selectedCategory === cat ? "#fff" : "var(--text-secondary)",
+                fontSize: 13, fontWeight: 500, cursor: "pointer",
+                transition: "all 0.2s",
+              }}
             >
               {cat}
             </button>
           ))}
         </div>
 
-        <div className="flex gap-2 mb-6">
+        {/* Tabs */}
+        <div style={{ display: "flex", gap: 8, marginBottom: 24 }}>
           <button
             onClick={() => setSavedTab(false)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              !savedTab ? "bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300" : "bg-dark-50 dark:bg-dark-800 text-dark-600 dark:text-dark-300 hover:bg-dark-100 dark:hover:bg-dark-700"
-            }`}
+            style={{
+              padding: "8px 16px", borderRadius: "var(--radius-lg)",
+              background: !savedTab ? `${"var(--accent)"}15` : "transparent",
+              border: "none",
+              color: !savedTab ? "var(--accent)" : "var(--text-muted)",
+              fontSize: 13, fontWeight: 600, cursor: "pointer",
+            }}
           >
             All Companies ({total})
           </button>
           <button
             onClick={() => setSavedTab(true)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              savedTab ? "bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300" : "bg-dark-50 dark:bg-dark-800 text-dark-600 dark:text-dark-300 hover:bg-dark-100 dark:hover:bg-dark-700"
-            }`}
+            style={{
+              padding: "8px 16px", borderRadius: "var(--radius-lg)",
+              background: savedTab ? `${"var(--accent)"}15` : "transparent",
+              border: "none",
+              color: savedTab ? "var(--accent)" : "var(--text-muted)",
+              fontSize: 13, fontWeight: 600, cursor: "pointer",
+            }}
           >
             Saved ({savedCompanies.length})
           </button>
         </div>
 
+        {/* Results */}
         {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "60px 20px" }}>
+            <Loader2 size={32} style={{ color: "var(--accent)", animation: "spin 1s linear infinite" }} />
           </div>
         ) : filteredCompanies.length === 0 ? (
-          <div className="text-center py-20 text-dark-400 dark:text-dark-500">
-            <Building2 className="w-12 h-12 mx-auto mb-3 opacity-50" />
-            <p className="font-medium text-lg">{savedTab ? "No saved companies" : "No companies found"}</p>
-            <p className="text-sm mt-1">{savedTab ? "Bookmark companies to see them here" : "Try a different search term"}</p>
+          <div style={{ textAlign: "center", padding: "60px 20px", color: "var(--text-muted)" }}>
+            <Building2 size={48} style={{ margin: "0 auto 16px", opacity: 0.4 }} />
+            <div style={{ fontSize: 18, fontWeight: 600, color: "var(--text-secondary)", marginBottom: 8 }}>
+              {savedTab ? "No saved companies" : "No companies found"}
+            </div>
+            <div style={{ fontSize: 14 }}>
+              {savedTab ? "Bookmark companies to see them here" : "Try a different search term"}
+            </div>
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
+            gap: 16,
+          }}>
             {filteredCompanies.map((company) => (
               <div
                 key={company.slug}
-                className="bg-white dark:bg-dark-800 rounded-xl border border-gray-100 dark:border-dark-700 shadow-sm hover:shadow-md transition-shadow p-5 flex flex-col"
+                style={{
+                  background: "var(--bg-card)",
+                  border: "1px solid var(--border)",
+                  borderRadius: "var(--radius-xl)",
+                  padding: 24,
+                  display: "flex", flexDirection: "column",
+                  transition: "all 0.3s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "var(--border-hover)";
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow = "0 8px 30px rgba(0, 0, 0, 0.15)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "var(--border)";
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
               >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center gap-3">
+                {/* Header */}
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 14 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <img
                       src={company.logo}
                       alt={company.name}
-                      className="w-12 h-12 rounded-lg object-contain bg-dark-50 dark:bg-dark-700"
+                      style={{
+                        width: 48, height: 48, borderRadius: "var(--radius-md)",
+                        objectFit: "contain", background: "var(--surface)",
+                        padding: 4,
+                      }}
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect width="48" height="48" rx="8" fill="%23374151"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="system-ui" font-size="18" font-weight="600" fill="%239ca3af">${company.name.charAt(0)}</text></svg>`)}`;
+                        (e.target as HTMLImageElement).src = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><rect width="48" height="48" rx="8" fill="%231a1a2e"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="system-ui" font-size="18" font-weight="600" fill="%239898b0">${company.name.charAt(0)}</text></svg>`)}`;
                       }}
                     />
                     <div>
-                      <h3 className="font-semibold text-dark-900 dark:text-dark-100">{company.name}</h3>
-                      <span className="text-xs text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 px-2 py-0.5 rounded-full">{company.category}</span>
+                      <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-primary)" }}>{company.name}</h3>
+                      <span style={{
+                        fontSize: 11, fontWeight: 600,
+                        padding: "2px 8px", borderRadius: 6,
+                        background: "rgba(59, 130, 246, 0.1)",
+                        color: "var(--accent-blue)",
+                      }}>{company.category}</span>
                     </div>
                   </div>
                   <button
                     onClick={() => toggleSave(company.slug)}
-                    className="text-dark-400 dark:text-dark-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                    style={{
+                      background: "none", border: "none", cursor: "pointer",
+                      color: savedCompanies.includes(company.slug) ? "var(--accent)" : "var(--text-muted)",
+                      padding: 4,
+                    }}
                   >
-                    {savedCompanies.includes(company.slug) ? (
-                      <BookmarkCheck className="w-5 h-5 text-primary-600" />
-                    ) : (
-                      <Bookmark className="w-5 h-5" />
-                    )}
+                    {savedCompanies.includes(company.slug) ? <BookmarkCheck size={20} /> : <Bookmark size={20} />}
                   </button>
                 </div>
 
-                <p className="text-sm text-dark-500 dark:text-dark-400 mb-3 flex-1">{company.description}</p>
+                {/* Description */}
+                <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.6, flex: 1, marginBottom: 14 }}>
+                  {company.description}
+                </p>
 
-                <div className="flex flex-wrap gap-1.5 mb-4">
-                  {company.tags.map((tag) => (
-                    <span key={tag} className="text-xs bg-dark-50 dark:bg-dark-700 text-dark-600 dark:text-dark-300 px-2 py-1 rounded-md">
-                      {tag}
-                    </span>
+                {/* Tags */}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 16 }}>
+                  {company.tags.slice(0, 4).map((tag) => (
+                    <span key={tag} style={{
+                      fontSize: 11, fontWeight: 500,
+                      padding: "3px 8px", borderRadius: 6,
+                      background: "var(--surface)",
+                      color: "var(--text-muted)",
+                    }}>{tag}</span>
                   ))}
+                  {company.tags.length > 4 && (
+                    <span style={{ fontSize: 11, color: "var(--text-muted)" }}>+{company.tags.length - 4}</span>
+                  )}
                 </div>
 
-                <div className="flex gap-2">
+                {/* Actions */}
+                <div style={{ display: "flex", gap: 8 }}>
                   <a
                     href={company.careers}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-white dark:bg-dark-700 border border-gray-200 dark:border-dark-600 text-dark-700 dark:text-dark-200 rounded-lg text-sm font-medium hover:bg-dark-50 dark:hover:bg-dark-600 transition-colors"
+                    style={{
+                      flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                      padding: "10px 14px",
+                      borderRadius: "var(--radius-md)",
+                      background: "var(--surface)",
+                      border: "1px solid var(--border)",
+                      color: "var(--text-secondary)",
+                      fontSize: 13, fontWeight: 500,
+                      textDecoration: "none",
+                      transition: "all 0.2s",
+                    }}
                   >
-                    Careers
-                    <ExternalLink className="w-3.5 h-3.5" />
+                    Careers <ExternalLink size={13} />
                   </a>
                   <a
                     href={company.applyLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
+                    style={{
+                      flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                      padding: "10px 14px",
+                      borderRadius: "var(--radius-md)",
+                      background: "var(--gradient)",
+                      color: "#fff",
+                      fontSize: 13, fontWeight: 600,
+                      textDecoration: "none",
+                      transition: "all 0.2s",
+                    }}
                   >
-                    Apply Now
-                    <ExternalLink className="w-3.5 h-3.5" />
+                    Apply Now <ExternalLink size={13} />
                   </a>
                 </div>
               </div>
@@ -257,22 +380,41 @@ export default function JobsPage() {
           </div>
         )}
 
+        {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-8">
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 32 }}>
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="px-4 py-2 bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-700 rounded-lg text-sm font-medium disabled:opacity-50 hover:bg-dark-50 dark:hover:bg-dark-700 transition-colors"
+              style={{
+                padding: "10px 20px", borderRadius: "var(--radius-lg)",
+                background: "var(--bg-card)",
+                border: "1px solid var(--border)",
+                color: "var(--text-secondary)",
+                fontSize: 14, fontWeight: 500,
+                cursor: page === 1 ? "not-allowed" : "pointer",
+                opacity: page === 1 ? 0.5 : 1,
+                transition: "all 0.2s",
+              }}
             >
               Previous
             </button>
-            <span className="text-sm text-dark-500 dark:text-dark-400 px-4">
+            <span style={{ fontSize: 13, color: "var(--text-muted)", padding: "0 12px" }}>
               Page {page} of {totalPages}
             </span>
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="px-4 py-2 bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-700 rounded-lg text-sm font-medium disabled:opacity-50 hover:bg-dark-50 dark:hover:bg-dark-700 transition-colors"
+              style={{
+                padding: "10px 20px", borderRadius: "var(--radius-lg)",
+                background: "var(--bg-card)",
+                border: "1px solid var(--border)",
+                color: "var(--text-secondary)",
+                fontSize: 14, fontWeight: 500,
+                cursor: page === totalPages ? "not-allowed" : "pointer",
+                opacity: page === totalPages ? 0.5 : 1,
+                transition: "all 0.2s",
+              }}
             >
               Next
             </button>
