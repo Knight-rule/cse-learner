@@ -4,7 +4,7 @@ export interface PracticeProblem {
   description: string;
   difficulty: "easy" | "medium" | "hard";
   starterCode: string;
-  language: "javascript" | "python" | "c" | "cpp";
+  language: "javascript" | "python" | "c" | "cpp" | "html";
   testCases: { input: string; expected: string }[];
   hints: string[];
   chapter?: string;
@@ -390,7 +390,7 @@ export const practiceData: CoursePractice[] = [
           title: "Create a Basic HTML Document Structure",
           description: "Create a valid HTML5 document with DOCTYPE, html, head, and body elements.",
           difficulty: "easy",
-          language: "javascript",
+          language: "html",
           chapter: "Introduction",
           starterCode: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>Document</title>\n</head>\n<body>\n  <!-- Your content here -->\n</body>\n</html>",
           testCases: [{input: "", expected: "Document contains <!DOCTYPE html>, <html>, <head>, <body>"}],
@@ -401,7 +401,7 @@ export const practiceData: CoursePractice[] = [
           title: "HTML Headings Hierarchy",
           description: "Create proper heading hierarchy from h1 to h6 in order.",
           difficulty: "easy",
-          language: "javascript",
+          language: "html",
           chapter: "Elements",
           starterCode: "<body>\n  <!-- Add headings h1 through h6 -->\n</body>",
           testCases: [{input: "", expected: "Contains h1, h2, h3, h4, h5, h6 in order"}],
@@ -412,7 +412,7 @@ export const practiceData: CoursePractice[] = [
           title: "Paragraphs and Line Breaks",
           description: "Create paragraphs with proper structure and use <br> for line breaks within paragraphs.",
           difficulty: "easy",
-          language: "javascript",
+          language: "html",
           chapter: "Elements",
           starterCode: "<body>\n  <!-- Create two paragraphs and use br for line breaks -->\n</body>",
           testCases: [{input: "", expected: "Contains at least 2 <p> tags and 1 <br>"}],
@@ -423,7 +423,7 @@ export const practiceData: CoursePractice[] = [
           title: "HTML Comments",
           description: "Add HTML comments to explain code sections without affecting rendering.",
           difficulty: "easy",
-          language: "javascript",
+          language: "html",
           chapter: "Introduction",
           starterCode: "<body>\n  <!-- Main content section -->\n  <p>Hello World</p>\n  <!-- TODO: Add footer here -->\n</body>",
           testCases: [{input: "", expected: "Contains at least one <!-- comment -->"}],
@@ -434,7 +434,7 @@ export const practiceData: CoursePractice[] = [
           title: "HTML Entities",
           description: "Use HTML entities to display special characters that would otherwise be interpreted as HTML.",
           difficulty: "easy",
-          language: "javascript",
+          language: "html",
           chapter: "Introduction",
           starterCode: "<p>\n  <!-- Display these characters: < > & \" ©\n  Use entities: &lt; &gt; &amp; &quot; &copy;\n</p>",
           testCases: [{input: "", expected: "Contains &lt;, &gt;, &amp;, &copy; entities"}],
@@ -445,7 +445,7 @@ export const practiceData: CoursePractice[] = [
           title: "Creating Hyperlinks",
           description: "Create links to external pages, internal sections, and email addresses.",
           difficulty: "easy",
-          language: "javascript",
+          language: "html",
           chapter: "Links",
           starterCode: "<nav>\n  <!-- Add links here -->\n</nav>",
           testCases: [{input: "", expected: "Contains at least 3 <a> tags with href"}],
@@ -456,7 +456,7 @@ export const practiceData: CoursePractice[] = [
           title: "Link Targets and Attributes",
           description: "Add target, rel, and title attributes to links for security and accessibility.",
           difficulty: "medium",
-          language: "javascript",
+          language: "html",
           chapter: "Links",
           starterCode: "<a href=\"https://example.com\">External Link</a>",
           testCases: [{input: "", expected: "Link has target=\"_blank\" and rel=\"noopener noreferrer\""}],
@@ -467,7 +467,7 @@ export const practiceData: CoursePractice[] = [
           title: "Embedding Images",
           description: "Add images with proper src, alt, width, and height attributes.",
           difficulty: "easy",
-          language: "javascript",
+          language: "html",
           chapter: "Images",
           starterCode: "<figure>\n  <!-- Add an image with alt text -->\n</figure>",
           testCases: [{input: "", expected: "Contains <img> with src and alt attributes"}],
@@ -478,7 +478,7 @@ export const practiceData: CoursePractice[] = [
           title: "Image Alt Text Best Practices",
           description: "Write appropriate alt text for informative and decorative images.",
           difficulty: "medium",
-          language: "javascript",
+          language: "html",
           chapter: "Images",
           starterCode: "<img src=\"photo.jpg\" alt=\"\">\n<img src=\"chart.png\" alt=\"\">",
           testCases: [{input: "", expected: "Decorative image has empty alt, informative image has descriptive alt"}],
