@@ -102,6 +102,22 @@ export default function PremiumCourseCard({ slug, title, description, icon, colo
         }}>
           <span style={{ fontSize: 13, color: "var(--text-muted)", display: "flex", alignItems: "center", gap: 6 }}>
             <BookOpen size={14} /> {lessonCount} lessons
+            {lessonCount >= 8 && (
+              <span style={{
+                fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5,
+                padding: "2px 6px", borderRadius: 4,
+                background: `${colors[0]}15`, color: colors[0],
+                border: `1px solid ${colors[0]}22`,
+              }}>Deep Dive</span>
+            )}
+            {lessonCount > 0 && lessonCount < 5 && (
+              <span style={{
+                fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5,
+                padding: "2px 6px", borderRadius: 4,
+                background: "rgba(16, 185, 129, 0.1)", color: "#10b981",
+                border: "1px solid rgba(16, 185, 129, 0.2)",
+              }}>Quick Start</span>
+            )}
           </span>
           <span style={{
             fontSize: 13, fontWeight: 600, color: colors[0],

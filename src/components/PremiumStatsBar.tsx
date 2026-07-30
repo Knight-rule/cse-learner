@@ -1,45 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, Code, Brain, Trophy, Sparkles, TrendingUp } from "lucide-react";
+import { BookOpen, Code, Brain, Trophy } from "lucide-react";
 import { courses } from "@/data/courses";
 import { practiceData } from "@/data/practice";
-
-function useCountUp(target: number, duration = 2000) {
-  const [count, setCount] = useState(target);
-  const ref = useRef<HTMLDivElement>(null);
-  const started = useRef(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReduced) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started.current) {
-          started.current = true;
-          setCount(0);
-          const start = performance.now();
-          const animate = (now: number) => {
-            const elapsed = now - start;
-            const progress = Math.min(elapsed / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            setCount(Math.round(eased * target));
-            if (progress < 1) requestAnimationFrame(animate);
-          };
-          requestAnimationFrame(animate);
-        }
-      },
-      { threshold: 0.3 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [target, duration]);
-
-  return { count, ref };
-}
 
 const totalProblems = practiceData.reduce((sum, c) => sum + c.problems.length, 0);
 const totalLessons = courses.reduce((sum, c) => sum + c.lessons.length, 0);
@@ -51,14 +15,41 @@ const stats = [
   { value: 60, label: "Hours of Content", suffix: "+", icon: Trophy, color: "#10b981" },
 ];
 
+function formatValue(value: number, suffix?: string) {
+  const display = value >= 1000 ? `${Math.round(value / 1000)}K` : String(value);
+  const plus = value >= 1000 ? "+" : suffix || "+";
+  return display + plus;
+}
+
 export default function PremiumStatsBar() {
+  const [visible, setVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) { setVisible(true); return; }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section style={{
       position: "relative",
       padding: "60px 0",
       overflow: "hidden",
     }}>
-      {/* Background glow */}
       <div style={{
         position: "absolute", inset: 0,
         background: "linear-gradient(180deg, transparent, rgba(249,115,22,0.03), transparent)",
@@ -66,16 +57,21 @@ export default function PremiumStatsBar() {
       }} />
 
       <div className="container" style={{ position: "relative" }}>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: 20,
-        }}>
-          {stats.map((s, i) => {
-            const { count, ref } = useCountUp(s.value);
+        <div
+          ref={ref}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: 20,
+            opacity: visible ? 1 : 0,
+            transform: visible ? "translateY(0)" : "translateY(24px)",
+            transition: "opacity 0.6s ease, transform 0.6s ease",
+          }}
+        >
+          {stats.map((s) => {
             const Icon = s.icon;
             return (
-              <div key={s.label} ref={ref} style={{
+              <div key={s.label} style={{
                 textAlign: "center",
                 padding: "32px 20px",
                 borderRadius: "var(--radius-xl)",
@@ -84,7 +80,6 @@ export default function PremiumStatsBar() {
                 position: "relative",
                 overflow: "hidden",
               }}>
-                {/* Top gradient line */}
                 <div style={{
                   position: "absolute", top: 0, left: "20%", right: "20%", height: 2,
                   background: `linear-gradient(90deg, transparent, ${s.color}44, transparent)`,
@@ -110,8 +105,7 @@ export default function PremiumStatsBar() {
                   lineHeight: 1.1,
                   marginBottom: 8,
                 }}>
-                  {count >= 1000 ? `${Math.round(count / 1000)}K` : count}
-                  {count >= 1000 ? "+" : s.suffix || "+"}
+                  {formatValue(s.value, s.suffix)}
                 </div>
 
                 <div style={{

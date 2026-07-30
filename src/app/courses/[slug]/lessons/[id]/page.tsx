@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, ArrowLeft, ArrowRight, ExternalLink, BookOpen, Code, CheckCircle2 } from "lucide-react";
+import { ChevronRight, ArrowLeft, ArrowRight, ExternalLink, BookOpen, Code, CheckCircle2, Brain } from "lucide-react";
 import { courses, getCourse } from "@/data/courses";
+import { practiceData } from "@/data/practice";
 import { notFound } from "next/navigation";
 import LessonContent from "@/components/LessonContent";
 import LessonTracker from "@/components/LessonTracker";
@@ -143,6 +144,29 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
           lessonIndex={lessonIndex}
           totalLessons={course.lessons.length}
         />
+
+        {/* Practice This Topic */}
+        {practiceData.some((p) => p.courseSlug === course.slug) && (
+          <Link
+            href={"/practice/" + course.slug}
+            style={{
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+              padding: "16px 24px",
+              borderRadius: "var(--radius-lg)",
+              background: "linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(168, 85, 247, 0.06))",
+              border: "1px solid rgba(59, 130, 246, 0.2)",
+              color: "var(--text-primary)",
+              textDecoration: "none",
+              fontSize: 15, fontWeight: 600,
+              marginBottom: 32,
+              transition: "all 0.2s",
+            }}
+          >
+            <Brain size={18} style={{ color: "var(--accent-blue)" }} />
+            Practice This Topic
+            <ArrowRight size={16} style={{ color: "var(--accent-blue)" }} />
+          </Link>
+        )}
 
         {/* ═══ Lesson Sidebar Outline (below content on mobile) ═══ */}
         <div style={{
