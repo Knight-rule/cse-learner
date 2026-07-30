@@ -49,11 +49,10 @@ export default function JobsPage() {
       setCompanies(data.companies || []);
       setCategories(data.categories || []);
       setTotalPages(data.pagination?.totalPages || 1);
-      setTotal(data.pagination?.total || 0);
+      if (data.pagination?.total) setTotal(data.pagination.total);
     } catch (err) {
       console.error("Failed to load companies:", err);
       setCompanies([]);
-      setTotal(0);
     }
     setLoading(false);
   }, [query, selectedCategory, page]);

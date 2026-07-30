@@ -16,8 +16,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: course.title,
     description: course.description,
-    openGraph: { title: course.title + " | CSE Learner", description: course.description, images: [{ url: "/og-image.svg", width: 1200, height: 630, alt: course.title }] },
-    twitter: { card: "summary_large_image", title: course.title + " | CSE Learner", description: course.description },
+    openGraph: { title: course.title + " | CSE Learner", description: course.description, images: [{ url: "/og-image.png", width: 1200, height: 630, alt: course.title }] },
+    twitter: { card: "summary_large_image", title: course.title + " | CSE Learner", description: course.description, images: ["/og-image.png"] },
   };
 }
 

@@ -2,11 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Users, BookOpen, Brain, Trophy } from "lucide-react";
+import { courses } from "@/data/courses";
+import { practiceData } from "@/data/practice";
 
 const icons = [Users, BookOpen, Brain, Trophy];
 
 function useCountUp(target: number, duration = 2000) {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(target);
+  const [animating, setAnimating] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const started = useRef(false);
 
@@ -18,6 +21,8 @@ function useCountUp(target: number, duration = 2000) {
       ([entry]) => {
         if (entry.isIntersecting && !started.current) {
           started.current = true;
+          setAnimating(true);
+          setCount(0);
           const start = performance.now();
           const animate = (now: number) => {
             const elapsed = now - start;
@@ -36,7 +41,7 @@ function useCountUp(target: number, duration = 2000) {
     return () => observer.disconnect();
   }, [target, duration]);
 
-  return { count, ref };
+  return { count, ref, animating };
 }
 
 interface Stat {
@@ -45,10 +50,13 @@ interface Stat {
   suffix?: string;
 }
 
+const totalProblems = practiceData.reduce((sum, c) => sum + c.problems.length, 0);
+const totalLessons = courses.reduce((sum, c) => sum + c.lessons.length, 0);
+
 const stats: Stat[] = [
-  { value: 29, label: "Courses" },
-  { value: 123, label: "Lessons" },
-  { value: 334, label: "Practice Problems" },
+  { value: courses.length, label: "Courses" },
+  { value: totalLessons, label: "Lessons" },
+  { value: totalProblems, label: "Practice Problems" },
   { value: 60, label: "Hours of Content", suffix: "+" },
 ];
 
@@ -67,7 +75,7 @@ export default function StatsBar() {
 }
 
 function StatItem({ stat, iconIndex }: { stat: Stat; iconIndex: number }) {
-  const { count, ref } = useCountUp(stat.value);
+  const { count, ref, animating } = useCountUp(stat.value);
   const Icon = icons[iconIndex];
 
   return (

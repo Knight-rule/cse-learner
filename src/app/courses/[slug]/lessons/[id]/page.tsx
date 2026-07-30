@@ -22,12 +22,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!course) return { title: "Not Found" };
   const lesson = course.lessons.find((l) => l.id === id);
   if (!lesson) return { title: "Not Found" };
-  const desc = lesson.content.split("\n")[0].substring(0, 157).replace(/\s+\S*$/, "") + "...";
+  const raw = lesson.content.split("\n")[0];
+  const truncated = raw.length <= 157 ? raw : raw.substring(0, 157).replace(/\s+\S*$/, "");
+  const desc = truncated + (truncated.length < raw.length ? "..." : "");
   return {
     title: `${lesson.title} - ${course.title}`,
     description: desc,
-    openGraph: { title: `${lesson.title} | ${course.title}`, description: desc, images: [{ url: "/og-image.svg", width: 1200, height: 630, alt: lesson.title }] },
-    twitter: { card: "summary_large_image", title: `${lesson.title} | ${course.title}`, description: desc },
+    openGraph: { title: `${lesson.title} | ${course.title}`, description: desc, images: [{ url: "/og-image.png", width: 1200, height: 630, alt: lesson.title }] },
+    twitter: { card: "summary_large_image", title: `${lesson.title} | ${course.title}`, description: desc, images: ["/og-image.png"] },
   };
 }
 
