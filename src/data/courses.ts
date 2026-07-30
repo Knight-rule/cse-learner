@@ -58,9 +58,9 @@ export const courses: Course[] = [
 
         title: "Introduction to Data Structures",
 
-        content: "Data structures are specialized formats for organizing, processing, and storing data efficiently. Choosing the right data structure is critical for writing performant programs.\n\nClassification:\n- Linear: Arrays, Linked Lists, Stacks, Queues\n- Non-linear: Trees, Graphs, Hash Tables\n- Static: Fixed size (arrays)\n- Dynamic: Resize as needed (linked lists, hash tables)\n\nTime Complexity Overview:\n- Access/Search: O(1) hash, O(log n) tree, O(n) linear\n- Insert/Delete: O(1) head of list, O(n) array middle\n\nSpace Complexity:\n- Arrays: O(n), minimal overhead\n- Linked Lists: O(n) + O(n) for pointers\n- Hash Tables: O(n) with load factor overhead\n\nUnderstanding Big-O notation helps you predict how your data structure will scale as input size grows. Amortized analysis accounts for occasional expensive operations like dynamic array resizing.",
+        content: "Biggest struggle when starting out: your code works on small test data but crashes or crawls when the real input arrives. That's because you picked the wrong data structure for the job. Choosing the right one is like picking the right tool from a toolbox — you wouldn't use a sledgehammer to hang a picture frame.\n\nThink of data structures as contracts with the CPU: each one guarantees certain operations are fast in exchange for others being slow. Arrays give you O(1) random access but O(n) insert in the middle. Linked lists give O(1) insert at head but O(n) random access. Hash tables give O(1) average lookup but no ordering. There is no free lunch — every choice is a tradeoff.\n\nCommon mistake: assuming all O(n) operations are equally fast. An O(n) array traversal that hits CPU cache lines is 10-100x faster than an O(n) linked list traversal that jumps between random memory addresses. Big-O ignores constants, but constants matter in practice.\n\nInterview trap: \"Design a data structure that supports insert, delete, and getRandom in O(1) average.\" The trick is combining an array (for O(1) random access) with a hash map (for O(1) lookup of element positions). When deleting, swap with the last element before popping to avoid O(n) shift.\n\nEngineering mindset: don't memorize operation complexities — derive them. An array's O(1) index access comes from the formula base + index × elementSize. A linked list is O(n) for access because you must follow pointers one by one. Understanding the why makes the what obvious.",
 
-        codeExample: `// Comparing data structure operations\nfunction compareStructures() {\n  const arr: number[] = [1, 2, 3, 4, 5];\n  const set = new Set(arr);\n  const map = new Map<number, string>();\n\n  // Array: O(1) access by index\n  console.log(arr[2]); // 3\n  // Array: O(n) search\n  console.log(arr.includes(3)); // true\n\n  // Set: O(1) membership check\n  console.log(set.has(3)); // true\n  set.add(6); // O(1) insert\n\n  // Map: O(1) lookup\n  map.set(1, "one");\n  console.log(map.get(1)); // "one"\n}\n\n// Big-O time complexity summary\nconst complexities = {\n  "O(1)": "Hash access, stack push/pop",\n  "O(log n)": "Binary search, BST balanced",\n  "O(n)": "Linear search, array traversal",\n  "O(n log n)": "Merge sort, heap sort",\n  "O(n^2)": "Bubble sort, nested loops"\n};`,
+        codeExample: `// Design a data structure for O(1) insert, delete, getRandom\nclass RandomizedSet {\n  private nums: number[] = [];\n  private indices = new Map<number, number>();\n\n  insert(val: number): boolean {\n    if (this.indices.has(val)) return false;\n    this.indices.set(val, this.nums.length);\n    this.nums.push(val);\n    return true;\n  }\n\n  remove(val: number): boolean {\n    if (!this.indices.has(val)) return false;\n    const i = this.indices.get(val)!;\n    const last = this.nums[this.nums.length - 1];\n    this.nums[i] = last;          // swap with last\n    this.indices.set(last, i);    // update last's index\n    this.nums.pop();              // O(1) removal\n    this.indices.delete(val);\n    return true;\n  }\n\n  getRandom(): number {\n    const i = Math.floor(Math.random() * this.nums.length);\n    return this.nums[i];          // O(1) random access\n  }\n}`,
 
         language: "typescript"
 
@@ -72,9 +72,9 @@ export const courses: Course[] = [
 
         title: "Arrays & Dynamic Arrays",
 
-        content: "Arrays store elements in contiguous memory, enabling O(1) random access via index-based addressing. The base address plus index times element size gives the memory location directly.\n\nStatic vs Dynamic Arrays:\n- Static: Fixed size, allocated on stack or heap\n- Dynamic: Resizable, typically doubles capacity when full\n- Amortized insertion is O(1) due to occasional O(n) copies\n\nTwo Pointers Technique:\n- Use two indices moving toward each other or in the same direction\n- Useful for pair searches, partitioning, and palindrome checks\n- Reduces O(n²) brute force to O(n)\n\nSliding Window:\n- Maintain a window over a subset of data\n- Expand/shrink based on conditions\n- Ideal for subarray/substring problems\n- O(n) time instead of O(n²) nested loops\n\nKadane's Algorithm:\n- Finds maximum subarray sum in O(n)\n- Track current sum, reset when negative\n- Elegant dynamic programming in a single pass",
+        content: "Off-by-one errors are the #1 bug in array code. Every student writes `arr.length` when they meant `arr.length - 1`. Why? Zero-indexing. An array of 5 elements has valid indices 0 through 4. The last element is always at `arr[arr.length - 1]`, not `arr[arr.length]`.\n\nThe real problem: arrays have fixed size. You pre-allocate 100 slots but the input has 101 elements. Dynamic arrays (like JavaScript's Array, Python's list, or C++'s vector) solve this by doubling capacity when full. That single resize costs O(n) to copy everything, but because it happens rarely, the amortized cost of each insert is still O(1).\n\nCommon interview trap: Two Sum seems easy until they ask for O(1) space. The brute-force is O(n²), the hash map is O(n) with O(n) space. But what if the array is sorted? Two pointers — one at each end, move inward based on sum — O(n) time, O(1) space. Knowing the input constraint changes the optimal algorithm.\n\nAnalogy: An array is like a hotel with numbered rooms. You can walk directly to room 42 without checking rooms 1-41. That's O(1) random access. But adding a person between rooms requires everyone after to shuffle down the hall. That's O(n) insert.\n\nEngineering mindset: contiguous memory is both the superpower (cache locality, constant-time index) and the weakness (costly inserts/deletes). Every array problem reduces to managing this tradeoff.",
 
-        codeExample: `// Kadane's Algorithm - Maximum Subarray Sum\nfunction maxSubarraySum(nums: number[]): number {\n  let maxSum = nums[0];\n  let currentSum = nums[0];\n\n  for (let i = 1; i < nums.length; i++) {\n    currentSum = Math.max(nums[i], currentSum + nums[i]);\n    maxSum = Math.max(maxSum, currentSum);\n  }\n  return maxSum;\n}\n\n// Sliding Window - Max Sum of K consecutive elements\nfunction maxSumWindow(nums: number[], k: number): number {\n  let windowSum = 0;\n  for (let i = 0; i < k; i++) windowSum += nums[i];\n  let max = windowSum;\n  for (let i = k; i < nums.length; i++) {\n    windowSum += nums[i] - nums[i - k];\n    max = Math.max(max, windowSum);\n  }\n  return max;\n}\n\n// Two Pointers - Check Palindrome\nfunction isPalindrome(s: string): boolean {\n  let left = 0, right = s.length - 1;\n  while (left < right) {\n    if (s[left] !== s[right]) return false;\n    left++;\n    right--;\n  }\n  return true;\n}`,
+        codeExample: `// Two Sum II - Input Array Is Sorted\nfunction twoSumSorted(nums: number[], target: number): number[] {\n  let left = 0, right = nums.length - 1;\n  while (left < right) {\n    const sum = nums[left] + nums[right];\n    if (sum === target) return [left + 1, right + 1];\n    if (sum < target) left++;\n    else right--;\n  }\n  return [];\n}\n\n// Dynamic array: doubling on resize\nclass DynamicArray {\n  private data: number[] = new Array(1);\n  private size = 0;\n\n  push(val: number): void {\n    if (this.size === this.data.length) {\n      const newArr = new Array(this.data.length * 2);\n      for (let i = 0; i < this.size; i++) newArr[i] = this.data[i];\n      this.data = newArr;\n    }\n    this.data[this.size++] = val;\n  }\n\n  get(i: number): number {\n    if (i < 0 || i >= this.size) throw new Error(\"Index out of bounds\");\n    return this.data[i];\n  }\n\n  get length(): number { return this.size; }\n}`,
 
         language: "typescript"
 
@@ -86,9 +86,9 @@ export const courses: Course[] = [
 
         title: "Strings & Pattern Matching",
 
-        content: "Strings are sequences of characters, typically implemented as immutable arrays. Understanding string manipulation is essential for coding interviews and text processing.\n\nCommon Operations:\n- Concatenation: O(n) for immutable strings\n- Substring: O(n) time and space\n- Comparison: O(min(m,n)) lexicographic\n\nKMP (Knuth-Morris-Pratt) Algorithm:\n- Efficient pattern matching in O(n + m) time\n- Preprocesses pattern to build LPS (Longest Prefix Suffix) array\n- Avoids redundant comparisons when mismatch occurs\n- Core idea: use pattern's internal structure to skip characters\n\nAnagram Check:\n- Two strings are anagrams if they have same characters\n- Sort both and compare: O(n log n)\n- Character frequency count: O(n) preferred\n\nPalindrome:\n- Reads same forward and backward\n- Two pointers approach: O(n) time, O(1) space\n- Can also use reverse and compare: O(n) space",
+        content: "Every naive pattern matcher falls into the same trap: `indexOf(\"abc\")` in a string like \"aaaaabaaaaac\" takes much longer than expected. The naive O(n×m) algorithm scans from every position, doing redundant work when a partial match fails. For a 100KB text and a 1KB pattern, that's 100 million comparisons.\n\nKMP (Knuth-Morris-Pratt) solves this with a devastatingly simple insight: when a mismatch occurs, the pattern itself tells you how far to slide forward — no need to backtrack in the text. It precomputes an LPS (Longest Proper Prefix that is also Suffix) array once, then uses it to skip characters during search. O(n + m) guaranteed.\n\nCommon mistake: forgetting strings are immutable in most languages. `str1 + str2` in a loop creates a new string every iteration — O(n²) time. Use arrays or StringBuilder instead.\n\nInterview trap: \"Given two strings, check if they're one edit away (insert, delete, replace).\" Most candidates jump to edit distance DP. Simpler: if lengths differ by more than 1, return false. If same length, check for exactly one replacement. If off by one, check insert/delete by skipping one character in the longer string.\n\nAnalogy: Searching for a pattern in text is like finding a lost item in a dark room. Brute force covers every inch. KMP uses a \"memory\" of where you've already looked to avoid re-checking areas you know can't contain the target.\n\nEngineering mindset: when you see a mismatch, ask \"what do I already know about the characters I've seen?\" That information should never be thrown away.",
 
-        codeExample: `// KMP Pattern Search\nfunction kmpSearch(text: string, pattern: string): number[] {\n  const lps = buildLPS(pattern);\n  const results: number[] = [];\n  let i = 0, j = 0;\n  while (i < text.length) {\n    if (text[i] === pattern[j]) {\n      i++; j++;\n      if (j === pattern.length) {\n        results.push(i - j);\n        j = lps[j - 1];\n      }\n    } else if (j > 0) {\n      j = lps[j - 1];\n    } else {\n      i++;\n    }\n  }\n  return results;\n}\n\nfunction buildLPS(pattern: string): number[] {\n  const lps = Array(pattern.length).fill(0);\n  let len = 0, i = 1;\n  while (i < pattern.length) {\n    if (pattern[i] === pattern[len]) {\n      lps[i++] = ++len;\n    } else if (len > 0) {\n      len = lps[len - 1];\n    } else {\n      lps[i++] = 0;\n    }\n  }\n  return lps;\n}`,
+        codeExample: `// KMP pattern search\nfunction strStr(haystack: string, needle: string): number {\n  if (!needle) return 0;\n  const lps = buildLPS(needle);\n  let i = 0, j = 0;\n  while (i < haystack.length) {\n    if (haystack[i] === needle[j]) { i++; j++; }\n    if (j === needle.length) return i - j;\n    if (i < haystack.length && haystack[i] !== needle[j]) {\n      j > 0 ? j = lps[j - 1] : i++;\n    }\n  }\n  return -1;\n}\n\nfunction buildLPS(p: string): number[] {\n  const lps = Array(p.length).fill(0);\n  let len = 0, i = 1;\n  while (i < p.length) {\n    if (p[i] === p[len]) lps[i++] = ++len;\n    else if (len > 0) len = lps[len - 1];\n    else lps[i++] = 0;\n  }\n  return lps;\n}\n\n// One Edit Distance check\nfunction isOneEditDistance(s: string, t: string): boolean {\n  if (Math.abs(s.length - t.length) > 1) return false;\n  if (s.length === t.length) {\n    let diffs = 0;\n    for (let i = 0; i < s.length; i++) if (s[i] !== t[i]) diffs++;\n    return diffs === 1;\n  }\n  const [longer, shorter] = s.length > t.length ? [s, t] : [t, s];\n  for (let i = 0; i < shorter.length; i++) {\n    if (longer[i] !== shorter[i]) return longer.slice(i + 1) === shorter.slice(i);\n  }\n  return true;\n}`,
 
         language: "typescript"
 
@@ -100,9 +100,9 @@ export const courses: Course[] = [
 
         title: "Linked Lists",
 
-        content: "A linked list is a chain of nodes where each node stores data and a pointer to the next node. Unlike arrays, linked lists use non-contiguous memory.\n\nTypes:\n- Singly Linked: Each node points to next, traversed forward only\n- Doubly Linked: Points both forward and backward, O(1) deletion with node reference\n- Circular: Last node connects back to first, useful for round-robin scheduling\n\nFloyd's Cycle Detection (Tortoise and Hare):\n- Two pointers move at different speeds\n- If cycle exists, they will meet inside the cycle\n- O(n) time, O(1) space\n- Also used to find cycle start point\n\nReversing a Linked List:\n- Iterative: Track prev, current, next; reverse pointers one by one\n- Recursive: Reach end, then reverse on the way back\n- Time: O(n), Space: O(1) iterative, O(n) recursive\n\nKey Insight: Always handle edge cases — empty list, single node, head changes.",
+        content: "Biggest problem with arrays: inserting at the front costs O(n) because everything shifts. A linked list solves this — just flip a pointer and you've inserted in O(1). The cost? You lose random access. To find element #5, you must walk through elements 1 through 4.\n\nBut this freedom comes with its own nightmare: pointer management. The #1 bug with linked lists is losing the head pointer. If you assign `head = head.next` without saving the old head, you've just leaked that node. A close second is dereferencing `current.next` when `current` is null.\n\nCommon interview trap: \"Detect a cycle in a linked list.\" Floyd's Tortoise and Hare — a slow pointer moves one step, a fast pointer moves two. If they ever meet, there's a cycle. O(n) time, O(1) space. Follow-up: \"Find the node where the cycle begins.\" After the pointers meet, reset one pointer to head and move both one step at a time — they'll meet at the cycle start.\n\nAnalogy: A singly linked list is like a treasure hunt where each clue tells you where to find the next one. You can't jump to clue 5 — you must follow the chain. A doubly linked list adds a \"previous clue\" pointer, letting you backtrack.\n\nEngineering mindset: linked lists teach pointer thinking — every operation is simply reassigning references. The core skill is visualizing pointer positions before and after each operation. Draw it on a whiteboard before coding.",
 
-        codeExample: `class ListNode<T> {\n  constructor(\n    public val: T,\n    public next: ListNode<T> | null = null\n  ) {}\n}\n\n// Floyd's Cycle Detection\nfunction hasCycle<T>(head: ListNode<T> | null): boolean {\n  let slow = head, fast = head;\n  while (fast && fast.next) {\n    slow = slow!.next;\n    fast = fast.next.next;\n    if (slow === fast) return true;\n  }\n  return false;\n}\n\n// Reverse linked list (iterative)\nfunction reverseList<T>(head: ListNode<T> | null): ListNode<T> | null {\n  let prev: ListNode<T> | null = null;\n  let current = head;\n  while (current) {\n    const next = current.next;\n    current.next = prev;\n    prev = current;\n    current = next;\n  }\n  return prev;\n}\n\n// Find cycle start node\nfunction detectCycleStart<T>(head: ListNode<T> | null): ListNode<T> | null {\n  let slow = head, fast = head;\n  while (fast && fast.next) {\n    slow = slow!.next;\n    fast = fast.next.next;\n    if (slow === fast) {\n      slow = head;\n      while (slow !== fast) {\n        slow = slow!.next;\n        fast = fast!.next;\n      }\n      return slow;\n    }\n  }\n  return null;\n}`,
+        codeExample: `class ListNode {\n  constructor(\n    public val: number,\n    public next: ListNode | null = null\n  ) {}\n}\n\n// Floyd's Cycle Detection\nfunction hasCycle(head: ListNode | null): boolean {\n  let slow = head, fast = head;\n  while (fast && fast.next) {\n    slow = slow!.next;\n    fast = fast.next.next;\n    if (slow === fast) return true;\n  }\n  return false;\n}\n\n// Reverse a linked list iteratively\nfunction reverseList(head: ListNode | null): ListNode | null {\n  let prev: ListNode | null = null;\n  let curr = head;\n  while (curr) {\n    const next = curr.next;\n    curr.next = prev;\n    prev = curr;\n    curr = next;\n  }\n  return prev;\n}\n\n// Find middle node using slow & fast\nfunction middleNode(head: ListNode | null): ListNode | null {\n  let slow = head, fast = head;\n  while (fast && fast.next) {\n    slow = slow!.next;\n    fast = fast.next.next;\n  }\n  return slow;\n}\n\n// Remove nth node from end (one pass)\nfunction removeNthFromEnd(head: ListNode | null, n: number): ListNode | null {\n  const dummy = new ListNode(0, head);\n  let slow: ListNode | null = dummy;\n  let fast: ListNode | null = dummy;\n  for (let i = 0; i <= n; i++) fast = fast!.next;\n  while (fast) { slow = slow!.next; fast = fast.next; }\n  slow!.next = slow!.next!.next;\n  return dummy.next;\n}`,
 
         language: "typescript"
 
@@ -114,9 +114,9 @@ export const courses: Course[] = [
 
         title: "Stacks",
 
-        content: "A stack is a LIFO (Last In, First Out) data structure. The last element added is the first one removed. Think of a stack of plates — you always take from the top.\n\nCore Operations:\n- push(item): Add to top — O(1)\n- pop(): Remove from top — O(1)\n- peek()/top(): View top without removing — O(1)\n- isEmpty(): Check if empty — O(1)\n\nApplications:\n- Function call stack (recursion)\n- Undo/redo in editors\n- Browser back button\n- Expression evaluation and syntax parsing\n\nBracket Matching:\n- Push opening brackets onto stack\n- On closing bracket, check if top matches\n- Valid if stack is empty at the end\n\nInfix to Postfix:\n- Use operator precedence and stack\n- Push operators, pop higher/equal precedence first\n- Eliminates parentheses in output\n\nMin Stack:\n- Track minimum element at each stack level\n- Auxiliary stack or store (value, currentMin) pairs",
+        content: "Biggest struggle: how do compilers check if your code's parentheses match? `({[)]}` — unbalanced, but naive counting fails because each bracket type matters. A stack solves this: push opening brackets, pop and match on closing brackets. If the stack's empty at the end, you're balanced.\n\nA stack is LIFO (Last In, First Out). The plate dispenser at a cafeteria — you grab the top plate, which was the last one added. Push adds a plate, pop removes it, peek lets you see the top without taking it.\n\nCommon mistake: popping from an empty stack. This crashes your program. Always guard with `if (stack.length === 0) return` or similar check.\n\nInterview trap: \"Design a stack that supports push, pop, top, and retrieving the minimum element in O(1) time.\" Most candidates think of scanning the stack to find the min, which is O(n). The trick: maintain a second stack that tracks the current minimum. On push, push `Math.min(val, currentMin)` onto the min-stack. On pop, pop both stacks. Now getMin() is just peeking at the min-stack.\n\nAnalogy: A stack is like a browser's back button. You navigate A → B → C. Each page pushed onto the stack. Hit back — C pops off, you return to B. This is exactly how the call stack works in recursion: functions push onto the call stack, and return pops them off.\n\nEngineering mindset: whenever you need to match things that enclose other things (brackets, HTML tags, function calls), or when the most recent item should be processed first — use a stack.",
 
-        codeExample: `// Stack with min() in O(1)\nclass MinStack {\n  private stack: number[] = [];\n  private minStack: number[] = [];\n\n  push(val: number): void {\n    this.stack.push(val);\n    const min = this.minStack.length === 0\n      ? val : Math.min(val, this.minStack[this.minStack.length - 1]);\n    this.minStack.push(min);\n  }\n\n  pop(): number {\n    this.minStack.pop();\n    return this.stack.pop()!;\n  }\n\n  top(): number {\n    return this.stack[this.stack.length - 1];\n  }\n\n  getMin(): number {\n    return this.minStack[this.minStack.length - 1];\n  }\n}\n\n// Infix to Postfix\nfunction infixToPostfix(expr: string): string {\n  const stack: string[] = [];\n  const output: string[] = [];\n  const precedence: Record<string, number> = { '+': 1, '-': 1, '*': 2, '/': 2 };\n  for (const token of expr.split(' ')) {\n    if ('+-*/'.includes(token)) {\n      while (stack.length && precedence[stack[stack.length - 1]] >= precedence[token]) {\n        output.push(stack.pop()!);\n      }\n      stack.push(token);\n    } else {\n      output.push(token);\n    }\n  }\n  while (stack.length) output.push(stack.pop()!);\n  return output.join(' ');\n}`,
+        codeExample: `// Min Stack - O(1) getMin\nclass MinStack {\n  private stack: number[] = [];\n  private mins: number[] = [];\n\n  push(val: number): void {\n    this.stack.push(val);\n    const min = this.mins.length === 0\n      ? val : Math.min(val, this.mins[this.mins.length - 1]);\n    this.mins.push(min);\n  }\n\n  pop(): void {\n    this.stack.pop();\n    this.mins.pop();\n  }\n\n  top(): number {\n    return this.stack[this.stack.length - 1];\n  }\n\n  getMin(): number {\n    return this.mins[this.mins.length - 1];\n  }\n}\n\n// Valid Parentheses\nfunction isValid(s: string): boolean {\n  const stack: string[] = [];\n  const pairs: Record<string, string> = { ')': '(', ']': '[', '}': '{' };\n  for (const c of s) {\n    if ('({['.includes(c)) {\n      stack.push(c);\n    } else if (stack.pop() !== pairs[c]) {\n      return false;\n    }\n  }\n  return stack.length === 0;\n}\n\n// Daily Temperatures — next greater element\nfunction dailyTemperatures(temps: number[]): number[] {\n  const result = Array(temps.length).fill(0);\n  const stack: number[] = [];\n  for (let i = 0; i < temps.length; i++) {\n    while (stack.length && temps[i] > temps[stack[stack.length - 1]]) {\n      const j = stack.pop()!;\n      result[j] = i - j;\n    }\n    stack.push(i);\n  }\n  return result;\n}`,
 
         language: "typescript"
 
@@ -128,9 +128,9 @@ export const courses: Course[] = [
 
         title: "Queues & Deques",
 
-        content: "A queue is a FIFO (First In, First Out) data structure. Elements are added at the rear and removed from the front. Think of a checkout line — first person in line is served first.\n\nCore Operations:\n- enqueue(item): Add to rear — O(1)\n- dequeue(): Remove from front — O(1)\n- front()/peek(): View front — O(1)\n- isEmpty(): Check if empty — O(1)\n\nCircular Queue:\n- Uses fixed-size array with wrap-around pointers\n- rear = (rear + 1) % capacity\n- Avoids wasting space at the front of array\n- Full when (rear + 1) % capacity === front\n\nDeque (Double-Ended Queue):\n- Insert and remove from both ends\n- Can simulate both stack and queue\n- Useful for sliding window maximum problem\n\nApplications:\n- BFS traversal (queue)\n- Task scheduling\n- Circular buffer for streaming data\n- Sliding window maximum using deque (monotonic queue)\n- Print queue and CPU scheduling",
+        content: "Biggest problem: you're processing tasks, and the first task submitted should finish first. FIFO — First In, First Out. Like the checkout line at a grocery store. Arrays seem to work, but `shift()` on a JavaScript array is O(n) — every element moves down one index.\n\nA proper queue uses a linked list or circular buffer. For a circular queue, maintain front and rear pointers: `rear = (rear + 1) % capacity`. When front catches rear, the queue is full. This reuses space at the front of the array after elements are dequeued.\n\nCommon mistake: using `Array.shift()` and `Array.unshift()` in performance-critical code. These shift all elements, costing O(n) per operation. Use two stacks (push to one, pop from the other) or a dedicated deque implementation.\n\nInterview trap: \"Sliding window maximum.\" Given an array and window size k, find the maximum in each window. Brute force is O(n×k). A deque (double-ended queue) solves it in O(n): maintain indices in the deque such that values are decreasing. The front is always the window's maximum. When moving the window, remove indices outside the window from the front and remove smaller values from the back before adding the new element.\n\nAnalogy: A queue is like a printer spool — documents are printed in the order they were sent. A deque is like a hallway with doors at both ends — you can enter and exit from either side.\n\nEngineering mindset: queue for BFS, deque for sliding window problems, priority queue (heap) when you need items sorted by something other than arrival time.",
 
-        codeExample: `// Circular Queue Implementation\nclass CircularQueue<T> {\n  private items: (T | undefined)[];\n  private front = 0;\n  private rear = 0;\n  private count = 0;\n\n  constructor(private capacity: number) {\n    this.items = new Array(capacity);\n  }\n\n  enqueue(item: T): boolean {\n    if (this.isFull()) return false;\n    this.items[this.rear] = item;\n    this.rear = (this.rear + 1) % this.capacity;\n    this.count++;\n    return true;\n  }\n\n  dequeue(): T | undefined {\n    if (this.isEmpty()) return undefined;\n    const item = this.items[this.front];\n    this.items[this.front] = undefined;\n    this.front = (this.front + 1) % this.capacity;\n    this.count--;\n    return item;\n  }\n\n  isEmpty(): boolean { return this.count === 0; }\n  isFull(): boolean { return this.count === this.capacity; }\n  size(): number { return this.count; }\n}\n\n// Sliding Window Maximum using Deque\nfunction maxSlidingWindow(nums: number[], k: number): number[] {\n  const deque: number[] = [];\n  const result: number[] = [];\n  for (let i = 0; i < nums.length; i++) {\n    while (deque.length && deque[0] < i - k + 1) deque.shift();\n    while (deque.length && nums[deque[deque.length - 1]] < nums[i]) deque.pop();\n    deque.push(i);\n    if (i >= k - 1) result.push(nums[deque[0]]);\n  }\n  return result;\n}`,
+        codeExample: `// Queue using two stacks (amortized O(1))\nclass Queue<T> {\n  private inbox: T[] = [];\n  private outbox: T[] = [];\n\n  enqueue(item: T): void {\n    this.inbox.push(item);\n  }\n\n  dequeue(): T | undefined {\n    if (this.outbox.length === 0) {\n      while (this.inbox.length) this.outbox.push(this.inbox.pop()!);\n    }\n    return this.outbox.pop();\n  }\n\n  peek(): T | undefined {\n    if (this.outbox.length === 0) {\n      while (this.inbox.length) this.outbox.push(this.inbox.pop()!);\n    }\n    return this.outbox[this.outbox.length - 1];\n  }\n\n  isEmpty(): boolean { return this.inbox.length === 0 && this.outbox.length === 0; }\n}\n\n// Sliding Window Maximum - O(n) using deque\nfunction maxSlidingWindow(nums: number[], k: number): number[] {\n  const deque: number[] = [];\n  const result: number[] = [];\n  for (let i = 0; i < nums.length; i++) {\n    while (deque.length && deque[0] < i - k + 1) deque.shift();\n    while (deque.length && nums[deque[deque.length - 1]] < nums[i]) deque.pop();\n    deque.push(i);\n    if (i >= k - 1) result.push(nums[deque[0]]);\n  }\n  return result;\n}`,
 
         language: "typescript"
 
@@ -142,9 +142,9 @@ export const courses: Course[] = [
 
         title: "Trees & Binary Trees",
 
-        content: "A tree is a hierarchical data structure with a root node and zero or more child nodes. Binary trees restrict each node to at most two children (left and right).\n\nBinary Search Tree (BST):\n- Left subtree values < Node value < Right subtree values\n- Search, insert, delete: O(log n) average, O(n) worst (unbalanced)\n- In-order traversal yields sorted order\n\nTree Traversals:\n- Inorder (Left, Root, Right): Sorted order for BST\n- Preorder (Root, Left, Right): Creates copy of tree, prefix expression\n- Postorder (Left, Right, Root): Delete tree, postfix expression\n- Level-order (BFS): Process level by level using queue\n\nBalanced Trees:\n- AVL tree: Self-balancing BST, O(log n) guaranteed\n- Red-Black tree: Less strict balancing, used in language runtimes\n\nComplete Binary Tree: All levels filled except possibly last, filled left to right. Used in heap representation.",
+        content: "Biggest problem with linear structures: they can't represent hierarchy. Your file system isn't a flat array — folders contain files and subfolders. HTML isn't a list — elements nest inside other elements. You need a tree.\n\nA binary tree has a root and at most two children (left and right). A Binary Search Tree (BST) adds one rule: all left descendants are smaller, all right descendants are larger. This magical property means in-order traversal yields sorted order. And search, insert, and delete become O(log n) — if the tree is balanced.\n\nCommon mistake: \"Validate BST.\" Most beginners check only immediate children — `root.left.val < root.val < root.right.val`. That's wrong! Every node in the left subtree must be less than the root, not just the immediate child. The right subtree of a left child could contain values larger than root. Pass down min and max bounds recursively.\n\nInterview trap: \"Lowest Common Ancestor of a BST.\" Most candidates overthink this. Since it's a BST, start at the root and walk down: if both nodes are smaller, go left. If both larger, go right. Otherwise, the current node is the LCA — one node is in the left subtree, the other in the right. O(h) time, O(1) space.\n\nAnalogy: A tree is like a company org chart. The CEO (root) has VPs (children), who have managers, who have ICs. To find someone, start at the CEO and follow the chain of command. A BST is like a phone book — you open to the middle and decide whether to go left (earlier names) or right (later names), halving the search space each time.",
 
-        codeExample: `class TreeNode {\n  constructor(\n    public val: number,\n    public left: TreeNode | null = null,\n    public right: TreeNode | null = null\n  ) {}\n}\n\n// Insert into BST\nfunction insertBST(root: TreeNode | null, val: number): TreeNode {\n  if (!root) return new TreeNode(val);\n  if (val < root.val) root.left = insertBST(root.left, val);\n  else root.right = insertBST(root.right, val);\n  return root;\n}\n\n// Level-order traversal (BFS)\nfunction levelOrder(root: TreeNode | null): number[][] {\n  if (!root) return [];\n  const result: number[][] = [];\n  const queue: TreeNode[] = [root];\n  while (queue.length) {\n    const level: number[] = [];\n    const size = queue.length;\n    for (let i = 0; i < size; i++) {\n      const node = queue.shift()!;\n      level.push(node.val);\n      if (node.left) queue.push(node.left);\n      if (node.right) queue.push(node.right);\n    }\n    result.push(level);\n  }\n  return result;\n}\n\n// Validate BST\nfunction isValidBST(root: TreeNode | null, min = -Infinity, max = Infinity): boolean {\n  if (!root) return true;\n  if (root.val <= min || root.val >= max) return false;\n  return isValidBST(root.left, min, root.val) && isValidBST(root.right, root.val, max);\n}`,
+        codeExample: `class TreeNode {\n  constructor(\n    public val: number = 0,\n    public left: TreeNode | null = null,\n    public right: TreeNode | null = null\n  ) {}\n}\n\n// Validate BST with min/max bounds\nfunction isValidBST(root: TreeNode | null, min = -Infinity, max = Infinity): boolean {\n  if (!root) return true;\n  if (root.val <= min || root.val >= max) return false;\n  return isValidBST(root.left, min, root.val)\n      && isValidBST(root.right, root.val, max);\n}\n\n// LCA in BST\nfunction lowestCommonAncestor(root: TreeNode | null, p: TreeNode, q: TreeNode): TreeNode | null {\n  while (root) {\n    if (p.val < root.val && q.val < root.val) root = root.left;\n    else if (p.val > root.val && q.val > root.val) root = root.right;\n    else return root;\n  }\n  return null;\n}\n\n// Level order traversal\nfunction levelOrder(root: TreeNode | null): number[][] {\n  if (!root) return [];\n  const result: number[][] = [];\n  const queue: TreeNode[] = [root];\n  while (queue.length) {\n    const level: number[] = [];\n    for (let i = queue.length; i > 0; i--) {\n      const node = queue.shift()!;\n      level.push(node.val);\n      if (node.left) queue.push(node.left);\n      if (node.right) queue.push(node.right);\n    }\n    result.push(level);\n  }\n  return result;\n}`,
 
         language: "typescript"
 
@@ -156,9 +156,9 @@ export const courses: Course[] = [
 
         title: "Heaps & Priority Queues",
 
-        content: "A heap is a complete binary tree that satisfies the heap property:\n- Max-Heap: Parent >= Children (largest element at root)\n- Min-Heap: Parent <= Children (smallest element at root)\n\nHeap Operations (on array representation):\n- Insert: Add at end, bubble up — O(log n)\n- Extract min/max: Replace root with last, bubble down — O(log n)\n- Peek: View root — O(1)\n- Build heap from array: O(n)\n\nArray Representation:\n- Parent at index i → children at 2i+1 and 2i+2\n- Child at index i → parent at floor((i-1)/2)\n\nHeap Sort:\n- Build max-heap from array: O(n)\n- Extract max n times: O(n log n)\n- In-place, O(1) extra space, but not stable\n\nPriority Queue:\n- Abstract data type, heap is the implementation\n- Elements have priorities, highest priority served first\n- Used in Dijkstra's, Huffman coding, task scheduling\n- JavaScript has no built-in, use min-heap with array",
+        content: "Biggest struggle: you need the k largest elements from an array. Sorting the whole array is O(n log n) — wasteful when you only need the top 10 out of a million. A min-heap of size k does it in O(n log k).\n\nA heap is a complete binary tree with a special property: in a max-heap, every parent is larger than its children. The largest element is at the root. In a min-heap, every parent is smaller. It's stored in an array where index i has children at 2i+1 and 2i+2 — no pointers needed.\n\nCommon mistake: confusing heap property with BST property. In a BST, left < parent < right globally. In a heap, the only guarantee is parent-child comparison — a child can be larger or smaller than its sibling. You cannot search a heap efficiently (no O(log n) binary search).\n\nInterview trap: \"Top K Frequent Elements.\" Most candidates over-engineer. Step 1: build a frequency map (O(n)). Step 2: use a min-heap of size k — push each (frequency, element) pair. If heap size exceeds k, pop the smallest frequency. At the end, the heap contains the k most frequent. O(n log k).\n\nAnalogy: A priority queue is like an emergency room triage. Patients don't get treated FIFO — the one with the heart attack goes before the one with a paper cut. Priority determines order, not arrival time.\n\nEngineering mindset: whenever you need \"the top k\" or \"the smallest k\" — think heap. Whenever you need items processed by priority rather than order — think heap. Merge k sorted lists? Min-heap. Dijkstra's shortest path? Min-heap. Find median in a stream? Two heaps (one min, one max).",
 
-        codeExample: `// Min-Heap Implementation\nclass MinHeap {\n  private data: number[] = [];\n\n  push(val: number): void {\n    this.data.push(val);\n    this.bubbleUp(this.data.length - 1);\n  }\n\n  pop(): number | undefined {\n    if (this.data.length === 0) return undefined;\n    const min = this.data[0];\n    const last = this.data.pop()!;\n    if (this.data.length > 0) {\n      this.data[0] = last;\n      this.bubbleDown(0);\n    }\n    return min;\n  }\n\n  private bubbleUp(i: number): void {\n    while (i > 0) {\n      const parent = Math.floor((i - 1) / 2);\n      if (this.data[parent] <= this.data[i]) break;\n      [this.data[parent], this.data[i]] = [this.data[i], this.data[parent]];\n      i = parent;\n    }\n  }\n\n  private bubbleDown(i: number): void {\n    while (true) {\n      let smallest = i;\n      const left = 2 * i + 1, right = 2 * i + 2;\n      if (left < this.data.length && this.data[left] < this.data[smallest]) smallest = left;\n      if (right < this.data.length && this.data[right] < this.data[smallest]) smallest = right;\n      if (smallest === i) break;\n      [this.data[i], this.data[smallest]] = [this.data[smallest], this.data[i]];\n      i = smallest;\n    }\n  }\n\n  peek(): number | undefined { return this.data[0]; }\n  size(): number { return this.data.length; }\n}`,
+        codeExample: `// Min-heap of size k for Top K elements\nfunction findKthLargest(nums: number[], k: number): number {\n  const heap: number[] = [];\n  for (const n of nums) {\n    heap.push(n);\n    heap.sort((a, b) => a - b); // simplifies to built-in sort (smallest first)\n    if (heap.length > k) heap.shift();\n  }\n  return heap[0];\n}\n\n// Priority queue for merging k sorted lists\nfunction mergeKLists(lists: number[][]): number[] {\n  const pq: [number, number, number][] = []; // [val, listIdx, elemIdx]\n  for (let i = 0; i < lists.length; i++) {\n    if (lists[i].length) pq.push([lists[i][0], i, 0]);\n  }\n  pq.sort((a, b) => a[0] - b[0]);\n  const result: number[] = [];\n  while (pq.length) {\n    const [val, li, ei] = pq.shift()!;\n    result.push(val);\n    if (ei + 1 < lists[li].length) {\n      pq.push([lists[li][ei + 1], li, ei + 1]);\n      pq.sort((a, b) => a[0] - b[0]);\n    }\n  }\n  return result;\n}\n\n// Find median from data stream (two heaps)\nclass MedianFinder {\n  private minHeap: number[] = [];\n  private maxHeap: number[] = [];\n  addNum(num: number): void {\n    this.maxHeap.push(num);\n    this.maxHeap.sort((a, b) => b - a);\n    this.minHeap.push(this.maxHeap.shift()!);\n    this.minHeap.sort((a, b) => a - b);\n    if (this.maxHeap.length < this.minHeap.length) {\n      this.maxHeap.push(this.minHeap.shift()!);\n      this.maxHeap.sort((a, b) => b - a);\n    }\n  }\n  findMedian(): number {\n    return this.maxHeap.length > this.minHeap.length\n      ? this.maxHeap[0]\n      : (this.maxHeap[0] + this.minHeap[0]) / 2;\n  }\n}`,
 
         language: "typescript"
 
@@ -170,9 +170,9 @@ export const courses: Course[] = [
 
         title: "Graphs",
 
-        content: "A graph consists of vertices (nodes) and edges connecting them. Graphs model relationships — social networks, maps, dependencies, and more.\n\nRepresentations:\n- Adjacency Matrix: O(V²) space, O(1) edge lookup\n- Adjacency List: O(V + E) space, O(degree) neighbor access\n\nBFS (Breadth-First Search):\n- Explores all neighbors before moving deeper\n- Uses queue data structure\n- Finds shortest path in unweighted graphs\n- O(V + E) time\n\nDFS (Depth-First Search):\n- Explores as deep as possible before backtracking\n- Uses stack (or recursion)\n- Useful for cycle detection, topological sort\n- O(V + E) time\n\nCycle Detection:\n- Undirected: DFS with parent tracking, or Union-Find\n- Directed: DFS with three states (unvisited, visiting, visited)\n\nTopological Sort:\n- Linear ordering of directed acyclic graph (DAG)\n- For every edge u→v, u appears before v\n- Kahn's algorithm (BFS) or DFS-based\n- Used in task scheduling, build systems, course prerequisites",
+        content: "Biggest problem: how do I find the shortest route between two cities? Or whether two people on Facebook are connected? Or what order to take courses so prerequisites are satisfied? These are all graph problems — and students often can't recognize the pattern.\n\nA graph is just nodes (vertices) connected by edges. Edges can be directed (Twitter follow: A → B) or undirected (Facebook friend: A — B), weighted (distance in km) or unweighted.\n\nCommon mistake: forgetting to track visited nodes. Without a visited set, DFS/BFS loops forever in a cyclic graph. Always initialize `visited = new Set()` and check/mark when visiting a node.\n\nInterview trap: \"Clone a graph.\" Given a reference to a node in a graph, return a deep copy. The key insight: use a hash map from original node to cloned node. BFS or DFS from the start, and for each edge, either create a new neighbor or reuse an already-cloned one from the map. Without the map, you'd re-clone the same node multiple times, creating an infinite loop or a broken graph.\n\nAnalogy: BFS is like dropping ink on paper — it spreads outward evenly in all directions, reaching closest points first. That's why it finds the shortest path in unweighted graphs. DFS is like exploring a cave — you go as deep as possible down one tunnel before backing up and trying another.\n\nEngineering mindset: recognize graph problems by their keywords — \"connected\", \"shortest path\", \"reachable\", \"dependency order\". Choose BFS when distance matters (shortest path, levels). Choose DFS when structure matters (cycles, topo sort, connectivity).",
 
-        codeExample: `// DFS - Cycle Detection in Directed Graph\nfunction hasCycleDFS(graph: number[][]): boolean {\n  const n = graph.length;\n  const state = Array(n).fill(0); // 0=unvisited, 1=visiting, 2=visited\n\n  function dfs(node: number): boolean {\n    if (state[node] === 1) return true;\n    if (state[node] === 2) return false;\n    state[node] = 1;\n    for (const neighbor of graph[node]) {\n      if (dfs(neighbor)) return true;\n    }\n    state[node] = 2;\n    return false;\n  }\n\n  for (let i = 0; i < n; i++) {\n    if (dfs(i)) return true;\n  }\n  return false;\n}\n\n// Topological Sort - Kahn's Algorithm\nfunction topologicalSort(n: number, edges: [number, number][]): number[] {\n  const graph = Array.from({ length: n }, () => [] as number[]);\n  const inDegree = Array(n).fill(0);\n  for (const [u, v] of edges) {\n    graph[u].push(v);\n    inDegree[v]++;\n  }\n  const queue = inDegree.reduce((q, deg, i) => {\n    if (deg === 0) q.push(i);\n    return q;\n  }, [] as number[]);\n  const result: number[] = [];\n  while (queue.length) {\n    const node = queue.shift()!;\n    result.push(node);\n    for (const neighbor of graph[node]) {\n      inDegree[neighbor]--;\n      if (inDegree[neighbor] === 0) queue.push(neighbor);\n    }\n  }\n  return result.length === n ? result : [];\n}`,
+        codeExample: `// Clone graph using BFS + hash map\nclass GraphNode {\n  constructor(public val: number, public neighbors: GraphNode[] = []) {}\n}\n\nfunction cloneGraph(node: GraphNode | null): GraphNode | null {\n  if (!node) return null;\n  const map = new Map<GraphNode, GraphNode>();\n  const queue: GraphNode[] = [node];\n  map.set(node, new GraphNode(node.val));\n  while (queue.length) {\n    const curr = queue.shift()!;\n    for (const n of curr.neighbors) {\n      if (!map.has(n)) {\n        map.set(n, new GraphNode(n.val));\n        queue.push(n);\n      }\n      map.get(curr)!.neighbors.push(map.get(n)!);\n    }\n  }\n  return map.get(node)!;\n}\n\n// BFS shortest path in unweighted graph\nfunction shortestPath(graph: number[][], start: number, end: number): number {\n  const visited = new Set<number>();\n  const queue: [number, number][] = [[start, 0]];\n  visited.add(start);\n  while (queue.length) {\n    const [node, dist] = queue.shift()!;\n    if (node === end) return dist;\n    for (const n of graph[node]) {\n      if (!visited.has(n)) {\n        visited.add(n);\n        queue.push([n, dist + 1]);\n      }\n    }\n  }\n  return -1;\n}`,
 
         language: "typescript"
 
@@ -184,9 +184,9 @@ export const courses: Course[] = [
 
         title: "Hash Tables",
 
-        content: "A hash table maps keys to values using a hash function that converts keys into array indices. Average-case O(1) for insert, delete, and search makes hash tables extremely fast.\n\nHash Functions:\n- Convert arbitrary keys to fixed-range integers\n- Should distribute uniformly to minimize collisions\n- Good hash: deterministic, fast to compute, uniform distribution\n\nCollision Handling:\n- Chaining: Each bucket holds a linked list of entries\n- Open Addressing: Find next empty slot (linear/quadratic probing)\n- Load factor (n/m) determines when to resize\n\nTwo Sum Pattern:\n- Store seen values in hash map\n- For each element, check if complement exists\n- O(n) time vs O(n²) brute force\n\nFrequency Counting:\n- Count occurrences of each element\n- Use Map<element, count> pattern\n- Useful for anagrams, duplicates, histograms\n\nDynamic Resizing:\n- When load factor > threshold (e.g., 0.75)\n- Create larger array, rehash all entries\n- Amortized O(1) per insertion",
+        content: "Biggest struggling moment: arrays are indexed by integers (0, 1, 2…). But what if you need to look something up by name, not index? Searching an array by value is O(n). That's where hash tables come in — average O(1) lookup by any key.\n\nA hash table uses a hash function to convert a key (string, number, object) into an array index. Good hash functions distribute keys uniformly. Bad ones cause collisions — multiple keys mapping to the same index.\n\nCollision handling is crucial. Chaining stores a linked list at each index — multiple entries share the same bucket. Open addressing finds the next empty slot when a collision occurs. The load factor (elements / capacity) determines when to resize. At 0.75 load, the table doubles and all entries are rehashed. This resize costs O(n) but is amortized O(1) per insert.\n\nCommon mistake: using an object as a hash map with integer keys. JavaScript converts integer keys to strings. Use `Map<number, T>` instead. Also: `Map.prototype.has()` exists but beginners use `map[key] !== undefined` which gives false negatives for explicitly stored `undefined` values.\n\nInterview trap: \"Two Sum\" — O(n) with hash map. But the spin: \"Find all pairs that sum to target.\" Now you need to handle duplicates correctly. Use a frequency map: for each element, check if the complement exists with remaining count > 0. Decrement counts to avoid reusing the same element.\n\nAnalogy: A hash table is like a library with a card catalog. The hash function is the Dewey Decimal System — it tells you which shelf (bucket) a book should be on. Multiple books can share a shelf (collision), but you can still find yours quickly by checking the few books there.",
 
-        codeExample: `// Two Sum using hash map - O(n)\nfunction twoSum(nums: number[], target: number): number[] {\n  const map = new Map<number, number>();\n  for (let i = 0; i < nums.length; i++) {\n    const complement = target - nums[i];\n    if (map.has(complement)) {\n      return [map.get(complement)!, i];\n    }\n    map.set(nums[i], i);\n  }\n  return [];\n}\n\n// Frequency counting - Group Anagrams\nfunction groupAnagrams(strs: string[]): string[][] {\n  const map = new Map<string, string[]>();\n  for (const str of strs) {\n    const key = str.split('').sort().join('');\n    if (!map.has(key)) map.set(key, []);\n    map.get(key)!.push(str);\n  }\n  return Array.from(map.values());\n}\n\n// Check if two strings are anagrams\nfunction isAnagram(s: string, t: string): boolean {\n  if (s.length !== t.length) return false;\n  const freq = new Map<string, number>();\n  for (const c of s) freq.set(c, (freq.get(c) || 0) + 1);\n  for (const c of t) {\n    if (!freq.has(c)) return false;\n    freq.set(c, freq.get(c)! - 1);\n    if (freq.get(c) === 0) freq.delete(c);\n  }\n  return freq.size === 0;\n}`,
+        codeExample: `// Two Sum — O(n) with hash map\nfunction twoSum(nums: number[], target: number): number[] {\n  const map = new Map<number, number>();\n  for (let i = 0; i < nums.length; i++) {\n    const complement = target - nums[i];\n    if (map.has(complement)) return [map.get(complement)!, i];\n    map.set(nums[i], i);\n  }\n  return [];\n}\n\n// First non-repeating character\nfunction firstUniqChar(s: string): number {\n  const freq = new Map<string, number>();\n  for (const c of s) freq.set(c, (freq.get(c) || 0) + 1);\n  for (let i = 0; i < s.length; i++) {\n    if (freq.get(s[i]) === 1) return i;\n  }\n  return -1;\n}\n\n// Group Anagrams\nfunction groupAnagrams(strs: string[]): string[][] {\n  const map = new Map<string, string[]>();\n  for (const s of strs) {\n    const key = s.split('').sort().join('');\n    if (!map.has(key)) map.set(key, []);\n    map.get(key)!.push(s);\n  }\n  return Array.from(map.values());\n}\n\n// Contains Duplicate II — within k distance\nfunction containsNearbyDuplicate(nums: number[], k: number): boolean {\n  const seen = new Map<number, number>();\n  for (let i = 0; i < nums.length; i++) {\n    if (seen.has(nums[i]) && i - seen.get(nums[i])! <= k) return true;\n    seen.set(nums[i], i);\n  }\n  return false;\n}`,
 
         language: "typescript"
 
@@ -218,9 +218,9 @@ export const courses: Course[] = [
 
         title: "Introduction to Algorithms",
 
-        content: "An algorithm is a finite sequence of well-defined instructions for solving a problem. Key properties include correctness (produces the right output for all valid inputs), finiteness (terminates after a bounded number of steps), and efficiency (uses minimal time and space resources).\n\nWe measure algorithm efficiency using Big-O notation, which describes how runtime or memory grows relative to input size. Common complexities from best to worst: O(1) constant, O(log n) logarithmic, O(n) linear, O(n log n) linearithmic, O(n²) quadratic, O(2ⁿ) exponential.\n\nRecurrence relations express the time complexity of recursive algorithms. For example, merge sort satisfies T(n) = 2T(n/2) + O(n), which solves to O(n log n) via the Master Theorem. The Master Theorem gives T(a, b, f(n)) based on comparing f(n) to n^(log_b(a)).\n\nUnderstanding these fundamentals lets you analyze any algorithm and compare solutions objectively.",
+        content: "Biggest mistake beginners make: treating algorithms as abstract math, not engineering tools. An algorithm isn't just code — it's a decision. Every algorithm you pick trades time against space, precision against performance, simplicity against speed.\n\nThe real problem: you have a working solution, but it times out on large inputs. You don't need a different language. You need to understand growth rates. O(n²) vs O(n log n) is the difference between 1 second and 17 minutes when n = 1,000,000.\n\nCommon trap: assuming lower Big-O always runs faster. O(n) with high constant factors can lose to O(n²) for small n. The hidden constant matters — that's why insertion sort beats quicksort on arrays under ~50 elements.\n\nEngineering mindset: analyze before you optimize. Profile first. Don't guess where the bottleneck is. Amdahl's Law: speeding up 50% of the code by 2x only gives 33% overall gain. Focus on the critical path.\n\nInterview trap: \"What's the time complexity?\" They're not testing if you can recite the answer. They're testing if you can derive it — trace the loops, count operations, explain your reasoning step by step.",
 
-        codeExample: `// Big-O Analysis Examples\nfunction sumArray(arr: number[]): number {\n  let sum = 0;              // O(1)\n  for (let i = 0; i < arr.length; i++) {\n    sum += arr[i];           // O(n)\n  }\n  return sum;                // Total: O(n)\n}\n\nfunction hasDuplicate(arr: number[]): boolean {\n  const seen = new Set<number>();\n  for (const num of arr) {          // O(n)\n    if (seen.has(num)) return true; // O(1) lookup\n    seen.add(num);                   // O(1) insert\n  }\n  return false;              // Total: O(n) time, O(n) space\n}\n\n// Master Theorem for T(n) = aT(n/b) + O(n^d)\n// If log_b(a) > d: O(n^log_b(a))\n// If log_b(a) = d: O(n^d * log n)\n// If log_b(a) < d: O(n^d)\nfunction fibonacci(n: number): number {\n  if (n <= 1) return n;               // O(1)\n  return fibonacci(n - 1) + fibonacci(n - 2); // O(2^n)\n}\n\nfunction fibonacciDP(n: number): number {\n  if (n <= 1) return n;\n  let [a, b] = [0, 1];\n  for (let i = 2; i <= n; i++) {      // O(n)\n    [a, b] = [b, a + b];\n  }\n  return b;\n}`,
+        codeExample: `// The growth rate trap: O(n^2) vs O(n log n)\n// For n=1,000,000:\n// n^2 = 1e12 operations (17 min at 1B ops/sec)\n// n log n ≈ 20e6 operations (0.02 sec at 1B ops/sec)\n\nfunction analyzeTime<T>(\n  label: string,\n  fn: () => T\n): { result: T; timeMs: number } {\n  const start = performance.now();\n  const result = fn();\n  return { result, timeMs: performance.now() - start };\n}\n\nfunction findDuplicatesBrute(arr: number[]): boolean {\n  for (let i = 0; i < arr.length; i++)       // O(n)\n    for (let j = i + 1; j < arr.length; j++) // O(n)\n      if (arr[i] === arr[j]) return true;     // Total: O(n^2)\n  return false;\n}\n\nfunction findDuplicatesSet(arr: number[]): boolean {\n  const seen = new Set<number>();\n  for (const x of arr) {          // O(n)\n    if (seen.has(x)) return true; // O(1)\n    seen.add(x);                  // O(1)\n  }\n  return false;                   // Total: O(n)\n}\n\n// Profile before optimizing\nconst data = Array.from({ length: 100000 }, (_, i) => i);\nconsole.log(\n  analyzeTime(\"brute\", () => findDuplicatesBrute(data)).timeMs,\n  analyzeTime(\"set\", () => findDuplicatesSet(data)).timeMs\n);`,
 
         language: "typescript"
 
@@ -232,9 +232,9 @@ export const courses: Course[] = [
 
         title: "Sorting Algorithms",
 
-        content: "Sorting is fundamental to computer science.\n\nComparison-based sorts (O(n log n) lower bound):\n- Quick Sort: O(n log n) avg, O(n²) worst\n- Merge Sort: O(n log n) guaranteed\n- Heap Sort: O(n log n) guaranteed\n\nNon-comparison sorts (can beat O(n log n)):\n- Counting Sort: O(n + k)\n- Radix Sort: O(d × (n + k))\n- Bucket Sort: O(n + k) average",
+        content: "Biggest sorting mistake: assuming QuickSort is always O(n log n). It isn't. Pivot selection is everything. Always picking first or last element on already-sorted data? That's O(n²). The fix: random pivot or median-of-three.\n\nReal problem: you need a stable sort (preserving original order of equal elements). QuickSort is unstable. Merge Sort is stable. Java's Collections.sort uses TimSort — a hybrid of merge sort and insertion sort — because real-world data often has runs of sorted elements.\n\nInterview trap: \"Implement insertion sort.\" Easy. But follow-up: \"When would you use it?\" Answer: small arrays (n < 50), nearly-sorted data (O(n) on best case), online sorting (sort as elements arrive).\n\nComparing sorts: Merge Sort needs O(n) extra space. QuickSort sorts in-place but its recursive stack is O(log n) on average, O(n) worst case. Heap Sort is in-place and guarantees O(n log n), but has poor cache locality — real-world performance is worse than QuickSort despite same Big-O.\n\nEngineering mindset: Never write your own sort. Use the language's built-in. But understand WHY your language picked its sort so you know when it'll hurt you.",
 
-        codeExample: `// Quick Sort\nfunction quickSort(arr: number[]): number[] {\n  if (arr.length <= 1) return arr;\n  const pivot = arr[Math.floor(arr.length / 2)];\n  const left = arr.filter(x => x < pivot);\n  const mid = arr.filter(x => x === pivot);\n  const right = arr.filter(x => x > pivot);\n  return [...quickSort(left), ...mid, ...quickSort(right)];\n}\n\n// Merge Sort\nfunction mergeSort(arr: number[]): number[] {\n  if (arr.length <= 1) return arr;\n  const mid = Math.floor(arr.length / 2);\n  const left = mergeSort(arr.slice(0, mid));\n  const right = mergeSort(arr.slice(mid));\n  return merge(left, right);\n}\n\nfunction merge(l: number[], r: number[]): number[] {\n  const result: number[] = [];\n  let i = 0, j = 0;\n  while (i < l.length && j < r.length) {\n    result.push(l[i] <= r[j] ? l[i++] : r[j++]);\n  }\n  return result.concat(l.slice(i), r.slice(j));\n}`,
+        codeExample: `// The pivot trap - bad QuickSort\nfunction badQuickSort(arr: number[]): number[] {\n  // First element pivot: O(n^2) on already-sorted data!\n  if (arr.length <= 1) return arr;\n  const pivot = arr[0]; // Bad choice!\n  const left = arr.slice(1).filter(x => x < pivot);\n  const right = arr.slice(1).filter(x => x >= pivot);\n  return [...badQuickSort(left), pivot, ...badQuickSort(right)];\n}\n\n// Fixed: median-of-three pivot\nfunction goodQuickSort(arr: number[]): number[] {\n  if (arr.length <= 1) return arr;\n  const mid = Math.floor(arr.length / 2);\n  const pivot = [arr[0], arr[mid], arr[arr.length - 1]].sort((a, b) => a - b)[1];\n  const left = arr.filter(x => x < pivot);\n  const right = arr.filter(x => x > pivot);\n  const equal = arr.filter(x => x === pivot);\n  return [...goodQuickSort(left), ...equal, ...goodQuickSort(right)];\n}\n\n// When insertion sort actually wins\nfunction hybridSort(arr: number[], threshold = 50): number[] {\n  if (arr.length <= threshold) {\n    for (let i = 1; i < arr.length; i++) {\n      const key = arr[i]; let j = i - 1;\n      while (j >= 0 && arr[j] > key) { arr[j + 1] = arr[j]; j--; }\n      arr[j + 1] = key;\n    }\n    return arr;\n  }\n  return goodQuickSort(arr);\n}`,
 
         language: "typescript"
 
@@ -246,9 +246,9 @@ export const courses: Course[] = [
 
         title: "Searching Algorithms",
 
-        content: "Searching algorithms locate specific elements within data structures. Linear search checks each element sequentially in O(n) time, suitable for unsorted data. Binary search achieves O(log n) by repeatedly halving a sorted array.\n\nBinary search variants extend the basic algorithm: lower bound finds the first position where an element could be inserted, upper bound finds the last position. Binary search on rotated sorted arrays handles arrays that were sorted then rotated at an unknown pivot.\n\nInterpolation search improves average performance on uniformly distributed data to O(log log n) by estimating the target's position based on value distribution rather than always checking the midpoint.",
+        content: "Most common interview trap on binary search: infinite loops and off-by-one errors. The root cause? Confusing inclusive vs exclusive bounds. Write `left + Math.floor((right - left) / 2)` not `(left + right) / 2` to avoid integer overflow.\n\nReal problem: binary search assumes sorted data. But what if the data isn't sorted? You can't just binary search. You must sort first (O(n log n)), then search. For single lookups, linear search is faster. For repeated lookups, sorting + binary wins.\n\nInterview trap: \"Search in a rotated sorted array.\" The trick: binary search still works. First determine which half is sorted (compare arr[left] vs arr[mid]), then check if target lies in that sorted range. Many candidates fail because they try to find the rotation point first — unnecessary.\n\nEngineering mindset: not all searches are equals. Hash-based lookups (Set, Map) give O(1) average but use more memory. Binary search gives O(log n) with zero extra memory. For production code, use TreeSet (balanced BST) when you need both search AND ordered traversal.\n\nCommon mistake: binary search on linked lists. Random access is O(n), so binary search is O(n log n) — worse than linear!",
 
-        codeExample: `// Linear Search\nfunction linearSearch(arr: number[], target: number): number {\n  for (let i = 0; i < arr.length; i++) {\n    if (arr[i] === target) return i;\n  }\n  return -1;\n}\n\n// Binary Search\nfunction binarySearch(arr: number[], target: number): number {\n  let left = 0, right = arr.length - 1;\n  while (left <= right) {\n    const mid = left + Math.floor((right - left) / 2);\n    if (arr[mid] === target) return mid;\n    if (arr[mid] < target) left = mid + 1;\n    else right = mid - 1;\n  }\n  return -1;\n}\n\n// Lower Bound - first position >= target\nfunction lowerBound(arr: number[], target: number): number {\n  let left = 0, right = arr.length;\n  while (left < right) {\n    const mid = left + Math.floor((right - left) / 2);\n    if (arr[mid] < target) left = mid + 1;\n    else right = mid;\n  }\n  return left;\n}\n\n// Search in Rotated Sorted Array\nfunction searchRotated(arr: number[], target: number): number {\n  let left = 0, right = arr.length - 1;\n  while (left <= right) {\n    const mid = left + Math.floor((right - left) / 2);\n    if (arr[mid] === target) return mid;\n    if (arr[left] <= arr[mid]) {\n      if (target >= arr[left] && target < arr[mid]) right = mid - 1;\n      else left = mid + 1;\n    } else {\n      if (target > arr[mid] && target <= arr[right]) left = mid + 1;\n      else right = mid - 1;\n    }\n  }\n  return -1;\n}`,
+        codeExample: `// Binary search - correct implementation\nfunction binarySearch(arr: number[], target: number): number {\n  let left = 0;\n  let right = arr.length - 1; // inclusive bound\n\n  while (left <= right) {     // <= not <, crucial!\n    const mid = left + Math.floor((right - left) / 2); // overflow-safe\n\n    if (arr[mid] === target) return mid;\n    if (arr[mid] < target) left = mid + 1;\n    else right = mid - 1;\n  }\n  return -1;\n}\n\n// Search in rotated sorted array - no pivot needed\nfunction searchRotated(nums: number[], target: number): number {\n  let l = 0, r = nums.length - 1;\n  while (l <= r) {\n    const mid = l + Math.floor((r - l) / 2);\n    if (nums[mid] === target) return mid;\n    if (nums[l] <= nums[mid]) {                   // left half is sorted\n      if (target >= nums[l] && target < nums[mid]) r = mid - 1;\n      else l = mid + 1;\n    } else {                                       // right half is sorted\n      if (target > nums[mid] && target <= nums[r]) l = mid + 1;\n      else r = mid - 1;\n    }\n  }\n  return -1;\n}\n\n// Lower bound - first position where arr[i] >= target\nfunction lowerBound(arr: number[], target: number): number {\n  let l = 0, r = arr.length;  // exclusive upper bound\n  while (l < r) {\n    const mid = l + Math.floor((r - l) / 2);\n    if (arr[mid] < target) l = mid + 1;\n    else r = mid;\n  }\n  return l;\n}`,
 
         language: "typescript"
 
@@ -260,9 +260,9 @@ export const courses: Course[] = [
 
         title: "Divide and Conquer",
 
-        content: "Divide and conquer solves problems by recursively breaking them into smaller subproblems, solving each independently, then combining results. The paradigm has three steps: divide the problem, conquer subproblems recursively, and combine their solutions.\n\nMerge sort exemplifies divide and conquer: divide the array in half, sort each half recursively, then merge sorted halves. The recurrence T(n) = 2T(n/2) + O(n) solves to O(n log n).\n\nThe closest pair of points problem demonstrates the power of this approach. A brute-force O(n²) algorithm can be improved to O(n log n) by sorting points by x-coordinate, recursively finding closest pairs in each half, and checking only a strip of width d around the dividing line where d is the minimum distance found so far.\n\nBinary search is another divide and conquer example that eliminates half the search space at each step.",
+        content: "Biggest divide-and-conquer mistake: thinking it's just recursion. It's not. Three-phase engineering: DIVIDE (split problem), CONQUER (solve subproblems), COMBINE (merge results). The hard part is always the COMBINE step.\n\nReal problem: Maximum subarray sum. Brute force is O(n³) → O(n²) with prefix sums. Divide and conquer gets it to O(n log n). But Kadane's algorithm (O(n) single pass) beats them all. The lesson: D&C isn't always the fastest. It's the pattern that works when linear scans can't.\n\nInterview trap: \"Write merge sort.\" Everyone memorizes the merge step. But the follow-up: \"What's the space complexity?\" If you answered O(n log n) because of recursion stack + arrays created at each level, you're wrong. Only O(n) extra space — merge arrays at same depth reuse memory.\n\nCommon mistake: ignoring the recursion tree depth. Every recursive call adds to the call stack. On n=1,000,000, merge sort needs ~20 stack frames. Recursive Quicksort could need 1,000,000 — stack overflow! That's why production sorts use iteration or tail recursion.\n\nEngineering mindset: D&C is parallelization-friendly. MapReduce is D&C at scale. Split across machines, solve independently, combine results.",
 
-        codeExample: `// Merge Sort - classic divide and conquer\nfunction mergeSort(arr: number[]): number[] {\n  if (arr.length <= 1) return arr;\n  const mid = Math.floor(arr.length / 2);\n  const left = mergeSort(arr.slice(0, mid));\n  const right = mergeSort(arr.slice(mid));\n  return merge(left, right);\n}\n\nfunction merge(l: number[], r: number[]): number[] {\n  const result: number[] = [];\n  let i = 0, j = 0;\n  while (i < l.length && j < r.length) {\n    result.push(l[i] <= r[j] ? l[i++] : r[j++]);\n  }\n  return result.concat(l.slice(i), r.slice(j));\n}\n\n// Maximum subarray using divide and conquer\nfunction maxSubarray(arr: number[]): number {\n  function dc(l: number, r: number): number {\n    if (l === r) return arr[l];\n    const mid = Math.floor((l + r) / 2);\n    let leftMax = -Infinity, sum = 0;\n    for (let i = mid; i >= l; i--) {\n      sum += arr[i];\n      leftMax = Math.max(leftMax, sum);\n    }\n    let rightMax = -Infinity;\n    sum = 0;\n    for (let i = mid + 1; i <= r; i++) {\n      sum += arr[i];\n      rightMax = Math.max(rightMax, sum);\n    }\n    return Math.max(dc(l, mid), dc(mid + 1, r), leftMax + rightMax);\n  }\n  return dc(0, arr.length - 1);\n}`,
+        codeExample: `// Maximum subarray sum - 3 approaches\nfunction maxSubarrayKadane(arr: number[]): number {\n  let max = -Infinity, curr = 0;\n  for (const x of arr) {\n    curr = Math.max(x, curr + x);\n    max = Math.max(max, curr);\n  }\n  return max; // O(n), impossible to beat\n}\n\n// D&C version - overkill but shows the pattern\nfunction maxSubarrayDC(arr: number[], l: number, r: number): number {\n  if (l === r) return arr[l];\n  const mid = Math.floor((l + r) / 2);\n\n  // Must cross mid - the COMBINE step\n  let leftSum = -Infinity, sum = 0;\n  for (let i = mid; i >= l; i--) { sum += arr[i]; leftSum = Math.max(leftSum, sum); }\n  let rightSum = -Infinity; sum = 0;\n  for (let i = mid + 1; i <= r; i++) { sum += arr[i]; rightSum = Math.max(rightSum, sum); }\n\n  return Math.max(\n    maxSubarrayDC(arr, l, mid),\n    maxSubarrayDC(arr, mid + 1, r),\n    leftSum + rightSum\n  ); // O(n log n) - the divide overhead costs\n}\n\n// Merge sort - O(n log n) time, O(n) space\nfunction mergeSort(arr: number[]): number[] {\n  if (arr.length <= 1) return arr;\n  const mid = Math.floor(arr.length / 2);\n  return merge(mergeSort(arr.slice(0, mid)), mergeSort(arr.slice(mid)));\n}\n\nfunction merge(l: number[], r: number[]): number[] {\n  const out: number[] = [];\n  let i = 0, j = 0;\n  while (i < l.length && j < r.length)\n    out.push(l[i] <= r[j] ? l[i++] : r[j++]);\n  return [...out, ...l.slice(i), ...r.slice(j)];\n}`,
 
         language: "typescript"
 
@@ -274,9 +274,9 @@ export const courses: Course[] = [
 
         title: "Greedy Algorithms",
 
-        content: "Greedy algorithms make locally optimal choices at each step.\n\nWhen greedy works:\n- Greedy choice property: local optimum leads to global optimum\n- Optimal substructure\n\nClassic problems:\n- Activity Selection\n- Fractional Knapsack\n- Huffman Coding\n- Minimum Spanning Tree (Prim's, Kruskal's)\n\nWhen greedy fails: 0/1 Knapsack, Longest Path",
+        content: "Biggest greedy mistake: assuming \"pick what looks best now\" always works. It doesn't. The greedy choice property must hold — and proving it is the actual interview.\n\nReal problem: Coin change (minimum coins to make amount). Greedy works for US coins (25, 10, 5, 1) — always pick the largest. But for arbitrary denominations like {1, 3, 4} to make 6? Greedy picks 4+1+1 (3 coins), optimal is 3+3 (2 coins). Greedy fails.\n\nInterview trap: \"Find minimum spanning tree.\" Candidates code Prim's but can't explain WHY the greedy choice works. The cut property: for any cut, the minimum crossing edge belongs to some MST. If you can't articulate the invariant, you haven't understood it.\n\nEngineering mindset: Greedy is for optimization problems with optimal substructure AND the greedy choice property. When both hold, greedy beats DP every time — O(n log n) vs O(n²). When only optimal substructure holds, you need DP. When neither, you need backtracking.\n\nCommon mistake: Activity selection — sorting by end time (correct) vs start time (wrong). If you sort by start time, you get a valid set but not necessarily maximum cardinality. The greedy choice is the activity that finishes earliest, giving the most room for remaining activities.",
 
-        codeExample: `// Activity Selection\nfunction activitySelection(\n  start: number[], end: number[]\n): number {\n  const activities = start\n    .map((s, i) => ({ start: s, end: end[i] }))\n    .sort((a, b) => a.end - b.end);\n\n  let count = 1;\n  let lastEnd = activities[0].end;\n\n  for (let i = 1; i < activities.length; i++) {\n    if (activities[i].start >= lastEnd) {\n      count++;\n      lastEnd = activities[i].end;\n    }\n  }\n  return count;\n}`,
+        codeExample: `// Activity Selection - correct greedy\nfunction activitySelection(\n  start: number[], end: number[]\n): { count: number; selected: number[] } {\n  const activities = start\n    .map((s, i) => ({ s, e: end[i], i }))\n    .sort((a, b) => a.e - b.e); // Greedy: earliest finish first\n\n  const selected = [0];\n  let lastEnd = activities[0].e;\n\n  for (let i = 1; i < activities.length; i++) {\n    if (activities[i].s >= lastEnd) {\n      selected.push(i);\n      lastEnd = activities[i].e;\n    }\n  }\n\n  return { count: selected.length, selected };\n}\n\n// Coin change - greedy fails for {1, 3, 4}, amount = 6\nfunction coinChangeGreedy(coins: number[], amount: number): number {\n  const sorted = [...coins].sort((a, b) => b - a);\n  let remaining = amount, count = 0;\n  for (const coin of sorted) {\n    const take = Math.floor(remaining / coin);\n    count += take;\n    remaining -= take * coin;\n  }\n  return remaining === 0 ? count : -1;\n}\n\n// {1, 3, 4}, amount 6 => greedy picks 4+1+1=3, optimal is 3+3=2\nconsole.log(coinChangeGreedy([1, 3, 4], 6)); // 3 (WRONG)\n\n// Huffman coding - classic greedy\n// Merge the two smallest frequencies, repeat\nfunction huffmanCost(freqs: number[]): number {\n  const heap = [...freqs].sort((a, b) => a - b);\n  let total = 0;\n  while (heap.length > 1) {\n    const a = heap.shift()!, b = heap.shift()!;\n    total += a + b;\n    heap.push(a + b);\n    heap.sort((x, y) => x - y);\n  }\n  return total;\n}`,
 
         language: "typescript"
 
@@ -288,9 +288,9 @@ export const courses: Course[] = [
 
         title: "Dynamic Programming",
 
-        content: "DP solves complex problems by breaking them into overlapping subproblems.\n\nTwo approaches:\n1. Top-down (Memoization): Recursion + cache\n2. Bottom-up (Tabulation): Iterative + table\n\nWhen to use DP:\n- Optimal substructure\n- Overlapping subproblems\n\nClassic problems:\n- Fibonacci, Coin Change, Longest Common Subsequence, Knapsack",
+        content: "Biggest DP mistake: trying to solve it from the problem statement without framing it as a recursion first. Rule: If brute force tries all subsets/combinations and subproblems repeat, use DP.\n\nDP is confusing because everyone starts with Fibonacci — it's too simple for the framework to click. Real DP struggles start with \"when to use it?\" Decision tree: 1) Can you express the answer in terms of smaller subproblems? 2) Do those subproblems overlap? If yes to both, DP applies.\n\nInterview trap: \"0/1 Knapsack.\" The canonical version: 2D DP where dp[i][w] = max value using first i items with capacity w. Follow-up: \"How do you solve this with 1D array?\" Realization: you iterate w backwards (capacity down to weight[i]) to avoid reusing items.\n\nCommon mistake: forgetting to initialize base cases correctly. In DP, the base case is not trivial — it's the first 1-2 rows/values that define the entire recurrence. Get the base wrong, everything cascades.\n\nEngineering mindset: Bottom-up (tabulation) is safer than top-down (memoization). No recursion depth issues, better cache locality, easier to debug. Use top-down only when the state space is sparse (few states reachable).",
 
-        codeExample: `// Fibonacci - DP\nfunction fib(n: number): number {\n  if (n <= 1) return n;\n  const dp = [0, 1];\n  for (let i = 2; i <= n; i++) {\n    dp[i] = dp[i - 1] + dp[i - 2];\n  }\n  return dp[n];\n}\n\n// 0/1 Knapsack\nfunction knapsack(weights: number[], values: number[], capacity: number): number {\n  const n = weights.length;\n  const dp = Array.from({ length: n + 1 }, () =>\n    Array(capacity + 1).fill(0)\n  );\n  for (let i = 1; i <= n; i++) {\n    for (let w = 0; w <= capacity; w++) {\n      dp[i][w] = dp[i - 1][w];\n      if (weights[i - 1] <= w) {\n        dp[i][w] = Math.max(\n          dp[i][w],\n          dp[i - 1][w - weights[i - 1]] + values[i - 1]\n        );\n      }\n    }\n  }\n  return dp[n][capacity];\n}`,
+        codeExample: `// Knapsack: 2D → 1D space optimization\nfunction knapsack2D(weights: number[], values: number[], cap: number): number {\n  const n = weights.length;\n  const dp = Array.from({ length: n + 1 }, () => Array(cap + 1).fill(0));\n  for (let i = 1; i <= n; i++)\n    for (let w = 0; w <= cap; w++)\n      if (weights[i - 1] <= w)\n        dp[i][w] = Math.max(dp[i - 1][w], dp[i - 1][w - weights[i - 1]] + values[i - 1]);\n      else dp[i][w] = dp[i - 1][w];\n  return dp[n][cap];\n}\n\nfunction knapsack1D(weights: number[], values: number[], cap: number): number {\n  const dp = Array(cap + 1).fill(0);\n  for (let i = 0; i < weights.length; i++)\n    // MUST go backwards - otherwise reuses the same item!\n    for (let w = cap; w >= weights[i]; w--)\n      dp[w] = Math.max(dp[w], dp[w - weights[i]] + values[i]);\n  return dp[cap];\n}\n\n// Longest Common Subsequence\nfunction lcs(a: string, b: string): number {\n  const m = a.length, n = b.length;\n  const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));\n  for (let i = 1; i <= m; i++)\n    for (let j = 1; j <= n; j++)\n      dp[i][j] = a[i - 1] === b[j - 1]\n        ? 1 + dp[i - 1][j - 1]\n        : Math.max(dp[i - 1][j], dp[i][j - 1]);\n  return dp[m][n];\n}\n\nconsole.log(knapsack1D([2, 3, 4, 5], [3, 4, 5, 6], 5)); // 7\nconsole.log(lcs(\"ABCBDAB\", \"BDCAB\")); // 4 ("BDAB" or "BCAB")`,
 
         language: "typescript"
 
@@ -302,9 +302,9 @@ export const courses: Course[] = [
 
         title: "Graph Algorithms",
 
-        content: "Graphs model relationships between entities. They consist of vertices (nodes) and edges (connections), and can be directed or undirected, weighted or unweighted.\n\nShortest path algorithms find optimal routes: Dijkstra's algorithm solves single-source shortest paths in O((V + E) log V) for non-negative weights using a priority queue. Bellman-Ford handles negative weights in O(VE) by relaxing all edges V-1 times.\n\nMinimum spanning tree algorithms find the cheapest way to connect all vertices. Kruskal's algorithm sorts edges by weight and greedily adds them if they don't create cycles, using union-find for efficient cycle detection. Prim's algorithm grows the MST from a starting vertex, always adding the cheapest edge connecting the tree to a new vertex.\n\nTopological sort orders vertices in a directed acyclic graph so every edge points from earlier to later.",
+        content: "Biggest graph mistake: using recursion (DFS) on a graph with cycles and getting a stack overflow. Always track visited nodes. Even for directed acyclic graphs, you need to avoid revisiting — the \"visited\" set isn't optional, it's necessary for correctness.\n\nReal problem: shortest path in a graph with negative weights. Dijkstra fails — it assumes positive weights. Bellman-Ford handles negatives by relaxing edges V-1 times. But O(VE) is expensive. The engineering tradeoff: use Dijkstra when you know weights are non-negative (95% of real-world cases), Bellman-Ford only when forced.\n\nInterview trap: \"Detect a cycle in a directed graph.\" Many candidates use visited only. But you need THREE states: unvisited (0), visiting (1), visited (2). A back edge to a visiting node means a cycle. A visited node already fully explored? Not a cycle.\n\nCommon mistake: Dijkstra with a priority queue implemented as an array. Each extract-min is O(n), making total O(V²) instead of O((V+E) log V). Always use a binary heap for the priority queue.\n\nEngineering mindset: graphs are everywhere — social networks, dependency resolution, routing, recommendation engines. BFS finds shortest paths in unweighted graphs level by level. DFS explores deep paths, useful for topological sorting and cycle detection.",
 
-        codeExample: `// Dijkstra's Shortest Path\nfunction dijkstra(\n  graph: Map<number, [number, number][]>,\n  source: number\n): Map<number, number> {\n  const dist = new Map<number, number>();\n  const visited = new Set<number>();\n  const pq: [number, number][] = [[0, source]];\n  dist.set(source, 0);\n\n  while (pq.length > 0) {\n    pq.sort((a, b) => a[0] - b[0]);\n    const [d, u] = pq.shift()!;\n    if (visited.has(u)) continue;\n    visited.add(u);\n\n    for (const [v, w] of graph.get(u) || []) {\n      const newDist = d + w;\n      if (!dist.has(v) || newDist < dist.get(v)!) {\n        dist.set(v, newDist);\n        pq.push([newDist, v]);\n      }\n    }\n  }\n  return dist;\n}\n\n// Bellman-Ford\nfunction bellmanFord(\n  edges: [number, number, number][],\n  V: number, source: number\n): number[] {\n  const dist = Array(V).fill(Infinity);\n  dist[source] = 0;\n  for (let i = 0; i < V - 1; i++) {\n    for (const [u, v, w] of edges) {\n      if (dist[u] + w < dist[v]) dist[v] = dist[u] + w;\n    }\n  }\n  return dist;\n}`,
+        codeExample: `// Dijkstra with proper priority queue\nfunction dijkstra(\n  graph: Map<number, [number, number][]>,\n  source: number\n): Map<number, number> {\n  const dist = new Map<number, number>();\n  const pq: [number, number][] = [];  // [dist, node]\n  dist.set(source, 0);\n  pq.push([0, source]);\n\n  while (pq.length > 0) {\n    pq.sort((a, b) => a[0] - b[0]); // poor man's heap\n    const [d, u] = pq.shift()!;\n    if (d > (dist.get(u) ?? Infinity)) continue; // stale entry\n\n    for (const [v, w] of graph.get(u) ?? []) {\n      const nd = d + w;\n      if (nd < (dist.get(v) ?? Infinity)) {\n        dist.set(v, nd);\n        pq.push([nd, v]);\n      }\n    }\n  }\n  return dist;\n}\n\n// Cycle detection in directed graph - 3 states\nenum State { Unvisited, Visiting, Visited }\n\nfunction hasCycle(graph: number[][]): boolean {\n  const state: State[] = Array(graph.length).fill(State.Unvisited);\n\n  function dfs(u: number): boolean {\n    if (state[u] === State.Visiting) return true;  // back edge = cycle!\n    if (state[u] === State.Visited) return false;\n    state[u] = State.Visiting;\n    for (const v of graph[u]) if (dfs(v)) return true;\n    state[u] = State.Visited;\n    return false;\n  }\n\n  return graph.some((_, i) => state[i] === State.Unvisited && dfs(i));\n}\n\n// Kahn's algorithm - topological sort (BFS-based)\nfunction topologicalSort(n: number, edges: [number, number][]): number[] {\n  const inDeg = Array(n).fill(0);\n  const adj: number[][] = Array.from({ length: n }, () => []);\n  for (const [u, v] of edges) { adj[u].push(v); inDeg[v]++; }\n  const q: number[] = [];\n  for (let i = 0; i < n; i++) if (inDeg[i] === 0) q.push(i);\n  const order: number[] = [];\n  while (q.length > 0) {\n    const u = q.shift()!;\n    order.push(u);\n    for (const v of adj[u]) if (--inDeg[v] === 0) q.push(v);\n  }\n  return order.length === n ? order : []; // empty = cycle exists\n}`,
 
         language: "typescript"
 
@@ -316,9 +316,9 @@ export const courses: Course[] = [
 
         title: "Backtracking",
 
-        content: "Backtracking systematically explores all possible solutions by building candidates incrementally and abandoning a candidate as soon as it determines it cannot lead to a valid solution. It is a depth-first search over the solution space.\n\nThe key insight is pruning: when a partial solution violates constraints, we stop exploring that branch entirely rather than continuing to generate invalid complete solutions.\n\nThe N-Queens problem places N queens on an N×N chessboard so no two attack each other. We place queens row by row, checking column and diagonal conflicts, and backtrack when no valid position exists in the current row.\n\nSudoku solving uses backtracking to try digits 1-9 in empty cells, verifying row, column, and 3×3 box constraints before recursing. The subset sum problem finds subsets that add to a target by including or excluding each element.",
+        content: "Biggest backtracking mistake: not pruning aggressively enough. Backtracking is brute force with pruning — if you're not pruning, you're just DFS on the entire search space. The performance gap between naive DFS and good backtracking is the difference between enumerating 10^12 and 10^3 states.\n\nReal problem: N-Queens. The naive approach generates all N! placements on the board and checks validity. The backtracking approach places one queen per row, checking column and diagonal conflicts incrementally. Pruning the moment a placement is invalid cuts the search space dramatically.\n\nInterview trap: \"Generate all subsets.\" Easy with backtracking. The subtlety: does order matter? [1,2] vs [2,1] — subsets ignore order, permutations don't. Subsets need a \"start index\" parameter to avoid generating the same set multiple times. Permutations need a \"used\" boolean array.\n\nCommon mistake: forgetting to undo the last choice (backtrack). After the recursive call returns, you must restore state. push → recurse → pop. mark → recurse → unmark. This undo step is the BACKTRACK part — skip it and your state bleeds across branches.\n\nEngineering mindset: backtracking solves constraint satisfaction problems — Sudoku, N-Queens, graph coloring, crossword puzzles. Constraint propagation (forward checking) prunes earlier by preemptively eliminating impossible values for future variables.",
 
-        codeExample: `// N-Queens\nfunction solveNQueens(n: number): string[][] {\n  const solutions: string[][] = [];\n  const board = Array(n).fill(-1);\n\n  function isValid(row: number, col: number): boolean {\n    for (let i = 0; i < row; i++) {\n      if (board[i] === col || Math.abs(board[i] - col) === row - i) return false;\n    }\n    return true;\n  }\n\n  function backtrack(row: number): void {\n    if (row === n) {\n      solutions.push(board.map(c => '.'.repeat(c) + 'Q' + '.'.repeat(n - c - 1)));\n      return;\n    }\n    for (let col = 0; col < n; col++) {\n      if (isValid(row, col)) {\n        board[row] = col;\n        backtrack(row + 1);\n        board[row] = -1;\n      }\n    }\n  }\n  backtrack(0);\n  return solutions;\n}\n\n// Subset Sum\nfunction subsetSum(nums: number[], target: number): boolean {\n  function bt(index: number, remaining: number): boolean {\n    if (remaining === 0) return true;\n    if (index === nums.length || remaining < 0) return false;\n    return bt(index + 1, remaining - nums[index]) || bt(index + 1, remaining);\n  }\n  return bt(0, target);\n}`,
+        codeExample: `// N-Queens with aggressive pruning\nfunction solveNQueens(n: number): string[][] {\n  const result: string[][] = [];\n  const cols = new Set<number>();\n  const diag1 = new Set<number>(); // row - col (constant per diagonal)\n  const diag2 = new Set<number>(); // row + col\n  const board: number[] = [];      // board[row] = col\n\n  function backtrack(row: number): void {\n    if (row === n) {\n      result.push(board.map(\n        c => '.'.repeat(c) + 'Q' + '.'.repeat(n - c - 1)\n      ));\n      return;\n    }\n\n    for (let col = 0; col < n; col++) {\n      // Prune: O(1) conflict check\n      if (cols.has(col) || diag1.has(row - col) || diag2.has(row + col)) continue;\n\n      board.push(col);\n      cols.add(col); diag1.add(row - col); diag2.add(row + col);\n\n      backtrack(row + 1);\n\n      // BACKTRACK: undo everything\n      cols.delete(col); diag1.delete(row - col); diag2.delete(row + col);\n      board.pop();\n    }\n  }\n\n  backtrack(0);\n  return result;\n}\n\n// Generate all subsets (combinations, not permutations)\nfunction subsets(nums: number[]): number[][] {\n  const result: number[][] = [];\n  function backtrack(start: number, curr: number[]) {\n    result.push([...curr]);\n    for (let i = start; i < nums.length; i++) {\n      curr.push(nums[i]);\n      backtrack(i + 1, curr); // i+1 = don't reuse elements\n      curr.pop();              // BACKTRACK undo\n    }\n  }\n  backtrack(0, []);\n  return result;\n}\n\nconsole.log(solveNQueens(4)); // 2 solutions\nconsole.log(subsets([1, 2, 3])); // 8 subsets`,
 
         language: "typescript"
 
@@ -330,9 +330,9 @@ export const courses: Course[] = [
 
         title: "String Algorithms",
 
-        content: "String algorithms solve pattern matching, search, and comparison problems efficiently. Naive string matching runs in O(nm) time, but specialized algorithms achieve better performance.\n\nThe Knuth-Morris-Pratt (KMP) algorithm preprocesses the pattern to build a failure function that tracks the longest proper prefix that is also a suffix. This allows the text pointer to never backtrack, achieving O(n + m) time.\n\nThe Z-algorithm computes an array where Z[i] is the length of the longest substring starting at position i that matches a prefix of the string. This enables O(n + m) pattern matching by concatenating pattern + '$' + text.\n\nTries (prefix trees) store strings character by character, enabling efficient prefix searches, autocomplete, and dictionary lookups in O(m) time where m is the key length.",
+        content: "Biggest string algorithm mistake: using brute-force substring search (O(n·m)) when writing production parsers, log analyzers, or text editors. For large texts, the naive approach is unacceptable — and most interview candidates don't know KMP or why it works.\n\nReal problem: pattern matching in DNA sequences or log files. Naive O(n·m) means checking every position and, on mismatch, starting over — potentially rechecking characters you've already seen. KMP's insight: when a mismatch occurs, the pattern's prefix structure tells you how far to shift, so the text pointer never goes backward. O(n + m) guaranteed.\n\nInterview trap: \"Write a function that finds all occurrences of a pattern in a string.\" The easy answer is indexOf in a loop or RegExp. But the interviewer wants you to understand that when n = 10^6 and m = 10^4, naive is 10^10 operations — too slow. This is why KMP and Rabin-Karp exist.\n\nCommon mistake: implementing KMP but getting the failure function wrong. The LPS (longest proper prefix that is also a suffix) array is where KMP's entire complexity lives. If LPS construction isn't O(m), the whole algorithm breaks.\n\nEngineering mindset: strings are arrays of characters. All array tricks apply — two pointers, sliding window, prefix sums. Rolling hash (Rabin-Karp) trades correctness probability for speed — use double hashing to avoid collisions.",
 
-        codeExample: `// KMP Pattern Matching\nfunction buildFailure(pattern: string): number[] {\n  const fail = Array(pattern.length).fill(0);\n  let i = 1, j = 0;\n  while (i < pattern.length) {\n    if (pattern[i] === pattern[j]) {\n      fail[i++] = ++j;\n    } else if (j > 0) {\n      j = fail[j - 1];\n    } else {\n      fail[i++] = 0;\n    }\n  }\n  return fail;\n}\n\nfunction kmpSearch(text: string, pattern: string): number[] {\n  const fail = buildFailure(pattern);\n  const matches: number[] = [];\n  let i = 0, j = 0;\n  while (i < text.length) {\n    if (text[i] === pattern[j]) {\n      i++; j++;\n    }\n    if (j === pattern.length) {\n      matches.push(i - j);\n      j = fail[j - 1];\n    } else if (i < text.length && text[i] !== pattern[j]) {\n      if (j > 0) j = fail[j - 1];\n      else i++;\n    }\n  }\n  return matches;\n}\n\n// Trie\nclass TrieNode {\n  children = new Map<string, TrieNode>();\n  isEnd = false;\n}\n\nfunction insertTrie(root: TrieNode, word: string): void {\n  let node = root;\n  for (const ch of word) {\n    if (!node.children.has(ch)) node.children.set(ch, new TrieNode());\n    node = node.children.get(ch)!;\n  }\n  node.isEnd = true;\n}`,
+        codeExample: `// KMP: text pointer never backtracks\nfunction kmpSearch(text: string, pattern: string): number[] {\n  const lps = buildLPS(pattern);\n  const matches: number[] = [];\n  let i = 0, j = 0; // i = text index, j = pattern index\n\n  while (i < text.length) {\n    if (text[i] === pattern[j]) { i++; j++; }\n    if (j === pattern.length) {\n      matches.push(i - j);\n      j = lps[j - 1]; // keep searching, don't reset\n    } else if (i < text.length && text[i] !== pattern[j]) {\n      if (j > 0) j = lps[j - 1]; // shift pattern using LPS\n      else i++;                   // no match possible, move on\n    }\n  }\n  return matches;\n}\n\n// LPS: the heart of KMP\nfunction buildLPS(pattern: string): number[] {\n  const lps = Array(pattern.length).fill(0);\n  let len = 0, i = 1; // len = length of previous longest prefix suffix\n  while (i < pattern.length) {\n    if (pattern[i] === pattern[len]) { lps[i++] = ++len; }\n    else if (len > 0) { len = lps[len - 1]; } // fallback, don't increment i\n    else { lps[i++] = 0; }\n  }\n  return lps;\n}\n\n// Rabin-Karp with rolling hash\nfunction rabinKarp(text: string, pattern: string): number[] {\n  const base = 256n, mod = 10n ** 9n + 7n;\n  const matches: number[] = [];\n  if (pattern.length > text.length) return matches;\n\n  // hash = Σ char * base^(len-1-i)\n  const hash = (s: string, len: number): bigint => {\n    let h = 0n;\n    for (let i = 0; i < len; i++) h = (h * base + BigInt(s.charCodeAt(i))) % mod;\n    return h;\n  };\n\n  const patHash = hash(pattern, pattern.length);\n  let txtHash = hash(text, pattern.length);\n  const power = base ** BigInt(pattern.length - 1) % mod;\n\n  for (let i = 0; i <= text.length - pattern.length; i++) {\n    if (txtHash === patHash && text.slice(i, i + pattern.length) === pattern)\n      matches.push(i);\n    if (i < text.length - pattern.length) {\n      // Rolling: remove left char, add right char\n      txtHash = ((txtHash - BigInt(text.charCodeAt(i)) * power % mod + mod) * base\n        + BigInt(text.charCodeAt(i + pattern.length))) % mod;\n    }\n  }\n  return matches;\n}`,
 
         language: "typescript"
 
@@ -344,9 +344,9 @@ export const courses: Course[] = [
 
         title: "Complexity Theory & NP",
 
-        content: "Computational complexity theory classifies problems by the resources required to solve them. The class P contains problems solvable in polynomial time, while NP contains problems whose solutions can be verified in polynomial time.\n\nThe famous P vs NP question asks whether every problem whose solution can be quickly verified can also be quickly solved. Most computer scientists believe P ≠ NP, meaning some problems are inherently harder to solve than to verify.\n\nNP-complete problems are the hardest problems in NP: if any NP-complete problem is in P, then P = NP. The Cook-Levin theorem proved SAT is NP-complete, and subsequent reductions showed thousands of problems (TSP, graph coloring, subset sum) are also NP-complete.\n\nFor NP-complete problems, we use approximation algorithms, heuristics, or exponential-time exact solutions depending on practical constraints. Polynomial reductions prove one problem is at least as hard as another by transforming instances efficiently.",
+        content: "Biggest misconception: \"NP means non-polynomial.\" Wrong. NP = Nondeterministic Polynomial time — problems whose solutions can be VERIFIED in polynomial time, not necessarily SOLVED in polynomial time. If you get this wrong in an interview, the conversation is over.\n\nReal problem: you're asked to build a scheduling system for 100 employees with 50 constraints (shift preferences, certifications, max hours). This is a constraint satisfaction problem — likely NP-complete. If you try to solve it exactly, it won't scale. Engineering reality: prove it's NP-complete, then apply approximation algorithms or SAT solvers.\n\nInterview trap: \"Prove this problem is NP-complete.\" Two steps: 1) Show it's in NP (verify in poly time). 2) Reduce a known NP-complete problem to it (show it's NP-hard). Common mistake: reducing to the wrong direction. You must reduce FROM known NPC TO your problem, not the other way.\n\nCommon mistake: treating \"intractable\" as \"impossible.\" NP-hardness doesn't mean you can't solve practical instances. SAT solvers handle millions of variables. TSP is solved optimally for thousands of cities. Branch-and-bound, heuristics, and approximation algorithms make NP-hard problems tractable in practice.\n\nEngineering mindset: complexity theory is about classification, not paralysis. Classify the problem, then apply the right tool: polynomial algorithm if P, exact solver if small instance, approximation if large instance, heuristic if time is tight.",
 
-        codeExample: `// SAT Solver (Brute Force) - checks all 2^n assignments\nfunction satSolve(clauses: number[][], n: number): boolean {\n  for (let mask = 0; mask < (1 << n); mask++) {\n    let satisfied = true;\n    for (const clause of clauses) {\n      let clauseMet = false;\n      for (const lit of clause) {\n        const val = (mask >> (Math.abs(lit) - 1)) & 1;\n        if ((lit > 0 && val === 1) || (lit < 0 && val === 0)) {\n          clauseMet = true;\n          break;\n        }\n      }\n      if (!clauseMet) { satisfied = false; break; }\n    }\n    if (satisfied) return true;\n  }\n  return false;\n}\n\n// Polynomial Reduction: Vertex Cover to Independent Set\n// IS(G) = NOT VC(G complement)\nfunction reduceVCtoIS(\n  adj: boolean[][], n: number\n): boolean[][] {\n  const complement = Array.from({ length: n }, () => Array(n).fill(false));\n  for (let i = 0; i < n; i++)\n    for (let j = 0; j < n; j++)\n      if (i !== j) complement[i][j] = !adj[i][j];\n  return complement;\n}\n\n// 2-SAT (polynomial time) using implication graph\nfunction solve2SAT(clauses: [number, number][], n: number): boolean {\n  const adj: number[][] = Array.from({ length: 2 * n + 1 }, () => []);\n  for (const [a, b] of clauses) {\n    adj[-a + n > 0 ? -a + 2 * n : -a].push(b > 0 ? b : 2 * n + b);\n    adj[b > 0 ? -b + 2 * n : -b].push(a > 0 ? a : 2 * n + a);\n  }\n  // Simplified: check satisfiability via DFS\n  return true;\n}`,
+        codeExample: `// SAT solver using DPLL (simplified backtracking)\ntype Clause = number[]; // positive = true, negative = false\n\nfunction dpll(clauses: Clause[], assignment: Map<number, boolean>): boolean {\n  // Unit propagation: if a clause has one literal, assign it\n  function simplify(): Clause[] {\n    let changed = true;\n    let current = clauses;\n    while (changed && current.length > 0) {\n      changed = false;\n      const unit = current.find(c => c.length === 1);\n      if (!unit) break;\n      const lit = unit[0];\n      const var_ = Math.abs(lit);\n      assignment.set(var_, lit > 0);\n      current = current\n        .filter(c => !c.includes(lit))        // remove satisfied\n        .map(c => c.filter(l => l !== -lit)); // shorten falsified\n      changed = true;\n    }\n    return current;\n  }\n\n  clauses = simplify();\n  if (clauses.length === 0) return true;  // all satisfied\n  if (clauses.some(c => c.length === 0)) return false; // conflict\n\n  // Choose unassigned variable\n  const var_ = Math.abs(clauses[0][0]);\n  for (const val of [true, false]) {\n    const newAssign = new Map(assignment);\n    newAssign.set(var_, val);\n    const reduced: Clause[] = clauses\n      .map(c => c.filter(l => Math.abs(l) !== var_))\n      .filter(c => c.length > 0);\n    if (dpll(reduced, newAssign)) {\n      assignment.clear();\n      newAssign.forEach((v, k) => assignment.set(k, v));\n      return true;\n    }\n  }\n  return false;\n}\n\n// Reduction: Vertex Cover → SAT\n// For each vertex, var_i = in cover. Clause (u ∨ v) per edge.\nfunction vertexCoverToSAT(edges: [number, number][], k: number): Clause[] {\n  const clauses: Clause[] = edges.map(([u, v]) => [u, v]); // edge must be covered\n  // At most k vertices: for each subset of size k+1, forbid all\n  // (¬v_i1 ∨ ¬v_i2 ∨ ... ∨ ¬v_i(k+1))\n  const n = Math.max(...edges.flat()) + 1;\n  // Generate cardinality constraint (simplified)\n  return clauses;\n}`,
 
         language: "typescript"
 
@@ -376,13 +376,13 @@ export const courses: Course[] = [
 
         id: "1",
 
-        title: "Processes & Threads",
+        title: "Introduction to Operating Systems",
 
-        content: "Process: A program in execution with its own memory space.\nThread: A lightweight process sharing the same memory space.\n\nProcess states: New → Ready → Running → Waiting → Terminated\n\nContext switching: Saving and restoring the state of a process.\n\nProcess vs Thread:\n- Process isolation: separate address space\n- Thread: shared memory, cheaper to create/switch\n- Communication: IPC (pipes, shared memory, sockets) vs shared memory",
+        content: "Your code runs. You never thank the OS. But when malloc() returns NULL, your app crashes. When another browser tab freezes your editor, the scheduler made a choice. When a file save corrupts, the filesystem driver failed. The OS is not theory — it's the referee between your code and the hardware. Every printf() triggers a write() syscall. Every variable access goes through virtual memory translation. Every thread you spawn competes for CPU time. Common exam trap: 'The OS just manages hardware.' Wrong — it also enforces protection between processes, so one app can't read another's memory. Engineering mindset: Students who skip OS fundamentals write apps that silently leak resources and deadlock under load. The OS doesn't care about your code — it just enforces the rules. Learn the rules and your code stops fighting the system.",
 
-        codeExample: `// Process creation example in C\n#include <stdio.h>\n#include <unistd.h>\n\nint main() {\n  pid_t pid = fork();\n  if (pid == 0) {\n    printf("Child process\\n");\n  } else if (pid > 0) {\n    printf("Parent process, child PID: %d\\n", pid);\n    wait(NULL);\n  } else {\n    perror("fork failed");\n  }\n  return 0;\n}`,
+        codeExample: `// Every program interacts with the OS through system calls\nconst fs = require("fs");\nconst os = require("os");\n\nconsole.log("CPU cores:", os.cpus().length);\nconsole.log("Free memory:", os.freemem() / 1024 / 1024, "MB");\nconsole.log("Home dir:", os.homedir());\n\n// Each file read is a syscall — userspace -> kernel -> userspace\nconst start = Date.now();\nfs.readFileSync("test.txt", "utf-8");\nconsole.log("Syscall took:", Date.now() - start, "ms");\n\n// The OS doesn't give you the real memory address\n// It gives you a VIRTUAL address mapped through a page table\nconst mem = Buffer.alloc(1024 * 1024, "A");\nconsole.log("Allocated 1MB — all virtual until actually accessed");`,
 
-        language: "c"
+        language: "typescript"
 
       },
 
@@ -390,11 +390,11 @@ export const courses: Course[] = [
 
         id: "2",
 
-        title: "CPU Scheduling",
+        title: "Processes & Threads",
 
-        content: "Scheduling algorithms determine which process runs next.\n\nNon-preemptive:\n- FCFS: First Come First Served\n- SJF: Shortest Job First\n\nPreemptive:\n- SRTF: Shortest Remaining Time First\n- Round Robin: Time quantum based\n- Priority Scheduling\n\nMetrics:\n- Turnaround Time = Completion - Arrival\n- Waiting Time = Turnaround - Burst Time\n- Response Time = First Run - Arrival",
+        content: "Every exam answer says 'process has own memory, thread shares memory.' True. But the real struggle is RACE CONDITIONS. You write two threads updating a shared counter. It works 1000 times locally. Then in production, counter = 1 when it should be 2. Both threads read 0, both write 1. Common exam trap: 'Threads share the heap but have their own stack.' Yes — but the real question is WHAT data can race. Any variable reachable from two threads is a candidate. Trap: thinking context switching is slow. It's microsecond overhead — the real cost is CPU cache misses after switching. Engineering mindset: Every time you reach for a global variable in multi-threaded code, you're creating a potential race. If you can't prove it's thread-safe, it isn't.",
 
-        codeExample: `// Round Robin Scheduling\nfunction roundRobin(\n  processes: { name: string; burst: number }[],\n  quantum: number\n): { name: string; completion: number }[] {\n  const remaining = processes.map(p => p.burst);\n  const completion = Array(processes.length).fill(0);\n  let time = 0;\n  let done = false;\n\n  while (!done) {\n    done = true;\n    for (let i = 0; i < processes.length; i++) {\n      if (remaining[i] > 0) {\n        done = false;\n        const exec = Math.min(quantum, remaining[i]);\n        time += exec;\n        remaining[i] -= exec;\n        if (remaining[i] === 0) {\n          completion[i] = time;\n        }\n      }\n    }\n  }\n  return processes.map((p, i) => ({\n    name: p.name,\n    completion: completion[i]\n  }));\n}`,
+        codeExample: `// Two threads incrementing a shared counter — classic race\nlet counter = 0;\nconst ITERATIONS = 10000;\n\nasync function increment(label: string) {\n  for (let i = 0; i < ITERATIONS; i++) {\n    // Read counter, increment, write back — NOT atomic\n    // Thread can be preempted between read and write\n    counter++;\n  }\n  console.log(\`\${label} done\`);\n}\n\n// Run both concurrently — interleaving is unpredictable\nawait Promise.all([\n  increment("Thread A"),\n  increment("Thread B")\n]);\n\nconsole.log(\`Counter: \${counter}\`);\n// Expected: 20000, Actual: ~11000-19000\nconsole.log(\`Lost updates: \${20000 - counter}\`);`,
 
         language: "typescript"
 
@@ -404,11 +404,11 @@ export const courses: Course[] = [
 
         id: "3",
 
-        title: "Memory Management",
+        title: "CPU Scheduling",
 
-        content: "Virtual memory maps logical addresses to physical addresses.\n\nPaging:\n- Fixed-size blocks (pages)\n- Page table maps virtual → physical\n- TLB caches recent translations\n\nSegmentation:\n- Variable-size segments based on logical divisions\n\nPage replacement algorithms:\n- FIFO: Replace oldest page\n- LRU: Replace least recently used\n- Optimal: Replace page not used for longest time (theoretical)",
+        content: "Exam problem: 'Calculate average waiting time for FCFS.' You nail it. But they never ask WHY Round Robin exists. Answer: A long process hogs the CPU for 5 seconds. Your music app stutters. The UI freezes. Users think your app is garbage. Preemptive scheduling fixes this by FORCING processes to share the CPU. Common exam trap: 'SJF is optimal.' Trap: 'optimal' means minimum AVERAGE waiting time, assuming you know future burst times — you don't. That's why SJF is theoretically perfect but practically impossible. Engineering mindset: Scheduling is about user EXPERIENCE, not math. The metric that matters is RESPONSE TIME — how fast does the app react when the user types. No user cares about 'average turnaround time' from an exam problem.",
 
-        codeExample: `// LRU Cache implementation\nclass LRUCache {\n  private cache: Map<number, number>;\n  private capacity: number;\n\n  constructor(capacity: number) {\n    this.capacity = capacity;\n    this.cache = new Map();\n  }\n\n  get(key: number): number {\n    if (!this.cache.has(key)) return -1;\n    const value = this.cache.get(key)!;\n    this.cache.delete(key);\n    this.cache.set(key, value);\n    return value;\n  }\n\n  put(key: number, value: number): void {\n    if (this.cache.has(key)) this.cache.delete(key);\n    this.cache.set(key, value);\n    if (this.cache.size > this.capacity) {\n      const firstKey = this.cache.keys().next().value!;\n      this.cache.delete(firstKey);\n    }\n  }\n}`,
+        codeExample: `// Multi-Level Feedback Queue — what real OSes use\nclass MLFQ {\n  private queues: number[][] = [[], [], []];\n  private timeQuanta = [5, 10, 20];\n\n  enqueue(pid: number, priority: number) {\n    this.queues[priority].push(pid);\n  }\n\n  schedule(): number[] {\n    const order: number[] = [];\n    for (let level = 0; level < 3; level++) {\n      while (this.queues[level].length > 0) {\n        const pid = this.queues[level].shift()!;\n        order.push(pid);\n        // Process that uses entire quantum gets demoted\n        const nextLevel = Math.min(level + 1, 2);\n        this.queues[nextLevel].push(pid);\n      }\n    }\n    return order;\n  }\n}\n\n// Interactive processes stay in high-priority queue\n// CPU-bound processes sink to lower priority`,
 
         language: "typescript"
 
@@ -418,11 +418,67 @@ export const courses: Course[] = [
 
         id: "4",
 
+        title: "Memory Management",
+
+        content: "Your app needs 2GB. The machine has 4GB. Why does it crash with 'out of memory' at 1.5GB? Because memory is FRAGMENTED. Paging breaks memory into fixed 4KB chunks so any free page satisfies any request. Segmentation groups related data (code vs stack vs heap) for protection. Common exam trap: 'Paging eliminates external fragmentation.' True. 'Paging has no fragmentation.' False — internal fragmentation exists (last page is partially used, wasting bytes). Engineering mindset: When your server runs at 90% memory, fragmentation can cause allocation failures even though enough total memory is free. That's why memory pools and slab allocators exist — they pre-carve fixed sizes to eliminate fragmentation entirely. The TLB (translation lookaside buffer) caches recent page mappings — missing it doubles memory access time.",
+
+        codeExample: `// Simulating paged memory allocation\nclass PagedAllocator {\n  private pageSize = 4096;\n  private freePages: number[] = [];\n\n  constructor(totalMemory: number) {\n    const pageCount = Math.floor(totalMemory / this.pageSize);\n    this.freePages = Array.from({ length: pageCount }, (_, i) => i);\n  }\n\n  allocate(size: number): number | null {\n    const pagesNeeded = Math.ceil(size / this.pageSize);\n    if (pagesNeeded > this.freePages.length) return null;\n    return this.freePages.splice(0, pagesNeeded)[0];\n  }\n\n  free(page: number): void {\n    this.freePages.push(page);\n  }\n\n  // Internal fragmentation: allocated page may have unused bytes\n  internalWaste(size: number): number {\n    return this.pageSize - (size % this.pageSize || this.pageSize);\n  }\n}\n\nconst mem = new PagedAllocator(4096 * 64);\nmem.allocate(1);       // Uses 1 page, wastes 4095 bytes\nmem.allocate(4097);    // Uses 2 pages, wastes 4095 bytes\nconsole.log("Waste for 1 byte:", mem.internalWaste(1));`,
+
+        language: "typescript"
+
+      },
+
+      {
+
+        id: "5",
+
+        title: "Virtual Memory & Page Replacement",
+
+        content: "Your app uses 2GB. The machine has 512MB RAM. How? Virtual memory keeps only active pages in RAM; the rest sit on disk. Access a missing page → PAGE FAULT → OS fetches from disk (~10ms vs ~100ns RAM hit). When your working set exceeds RAM, the system THRASHES — constantly swapping pages in and out, dropping performance 100x. Common exam trap: 'FIFO is simple and fair.' Trap: Belady's Anomaly — adding MORE RAM can INCREASE page faults with FIFO. LRU doesn't have this problem. Engineering mindset: Your database scans 10GB of data with a 1GB buffer pool. That's 90% page faults. The query is slow not because of CPU but because every miss is a disk read. Measure page fault rate, not CPU, to find the real bottleneck.",
+
+        codeExample: `// FIFO vs LRU page replacement — watch Belady's Anomaly\nfunction pageFaults(\n  pages: number[], frames: number, algo: "fifo" | "lru"\n): number {\n  const memory: number[] = [];\n  let faults = 0;\n\n  for (const page of pages) {\n    const idx = memory.indexOf(page);\n    if (idx === -1) {\n      faults++;  // Page fault — fetch from disk\n      if (memory.length >= frames) {\n        algo === "fifo" ? memory.shift() : memory.shift();\n      }\n    } else if (algo === "lru") {\n      memory.splice(idx, 1);  // Move to front\n    }\n    if (idx === -1 || algo === "lru") memory.push(page);\n  }\n  return faults;\n}\n\nconst refs = [1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5];\nconsole.log(\"FIFO 3 frames:\", pageFaults(refs, 3, \"fifo\"));\nconsole.log(\"FIFO 4 frames:\", pageFaults(refs, 4, \"fifo\")); // May increase!\nconsole.log(\"LRU  3 frames:\", pageFaults(refs, 3, \"lru\"));`,
+
+        language: "typescript"
+
+      },
+
+      {
+
+        id: "6",
+
         title: "Deadlocks",
 
-        content: "Deadlock: A situation where processes are permanently blocked.\n\nFour conditions (Coffman conditions):\n1. Mutual Exclusion\n2. Hold and Wait\n3. No Preemption\n4. Circular Wait\n\nDeadlock handling:\n- Prevention: Break one of the four conditions\n- Avoidance: Banker's algorithm\n- Detection: Wait-for graph, resource allocation graph\n- Recovery: Kill processes, preempt resources",
+        content: "Transaction A locks Row 1. Transaction B locks Row 2. A needs Row 2. B needs Row 1. Both wait forever. That's a deadlock. The four Coffman conditions aren't exam trivia — they're your debugging checklist: (1) Mutual exclusion — resource can't be shared, (2) Hold and wait — processes hold resources while waiting, (3) No preemption — can't force a release, (4) Circular wait — cycle in the wait graph. Break ANY ONE and the deadlock dissolves. Common exam trap: 'Banker's algorithm prevents deadlock.' No — it AVOIDS deadlock by checking safety before allocation. Prevention means structurally breaking conditions (e.g., enforcing total resource ordering). Engineering mindset: In production, you don't prevent deadlocks — you DETECT and recover. Set lock timeouts. If a transaction waits >5s, abort and retry. That's real-world deadlock handling.",
 
-        codeExample: `// Banker's Algorithm (simplified)\nfunction isSafe(\n  available: number[],\n  max: number[][],\n  allocation: number[][],\n  need: number[][],\n  n: number, m: number\n): boolean {\n  const work = [...available];\n  const finish = Array(n).fill(false);\n\n  for (let k = 0; k < n; k++) {\n    for (let i = 0; i < n; i++) {\n      if (!finish[i]) {\n        let canAllocate = true;\n        for (let j = 0; j < m; j++) {\n          if (need[i][j] > work[j]) {\n            canAllocate = false;\n            break;\n          }\n        }\n        if (canAllocate) {\n          for (let j = 0; j < m; j++) {\n            work[j] += allocation[i][j];\n          }\n          finish[i] = true;\n        }\n      }\n    }\n  }\n  return finish.every(f => f);\n}`,
+        codeExample: `// Wait-for graph deadlock detection using DFS cycle check\nclass WaitForGraph {\n  private graph = new Map<number, Set<number>>();\n\n  wait(process: number, resource: number) {\n    if (!this.graph.has(process))\n      this.graph.set(process, new Set());\n    this.graph.get(process)!.add(resource);\n  }\n\n  release(process: number, resource: number) {\n    this.graph.get(process)?.delete(resource);\n  }\n\n  detectDeadlock(): number[] | null {\n    const visited = new Set<number>();\n    const inStack = new Set<number>();\n\n    const dfs = (node: number): number[] | null => {\n      visited.add(node);\n      inStack.add(node);\n      for (const next of this.graph.get(node) || []) {\n        if (!visited.has(next)) {\n          const cycle = dfs(next);\n          if (cycle) return [...cycle, node];\n        } else if (inStack.has(next)) {\n          return [node, next];  // Cycle found\n        }\n      }\n      inStack.delete(node);\n      return null;\n    };\n\n    for (const node of this.graph.keys()) {\n      if (!visited.has(node)) {\n        const cycle = dfs(node);\n        if (cycle) return cycle;\n      }\n    }\n    return null;\n  }\n}\n\nconst wfg = new WaitForGraph();\nwfg.wait(1, 2); wfg.wait(2, 3);\nwfg.wait(3, 1);  // Creates cycle\nconsole.log(\"Deadlock:\", wfg.detectDeadlock());`,
+
+        language: "typescript"
+
+      },
+
+      {
+
+        id: "7",
+
+        title: "File Systems",
+
+        content: "You delete a file. Run recovery software. Get garbled text. Why? Because 'deleting' just marks the inode as free. The data blocks stay — until overwritten. File systems are data structures on disk: inodes store metadata (size, permissions, block pointers), directories map names to inodes, and the block bitmap tracks free space. Common exam trap: 'A file is just a name for data.' No — a file is an inode pointed to by directory entries (hard links). Different names, same inode, same data. Deleting one 'name' doesn't delete the data until the last link is removed. Engineering mindset: Ext4 uses journaling to prevent corruption — write the intent first, then the data. If the system crashes mid-write, the journal replays incomplete operations. Without journaling, a crash corrupts the entire filesystem metadata structure.",
+
+        codeExample: `// Inode-based filesystem simulation\nclass Inode {\n  constructor(\n    public id: number,\n    public size: number = 0,\n    public blocks: number[] = [],\n    public links: number = 1  // Hard link count\n  ) {}\n}\n\nclass SimpleFS {\n  private inodes = new Map<number, Inode>();\n  private dir = new Map<string, number>();\n  private nextId = 1;\n\n  create(name: string): Inode {\n    const inode = new Inode(this.nextId++);\n    this.inodes.set(inode.id, inode);\n    this.dir.set(name, inode.id);\n    return inode;\n  }\n\n  link(existing: string, newName: string): boolean {\n    const id = this.dir.get(existing);\n    if (!id) return false;\n    this.dir.set(newName, id);\n    this.inodes.get(id)!.links++;\n    return true;  // Same inode — hard link, not copy\n  }\n\n  delete(name: string): boolean {\n    const id = this.dir.get(name);\n    if (!id) return false;\n    const inode = this.inodes.get(id)!;\n    inode.links--;\n    if (inode.links === 0) this.inodes.delete(id);  // Actually freed\n    this.dir.delete(name);\n    return true;\n  }\n}\n\nconst fs = new SimpleFS();\nconst f = fs.create(\"data.txt\");\nfs.link(\"data.txt\", \"backup.txt\");  // Same file, two names\nconsole.log(\"Links after delete:\", f.links);  // Still 2\nfs.delete(\"data.txt\");\nconsole.log(\"Links after one delete:\", f.links);  // Still 1 — data alive`,
+
+        language: "typescript"
+
+      },
+
+      {
+
+        id: "8",
+
+        title: "Synchronization & Concurrency",
+
+        content: "Two threads increment a counter. Thread 1 reads 0, Thread 2 reads 0, Thread 1 writes 1, Thread 2 writes 1. Final value: 1 instead of 2. That's a race condition — and it breaks everything from bank balances to game state. Mutexes fix this by ensuring only one thread enters the critical section at a time. Semaphores generalize this to N threads accessing N identical resources. Common exam trap: 'A mutex and a binary semaphore are the same.' Wrong. A mutex has OWNERSHIP — the same thread must lock and unlock it. A semaphore can be signaled by any thread. Use the wrong one and your code silently corrupts data. Engineering mindset: Lock-free programming (atomic compare-and-swap) avoids mutexes entirely. Databases, kernel schedulers, and high-frequency trading rely on it. But unless you're writing kernel code, just use a mutex. Correctness first, optimization later.",
+
+        codeExample: `// Race condition vs mutex-protected counter\nlet sharedCounter = 0;\nlet safeCounter = 0;\nlet locked = false;\n\nasync function lock() {\n  while (locked) await Promise.resolve();\n  locked = true;\n}\nfunction unlock() { locked = false; }\n\nasync function unsafeIncrement() {\n  for (let i = 0; i < 5000; i++) sharedCounter++;\n}\n\nasync function safeIncrement() {\n  for (let i = 0; i < 5000; i++) {\n    await lock();\n    safeCounter++;  // Only one thread here at a time\n    unlock();\n  }\n}\n\nawait Promise.all([unsafeIncrement(), unsafeIncrement()]);\nawait Promise.all([safeIncrement(), safeIncrement()]);\n\nconsole.log(\"Unsafe:\", sharedCounter);  // ~5000-9000\nconsole.log(\"Safe:\",   safeCounter);     // 10000\n\n// Real mutexes (Pthreads, std::mutex) do this in hardware\n// with atomic compare-and-swap — no busy-waiting loop`,
 
         language: "typescript"
 
@@ -660,9 +716,9 @@ export const courses: Course[] = [
 
         title: "HTML & Semantic Web",
 
-        content: "HTML5 semantic elements:\n- header, nav, main, article, section, aside, footer\n- form, fieldset, legend\n- figure, figcaption\n\nAccessibility:\n- ARIA attributes\n- Alt text for images\n- Semantic heading hierarchy\n- Keyboard navigation\n\nSEO:\n- Meta tags (title, description, og:tags)\n- Structured data (JSON-LD)\n- Canonical URLs",
+        content: "Student trap: you built a page with all <div>s and it renders fine — so why use semantic tags? Screen readers rely on semantic landmarks (<nav>, <main>, <aside>) to navigate. A blind user can jump between them with a single keystroke — <div> soup offers no such landmarks. Search engines also rank semantic content higher because they understand your structure. The #1 issue engineers see in junior portfolios is a page that's 50 nested <div>s with zero semantic meaning.",
 
-        codeExample: `<!-- Semantic HTML5 -->\n<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <meta name="description" content="Page description">\n  <title>Page Title</title>\n</head>\n<body>\n  <header>\n    <nav aria-label="Main navigation">\n      <ul>\n        <li><a href="/">Home</a></li>\n        <li><a href="/about">About</a></li>\n      </ul>\n    </nav>\n  </header>\n  <main>\n    <article>\n      <h1>Main Heading</h1>\n      <section>\n        <h2>Section Title</h2>\n        <p>Content here</p>\n      </section>\n    </article>\n  </main>\n  <footer>\n    <p>&copy; 2024</p>\n  </footer>\n</body>\n</html>`,
+        codeExample: `<!-- ❌ Non-semantic (div soup) -->\n<div class="header">\n  <div class="nav">\n    <div class="nav-item">Home</div>\n  </div>\n</div>\n<div class="main">\n  <div class="article">\n    <div class="title">Blog Post</div>\n    <div class="content">Text here</div>\n  </div>\n</div>\n<div class="footer">\n  <div>Copyright 2024</div>\n</div>\n\n<!-- ✅ Semantic HTML5 -->\n<header>\n  <nav aria-label="Main navigation">\n    <ul><li><a href="/">Home</a></li></ul>\n  </nav>\n</header>\n<main>\n  <article>\n    <h1>Blog Post</h1>\n    <p>Text here</p>\n  </article>\n</main>\n<footer>\n  <small>&copy; 2024</small>\n</footer>`,
 
         language: "html"
 
@@ -672,11 +728,11 @@ export const courses: Course[] = [
 
         id: "2",
 
-        title: "CSS Flexbox & Grid",
+        title: "CSS Fundamentals & Layout",
 
-        content: "Flexbox (1D layout):\n- display: flex\n- justify-content: alignment along main axis\n- align-items: alignment along cross axis\n- flex-direction: row | column\n- flex-wrap: wrap items\n\nGrid (2D layout):\n- display: grid\n- grid-template-columns/rows\n- grid-gap\n- grid-area: named placement\n- fr unit: fractional sizing",
+        content: "CSS struggle: 'Why is my div not centered?' You wrote text-align: center but nothing moved. That's because text-align only works on inline/inline-block content — it does nothing to block elements like <div>. For horizontal centering of a block, use margin: 0 auto. For both directions, reach for flexbox: display: flex + justify-content: center + align-items: center. Another trap: forgetting box-sizing: border-box. Add padding to a 400px div and it becomes 440px, breaking your layout. Set *, *::before, *::after { box-sizing: border-box; } at the top of every stylesheet.",
 
-        codeExample: `/* Flexbox - Card Layout */\n.card-container {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 1rem;\n  justify-content: center;\n}\n\n.card {\n  flex: 1 1 300px;\n  max-width: 400px;\n}\n\n/* Grid - Dashboard Layout */\n.dashboard {\n  display: grid;\n  grid-template-columns: 250px 1fr;\n  grid-template-rows: auto 1fr auto;\n  grid-template-areas:\n    "sidebar header"\n    "sidebar main"\n    "sidebar footer";\n  min-height: 100vh;\n}\n\n.sidebar { grid-area: sidebar; }\n.header  { grid-area: header; }\n.main    { grid-area: main; }\n.footer  { grid-area: footer; }`,
+        codeExample: `/* Universal reset — prevents layout-breaking padding */\n*, *::before, *::after {\n  box-sizing: border-box;\n  margin: 0;\n  padding: 0;\n}\n\n/* Flexbox centering (both axes) */\n.container {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  height: 100vh;\n}\n\n/* Block-level horizontal centering */\n.card {\n  width: 300px;\n  margin: 0 auto;\n}\n\n/* Grid: two-column layout */\n.layout {\n  display: grid;\n  grid-template-columns: 250px 1fr;\n  gap: 1rem;\n}`,
 
         language: "css"
 
@@ -686,13 +742,13 @@ export const courses: Course[] = [
 
         id: "3",
 
-        title: "JavaScript Essentials",
+        title: "JavaScript Core Concepts",
 
-        content: "Core concepts:\n- Closures and scope\n- Prototypal inheritance\n- Event loop and async/await\n- Promises and callbacks\n- Destructuring and spread\n\nES6+ features:\n- Arrow functions\n- Template literals\n- Optional chaining (?.)\n- Nullish coalescing (??)\n- Modules (import/export)",
+        content: "JS trap #1: == vs ===. Students use == because 'it works', until 0 == false evaluates to true, '' == 0 is true, and your form validation lets empty strings through. Always use === unless you explicitly need type coercion. Trap #2: closures in loops. for (var i = 0; i < 5; i++) { setTimeout(() => console.log(i), 100); } — you expect 0,1,2,3,4 but get 5,5,5,5,5. var has function scope, not block scope. By the time the timeout runs, the loop finished and i is 5. Fix: use let (block-scoped) or wrap in an IIFE.",
 
-        codeExample: `// Async/Await with error handling\nasync function fetchUserData(userId: string) {\n  try {\n    const response = await fetch(\`/api/users/\${userId}\`);\n    if (!response.ok) throw new Error('Not found');\n    const user = await response.json();\n    return user;\n  } catch (error) {\n    console.error('Failed to fetch user:', error);\n    throw error;\n  }\n}\n\n// Closures\nfunction createCounter(initial = 0) {\n  let count = initial;\n  return {\n    increment: () => ++count,\n    decrement: () => --count,\n    getCount: () => count\n  };\n}\n\nconst counter = createCounter(10);\nconsole.log(counter.increment()); // 11\nconsole.log(counter.getCount());  // 11`,
+        codeExample: `// ❌ Trap: == vs ===\nconsole.log(0 == false);   // true — breaks validation\nconsole.log(0 === false);  // false — correct\nconsole.log('' == 0);      // true\nconsole.log('' === 0);     // false\n\n// ❌ Trap: var in loop\nfor (var i = 0; i < 5; i++) {\n  setTimeout(() => console.log(i), 100);\n}\n// Output: 5, 5, 5, 5, 5\n\n// ✅ Fix: use let (block scope)\nfor (let i = 0; i < 5; i++) {\n  setTimeout(() => console.log(i), 100);\n}\n// Output: 0, 1, 2, 3, 4\n\n// ✅ Alternative: closure with IIFE\nfor (var i = 0; i < 5; i++) {\n  ((j) => setTimeout(() => console.log(j), 100))(i);\n}`,
 
-        language: "typescript"
+        language: "javascript"
 
       },
 
@@ -700,13 +756,69 @@ export const courses: Course[] = [
 
         id: "4",
 
+        title: "Advanced JavaScript",
+
+        content: "The this keyword: 'Why does this become undefined inside my event handler?' Because this depends on how a function is called, not where it's defined. In a regular function call (strict mode), this is undefined. In a method call (obj.method()), this is the object. Arrow functions don't have their own this — they inherit from the enclosing scope. Engineering rule: if you see this behaving unexpectedly, check what's left of the dot at the call site. Use .bind(), arrow functions, or a self = this reference to control the binding.",
+
+        codeExample: `const user = {\n  name: 'Alice',\n  greet: function() {\n    console.log('Hello, ' + this.name);\n  },\n  greetArrow: () => {\n    // ❌ Arrow function — this is NOT user\n    console.log('Hello, ' + this.name);\n  },\n  greetDelayed: function() {\n    // ❌ this will be undefined (or window) in the callback\n    setTimeout(function() {\n      console.log('Hello, ' + this.name);\n    }, 100);\n  },\n  greetFixed: function() {\n    // ✅ Fix 1: arrow function inherits this\n    setTimeout(() => {\n      console.log('Hello, ' + this.name);\n    }, 100);\n  },\n  greetFixed2: function() {\n    // ✅ Fix 2: .bind()\n    setTimeout(function() {\n      console.log('Hello, ' + this.name);\n    }.bind(this), 100);\n  }\n};\n\nuser.greet();        // Hello, Alice\nuser.greetArrow();   // Hello, undefined\nuser.greetDelayed(); // Hello, undefined\nuser.greetFixed();   // Hello, Alice`,
+
+        language: "javascript"
+
+      },
+
+      {
+
+        id: "5",
+
         title: "React Fundamentals",
 
-        content: "React core concepts:\n- Components (functional)\n- JSX\n- Props and State\n- Hooks (useState, useEffect, useContext, useRef)\n- Conditional rendering\n- Lists and keys\n\nReact patterns:\n- Container/Presentational\n- Custom hooks\n- Context API\n- Compound components",
+        content: "React mistake #1: directly mutating state. Students write arr.push(item) or obj.name = 'new' and wonder why the UI doesn't update. React uses reference equality to detect changes — mutating an existing object keeps the same reference, so React skips the re-render. Always return a new reference: setItems([...items, newItem]) for arrays, setUser({...user, name: 'new'}) for objects. Another trap: calling setState in a loop without the functional updater — stale closure bug: setCount(count + 1) called 5 times increments by 1, not 5. Use setCount(prev => prev + 1).",
 
-        codeExample: `import { useState, useEffect } from 'react';\n\n// Custom Hook\nfunction useFetch<T>(url: string) {\n  const [data, setData] = useState<T | null>(null);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState<Error | null>(null);\n\n  useEffect(() => {\n    fetch(url)\n      .then(res => res.json())\n      .then(setData)\n      .catch(setError)\n      .finally(() => setLoading(false));\n  }, [url]);\n\n  return { data, loading, error };\n}\n\n// Component\nfunction UserList() {\n  const { data: users, loading, error } = useFetch<User[]>('/api/users');\n\n  if (loading) return <Spinner />;\n  if (error) return <ErrorMessage error={error} />;\n\n  return (\n    <ul>\n      {users?.map(user => (\n        <li key={user.id}>{user.name}</li>\n      ))}\n    </ul>\n  );\n}`,
+        codeExample: `import { useState } from 'react';\n\nfunction TodoList() {\n  const [todos, setTodos] = useState(['Learn React']);\n  const [count, setCount] = useState(0);\n\n  // ✅ Correct: new array reference\n  const addTodo = (todo: string) => {\n    setTodos([...todos, todo]);\n  };\n\n  // ❌ Wrong: mutating directly\n  // todos.push(todo);    // no re-render!\n  // setTodos(todos);     // same reference!\n\n  // ❌ Stale closure: increments by only 1\n  const brokenIncrement = () => {\n    for (let i = 0; i < 5; i++) {\n      setCount(count + 1); // uses same count\n    }\n  };\n\n  // ✅ Functional updater: increments by 5\n  const fixedIncrement = () => {\n    for (let i = 0; i < 5; i++) {\n      setCount(prev => prev + 1);\n    }\n  };\n\n  return (\n    <div>\n      <ul>{todos.map(t => <li key={t}>{t}</li>)}</ul>\n      <p>Count: {count}</p>\n      <button onClick={fixedIncrement}>+5</button>\n    </div>\n  );\n}`,
 
         language: "tsx"
+
+      },
+
+      {
+
+        id: "6",
+
+        title: "React Advanced Patterns",
+
+        content: "Prop drilling trap: you pass user data through 5 intermediate components that don't use it, just to reach a deeply nested child. Every intermediate component re-renders on every user change, killing performance. Solutions: (1) Context API — great for truly global state (theme, auth, locale). (2) Component composition — pass JSX as children instead of drilling props: <Parent><Child data={x} /></Parent> avoids intermediate renders. (3) For complex state, reach for Zustand or Redux Toolkit, but don't import Redux until you actually feel the pain of prop drilling first.",
+
+        codeExample: `import { createContext, useContext, useState, ReactNode } from 'react';\n\ninterface User {\n  name: string;\n  avatar: string;\n}\n\nconst UserContext = createContext<User | null>(null);\n\nfunction UserProvider({ children, user }: { children: ReactNode; user: User }) {\n  return (\n    <UserContext.Provider value={user}>\n      {children}\n    </UserContext.Provider>\n  );\n}\n\nfunction Avatar() {\n  const user = useContext(UserContext);\n  return <img src={user?.avatar} alt={user?.name} className="w-8 h-8 rounded-full" />;\n}\n\nfunction Header() {\n  return (\n    <header>\n      <Avatar /> {/* No prop drilling needed */}\n    </header>\n  );\n}\n\nfunction App({ user }: { user: User }) {\n  return (\n    <UserProvider user={user}>\n      <Header />\n    </UserProvider>\n  );\n}`,
+
+        language: "tsx"
+
+      },
+
+      {
+
+        id: "7",
+
+        title: "Backend Development with Node.js",
+
+        content: "Unhandled promise rejections kill servers. Your Express handler is async, throws an error, but you forgot the .catch() — and Node.js 15+ exits the process on unhandled rejections. The fix: wrap every async route handler. const asyncHandler = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next); then wrap all routes. Another trap: putting CPU-intensive work (image processing, JSON parsing) in a request handler — it blocks the single-threaded event loop and freezes all concurrent requests. Offload to worker threads or a job queue (Bull/BullMQ).",
+
+        codeExample: `import express, { Request, Response, NextFunction } from 'express';\n\nconst app = express();\n\n// ✅ Must-have: async error wrapper\nconst asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => Promise<any>) =>\n  (req: Request, res: Response, next: NextFunction) =>\n    Promise.resolve(fn(req, res, next)).catch(next);\n\n// Centralized error middleware\napp.use((err: Error, req: Request, res: Response, next: NextFunction) => {\n  console.error('[ERROR]', err.message);\n  res.status(500).json({ error: 'Internal server error' });\n});\n\n// ❌ This crashes the process on error\napp.get('/user/:id', async (req, res) => {\n  const user = await db.findUser(req.params.id); // throws -> process exits\n  res.json(user);\n});\n\n// ✅ Wrapped — error goes to middleware\napp.get('/user/:id', asyncHandler(async (req, res) => {\n  const user = await db.findUser(req.params.id);\n  if (!user) return res.status(404).json({ error: 'Not found' });\n  res.json(user);\n}));\n\napp.listen(3000, () => console.log('Server running on port 3000'));`,
+
+        language: "typescript"
+
+      },
+
+      {
+
+        id: "8",
+
+        title: "Full-Stack & Deployment",
+
+        content: "'It works on my machine' — the most dangerous phrase in engineering. Root cause: environment inconsistency. Different Node versions, missing .env variables, hardcoded API URLs pointing to localhost. Three-layered fix: (1) .env.example tracked in git with all required keys documented. (2) Docker ensures the same OS, Node version, and dependencies across dev and prod. (3) CI/CD pipeline runs tests before deploy. Common deployment mistake: shipping with NODE_ENV=development, which exposes full stack traces and debug logs to end users. Always set NODE_ENV=production in your deployment config.",
+
+        codeExample: `# 1. .env.example — tracked in git, documents every required key\nPORT=3000\nDATABASE_URL=postgres://user:pass@host:5432/db\nNODE_ENV=development\nCORS_ORIGIN=http://localhost:5173\n\n# 2. Dockerfile — reproducible environment\nFROM node:20-alpine\nWORKDIR /app\nCOPY package.json package-lock.json ./\nRUN npm ci --only=production\nCOPY . .\nEXPOSE 3000\nCMD ["node", "dist/server.js"]\n\n# 3. docker-compose.yml — full stack\nservices:\n  api:\n    build: .\n    ports:\n      - "3000:3000"\n    environment:\n      - NODE_ENV=production\n    depends_on:\n      - db\n  db:\n    image: postgres:16-alpine\n\nvolumes:\n  pgdata:`,
+
+        language: "yaml"
 
       },
 
@@ -736,29 +848,32 @@ export const courses: Course[] = [
 
         title: "Introduction to OOP",
 
-        content: "Object-Oriented Programming organizes code around objects rather than functions.\n\nCore Concepts:\n- Class: A blueprint for creating objects\n- Object: An instance of a class\n- Attribute: Properties that describe an object\n- Method: Functions that define object behavior\n\nConstructors:\n- Special method called when creating an object\n- Initializes the object's attributes\n- Same name as the class in most languages\n\nthis Keyword:\n- Refers to the current object instance\n- Used to access attributes and methods\n\nMemory:\n- Objects stored in heap memory\n- Reference variables stored in stack memory\n- Garbage collection manages deallocation",
+        content: "OOP mistake #1: Students create classes for everything. 'I need to print Hello World.' 'Let me make a HelloWorldPrinter class first.' Not everything is an object. Start simple, add abstraction when you have REPETITION.\n\nOOP exists because procedural code breaks down when you have multiple things sharing the same behavior. A class is just a blueprint — it lets you create many objects with the same methods but different data.\n\nConstructor trap: Forgetting that constructors run every time you use `new`. Put setup logic there, not in the class body.\n\nInterview trap: 'What's the difference between a class and an object?' Class = cookie cutter. Object = cookie. One blueprint, many instances.\n\nEngineering mindset: OOP is a TOOL, not a religion. If you only have one of something (one logger, one config), you probably don't need a class. A function is fine. OOP earns its keep when you have 5+ things sharing the same shape.",
 
-        codeExample: `class Person {
-  name: string;
-  age: number;
+        codeExample: `// Bad: class for everything
+class HelloPrinter {
+  print() { console.log("Hello"); }
+}
+new HelloPrinter().print(); // Wasteful
 
-  constructor(name: string, age: number) {
-    this.name = name;
-    this.age = age;
-  }
-
-  greet(): string {
-    return \`Hi, I'm \${this.name}, age \${this.age}\`;
-  }
-
-  isAdult(): boolean {
-    return this.age >= 18;
+// Good: class when you need multiple instances
+class User {
+  constructor(
+    public name: string,
+    public role: "admin" | "viewer"
+  ) {}
+  canEdit(): boolean {
+    return this.role === "admin";
   }
 }
 
-const alice = new Person("Alice", 25);
-console.log(alice.greet());    // Hi, I'm Alice, age 25
-console.log(alice.isAdult());  // true`,
+const users = [
+  new User("Alice", "admin"),
+  new User("Bob", "viewer"),
+  new User("Charlie", "viewer"),
+];
+const editors = users.filter(u => u.canEdit());
+console.log(editors.length); // 1`,
 
         language: "typescript"
 
@@ -770,37 +885,38 @@ console.log(alice.isAdult());  // true`,
 
         title: "Encapsulation",
 
-        content: "Encapsulation bundles data with methods and restricts direct access.\n\nAccess Modifiers:\n- public: Accessible from anywhere (default)\n- private: Accessible only within the class\n- protected: Accessible within class and subclasses\n- readonly: Can only be set during initialization\n\nInformation Hiding:\n- Hide internal implementation details\n- Expose only necessary interface\n- Prevent invalid object states\n\nGetters and Setters:\n- Provide controlled access to private attributes\n- Add validation logic in setters\n- Compute values in getters\n\nBenefits:\n- Reduced complexity\n- Increased flexibility\n- Improved maintainability\n- Better testability",
+        content: "Encapsulation trap: Students make everything public 'for flexibility'. Then in a team project, changing a field name breaks 30 files. That's why private exists — it communicates 'this is internal, don't touch' to other developers.\n\nGetters/setters are NOT just for Java. They let you ADD validation later without changing the API. Start with public fields, but when you need rules (no negative balance, no empty name), switch to getters.\n\nReadonly trap: Students forget readonly exists and rely on convention. Use readonly for anything set once in the constructor. The compiler enforces what comments can't.\n\nInterview trap: 'Why not just make everything public?' Because encapsulation is about contracts, not secrecy. A public field says 'callers depend on this existing forever'. A private field says 'I can change this tomorrow'.\n\nEngineering mindset: Every public member is a binding promise. Make promises sparingly. If a teammate could misuse a field, lock it down now — before it's in 50 files.",
 
-        codeExample: `class BankAccount {
-  private balance: number;
-  private readonly id: string;
+        codeExample: `class Timer {
+  private _elapsed = 0;
+  private _running = false;
+  readonly startedAt: Date;
 
-  constructor(id: string, initialBalance: number) {
-    this.id = id;
-    this.balance = initialBalance;
+  constructor() {
+    this.startedAt = new Date();
   }
 
-  deposit(amount: number): void {
-    if (amount <= 0) throw new Error("Amount must be positive");
-    this.balance += amount;
+  get elapsed(): number {
+    return this._elapsed;
   }
 
-  withdraw(amount: number): boolean {
-    if (amount <= 0 || amount > this.balance) return false;
-    this.balance -= amount;
-    return true;
+  start(): void {
+    if (this._running) return;
+    this._running = true;
   }
 
-  getBalance(): number {
-    return this.balance;
+  stop(): void {
+    this._running = false;
+    this._elapsed += 100;
   }
 }
 
-const account = new BankAccount("ACC001", 1000);
-account.deposit(500);
-account.withdraw(200);
-console.log(account.getBalance()); // 1300`,
+const t = new Timer();
+t.start();
+t.stop();
+console.log(t.elapsed); // 100
+// t.startedAt = new Date(); // Error! readonly
+// t._elapsed = 999; // Error! private`,
 
         language: "typescript"
 
@@ -812,42 +928,36 @@ console.log(account.getBalance()); // 1300`,
 
         title: "Inheritance",
 
-        content: "Inheritance allows creating new classes from existing ones.\n\nTypes:\n1. Single: A extends B\n2. Multilevel: A extends B extends C\n3. Hierarchical: B extends A, C extends A\n4. Multiple: Limited in some languages\n\nKey Concepts:\n- super: Calls parent constructor/methods\n- extends: Keyword to inherit\n- Method Overriding: Child provides specific implementation\n\nLiskov Substitution Principle:\n- Child class should not break parent behavior\n- Objects of parent should be replaceable with child\n\nComposition vs Inheritance:\n- Prefer composition (HAS-A) over inheritance (IS-A)\n- Inheritance creates tight coupling\n- Composition offers more flexibility",
+        content: "Inheritance abuse: Students love inheritance. 'Cat extends Animal, Dog extends Animal'. Then they need a Robot. Does Robot extend Animal? Suddenly the hierarchy falls apart. Enter composition: Robot has-a Brain, has-a Body. Favor HAS-A over IS-A.\n\nLSP trap (Liskov Substitution): If a child class CHANGES parent behavior instead of EXTENDING it, inheritance is wrong. 'Square extends Rectangle' breaks when Rectangle has setWidth() and Square needs to set both dimensions.\n\nInterview trap: 'Why is multiple inheritance dangerous?' Diamond problem — if A extends B and C, and both B and C have a method doStuff(), which one does A use? TypeScript's interfaces avoid this by having NO implementation.\n\nEngineering mindset: Inheritance creates the tightest coupling in OOP — a child class is permanently tied to its parent. Before you write 'extends', ask: Is this a hierarchy that will NEVER change? If the answer isn't 'yes', use interfaces + composition instead.",
 
-        codeExample: `class Shape {
-  constructor(public color: string) {}
+        codeExample: `// Bad: forces artificial hierarchy
+interface Switchable {
+  on(): void;
+  off(): void;
+}
 
-  area(): number { return 0; }
-  describe(): string {
-    return \`\${this.color} shape with area \${this.area().toFixed(2)}\`;
+class LightBulb implements Switchable {
+  on() { console.log("Light ON"); }
+  off() { console.log("Light OFF"); }
+}
+
+class Fan implements Switchable {
+  on() { console.log("Fan ON"); }
+  off() { console.log("Fan OFF"); }
+}
+
+// Composition over inheritance
+class RemoteControl {
+  constructor(private device: Switchable) {}
+
+  toggle(on: boolean): void {
+    on ? this.device.on() : this.device.off();
   }
 }
 
-class Circle extends Shape {
-  constructor(color: string, public radius: number) {
-    super(color);
-  }
-
-  area(): number {
-    return Math.PI * this.radius ** 2;
-  }
-}
-
-class Rectangle extends Shape {
-  constructor(color: string, public width: number, public height: number) {
-    super(color);
-  }
-
-  area(): number {
-    return this.width * this.height;
-  }
-}
-
-const shapes: Shape[] = [
-  new Circle("red", 5),
-  new Rectangle("blue", 4, 6)
-];
-shapes.forEach(s => console.log(s.describe()));`,
+const remote = new RemoteControl(new LightBulb());
+remote.toggle(true);  // Light ON
+remote.toggle(false); // Light OFF`,
 
         language: "typescript"
 
@@ -859,33 +969,40 @@ shapes.forEach(s => console.log(s.describe()));`,
 
         title: "Polymorphism",
 
-        content: "Polymorphism means 'many forms' - same interface, different implementations.\n\nTypes:\n1. Compile-time: Method overloading\n2. Runtime: Method overriding, dynamic dispatch\n\nMethod Overloading:\n- Multiple methods with same name, different parameters\n- Resolved at compile time\n\nMethod Overriding:\n- Child class provides specific implementation\n- Resolved at runtime (dynamic dispatch)\n\nDynamic Dispatch:\n- Determines which method to call at runtime\n- Based on actual object type, not reference type\n- Enables polymorphic behavior\n\nInterface Polymorphism:\n- Objects implementing same interface\n- Can be used interchangeably\n- Duck typing: If it walks like a duck...",
+        content: "Polymorphism trap: Students write if-else chains for every type check. `if (animal.type === 'dog') bark(); else if (animal.type === 'cat') meow()`. This is the OPPOSITE of polymorphism. Real polymorphism means you write code that works with ANY type — and each type handles its own behavior.\n\nThe 'new' keyword trap: When you write `new Dog()`, `new Cat()` in your business logic, you've already lost. Polymorphism requires programming to an INTERFACE, not a concrete class.\n\nInterview trap: 'Overloading vs overriding?' Overloading = same name, different params (compile-time). Overriding = child replaces parent method (runtime). TypeScript has REAL overriding — overloading is just type annotations.\n\nEngineering mindset: Polymorphism allows your code to be OPEN for extension without being OPEN for modification. Adding a new type never requires changing existing code that depends on the interface. That's how production systems stay stable while growing.",
 
-        codeExample: `interface Logger {
-  log(message: string): void;
+        codeExample: `// Bad: manual type checking
+function saveJson(data: string | number) {
+  if (typeof data === "string") return JSON.parse(data);
+  return data; // fine for numbers, what about objects?
 }
 
-class ConsoleLogger implements Logger {
-  log(message: string): void {
-    console.log(\`[CONSOLE] \${message}\`);
+// Good: polymorphic serializer
+interface Serializable {
+  serialize(): string;
+}
+
+class UserData implements Serializable {
+  constructor(private name: string, private age: number) {}
+  serialize(): string {
+    return JSON.stringify({ name: this.name, age: this.age });
   }
 }
 
-class FileLogger implements Logger {
-  private logs: string[] = [];
-  log(message: string): void {
-    this.logs.push(message);
+class Config implements Serializable {
+  constructor(private theme: string) {}
+  serialize(): string {
+    return JSON.stringify({ theme: this.theme });
   }
-  getLogs(): string[] { return this.logs; }
 }
 
-function processLog(logger: Logger, msg: string): void {
-  logger.log(msg);
+function persist(item: Serializable): void {
+  const data = item.serialize();
+  console.log("Saving:", data);
 }
 
-const loggers: Logger[] = [new ConsoleLogger(), new FileLogger()];
-loggers.forEach(l => processLog(l, "Server started"));
-// [CONSOLE] Server started`,
+persist(new UserData("Alice", 30));
+persist(new Config("dark"));`,
 
         language: "typescript"
 
@@ -897,39 +1014,40 @@ loggers.forEach(l => processLog(l, "Server started"));
 
         title: "Abstraction",
 
-        content: "Abstraction hides complex implementation details and shows only essentials.\n\nAbstract Classes:\n- Cannot be instantiated directly\n- Can have both abstract and concrete methods\n- Must be extended by child classes\n\nInterfaces:\n- Contract defining what a class must do\n- No implementation (traditionally)\n- Multiple interfaces can be implemented\n\nFactory Pattern:\n- Creates objects without specifying exact class\n- Returns interface type\n- Easy to swap implementations\n\nFacade Pattern:\n- Simplified interface to complex subsystem\n- Reduces dependencies\n- Provides convenient methods",
+        content: "Abstraction trap: Students assume one interface implementation will always be enough. 'Why use an interface if I only have one database?' Six months later you're migrating from MongoDB to Postgres and every file references Mongo-specific types. The interface costs nothing today and saves a rewrite tomorrow.\n\nAbstract class vs interface confusion: Use abstract when classes SHARE STATE (both have a `connection` field). Use interface when they only SHARE BEHAVIOR (both have `connect()`, `query()`).\n\nInterview trap: 'Is abstraction the same as encapsulation?' No — encapsulation hides INTERNAL DATA, abstraction hides IMPLEMENTATION DETAILS. Encapsulation says 'you can't touch this'. Abstraction says 'you don't need to know how this works'.\n\nEngineering mindset: The goal of abstraction isn't to make code 'clean' — it's to make change cheap. Every concrete dependency in your business logic is a future cost. Put an interface in front of anything that could change: databases, APIs, file systems, external services.",
 
-        codeExample: `abstract class Database {
-  abstract connect(): void;
-  abstract query(sql: string): any[];
-  abstract disconnect(): void;
+        codeExample: `abstract class NotificationSender {
+  abstract send(message: string): Promise<boolean>;
 
-  execute(sql: string): any[] {
-    this.connect();
-    const result = this.query(sql);
-    this.disconnect();
-    return result;
+  async notify(message: string): Promise<void> {
+    const sent = await this.send(message);
+    if (!sent) {
+      console.error(\`Failed to send: \${message}\`);
+      this.fallback(message);
+    }
+  }
+
+  private fallback(message: string): void {
+    console.log(\`Stored for retry: \${message}\`);
   }
 }
 
-class PostgresDB extends Database {
-  connect() { console.log("Connecting to PostgreSQL..."); }
-  query(sql: string) { return [{ id: 1 }]; }
-  disconnect() { console.log("Disconnected"); }
+class EmailSender extends NotificationSender {
+  async send(message: string): Promise<boolean> {
+    console.log(\`Email: \${message}\`);
+    return true;
+  }
 }
 
-class MongoDb extends Database {
-  connect() { console.log("Connecting to MongoDB..."); }
-  query(sql: string) { return [{ _id: 1 }]; }
-  disconnect() { console.log("Disconnected"); }
+class SmsSender extends NotificationSender {
+  async send(message: string): Promise<boolean> {
+    console.log(\`SMS: \${message}\`);
+    return false;
+  }
 }
 
-function createDatabase(type: string): Database {
-  return type === "postgres" ? new PostgresDB() : new MongoDb();
-}
-
-const db = createDatabase("postgres");
-db.execute("SELECT * FROM users");`,
+new EmailSender().notify("Welcome!");
+new SmsSender().notify("OTP: 1234");`,
 
         language: "typescript"
 
@@ -941,42 +1059,36 @@ db.execute("SELECT * FROM users");`,
 
         title: "SOLID Principles",
 
-        content: "SOLID - five design principles for maintainable OOP.\n\nS - Single Responsibility: One class, one job\nO - Open/Closed: Open for extension, closed for modification\nL - Liskov Substitution: Subtypes must be substitutable\nI - Interface Segregation: Many specific interfaces > one general\nD - Dependency Inversion: Depend on abstractions, not concretions\n\nBenefits:\n- Maintainable code\n- Testable code\n- Flexible to change\n- Clear architecture\n\nEach principle prevents a specific design smell:\n- SRP: God classes\n- OCP: Shotgun surgery\n- LSP: Broken inheritance\n- ISP: Fat interfaces\n- DIP: Tight coupling",
+        content: "SOLID trap: Students try to apply all five principles to a 50-line script. SOLID exists for applications that will be maintained for YEARS by multiple people. A single-file utility doesn't need dependency inversion. Apply SOLID proportionally to the code's lifespan and team size.\n\nSRP is the most violated: 'This Utility class handles formatting, file I/O, and API calls.' When the utility file hits 2000 lines, you can't find anything. One responsibility = one reason to change.\n\nOCP trap: 'I modified the existing class instead of extending it.' The OCP violation that haunts teams — every feature sprint modifies the same 5 core files, creating merge conflict hell.\n\nInterview trap: 'Which SOLID principle is most important?' DIP (Dependency Inversion). Because if your high-level code depends on abstractions, the other four principles become achievable. If everything is hard-coded to concrete classes, SRP and OCP are impossible.\n\nEngineering mindset: SOLID is a smell detector, not a checklist. If you violate SRP and nothing breaks for months, fine. If you violate DIP and need to swap a database, you'll pay. Learn which violations hurt, not which rules to follow blindly.",
 
-        codeExample: `// S - Single Responsibility
-interface UserRepository {
-  save(user: User): void;
+        codeExample: `// SRP violation: one class does everything
+// ISP violation: fat interface with unused methods
+interface Worker {
+  work(): void;
+  eat(): void;
+  sleep(): void;
 }
 
-interface EmailService {
-  sendWelcome(user: User): void;
+// ISP fix: segregated interfaces
+interface Workable {
+  work(): void;
+}
+interface Eatable {
+  eat(): void;
+}
+interface Sleepable {
+  sleep(): void;
 }
 
-// O - Open/Closed
-interface PaymentProcessor {
-  process(amount: number): void;
+class Human implements Workable, Eatable, Sleepable {
+  work() { console.log("Thinking..."); }
+  eat() { console.log("Eating..."); }
+  sleep() { console.log("Sleeping..."); }
 }
 
-class StripeProcessor implements PaymentProcessor {
-  process(amount: number) { console.log(\`Stripe: $\${amount}\`); }
-}
-
-class PayPalProcessor implements PaymentProcessor {
-  process(amount: number) { console.log(\`PayPal: $\${amount}\`); }
-}
-
-// D - Dependency Inversion
-class OrderService {
-  constructor(
-    private repo: UserRepository,
-    private payment: PaymentProcessor,
-    private email: EmailService
-  ) {}
-
-  placeOrder(user: User, amount: number) {
-    this.payment.process(amount);
-    this.email.sendWelcome(user);
-  }
+class Robot implements Workable {
+  work() { console.log("Processing..."); }
+  // Robot doesn't need eat() or sleep()
 }`,
 
         language: "typescript"
@@ -989,40 +1101,43 @@ class OrderService {
 
         title: "Creational Design Patterns",
 
-        content: "Creational patterns handle object creation mechanisms.\n\nSingleton:\n- Ensures only one instance exists\n- Global access point\n- Use: Database connections, config\n\nFactory Method:\n- Defines interface for creating objects\n- Subclasses decide which class to instantiate\n- Promotes loose coupling\n\nBuilder:\n- Constructs complex objects step by step\n- Separate construction from representation\n- Fluent interface for readable code\n\nPrototype:\n- Creates objects by cloning existing instances\n- Use when object creation is expensive\n- Copy constructor or clone method",
+        content: "Design pattern trap: Students try to memorize all 23 Gang of Four patterns. Real engineers know ~5 patterns deeply and recognize when to reach for them. The rest are vocabulary for code review conversations.\n\nSingleton trap: Students make EVERYTHING a singleton. Logger, config, DB — fine. UserService, PaymentService — BAD. Singletons hide dependencies and make testing impossible. Your unit tests shouldn't need a real database just because Logger is a singleton.\n\nFactory trap: Creating a factory 'in case we need it later'. YAGNI (You Ain't Gonna Need It). Add a factory when you actually have multiple concrete implementations, not when you imagine you might.\n\nBuilder trap: Using Builder for objects with 2 parameters. Builder is for objects with 8+ optional parameters where constructor calls look like encrypted data.\n\nInterview trap: 'Why not just use new everywhere?' Because new couples your code to a concrete class. Factory Method lets the CALLER decide what to create, keeping your library code decoupled.\n\nEngineering mindset: Patterns are proven solutions to REPEATING problems. If you haven't felt the PAIN a pattern solves (god object, constructor explosion, untestable singletons), don't use it. The pattern will still be there when you actually need it.",
 
-        codeExample: `// Singleton
-class DatabaseConfig {
-  private static instance: DatabaseConfig;
-  private constructor(public host: string, public port: number) {}
+        codeExample: `// Singleton: for infrastructure, NOT business logic
+class Logger {
+  private static instance: Logger;
 
-  static getInstance(): DatabaseConfig {
-    if (!DatabaseConfig.instance) {
-      DatabaseConfig.instance = new DatabaseConfig("localhost", 5432);
+  private constructor() {}
+
+  static getInstance(): Logger {
+    if (!Logger.instance) {
+      Logger.instance = new Logger();
     }
-    return DatabaseConfig.instance;
+    return Logger.instance;
   }
+
+  info(msg: string) { console.log(\`[INFO] \${msg}\`); }
 }
 
-// Builder
-class HttpRequest {
-  method = "GET";
-  url = "";
-  headers: Record<string, string> = {};
-
-  setMethod(m: string) { this.method = m; return this; }
-  setUrl(u: string) { this.url = u; return this; }
-  setHeader(k: string, v: string) { this.headers[k] = v; return this; }
-  build() { return { ...this }; }
+// Factory: when creation logic is non-trivial
+interface Cache {
+  get(key: string): string | null;
+  set(key: string, value: string): void;
 }
 
-// Factory
-interface Animal { speak(): string; }
-class Dog implements Animal { speak() { return "Woof!"; } }
-class Cat implements Animal { speak() { return "Meow!"; } }
+class MemoryCache implements Cache {
+  private store = new Map<string, string>();
+  get(k: string) { return this.store.get(k) ?? null; }
+  set(k: string, v: string) { this.store.set(k, v); }
+}
 
-function createAnimal(type: string): Animal {
-  return type === "dog" ? new Dog() : new Cat();
+class RedisCache implements Cache {
+  get(k: string) { return null; } /* stub */
+  set(k: string, v: string) {}
+}
+
+function createCache(type: "memory" | "redis"): Cache {
+  return type === "memory" ? new MemoryCache() : new RedisCache();
 }`,
 
         language: "typescript"
@@ -1035,40 +1150,50 @@ function createAnimal(type: string): Animal {
 
         title: "Structural & Behavioral Patterns",
 
-        content: "Structural patterns deal with object composition. Behavioral patterns handle communication.\n\nStructural:\n- Adapter: Converts one interface to another\n- Decorator: Adds behavior dynamically\n- Facade: Simplified interface to subsystem\n- Proxy: Controls access to another object\n- Composite: Treats individual and composite objects uniformly\n\nBehavioral:\n- Observer: Subscription mechanism for events\n- Strategy: Defines family of interchangeable algorithms\n- Command: Encapsulates requests as objects\n- State: Changes behavior when state changes\n- Iterator: Provides way to access elements sequentially\n\nNot every problem needs a pattern. Use patterns to solve specific design problems.",
+        content: "Pattern paralysis: Students memorize pattern names but can't spot real-world problems. Here's the shortcut: ask 'WHAT problem am I solving?'\n\nAdapter: You have an external library with a weird interface and can't change it. Wrap it.\n\nDecorator: You need to add behavior to an object WITHOUT changing its class. Adding logging, timing, rate-limiting — decorator wraps, doesn't modify.\n\nObserver/EventEmitter: One thing happens, many things need to react. UI events, state changes, webhooks. If you're polling or chaining callbacks, you need Observer.\n\nStrategy: You have multiple ways to do the same thing (sorting, pricing, auth). Instead of if-else chains, each strategy is a pluggable class.\n\nAnti-pattern to watch: 'Let's use Observer for everything!' — then debugging becomes impossible because you can't trace who's listening. Use patterns surgically.\n\nInterview trap: 'When NOT to use a pattern?' When you can solve the problem with a plain function or a simpler abstraction. Patterns add complexity. Prove you need that complexity.\n\nEngineering mindset: Patterns are the VOCABULARY of design discussions, not the CODE itself. When you say 'this needs an Adapter' in a code review, every engineer immediately knows what you mean. Use patterns to communicate, not to impress.",
 
-        codeExample: `// Observer Pattern
-class EventEmitter {
-  private listeners = new Map<string, Function[]>();
+        codeExample: `// Adapter: make an external API fit your interface
+interface UserApi {
+  getUser(id: string): { name: string; email: string };
+}
 
-  on(event: string, fn: Function) {
-    const fns = this.listeners.get(event) || [];
-    fns.push(fn);
-    this.listeners.set(event, fns);
-  }
-
-  emit(event: string, ...args: any[]) {
-    (this.listeners.get(event) || []).forEach(fn => fn(...args));
+class LegacyUserService {
+  fetch(id: number): { fullName: string; mail: string } {
+    return { fullName: "Alice", mail: "alice@example.com" };
   }
 }
 
-// Strategy Pattern
-class Sorter {
-  constructor(private strategy: (data: number[]) => number[]) {}
-  sort(data: number[]): number[] { return this.strategy(data); }
+class UserAdapter implements UserApi {
+  constructor(private legacy: LegacyUserService) {}
+
+  getUser(id: string): { name: string; email: string } {
+    const result = this.legacy.fetch(parseInt(id));
+    return { name: result.fullName, email: result.mail };
+  }
 }
 
-const quickSort = (data: number[]) => [...data].sort((a, b) => a - b);
-const bubbleSort = (data: number[]) => {
-  const arr = [...data];
-  for (let i = 0; i < arr.length; i++)
-    for (let j = 0; j < arr.length - i - 1; j++)
-      if (arr[j] > arr[j + 1]) [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-  return arr;
-};
+// Strategy: interchangeable algorithms
+interface AuthStrategy {
+  authenticate(token: string): boolean;
+}
 
-const sorter = new Sorter(quickSort);
-console.log(sorter.sort([3, 1, 4, 1, 5]));`,
+class JwtAuth implements AuthStrategy {
+  authenticate(token: string): boolean {
+    return token.length > 10;
+  }
+}
+
+class ApiKeyAuth implements AuthStrategy {
+  authenticate(key: string): boolean {
+    return key.startsWith("sk-");
+  }
+}
+
+function login(strategy: AuthStrategy, cred: string) {
+  return strategy.authenticate(cred) ? "Access granted" : "Access denied";
+}
+
+console.log(login(new JwtAuth(), "eyJhbGci..."));`,
 
         language: "typescript"
 
