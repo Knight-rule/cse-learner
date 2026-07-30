@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ChevronRight, Briefcase, ArrowRight, Brain, Zap, Target, TrendingUp, BookOpen, Terminal, LayoutDashboard, Trophy } from "lucide-react";
+import { ChevronRight, Briefcase, ArrowRight, Brain, Zap, Target, TrendingUp, BookOpen, Terminal, LayoutDashboard, Trophy, Info } from "lucide-react";
 import DashboardStats from "@/components/DashboardStats";
 import ActivityFeed from "@/components/ActivityFeed";
 import { courses } from "@/data/courses";
@@ -149,6 +149,19 @@ export default function DashboardPage() {
 
       {/* ═══ Content ═══ */}
       <div className="container" style={{ padding: "32px 20px 80px" }}>
+        {/* localStorage disclosure */}
+        <div style={{
+          display: "flex", alignItems: "center", gap: 10,
+          padding: "12px 16px", marginBottom: 24,
+          borderRadius: "var(--radius-lg)",
+          background: "rgba(59, 130, 246, 0.06)",
+          border: "1px solid rgba(59, 130, 246, 0.15)",
+          fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.5,
+        }}>
+          <Info size={15} style={{ color: "var(--accent-blue)", flexShrink: 0 }} />
+          Your progress is saved in this browser&apos;s local storage. Clearing browser data will reset your progress.
+        </div>
+
         {/* Stats */}
         <div style={{ marginBottom: 32 }}>
           <DashboardStats />

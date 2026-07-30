@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { ChevronRight, Award, ArrowRight, Pencil, Lock, ExternalLink, Search } from "lucide-react";
+import { ChevronRight, Award, ArrowRight, Pencil, Lock, ExternalLink, Search, Info } from "lucide-react";
 import { courses } from "@/data/courses";
 import { practiceData } from "@/data/practice";
 import { getSolvedProblems, awardCertificate, getCertificates, getLearnerName, setLearnerName } from "@/lib/tracker";
@@ -93,6 +93,19 @@ export default function CertificatesPage() {
         <p className="body-lg mb-8" style={{ maxWidth: 600 }}>
           Earn a certificate of completion for every course by solving all its practice problems. Showcase your CS mastery.
         </p>
+
+        {/* localStorage disclosure */}
+        <div style={{
+          display: "flex", alignItems: "center", gap: 10,
+          padding: "12px 16px", marginBottom: 24,
+          borderRadius: "var(--radius-lg)",
+          background: "rgba(59, 130, 246, 0.06)",
+          border: "1px solid rgba(59, 130, 246, 0.15)",
+          fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.5,
+        }}>
+          <Info size={15} style={{ color: "var(--accent-blue)", flexShrink: 0 }} />
+          Certificates are generated locally in your browser. Clearing browser data will remove earned certificates.
+        </div>
 
         {/* Learner name */}
         <div className="cert-name-bar">
