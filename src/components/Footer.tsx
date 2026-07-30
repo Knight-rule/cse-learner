@@ -40,7 +40,7 @@ export default function Footer() {
           <div>
             <h4 className="footer-heading">Contact Us</h4>
             <ul className="footer-links footer-contact">
-              <li>prashantbhandari988@gmail.com</li>
+              <li>{process.env.NEXT_PUBLIC_CONTACT_EMAIL || "prashantbhandari988@gmail.com"}</li>
               <li>Built for Computer Science Students</li>
               <li>Free &amp; Open Learning Platform</li>
             </ul>

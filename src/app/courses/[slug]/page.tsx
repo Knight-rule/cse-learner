@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight, BookOpen, Code, ArrowRight, ExternalLink } from "lucide-react";
 import { courses, getCourse } from "@/data/courses";
@@ -6,6 +7,17 @@ import { notFound } from "next/navigation";
 
 export function generateStaticParams() {
   return courses.map((c) => ({ slug: c.slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const course = getCourse(slug);
+  if (!course) return { title: "Course Not Found" };
+  return {
+    title: course.title,
+    description: course.description,
+    openGraph: { title: course.title, description: course.description },
+  };
 }
 
 export default async function CoursePage({ params }: { params: Promise<{ slug: string }> }) {

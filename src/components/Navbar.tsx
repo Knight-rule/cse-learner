@@ -59,7 +59,7 @@ export default function Navbar() {
 
         <div className={"nav-center" + (mobileOpen ? " open" : "")}>
           {navLinks.map((link) => {
-            const active = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
+            const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
             return (
               <Link
                 key={link.href}

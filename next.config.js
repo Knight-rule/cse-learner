@@ -5,9 +5,24 @@ const nextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "logo.clearbit.com" },
+      { protocol: "https", hostname: "t0.gstatic.com" },
+      { protocol: "https", hostname: "t1.gstatic.com" },
+      { protocol: "https", hostname: "t2.gstatic.com" },
+      { protocol: "https", hostname: "t3.gstatic.com" },
     ],
   },
   headers: async () => [
+    {
+      source: "/_next/static/:path*",
+      headers: [
+        { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        { key: "X-Content-Type-Options", value: "nosniff" },
+      ],
+    },
+    {
+      source: "/favicon.svg",
+      headers: [{ key: "Cache-Control", value: "public, max-age=86400" }],
+    },
     {
       source: "/(.*)",
       headers: [
@@ -25,7 +40,7 @@ const nextConfig = {
             "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://emkc.org https://wandbox.org",
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
             "font-src 'self' https://fonts.gstatic.com",
-            "img-src 'self' data: blob: https://www.google.com",
+            "img-src 'self' data: blob: https://www.google.com https://logo.clearbit.com https://t0.gstatic.com https://t1.gstatic.com https://t2.gstatic.com https://t3.gstatic.com",
             "connect-src 'self' https://cdn.jsdelivr.net https://emkc.org https://wandbox.org https://api.judge0.com https://generativelanguage.googleapis.com",
             "frame-src 'self' blob:",
             "frame-ancestors 'none'",

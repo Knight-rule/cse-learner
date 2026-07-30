@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Copy, Check, Play, ExternalLink } from "lucide-react";
+import { Copy, Check, Play } from "lucide-react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
 
 interface CodeEditorProps {
   code: string;
@@ -36,19 +35,11 @@ const playgroundLangs: Record<string, string> = {
 
 export default function CodeEditor({ code, language = "typescript" }: CodeEditorProps) {
   const [copied, setCopied] = useState(false);
-  const router = useRouter();
-  const searchParams = useSearchParams();
 
   const handleCopy = async () => {
     try { await navigator.clipboard.writeText(code); } catch {}
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleOpenInPlayground = () => {
-    const playgroundLang = playgroundLangs[language] || "typescript";
-    const url = `/playground?code=${encodeURIComponent(code)}&lang=${playgroundLang}`;
-    router.push(url);
   };
 
   return (

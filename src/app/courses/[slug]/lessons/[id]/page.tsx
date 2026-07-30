@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight, ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
 import { courses, getCourse } from "@/data/courses";
@@ -13,6 +14,18 @@ export function generateStaticParams() {
     });
   });
   return params;
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string; id: string }> }): Promise<Metadata> {
+  const { slug, id } = await params;
+  const course = getCourse(slug);
+  if (!course) return { title: "Not Found" };
+  const lesson = course.lessons.find((l) => l.id === id);
+  if (!lesson) return { title: "Not Found" };
+  return {
+    title: `${lesson.title} - ${course.title}`,
+    description: lesson.content.split("\n")[0].substring(0, 160),
+  };
 }
 
 export default async function LessonPage({ params }: { params: Promise<{ slug: string; id: string }> }) {

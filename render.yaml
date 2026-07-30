@@ -2,9 +2,11 @@ services:
   - type: web
     name: cse-learner
     runtime: node
+    repo: https://github.com/Knight-rule/cse-learner
     plan: free
-    buildCommand: npm install && npm run build
-    startCommand: npm start
+    buildCommand: pnpm build
+    startCommand: pnpm start
+    healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production

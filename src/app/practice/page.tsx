@@ -1,11 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight, Code, BookOpen, ChevronDown } from "lucide-react";
 import { courses } from "@/data/courses";
 import { practiceData } from "@/data/practice";
 
-export const metadata = {
-  title: "Practice Problems - CSE Learner",
-  description: "Solve coding challenges for every CS course topic",
+export const metadata: Metadata = {
+  title: "Practice Problems",
+  description: "Solve coding challenges for every CS course topic. Practice DSA, algorithms, system design and more.",
 };
 
 export default function PracticePage() {
