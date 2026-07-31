@@ -1287,79 +1287,232 @@ console.log(login(new JwtAuth(), "eyJhbGci..."));`,
 
   },
 
-  {
-
+    {
     slug: "java",
-
     title: "Java",
-
-    description: "Master Java programming from OOP to collections and multithreading.",
-
+    description: "Master Java programming from OOP to collections and exception handling.",
     icon: "☕",
-
     color: "from-red-500 to-red-700",
     category: "Languages",
-
     lessons: [
-
       {
-
-        id: "1",
-
+        id: "java-1",
         title: "Java Basics",
-
-        content: "Java is a statically-typed, object-oriented language.\n\nKey features:\n- Platform independent (JVM)\n- Strongly typed\n- Automatic garbage collection\n- Rich standard library\n\nPrimitive types: byte, short, int, long, float, double, char, boolean\n\nEverything is a class in Java (except primitives).",
-
-        codeExample: `public class Main {\n    public static void main(String[] args) {\n        // Variables\n        String name = "Alice";\n        int age = 25;\n        double height = 5.6;\n        boolean active = true;\n\n        // Arrays\n        int[] nums = {1, 2, 3, 4, 5};\n        System.out.println(nums[0]); // 1\n\n        // Strings\n        String greeting = "Hello, " + name;\n        System.out.println(greeting);\n        System.out.println(greeting.length());\n        System.out.println(greeting.toUpperCase());\n\n        // Conditionals\n        if (age >= 18) {\n            System.out.println("Adult");\n        } else {\n            System.out.println("Minor");\n        }\n\n        // Loops\n        for (int i = 0; i < nums.length; i++) {\n            System.out.print(nums[i] + " ");\n        }\n    }\n}`,
-
+        content: "Java is a powerful, object-oriented programming language used in enterprise applications, Android development, and backend systems. Java is \u201cwrite once, run anywhere\u201d thanks to the JVM.\n\nKey concepts:\n- What is Java?\n- Java vs C vs C++ \u2014 Key Differences\n- Setting Up Java (JDK, JRE, JVM Overview)\n- Your First Java Program (public class Main and System.out.println)\n- Java Program Structure (Class, main Method, Compilation)\n- Java Naming Conventions",
+        codeExample: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}`,
         language: "java"
-
       },
-
       {
+        id: "java-2",
+        title: "Variables and Data Types",
+        content: "Java is statically typed with 8 primitive data types.\n\nKey concepts:\n- Primitive Data Types (byte, short, int, long, float, double, char, boolean)\n- Declaring and Initializing Variables\n- Variable Naming Rules and Conventions\n- Constants (final keyword)\n- Type Casting (Widening and Narrowing)\n- Wrapper Classes\n- var (Local Variable Type Inference \u2014 Java 10+)\n- Strings as Objects (Not Primitive)",
+        codeExample: `public class Variables {
+    public static void main(String[] args) {
+        int age = 25;
+        double salary = 50000.50;
+        char grade = 'A';
+        boolean isStudent = true;
+        final int MAX = 100;
+        String name = "Alice";
 
-        id: "2",
-
-        title: "OOP in Java",
-
-        content: "Java is purely object-oriented.\n\nKey concepts:\n- Classes and Objects\n- Constructors (default, parameterized, copy)\n- Inheritance (extends)\n- Polymorphism (method overriding)\n- Encapsulation (private fields + getters/setters)\n- Abstract classes and interfaces",
-
-        codeExample: `// Abstract class\nabstract class Shape {\n    protected String color;\n\n    public Shape(String color) {\n        this.color = color;\n    }\n\n    public abstract double area();\n\n    public void display() {\n        System.out.println("Color: " + color + ", Area: " + area());\n    }\n}\n\n// Interface\ninterface Drawable {\n    void draw();\n    default void printInfo() {\n        System.out.println("Drawable shape");\n    }\n}\n\n// Concrete class\nclass Circle extends Shape implements Drawable {\n    private double radius;\n\n    public Circle(String color, double radius) {\n        super(color);\n        this.radius = radius;\n    }\n\n    @Override\n    public double area() {\n        return Math.PI * radius * radius;\n    }\n\n    @Override\n    public void draw() {\n        System.out.println("Drawing circle");\n    }\n}\n\n// Usage\nCircle c = new Circle("Red", 5.0);\nc.display();  // Color: Red, Area: 78.54\nc.draw();     // Drawing circle`,
-
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+        System.out.println("Size of int: " + Integer.BYTES + " bytes");
+    }
+}`,
         language: "java"
-
       },
-
       {
-
-        id: "3",
-
-        title: "Collections Framework",
-
-        content: "Java Collections Framework provides data structures.\n\nKey interfaces:\n- List: Ordered, duplicates allowed (ArrayList, LinkedList)\n- Set: No duplicates (HashSet, TreeSet, LinkedHashSet)\n- Map: Key-value pairs (HashMap, TreeMap, LinkedHashMap)\n- Queue: FIFO (PriorityQueue, ArrayDeque)\n\nGenerics ensure type safety.",
-
-        codeExample: `import java.util.*;\n\npublic class CollectionsDemo {\n    public static void main(String[] args) {\n        // ArrayList\n        List<String> names = new ArrayList<>();\n        names.add("Alice");\n        names.add("Bob");\n        names.add("Charlie");\n        names.remove("Bob");\n        System.out.println(names); // [Alice, Charlie]\n\n        // HashMap\n        Map<String, Integer> scores = new HashMap<>();\n        scores.put("Math", 95);\n        scores.put("Science", 88);\n        scores.get("Math"); // 95\n        scores.forEach((k, v) -> \n            System.out.println(k + ": " + v));\n\n        // HashSet\n        Set<Integer> uniqueNums = new HashSet<>();\n        uniqueNums.add(1);\n        uniqueNums.add(2);\n        uniqueNums.add(1); // ignored\n        System.out.println(uniqueNums); // [1, 2]\n\n        // Stream API\n        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);\n        int sum = numbers.stream()\n            .filter(n -> n % 2 == 0)\n            .mapToInt(n -> n)\n            .sum();\n        System.out.println("Even sum: " + sum); // 6\n    }\n}`,
-
+        id: "java-3",
+        title: "Operators",
+        content: "Operators perform operations on variables and values.\n\nKey concepts:\n- Arithmetic Operators (+, -, *, /, %)\n- Comparison Operators (==, !=, <, >, <=, >=)\n- Logical Operators (&&, ||, !)\n- Assignment Operators (=, +=, -=, *=, /=)\n- Increment and Decrement (++, --)\n- Bitwise Operators (&, |, ^, ~, <<, >>)\n- Ternary Operator (condition ? expr1 : expr2)\n- String Concatenation (+ Operator)",
+        codeExample: `public class Operators {
+    public static void main(String[] args) {
+        int a = 10, b = 3;
+        System.out.println("Sum: " + (a + b));      // 13
+        System.out.println("Modulo: " + (a % b));   // 1
+        System.out.println("AND: " + (a > 5 && b < 5)); // true
+        String result = a > 5 ? "Big" : "Small";
+        System.out.println("Ternary: " + result);   // Big
+    }
+}`,
         language: "java"
-
       },
-
       {
+        id: "java-4",
+        title: "Conditionals",
+        content: "Conditionals let you execute different code based on conditions.\n\nKey concepts:\n- if Statement\n- if...else Statement\n- else if Ladder\n- Nested if Statements\n- Ternary Operator\n- switch Statement (with break, default)\n- switch with Strings (Java 7+)",
+        codeExample: `public class Conditionals {
+    public static void main(String[] args) {
+        int score = 85;
+        if (score >= 90) {
+            System.out.println("Grade A");
+        } else if (score >= 80) {
+            System.out.println("Grade B");
+        } else if (score >= 70) {
+            System.out.println("Grade C");
+        } else {
+            System.out.println("Grade F");
+        }
 
-        id: "4",
-
-        title: "Exception Handling & Generics",
-
-        content: "Java has robust exception handling.\n\nException hierarchy:\n- Throwable\n  - Error (JVM errors, don't catch)\n  - Exception\n    - RuntimeException (unchecked)\n    - IOException, SQLException (checked)\n\nChecked exceptions MUST be caught or declared.\n\nGenerics provide type safety at compile time.",
-
-        codeExample: `// Exception handling\npublic class ExceptionDemo {\n    public static int divide(int a, int b) {\n        try {\n            return a / b;\n        } catch (ArithmeticException e) {\n            System.out.println("Error: " + e.getMessage());\n            return 0;\n        } finally {\n            System.out.println("This always runs");\n        }\n    }\n\n    // Custom exception\n    public static class InsufficientFundsException extends Exception {\n        private double amount;\n\n        public InsufficientFundsException(double amount) {\n            super("Insufficient funds");\n            this.amount = amount;\n        }\n\n        public double getAmount() { return amount; }\n    }\n}\n\n// Generics\npublic class Box<T> {\n    private T content;\n\n    public Box(T content) {\n        this.content = content;\n    }\n\n    public T getContent() { return content; }\n    public void setContent(T content) { this.content = content; }\n}\n\n// Usage\nBox<Integer> intBox = new Box<>(42);\nBox<String> strBox = new Box<>("Hello");\nSystem.out.println(intBox.getContent()); // 42\nSystem.out.println(strBox.getContent()); // Hello`,
-
+        int day = 3;
+        switch (day) {
+            case 1: System.out.println("Monday"); break;
+            case 2: System.out.println("Tuesday"); break;
+            case 3: System.out.println("Wednesday"); break;
+            default: System.out.println("Other day");
+        }
+    }
+}`,
         language: "java"
-
       },
+      {
+        id: "java-5",
+        title: "Loops",
+        content: "Loops execute a block of code repeatedly.\n\nKey concepts:\n- for Loop\n- Enhanced for-each Loop\n- while Loop\n- do...while Loop\n- break and continue\n- Nested Loops\n- Infinite Loops",
+        codeExample: `public class Loops {
+    public static void main(String[] args) {
+        // for loop
+        for (int i = 1; i <= 5; i++) {
+            System.out.println(i);
+        }
 
-    ],
+        // for-each loop
+        String[] fruits = {"apple", "banana", "orange"};
+        for (String fruit : fruits) {
+            System.out.println(fruit);
+        }
 
+        // while loop
+        int count = 1;
+        while (count <= 5) {
+            System.out.println(count);
+            count++;
+        }
+
+        // do-while (executes at least once)
+        int x = 1;
+        do {
+            System.out.println(x);
+            x++;
+        } while (x <= 5);
+    }
+}`,
+        language: "java"
+      },
+      {
+        id: "java-6",
+        title: "Classes and Objects",
+        content: "Java is purely object-oriented. Everything lives inside a class.\n\nKey concepts:\n- Defining a Class\n- Creating Objects (with new Keyword)\n- Instance Variables and Methods\n- The this Keyword\n- Constructors (Default and Parameterized)\n- Access Modifiers (public, private, protected, default)\n- Getter and Setter Methods\n- Static Members (static keyword)",
+        codeExample: `public class Dog {
+    String name;
+    int age;
+
+    // Constructor
+    public Dog(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    // Method
+    public void bark() {
+        System.out.println(name + " says woof!");
+    }
+
+    public static void main(String[] args) {
+        Dog myDog = new Dog("Rex", 3);
+        myDog.bark();
+        System.out.println("Age: " + myDog.age);
+    }
+}`,
+        language: "java"
+      },
+      {
+        id: "java-7",
+        title: "Inheritance and Interfaces",
+        content: "Inheritance lets you create new classes from existing ones.\n\nKey concepts:\n- Inheritance (extends keyword)\n- The super Keyword\n- Method Overriding\n- The final Keyword (Final Classes, Final Methods)\n- Interfaces (interface keyword)\n- Implementing Interfaces (implements)\n- Multiple Interface Implementation\n- Abstract Classes (Basic)",
+        codeExample: `class Animal {
+    void sound() {
+        System.out.println("Some sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Bark!");
+    }
+}
+
+interface Printable {
+    void print();
+}
+
+class Document implements Printable {
+    public void print() {
+        System.out.println("Printing document...");
+    }
+}`,
+        language: "java"
+      },
+      {
+        id: "java-8",
+        title: "ArrayLists and Lists",
+        content: "ArrayLists are dynamic arrays that can grow and shrink.\n\nKey concepts:\n- Arrays vs ArrayLists\n- Importing ArrayList\n- Creating and Initializing ArrayLists\n- Adding Elements (add), Removing (remove), Accessing (get)\n- ArrayList Size (size())\n- Iterating Over ArrayLists\n- Sorting ArrayLists (Collections.sort())\n- Comparing ArrayList with Arrays",
+        codeExample: `import java.util.ArrayList;
+import java.util.Collections;
+
+public class ListsDemo {
+    public static void main(String[] args) {
+        ArrayList<String> names = new ArrayList<>();
+        names.add("Alice");
+        names.add("Bob");
+        names.add("Charlie");
+        names.remove("Bob");
+
+        for (String name : names) {
+            System.out.println(name);
+        }
+
+        Collections.sort(names);
+        System.out.println("Sorted: " + names);
+    }
+}`,
+        language: "java"
+      },
+      {
+        id: "java-9",
+        title: "Exception Handling",
+        content: "Exception handling manages runtime errors gracefully.\n\nKey concepts:\n- try...catch Block\n- Multiple catch Blocks\n- finally Block\n- throw Statement\n- Custom Exceptions (Basic)\n- Common Exception Types (NullPointerException, ArithmeticException, ArrayIndexOutOfBoundsException)\n- Checked vs Unchecked Exceptions",
+        codeExample: `public class ExceptionDemo {
+    public static void main(String[] args) {
+        try {
+            int result = 10 / 0;
+        } catch (ArithmeticException e) {
+            System.out.println("Cannot divide by zero!");
+        } finally {
+            System.out.println("This always runs.");
+        }
+
+        // Throwing an exception
+        try {
+            setAge(-5);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void setAge(int age) {
+        if (age < 0) throw new IllegalArgumentException("Age cannot be negative");
+    }
+}`,
+        language: "java"
+      }
+    ]
   },
 
   {
@@ -1526,79 +1679,186 @@ console.log(login(new JwtAuth(), "eyJhbGci..."));`,
 
   },
 
-  {
-
+    {
     slug: "javascript",
-
     title: "JavaScript",
-
-    description: "Modern JavaScript from ES6+ to async programming and DOM manipulation.",
-
+    description: "Master JavaScript from basics to DOM manipulation, events, and modern ES6+ features.",
     icon: "📜",
-
     color: "from-yellow-400 to-amber-500",
     category: "Languages",
-
     lessons: [
-
       {
-
-        id: "1",
-
-        title: "ES6+ Features",
-
-        content: "Modern JavaScript (ES6+) introduced major improvements.\n\nKey features:\n- let/const (block scoping)\n- Arrow functions\n- Template literals\n- Destructuring\n- Spread/rest operators\n- Optional chaining (?.)\n- Nullish coalescing (??)",
-
-        codeExample: `// let and const\nconst PI = 3.14159;\nlet count = 0;\n\n// Arrow functions\nconst add = (a, b) => a + b;\nconst square = x => x * x;\n\n// Template literals\nconst name = "Alice";\nconsole.log(\`Hello, \${name}!\`);\n\n// Destructuring\nconst user = { name: "Bob", age: 25, city: "NYC" };\nconst { name: userName, age } = user;\nconsole.log(userName, age); // Bob 25\n\nconst [first, second, ...rest] = [1, 2, 3, 4, 5];\nconsole.log(first, second, rest); // 1 2 [3,4,5]\n\n// Optional chaining\nconst address = user?.address?.street ?? "N/A";\nconsole.log(address); // N/A\n\n// Spread\nconst arr1 = [1, 2, 3];\nconst arr2 = [...arr1, 4, 5]; // [1,2,3,4,5]\n\nconst obj1 = { a: 1, b: 2 };\nconst obj2 = { ...obj1, c: 3 }; // {a:1,b:2,c:3}`,
-
+        id: "js-1",
+        title: "JavaScript Basics",
+        content: "Learn JavaScript \u2014 the programming language of the web. JavaScript makes web pages interactive by manipulating HTML and CSS dynamically.\n\nKey concepts:\n- What is JavaScript?\n- JavaScript vs HTML vs CSS \u2014 Roles and Responsibilities\n- Where JavaScript Runs (Browser, Node.js)\n- Adding JavaScript to HTML (script tag, external file)\n- Your First JavaScript Program (console.log)\n- JavaScript Syntax Basics (Semicolons, Case Sensitivity)\n- JavaScript Output Methods (console.log, window.alert, document.write, innerHTML)",
+        codeExample: `console.log("Hello, World!");
+alert("Welcome!");
+document.getElementById("demo").innerHTML = "JavaScript is running!";`,
         language: "javascript"
-
       },
-
       {
-
-        id: "2",
-
-        title: "Async JavaScript",
-
-        content: "JavaScript is single-threaded but handles async via event loop.\n\nConcepts:\n- Callbacks (old way)\n- Promises (.then/.catch)\n- async/await\n- Promise.all, Promise.race\n- Error handling with try/catch",
-
-        codeExample: `// Promises\nfunction fetchData(url) {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (url) resolve({ data: "result" });\n      else reject(new Error("No URL"));\n    }, 1000);\n  });\n}\n\n// .then style\nfetchData("/api/users")\n  .then(res => console.log(res))\n  .catch(err => console.error(err));\n\n// async/await\nasync function getData() {\n  try {\n    const res = await fetchData("/api/users");\n    console.log(res);\n  } catch (err) {\n    console.error(err);\n  }\n}\n\n// Promise.all - run in parallel\nasync function getAll() {\n  const [users, posts] = await Promise.all([\n    fetchData("/users"),\n    fetchData("/posts")\n  ]);\n  return { users, posts };\n}\n\n// Promise.race - first to resolve\nasync function fastest() {\n  const result = await Promise.race([\n    fetchData("/server1"),\n    fetchData("/server2")\n  ]);\n  return result;\n}`,
-
+        id: "js-2",
+        title: "Variables and Data Types",
+        content: "Variables store data values. JavaScript has flexible typing with let, const, and var.\n\nKey concepts:\n- Declaring Variables (var, let, const)\n- let vs const vs var \u2014 Scoping Differences\n- String, Number, Boolean data types\n- null and undefined\n- typeof Operator\n- Type Conversion (String, Number, Boolean)\n- Template Literals (Backtick Strings)",
+        codeExample: `let name = "Alice";
+const age = 25;
+var isStudent = true;
+let city; // undefined
+console.log(typeof name); // string
+let message = \`Hello, \${name}! You are \${age} years old.\`;
+console.log(message);`,
         language: "javascript"
-
       },
-
       {
+        id: "js-3",
+        title: "Operators",
+        content: "Operators perform operations on variables and values.\n\nKey concepts:\n- Arithmetic Operators (+, -, *, /, %, **)\n- Assignment Operators (=, +=, -=, *=, /=)\n- Comparison Operators (==, ===, !=, !==, <, >, <=, >=)\n- Logical Operators (&&, ||, !)\n- Increment and Decrement (++, --)\n- String Operators (+ for concatenation)\n- Truthy and Falsy Values\n- Short-Circuit Evaluation",
+        codeExample: `let a = 10;
+let b = 3;
+console.log(a + b);  // 13
+console.log(a % b);  // 1
+console.log(a === b); // false
+console.log(a > 5 && b < 5); // true
+console.log(!false); // true`,
+        language: "javascript"
+      },
+      {
+        id: "js-4",
+        title: "Conditionals",
+        content: "Conditionals let you execute different code based on conditions.\n\nKey concepts:\n- if Statement\n- else Statement\n- else if Ladder\n- Ternary Operator (condition ? expr1 : expr2)\n- switch Statement\n- switch with break and default\n- Nested Conditionals",
+        codeExample: `let score = 85;
+if (score >= 90) {
+  console.log("Grade A");
+} else if (score >= 80) {
+  console.log("Grade B");
+} else {
+  console.log("Grade C");
+}
 
-        id: "3",
+let day = new Date().getDay();
+switch(day) {
+  case 0: console.log("Sunday"); break;
+  case 1: console.log("Monday"); break;
+  default: console.log("Weekday");
+}
 
+let result = score >= 50 ? "Pass" : "Fail";`,
+        language: "javascript"
+      },
+      {
+        id: "js-5",
+        title: "Loops",
+        content: "Loops execute a block of code repeatedly.\n\nKey concepts:\n- for Loop\n- while Loop\n- do...while Loop\n- break and continue\n- for...in (Object keys)\n- for...of (Array values)\n- Nested Loops\n- Infinite Loops (and how to avoid them)",
+        codeExample: `for (let i = 0; i < 5; i++) {
+  console.log(i);
+}
+
+let arr = ["apple", "banana", "cherry"];
+for (let fruit of arr) {
+  console.log(fruit);
+}
+
+let i = 0;
+while (i < 5) {
+  console.log(i);
+  i++;
+}`,
+        language: "javascript"
+      },
+      {
+        id: "js-6",
+        title: "Functions",
+        content: "Functions are reusable blocks of code.\n\nKey concepts:\n- Function Declaration\n- Function Expression\n- Arrow Functions (() => {})\n- Parameters and Arguments\n- Default Parameters\n- Return Values\n- Scope: Local vs Global Variables\n- The this Keyword (Basic)",
+        codeExample: `// Declaration
+function greet(name) {
+  return \`Hello, \${name}!\`;
+}
+
+// Expression
+const greetExpr = function(name) {
+  return \`Hello, \${name}!\`;
+};
+
+// Arrow function
+const greetArrow = (name) => \`Hello, \${name}!\`;
+
+console.log(greet("Alice"));    // Hello, Alice!
+console.log(greetArrow("Bob")); // Hello, Bob!`,
+        language: "javascript"
+      },
+      {
+        id: "js-7",
+        title: "Arrays",
+        content: "Arrays store multiple values in a single variable.\n\nKey concepts:\n- Creating Arrays ([] and new Array())\n- Accessing Elements by Index\n- Array Length (length)\n- Adding Elements (push, unshift)\n- Removing Elements (pop, shift)\n- Array Methods (slice, splice, concat, join)\n- Iterating Arrays (for, for...of, forEach)\n- map(), filter(), reduce()\n- Array Sorting (sort, reverse)",
+        codeExample: `let fruits = ["apple", "banana", "orange"];
+fruits.push("grape");
+for (let fruit of fruits) {
+  console.log(fruit);
+}
+let doubled = fruits.map(f => f.toUpperCase());
+let nums = [3, 1, 4, 1, 5];
+nums.sort((a, b) => a - b);
+console.log(nums); // [1, 1, 3, 4, 5]`,
+        language: "javascript"
+      },
+      {
+        id: "js-8",
+        title: "JavaScript Objects",
+        content: "Objects store data as key-value pairs.\n\nKey concepts:\n- Creating Objects (Object Literal, new Object())\n- Object Properties and Methods\n- Accessing Properties (Dot Notation, Bracket Notation)\n- Adding and Removing Properties\n- Object Destructuring\n- Object.keys(), Object.values(), Object.entries()\n- for...in Loop for Objects\n- Spread Operator for Objects ({...obj})",
+        codeExample: `let student = {
+  name: "Alice",
+  age: 25,
+  getGreeting() {
+    return \`Hi, I'm \${this.name}.\`;
+  }
+};
+console.log(student.name);      // Alice
+console.log(student["age"]);    // 25
+student.grade = "A";
+console.log(Object.keys(student));   // ["name", "age", "getGreeting", "grade"]
+console.log(Object.values(student)); // ["Alice", 25, ƒ, "A"]`,
+        language: "javascript"
+      },
+      {
+        id: "js-9",
         title: "DOM Manipulation",
+        content: "The DOM (Document Object Model) represents the page structure that JavaScript can manipulate.\n\nKey concepts:\n- What is the DOM?\n- document.getElementById()\n- querySelector() and querySelectorAll()\n- Changing Element Content (textContent, innerHTML)\n- Changing Element Styles (element.style)\n- Changing Attributes (setAttribute, getAttribute)\n- Adding and Removing Classes (classList)\n- Creating and Appending Elements\n- Event Listeners (addEventListener)\n- Event Object and event.target",
+        codeExample: `let btn = document.getElementById("myBtn");
+btn.addEventListener("click", function() {
+  document.getElementById("demo").textContent = "Button clicked!";
+  btn.classList.toggle("active");
+});
 
-        content: "The DOM (Document Object Model) represents the page structure.\n\nKey methods:\n- querySelector / querySelectorAll\n- getElementById\n- createElement / appendChild\n- addEventListener\n- classList.add/remove/toggle\n- innerHTML / textContent / value",
-
-        codeExample: `// Selecting elements\nconst heading = document.querySelector("h1");\nconst buttons = document.querySelectorAll(".btn");\n\n// Creating elements\nconst div = document.createElement("div");\ndiv.className = "card";\ndiv.textContent = "Hello!";\ndocument.body.appendChild(div);\n\n// Event listeners\nbuttons.forEach(btn => {\n  btn.addEventListener("click", (e) => {\n    e.target.classList.toggle("active");\n    console.log("Clicked:", e.target.textContent);\n  });\n});\n\n// Form handling\nconst form = document.querySelector("form");\nform.addEventListener("submit", (e) => {\n  e.preventDefault();\n  const formData = new FormData(form);\n  const data = Object.fromEntries(formData);\n  console.log(data);\n});\n\n// DOM traversal\nconst parent = heading.parentElement;\nconst children = parent.children;\nconst next = heading.nextElementSibling;`,
-
+let newDiv = document.createElement("div");
+newDiv.textContent = "New element";
+document.body.appendChild(newDiv);`,
         language: "javascript"
-
       },
-
       {
+        id: "js-10",
+        title: "Error Handling",
+        content: "Error handling helps you manage runtime errors gracefully.\n\nKey concepts:\n- try...catch Block\n- finally Block\n- throw Statement\n- Custom Errors\n- Common Error Types (TypeError, ReferenceError, SyntaxError)\n- Graceful Error Messages",
+        codeExample: `try {
+  let result = riskyOperation();
+} catch (error) {
+  console.error("Something went wrong:", error.message);
+} finally {
+  console.log("This always runs.");
+}
 
-        id: "4",
-
-        title: "Modules & Closures",
-
-        content: "Modules organize code into separate files.\n\nModule systems:\n- CommonJS (require/module.exports)\n- ES Modules (import/export)\n\nClosures:\nA function that remembers its lexical scope even when executed outside that scope.",
-
-        codeExample: `// ES Modules\n// math.js\nexport const add = (a, b) => a + b;\nexport const subtract = (a, b) => a - b;\nexport default class Calculator {\n  result = 0;\n  add(n) { this.result += n; return this; }\n  subtract(n) { this.result -= n; return this; }\n  getValue() { return this.result; }\n}\n\n// app.js\nimport Calculator, { add, subtract } from "./math.js";\nconst calc = new Calculator();\nconsole.log(calc.add(5).subtract(2).getValue()); // 3\n\n// Closures\nfunction createCounter(initial = 0) {\n  let count = initial;\n  return {\n    increment: () => ++count,\n    decrement: () => --count,\n    getCount: () => count\n  };\n}\n\nconst counter = createCounter(10);\nconsole.log(counter.increment()); // 11\nconsole.log(counter.increment()); // 12\nconsole.log(counter.getCount());  // 12\n\n// Module pattern\nconst singleton = (() => {\n  let instance;\n  return {\n    getInstance: () => {\n      if (!instance) instance = { data: [] };\n      return instance;\n    }\n  };\n})();`,
-
+// Throwing an error
+function divide(a, b) {
+  if (typeof a !== "number" || typeof b !== "number") {
+    throw new TypeError("Both arguments must be numbers");
+  }
+  if (b === 0) {
+    throw new Error("Cannot divide by zero");
+  }
+  return a / b;
+}`,
         language: "javascript"
-
-      },
-
-    ],
-
+      }
+    ]
   },
 
   {
