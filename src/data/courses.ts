@@ -9041,6 +9041,206 @@ console.log("Metrics:", line.getMetrics());`,
         language: "python"
       }
   ]
+},
+
+{
+  slug: "css",
+
+  title: "CSS",
+
+  description: "Learn CSS from basics to advanced styling concepts.",
+
+  icon: "🎨",
+
+  color: "from-blue-400 to-purple-600",
+
+  category: "Languages",
+
+  lessons: [
+      {
+        id: "css-1",
+        title: "CSS Basics",
+        content: `s\n- What is CSS?\n- CSS vs HTML \u2014 What Each Does\n- How CSS Works (Selectors, Properties, Values)\n- Adding CSS to HTML (Inline, Internal, External)\n- CSS Syntax (Selector \`{ property: value; }\`)\n- CSS Comments (\`/* comment */\`)\n- Your First CSS Style\n\n**Example:**\n[Code]\n[Code]`,
+        codeExample: `h1 {\n  color: blue;\n  font-size: 32px;\n}`,
+        language: "css"
+      },
+
+      {
+        id: "css-2",
+        title: "CSS Selectors",
+        content: `s\n- Element/Type Selectors (\`p\`, \`div\`, \`h1\`)\n- Class Selectors (\`.className\`)\n- ID Selectors (\`#myId\`)\n- Universal Selector (\`*\`)\n- Grouping Selectors (\`h1, h2, h3\`)\n- Descendant Selectors (\`div p\`)\n- Child Selectors (\`ul > li\`)\n- Attribute Selectors (\`[type=\"text\"]\`, \`[href]\`)\n- Pseudo-classes (\`:hover\`, \`:first-child\`, \`:nth-child()\`)\n- Pseudo-elements (\`::before\`, \`::after\`, \`::first-line\`)\n\n**Example:**\n[Code]`,
+        codeExample: `/* Element selector */\np { color: black; }\n\n/* Class selector */\n.highlight { background-color: yellow; }\n\n/* ID selector */\n#main-title { font-size: 40px; }\n\n/* Descendant selector */\nnav a { text-decoration: none; }\n\n/* Pseudo-class */\na:hover { color: red; }\n\n/* Pseudo-element */\np::first-line { font-weight: bold; }`,
+        language: "css"
+      },
+
+      {
+        id: "css-3",
+        title: "CSS Fonts and Text",
+        content: `t\n- Font Family (\`font-family\`)\n- Font Size (\`font-size\`)\n- Font Weight (\`font-weight\`, \`@font-face\`)\n- Font Style (\`font-style: italic\`, \`oblique\`)\n- Text Alignment (\`text-align\`)\n- Text Decoration (\`text-decoration: underline\`, \`line-through\`, \`overline\`)\n- Text Transform (\`text-transform: uppercase\`, \`lowercase\`, \`capitalize\`)\n- Letter Spacing (\`letter-spacing\`) and Word Spacing (\`word-spacing\`)\n- Line Height (\`line-height\`)\n- Google Fonts and \`@import\`\n\n**Example:**\n[Code]`,
+        codeExample: `body {\n  font-family: Arial, sans-serif;\n  font-size: 16px;\n  line-height: 1.6;\n}\nh1 {\n  text-align: center;\n  text-transform: uppercase;\n  letter-spacing: 2px;\n}\na {\n  text-decoration: none;\n}`,
+        language: "css"
+      },
+
+      {
+        id: "css-4",
+        title: "The Box Model",
+        content: `l\n- Content, Padding, Border, Margin\n- \`width\` and \`height\`\n- \`padding\` (all sides, shorthand)\n- \`border\` (width, style, color)\n- \`margin\` (centering with \`auto\`)\n- \`box-sizing: border-box\`\n- \`outline\` vs \`border\`\n\n**Example:**\n[Code]`,
+        codeExample: `.box {\n  width: 300px;\n  padding: 20px;\n  border: 2px solid #ccc;\n  margin: 10px auto;\n  box-sizing: border-box;\n}`,
+        language: "css"
+      },
+
+      {
+        id: "css-5",
+        title: "Colors in CSS",
+        content: `S\n- Color Names (\`red\`, \`blue\`, \`coral\`)\n- HEX Notation (\`#FF0000\`, \`#F00\`)\n- RGB and RGBA (\`rgb(255,0,0)\`, \`rgba(255,0,0,0.5)\`)\n- HSL and HSLA (\`hsl(0,100%,50%)\`, \`hsla(0,100%,50%,0.5)\`)\n- \`transparent\` and \`currentColor\`\n- Color Contrast and Accessibility\n\n**Example:**\n[Code]`,
+        codeExample: `h1 { color: #FF0000; }\n.box { background-color: rgba(0, 0, 255, 0.3); }\n.text { color: hsl(120, 100%, 25%); }`,
+        language: "css"
+      },
+
+      {
+        id: "css-6",
+        title: "Backgrounds",
+        content: `s\n- \`background-color\`\n- \`background-image\` (URL, gradient)\n- \`background-repeat\` (\`no-repeat\`, \`repeat-x\`, \`repeat-y\`)\n- \`background-position\` (\`center\`, \`top left\`, \`50% 50%\`)\n- \`background-size\` (\`cover\`, \`contain\`, \`100px 100px\`)\n- \`background-attachment\` (\`fixed\`, \`scroll\`)\n- Multiple Backgrounds\n- CSS Gradients (linear, radial)\n\n**Example:**\n[Code]`,
+        codeExample: ` body {\n  background-color: #f0f0f0;\n  background-image: url(\"bg.png\");\n  background-repeat: no-repeat;\n  background-position: center;\n  background-size: cover;\n}\n.gradient {\n  background: linear-gradient(to right, red, blue);\n}`,
+        language: "css"
+      },
+
+      {
+        id: "css-7",
+        title: "Display Property",
+        content: `y\n- \`display: block\`, \`inline\`, \`inline-block\`\n- \`display: none\` vs \`visibility: hidden\`\n- \`display: flex\`\n- \`display: grid\`\n- \`display: position\`\n\n**Example:**\n[Code]`,
+        codeExample: `.container {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.hidden {\n  display: none;\n}`,
+        language: "css"
+      },
+
+      {
+        id: "css-8",
+        title: "Flexbox",
+        content: `x\n- \`flex-direction\` (\`row\`, \`column\`, \`row-reverse\`, \`column-reverse\`)\n- \`flex-wrap\` (\`nowrap\`, \`wrap\`, \`wrap-reverse\`)\n- \`justify-content\` (\`flex-start\`, \`flex-end\`, \`center\`, \`space-between\`, \`space-around\`, \`space-evenly\`)\n- \`align-items\` (\`flex-start\`, \`flex-end\`, \`center\`, \`baseline\`, \`stretch\`)\n- \`align-content\`\n- Flex Grow (\`flex-grow\` or \`flex: 1\`)\n- Flex Shrink (\`flex-shrink\`)\n- Flex Basis (\`flex-basis\`)\n- Flex Shorthand (\`flex: 1 1 auto\`)\n\n**Example:**\n[Code]`,
+        codeExample: `.container {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n}\n.item {\n  flex: 1;\n  margin: 10px;\n}`,
+        language: "css"
+      },
+
+      {
+        id: "css-9",
+        title: "CSS Grid",
+        content: `d\n- \`display: grid\`\n- \`grid-template-columns\` and \`grid-template-rows\`\n- \`grid-template-areas\`\n- \`gap\` (grid gap)\n- \`grid-column\` and \`grid-row\` for placement\n- Auto-fit and Auto-fill\n- Named Grid Lines\n- \`fr\` (fractional) Unit\n- \`minmax()\` in Grid\n- Responsive Grid Layouts\n\n**Example:**\n[Code]`,
+        codeExample: `.grid {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 20px;\n}\n.sidebar {\n  grid-column: 1 / 3;\n}`,
+        language: "css"
+      },
+
+      {
+        id: "css-10",
+        title: "Media Queries",
+        content: `s\n- Viewport Meta Tag (\`<meta name=\"viewport\">\`)\n- \`@media\` Rules\n- Breakpoints (Common: 480px, 768px, 1024px, 1440px)\n- Mobile-First vs Desktop-First\n- \`min-width\` vs \`max-width\`\n- Combining Media Queries\n- Hide/Show Elements by Screen Size\n\n**Example:**\n[Code]`,
+        codeExample: `/* Mobile-first */\n.container { display: flex; flex-direction: column; }\n\n/* Tablet */\n@media (min-width: 768px) {\n  .container { flex-direction: row; }\n}\n\n/* Desktop */\n@media (min-width: 1024px) {\n  .container { max-width: 1200px; margin: auto; }\n}`,
+        language: "css"
+      }
+  ]
+},
+
+{
+  slug: "c",
+
+  title: "C",
+
+  description: "Learn C programming from basics to advanced concepts including pointers, memory management, and file handling.",
+
+  icon: "📘",
+
+  color: "from-gray-500 to-gray-700",
+
+  category: "Systems",
+
+  lessons: [
+      {
+        id: "c-1",
+        title: "Getting Started with C",
+        content: `C\n- What is C? History and Overview\n- Why Learn C? (Efficiency, System Programming, Foundation for Other Languages)\n- Installing a C Compiler (GCC/MinGW, Clang, Online Compilers)\n- Writing Your First C Program (\`Hello, World!\`)\n- Understanding the \`main()\` Function\n- Compiling and Running a C Program (\`gcc hello.c -o hello && ./hello\`)\n- Anatomy of a C Program (\`#include\`, declarations, \`main\`, return)\n\n**Example:**\n[Code]`,
+        codeExample: `#include <stdio.h>\n\nint main() {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}`,
+        language: "c"
+      },
+
+      {
+        id: "c-2",
+        title: "Variables and Data Types",
+        content: `s\n- Writing and Declaring Variables\n- Data Types: \`int\`, \`float\`, \`double\`, \`char\`\n- \`sizeof()\` Operator\n- Signed vs Unsigned Types\n- Constants (\`const\` keyword)\n- Variable Naming Rules and Conventions\n- Type Casting (Implicit and Explicit)\n\n**Example:**\n[Code]`,
+        codeExample: `#include <stdio.h>\n\nint main() {\n    int age = 25;\n    float height = 5.6;\n    double pi = 3.14159;\n    char grade = 'A';\n    const int MAX = 100;\n\n    printf(\"Age: %d\\n\", age);\n    printf(\"Height: %.2f\\n\", height);\n    printf(\"Pi: %.5f\\n\", pi);\n    printf(\"Grade: %c\\n\", grade);\n    printf(\"Size of int: %lu bytes\\n\", sizeof(int));\n    return 0;\n}`,
+        language: "c"
+      },
+
+      {
+        id: "c-3",
+        title: "Operators",
+        content: `s\n- Arithmetic Operators (\`+\`, \`-\`, \`*\`, \`/\`, \`%\`)\n- Increment and Decrement (\`++\`, \`--\`)\n- Relational Operators (\`==\`, \`!=\`, \`<\`, \`>\`, \`<=\`, \`>=\`)\n- Logical Operators (\`&&\`, \`||\`, \`!\`)\n- Assignment Operators (\`=\`, \`+=\`, \`-=\`, \`*=\`, \`/=\`)\n- Bitwise Operators (\`&\`, \`|\`, \`^\`, \`~\`, \`<<\`, \`>>\`)\n- Ternary Operator (\`condition ? expr1 : expr2\`)\n- \`sizeof\` Operator\n- Operator Precedence and Associativity\n\n**Example:**\n[Code]`,
+        codeExample: `int a = 10, b = 3;\nprintf(\"Sum: %d\\n\", a + b);\nprintf(\"Modulo: %d\\n\", a % b);\nprintf(\"Bitwise AND: %d\\n\", a & b);\nprintf(\"Ternary: %d\\n\", a > b ? 1 : 0);`,
+        language: "c"
+      },
+
+      {
+        id: "c-4",
+        title: "Conditionals (\`if\`, \`else if\`, \`else\`)",
+        content: `)\n- \`if\` Statement\n- \`if...else\` Statement\n- \`else if\` Ladder\n- Nested \`if\` Statements\n- Ternary Operator (One-Line \`if/else\`)\n- Comparison and Logical Operators in Conditions\n\n**Example:**\n[Code]`,
+        codeExample: `int score = 85;\nif (score >= 90) {\n    printf(\"Grade A\\n\");\n} else if (score >= 80) {\n    printf(\"Grade B\\n\");\n} else if (score >= 70) {\n    printf(\"Grade C\\n\");\n} else {\n    printf(\"Grade F\\n\");\n}`,
+        language: "c"
+      },
+
+      {
+        id: "c-5",
+        title: "Loops",
+        content: `s\n- \`for\` Loop\n- \`while\` Loop\n- \`do...while\` Loop (Executes at Least Once)\n- \`break\` and \`continue\` Statements\n- Nested Loops\n- Infinite Loops (\`for(;;)\`, \`while(1)\`)\n\n**Example:**\n[Code]`,
+        codeExample: `// for loop\nfor (int i = 1; i <= 5; i++) {\n    printf(\"%d\\n\", i);\n}\n\n// while loop\nint count = 1;\nwhile (count <= 5) {\n    printf(\"%d\\n\", count);\n    count++;\n}\n\n// do...while (executes at least once)\nint x = 1;\ndo {\n    printf(\"Value: %d\\n\", x);\n    x++;\n} while (x <= 5);`,
+        language: "c"
+      },
+
+      {
+        id: "c-6",
+        title: "Functions",
+        content: `s\n- Function Declaration (Prototype) and Definition\n- Parameters and Arguments\n- Return Values (\`return\`)\n- Void Functions (No Return Value)\n- Scope: Local vs Global Variables\n- Recursion (Basic)\n- Passing Arguments by Value\n\n**Example:**\n[Code]`,
+        codeExample: `#include <stdio.h>\n\nint add(int a, int b) {\n    return a + b;\n}\n\nvoid greet() {\n    printf(\"Hello from a function!\\n\");\n}\n\nint factorial(int n) {\n    if (n <= 1) return 1;\n    return n * factorial(n - 1);\n}`,
+        language: "c"
+      },
+
+      {
+        id: "c-7",
+        title: "Arrays",
+        content: `s\n- Declaring and Initializing Arrays\n- Accessing Elements by Index (Zero-Based)\n- Array Length and \`sizeof\`\n- Iterating Over Arrays (\`for\` loop)\n- Multi-Dimensional Arrays (2D Arrays)\n- Arrays and Functions (Passing Arrays)\n- Common Array Mistakes (Out of Bounds)\n\n**Example:**\n[Code]`,
+        codeExample: `int numbers[5] = {10, 20, 30, 40, 50};\nprintf(\"First element: %d\\n\", numbers[0]);\nprintf(\"Array size: %lu\\n\", sizeof(numbers) / sizeof(numbers[0]));\n\n// 2D array\nint matrix[2][3] = {\n    {1, 2, 3},\n    {4, 5, 6}\n};\nprintf(\"Element at [0][1]: %d\\n\", matrix[0][1]);`,
+        language: "c"
+      },
+
+      {
+        id: "c-8",
+        title: "Strings",
+        content: `s\n- What is a String in C? (Character Arrays)\n- Null Terminator (\`'\\0'\`)\n- Declaring and Initializing Strings\n- String Input (\`scanf\`, \`fgets\`)\n- String Output (\`printf\`, \`puts\`)\n- \`strlen\`, \`strcpy\`, \`strcat\`, \`strcmp\` (from \`<string.h>\`)\n- Common String Functions Reference\n\n**Example:**\n[Code]`,
+        codeExample: `#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char name[50] = \"Alice\";\n    printf(\"Name: %s\\n\", name);\n    printf(\"Length: %lu\\n\", strlen(name));\n\n    char surname[20];\n    strcpy(surname, \"Smith\");\n    strcat(name, \" \");\n    strcat(name, surname);\n    printf(\"Full name: %s\\n\", name);\n\n    int result = strcmp(\"abc\", \"abc\");\n    printf(\"Compare result: %d\\n\", result);\n    return 0;\n}`,
+        language: "c"
+      },
+
+      {
+        id: "c-9",
+        title: "Pointers Basics",
+        content: `s\n- What is a Pointer? (Memory Address)\n- Declaring and Initializing Pointers\n- Address-of Operator (\`&\`)\n- Dereference Operator (\`*\`)\n- NULL Pointer\n- Pointer Arithmetic\n- Pointers and Arrays Relationship\n\n**Example:**\n[Code]`,
+        codeExample: `int number = 42;\nint *ptr = &number;\nprintf(\"Value: %d\\n\", *ptr);\nprintf(\"Address: %p\\n\", ptr);\n\nint arr[] = {10, 20, 30};\nint *arrPtr = arr;\nprintf(\"First element: %d\\n\", *arrPtr);\nprintf(\"Second element: %d\\n\", *(arrPtr + 1));`,
+        language: "c"
+      },
+
+      {
+        id: "c-10",
+        title: "Structures",
+        content: `s\n- Declaring a \`struct\`\n- Creating Struct Variables\n- Accessing Members (\`.\` Operator, \`->\` with Pointers)\n- Arrays of Structures\n- Pointers to Structures\n- Typedef for Structures\n- Nested Structures\n\n**Example:**\n[Code]`,
+        codeExample: `#include <stdio.h>\n#include <string.h>\n\ntypedef struct {\n    char name[50];\n    int age;\n    float salary;\n} Employee;\n\nint main() {\n    Employee e1 = {\"Alice\", 30, 50000.0};\n    printf(\"Name: %s, Age: %d\\n\", e1.name, e1.age);\n    printf(\"Salary: %.2f\\n\", e1.salary);\n\n    Employee *ptr = &e1;\n    printf(\"Access via pointer: %s\\n\", ptr->name);\n    return 0;\n}`,
+        language: "c"
+      },
+
+      {
+        id: "c-11",
+        title: "File Handling",
+        content: `g\n- Opening Files (\`fopen\`)\n- File Modes (\`\"r\"\`, \`\"w\"\`, \`\"a\"\`, \`\"r+\"\`)\n- Reading from Files (\`fscanf\`, \`fgets\`)\n- Writing to Files (\`fprintf\`, \`fputs\`)\n- Closing Files (\`fclose\`)\n- Checking for End-of-File (\`feof\`)\n- Error Handling with \`NULL\` Check\n\n**Example:**\n[Code]`,
+        codeExample: `#include <stdio.h>\n\nint main() {\n    FILE *file = fopen(\"data.txt\", \"w\");\n    if (file == NULL) {\n        printf(\"Error opening file!\\n\");\n        return 1;\n    }\n    fprintf(file, \"Hello, File!\\n\");\n    fprintf(file, \"Second line\\n\");\n    fclose(file);\n\n    // Read back\n    file = fopen(\"data.txt\", \"r\");\n    char line[100];\n    while (fgets(line, 100, file) != NULL) {\n        printf(\"%s\", line);\n    }\n    fclose(file);\n    return 0;\n}`,
+        language: "c"
+      }
+  ]
 }
 ];
 
