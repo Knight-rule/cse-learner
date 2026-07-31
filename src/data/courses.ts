@@ -8787,6 +8787,261 @@ console.log("Metrics:", line.getMetrics());`,
 
   },
 
+{
+  slug: "python",
+
+  title: "Python",
+
+  description: "Learn Python from basics to advanced concepts with practical examples.",
+
+  icon: "<:>",
+
+  color: "from-blue-500 to-green-600",
+
+  category: "Languages",
+
+  lessons: [
+      {
+        id: "py-1",
+        title: "Python Introduction",
+        content: `n\n- What is Python?\n- Why Learn Python?\n- Installing Python\n- Running Python (Interactive Shell, Script, IDLE, VS Code)\n- Your First Program (\`print\`)\n- Using the Python Interpreter\n\n**Example:**\n[Code]`,
+        codeExample: `print(\"Hello, World!\")`,
+        language: "python"
+      },
+
+      {
+        id: "py-2",
+        title: "Variables and Data Types",
+        content: `s\n- Variable Assignment\n- Naming Rules and Conventions\n- Data Types: int, float, str, bool\n- \`type()\` Function\n- Type Conversion (\`int()\`, \`float()\`, \`str()\`, \`bool()\`)\n- \`input()\` Function\n\n**Example:**\n[Code]`,
+        codeExample: `name = \"Alice\"\nage = 25\nheight = 5.6\nis_student = True`,
+        language: "python"
+      },
+
+      {
+        id: "py-3",
+        title: "Operators",
+        content: `s\n- Arithmetic Operators (\`+\`, \`-\`, \`*\`, \`/\`, \`//\`, \`%\`, \`**\`)\n- Comparison Operators (\`==\`, \`!=\`, \`<\`, \`>\`, \`<=\`, \`>=\`)\n- Logical Operators (\`and\`, \`or\`, \`not\`)\n- Assignment Operators (\`=\`, \`+=\`, \`-=\`, \`*=\`, \`/=\`)\n- Ternary Operator\n\n**Example:**\n[Code]`,
+        codeExample: `a = 10\nb = 3\nprint(a + b)\nprint(a // b)\nprint(a % b)\nprint(a ** b)`,
+        language: "python"
+      },
+
+      {
+        id: "py-4",
+        title: "Strings",
+        content: `s\n- Creating Strings (single, double, triple quotes)\n- String Indexing and Slicing\n- String Methods (\`upper()\`, \`lower()\`, \`strip()\`, \`split()\`, \`join()\`, \`replace()\`, \`find()\`)\n- String Concatenation\n- String Formatting (f-strings, \`.format()\`, \`%\` operator)\n- String Length (\`len()\`)\n\n**Example:**\n[Code]`,
+        codeExample: `name = \"Alice\"\nprint(name.upper())\nprint(f\"Hello, {name}!\")`,
+        language: "python"
+      },
+
+      {
+        id: "py-5",
+        title: "Numbers and Math",
+        content: `h\n- Built-in Math Functions (\`abs()\`, \`round()\`, \`pow()\`, \`min()\`, \`max()\`, \`sum()\`)\n- The \`math\` Module\n- Random Numbers (\`random\` module)\n- Integer Division vs Float Division\n- Type Conversion Between int and float\n\n**Example:**\n[Code]`,
+        codeExample: `import math\nprint(math.sqrt(16))\nprint(round(3.14159, 2))\nprint(abs(-7))`,
+        language: "python"
+      },
+
+      {
+        id: "py-6",
+        title: "Boolean Logic and Comparison",
+        content: `n\n- Boolean Values (\`True\`, \`False\`)\n- Comparison Operators\n- Logical Operators (\`and\`, \`or\`, \`not\`)\n- Truthy and Falsy Values\n- Identity Operators (\`is\`, \`is not\`)\n- Membership Operators (\`in\`, \`not in\`)\n\n**Example:**\n[Code]`,
+        codeExample: `age = 20\nprint(age >= 18 and age < 120)\nprint(\"a\" in \"Python\")\nprint(0 == False)`,
+        language: "python"
+      },
+
+      {
+        id: "py-7",
+        title: "Print Formatting",
+        content: `g\n- \`print()\` with Multiple Arguments\n- Separator and End Parameters (\`sep\`, \`end\`)\n- f-Strings (Formatted String Literals)\n- \`.format()\` Method\n- Old-Style \`%\` Formatting\n- String Alignment (\`ljust()\`, \`rjust()\`, \`center()\`)\n\n**Example:**\n[Code]`,
+        codeExample: `name = \"Alice\"\nage = 25\nprint(f\"Name: {name}, Age: {age}\")\nprint(\"Name: {}, Age: {}\".format(name, age))\nprint(f\"{name:<10} | {age:>5}\")`,
+        language: "python"
+      },
+
+      {
+        id: "py-8",
+        title: "f-Strings Deep Dive",
+        content: `e\n- Basic Interpolation\n- Expression Evaluation in f-Strings\n- Format Specifiers (\`.2f\`, \`:>10\`, \`:05d\`)\n- Calling Methods Inside f-Strings\n- Nested f-Strings\n\n**Example:**\n[Code]`,
+        codeExample: `price = 19.99\nprint(f\"The price is \${price:.2f}\")\nprint(f\"Result: {price * 2:.1f}\")\nprint(f\"{'hello'.upper()}\")`,
+        language: "python"
+      },
+
+      {
+        id: "py-9",
+        title: "Lists",
+        content: `s\n- Creating Lists\n- Accessing Elements by Index\n- Slicing Lists\n- Common Methods (\`append()\`, \`insert()\`, \`remove()\`, \`pop()\`, \`sort()\`, \`reverse()\`, \`clear()\`)\n- List Length (\`len()\`)\n- Iterating Over Lists (\`for\` loop, \`while\` loop)\n- List Comprehension\n- Nested Lists\n- Copying Lists (shallow vs deep)\n\n**Example:**\n[Code]`,
+        codeExample: `fruits = [\"apple\", \"banana\", \"orange\"]\nfruits.append(\"grape\")\nfor fruit in fruits:\n    print(fruit)\nsquares = [x**2 for x in range(1, 6)]`,
+        language: "python"
+      },
+
+      {
+        id: "py-10",
+        title: "Tuples",
+        content: `s\n- Creating Tuples\n- Accessing Elements by Index\n- Tuple Immutability\n- Tuple Methods (\`count()\`, \`index()\`)\n- Tuple Unpacking\n- Nested Tuples\n- When to Use Tuples vs Lists\n\n**Example:**\n[Code]`,
+        codeExample: `coordinates = (10, 20)\nx, y = coordinates\nprint(x, y)`,
+        language: "python"
+      },
+
+      {
+        id: "py-11",
+        title: "Dictionaries",
+        content: `s\n- Creating Dictionaries\n- Accessing Values by Key\n- Adding and Updating Key-Value Pairs\n- Removing Items (\`del\`, \`pop()\`, \`clear()\`)\n- Dictionary Methods (\`keys()\`, \`values()\`, \`items()\`, \`get()\`, \`update()\`)\n- Iterating Over Dictionaries\n- Nested Dictionaries\n- Dictionary Comprehension\n\n**Example:**\n[Code]`,
+        codeExample: `student = {\"name\": \"Alice\", \"age\": 25, \"grade\": \"A\"}\nprint(student[\"name\"])\nfor key, value in student.items():\n    print(f\"{key}: {value}\")`,
+        language: "python"
+      },
+
+      {
+        id: "py-12",
+        title: "Sets",
+        content: `s\n- Creating Sets\n- Set Operations (\`union\`, \`intersection\`, \`difference\`, \`symmetric_difference\`)\n- Adding and Removing Elements (\`add()\`, \`remove()\`, \`discard()\`)\n- Set Comprehension\n- Frozensets (immutable sets)\n- When to Use Sets\n\n**Example:**\n[Code]`,
+        codeExample: `a = {1, 2, 3, 4}\nb = {3, 4, 5, 6}\nprint(a | b)       # union\nprint(a & b)       # intersection\nprint(a - b)       # difference`,
+        language: "python"
+      },
+
+      {
+        id: "py-13",
+        title: "Conditionals \u2014 if/elif/else",
+        content: `e\n- \`if\` Statement\n- \`elif\` (else if)\n- \`else\`\n- Nested Conditionals\n- Ternary Operator (One-Line if/else)\n- Truthy and Falsy Values in Conditionals\n\n**Example:**\n[Code]`,
+        codeExample: `score = 85\nif score >= 90:\n    grade = \"A\"\nelif score >= 80:\n    grade = \"B\"\nelse:\n    grade = \"C\"\n\nresult = \"Pass\" if score >= 50 else \"Fail\"`,
+        language: "python"
+      },
+
+      {
+        id: "py-14",
+        title: "Loops \u2014 for",
+        content: `r\n- \`for\` Loop with \`range()\`\n- Iterating Over Lists, Tuples, Dictionaries\n- \`enumerate()\` for Index and Value\n- \`break\` and \`continue\`\n- \`else\` Clause on Loops\n- Nested Loops\n\n**Example:**\n[Code]`,
+        codeExample: `for i in range(1, 6):\n    print(i)\n\nfor index, fruit in enumerate([\"apple\", \"banana\", \"orange\"]):\n    print(f\"{index}: {fruit}\")`,
+        language: "python"
+      },
+
+      {
+        id: "py-15",
+        title: "Loops \u2014 while",
+        content: `e\n- \`while\` Loop\n- Infinite Loops\n- \`break\` and \`continue\` in while Loops\n- \`else\` Clause on while Loops\n- Loop Control Patterns\n\n**Example:**\n[Code]`,
+        codeExample: `count = 0\nwhile count < 5:\n    print(count)\n    count += 1`,
+        language: "python"
+      },
+
+      {
+        id: "py-16",
+        title: "Function Basics",
+        content: `s\n- Function Definition (\`def\`)\n- Parameters and Arguments\n- Return Values (\`return\`)\n- Default Parameter Values\n- Keyword Arguments\n- \`*args\` and \`**kwargs\`\n- Docstrings\n\n**Example:**\n[Code]`,
+        codeExample: `def greet(name, greeting=\"Hello\"):\n    \"\"\"Returns a greeting message.\"\"\"\n    return f\"{greeting}, {name}!\"\n\nprint(greet(\"Alice\"))\nprint(greet(\"Bob\", greeting=\"Hi\"))`,
+        language: "python"
+      },
+
+      {
+        id: "py-17",
+        title: "Scope andLambda",
+        content: `a\n- Local vs Global Variables\n- \`global\` Keyword\n- \`nonlocal\` Keyword\n- Lambda Functions\n- \`map()\`, \`filter()\`, \`sorted()\` with Lambdas\n- Variable Scope Rules (LEGB)\n\n**Example:**\n[Code]`,
+        codeExample: `x = 10\ndef my_func():\n    x = 5\n    return x\n\ndouble = lambda x: x * 2\nnumbers = [3, 1, 4, 1, 5]\nsorted_numbers = sorted(numbers, key=lambda x: -x)`,
+        language: "python"
+      },
+
+      {
+        id: "py-18",
+        title: "Reading Files",
+        content: `s\n- Opening Files (\`open()\`)\n- \`with\` Statement\n- \`read()\`, \`readline()\`, \`readlines()\`\n- File Modes (\`r\`, \`r+\`, \`rb\`)\n- Iterating Over Lines in a File\n\n**Example:**\n[Code]`,
+        codeExample: `with open(\"data.txt\", \"r\") as file:\n    content = file.read()\n    print(content)`,
+        language: "python"
+      },
+
+      {
+        id: "py-19",
+        title: "Writing Files",
+        content: `s\n- Writing Files (\`\"w\"\`, \`\"a\"\`, \`\"x\"\` modes)\n- \`write()\` Method\n- \`writelines()\` Method\n- Overwriting vs Appending\n- Creating Directories (\`os.makedirs()\`)\n\n**Example:**\n[Code]`,
+        codeExample: `with open(\"output.txt\", \"w\") as file:\n    file.write(\"Hello, World!\\n\")\n    file.write(\"Second line\\n\")`,
+        language: "python"
+      },
+
+      {
+        id: "py-20",
+        title: "CSV and JSON Files",
+        content: `s\n- Reading and Writing CSV Files (\`csv\` module)\n- Reading and Writing JSON Files (\`json\` module)\n- \`json.dump()\` and \`json.load()\`\n- Converting Between Python Objects and JSON\n\n**Example:**\n[Code]`,
+        codeExample: `import json\ndata = {\"name\": \"Alice\", \"age\": 25}\nwith open(\"data.json\", \"w\") as file:\n    json.dump(data, file)`,
+        language: "python"
+      },
+
+      {
+        id: "py-21",
+        title: "Classes and Objects",
+        content: `s\n- Defining Classes (\`class\`)\n- Creating Objects (Instances)\n- The \`__init__()\` Constructor\n- Instance Attributes and \`self\`\n- Instance Methods\n- The \`__str__()\` and \`__repr__()\` Methods\n\n**Example:**\n[Code]`,
+        codeExample: `class Dog:\n    def __init__(self, name, breed):\n        self.name = name\n        self.breed = breed\n\n    def bark(self):\n        return f\"{self.name} says woof!\"\n\nmy_dog = Dog(\"Rex\", \"Labrador\")\nprint(my_dog.bark())`,
+        language: "python"
+      },
+
+      {
+        id: "py-22",
+        title: "Inheritance and Polymorphism",
+        content: `m\n- Inheritance (\`super()\`)\n- Method Overriding\n- The \`isinstance()\` Function\n- Multiple Inheritance\n- Polymorphism\n- Abstract Classes (\`abc\` module)\n\n**Example:**\n[Code]`,
+        codeExample: `class Animal:\n    def sound(self):\n        return \"Some sound\"\n\nclass Dog(Animal):\n    def sound(self):\n        return \"Bark\"\n\nmy_dog = Dog()\nprint(my_dog.sound())`,
+        language: "python"
+      },
+
+      {
+        id: "py-23",
+        title: "Encapsulation and Properties",
+        content: `s\n- Public, Protected, and Private Attributes (\`_\`, \`__\`)\n- Getter and Setter Methods\n- The \`@property\` Decorator\n- Data Validation in Setters\n- Name Mangling\n\n**Example:**\n[Code]`,
+        codeExample: `class BankAccount:\n    def __init__(self, balance):\n        self.__balance = balance\n\n    @property\n    def balance(self):\n        return self.__balance\n\n    @balance.setter\n    def balance(self, value):\n        if value >= 0:\n            self.__balance = value`,
+        language: "python"
+      },
+
+      {
+        id: "py-24",
+        title: "Importing Modules",
+        content: `s\n- \`import\` Statement\n- \`from ... import\`\n- \`import ... as\` (Alias)\n- The \`standard library\` (os, math, random, datetime, json)\n- Installing Third-Party Packages (\`pip\`)\n\n**Example:**\n[Code]`,
+        codeExample: `import math\nfrom random import randint\nimport datetime as dt`,
+        language: "python"
+      },
+
+      {
+        id: "py-25",
+        title: "Creating Your Own Modules",
+        content: `s\n- Creating a \`.py\` File as a Module\n- The \`__name__\` Variable\n- The \`__all__\` List\n- \`__init__.py\` in Packages\n- Organizing Code into Packages\n\n**Example:**\n[Code]`,
+        codeExample: `# mymodule.py\ndef greet(name):\n    return f\"Hello, {name}!\"\n\n# main.py\nfrom mymodule import greet\nprint(greet(\"Alice\"))`,
+        language: "python"
+      },
+
+      {
+        id: "py-26",
+        title: "Try/Except/Finally",
+        content: `y\n- \`try\` and \`except\` Blocks\n- Specific Exception Types (\`ValueError\`, \`TypeError\`, \`FileNotFoundError\`)\n- \`else\` Clause\n- \`finally\` Clause\n- Raising Exceptions (\`raise\`)\n- Custom Exceptions\n\n**Example:**\n[Code]`,
+        codeExample: `try:\n    num = int(input(\"Enter a number: \"))\nexcept ValueError:\n    print(\"That's not a valid number!\")\nfinally:\n    print(\"This always runs.\")`,
+        language: "python"
+      },
+
+      {
+        id: "py-27",
+        title: "List Comprehensions and Generators",
+        content: `s\n- List Comprehension Syntax\n- Nested List Comprehensions\n- Generator Functions (\`yield\`)\n- Generator Expressions\n- Memory Efficiency of Generators\n\n**Example:**\n[Code]`,
+        codeExample: `squares = [x**2 for x in range(10)]\nsquares_gen = (x**2 for x in range(10))`,
+        language: "python"
+      },
+
+      {
+        id: "py-28",
+        title: "Decorators",
+        content: `s\n- What is a Decorator?\n- Creating a Simple Decorator\n- Decorators with Arguments\n- \`@functools.wraps\`\n- Common Built-in Decorators (\`@staticmethod\`, \`@classmethod\`, \`@property\`)\n\n**Example:**\n[Code]`,
+        codeExample: `def decorator(func):\n    def wrapper(*args, **kwargs):\n        print(\"Before function call\")\n        result = func(*args, **kwargs)\n        print(\"After function call\")\n        return result\n    return wrapper`,
+        language: "python"
+      },
+
+      {
+        id: "py-29",
+        title: "Working with APIs",
+        content: `s\n- What is an API?\n- Making HTTP Requests (\`requests\` library)\n- JSON Responses (\`json\` module)\n- REST APIs (GET, POST)\n- Error Handling for API Requests\n\n**Example:**\n[Code]`,
+        codeExample: `import requests\nresponse = requests.get(\"https://api.github.com\")\ndata = response.json()`,
+        language: "python"
+      },
+
+      {
+        id: "py-30",
+        title: "Introduction to Databases with Python",
+        content: `n\n- SQLite Basics (\`sqlite3\` module)\n- Connecting to a Database\n- Creating Tables\n- Inserting, Querying, Updating, Deleting Records\n- Parameterized Queries (SQL Injection Prevention)\n\n**Example:**\n[Code]`,
+        codeExample: `import sqlite3\nconn = sqlite3.connect(\"mydb.db\")\ncursor = conn.cursor()\ncursor.execute(\"CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT)\")\ncursor.execute(\"INSERT INTO users (name) VALUES (?)\", (\"Alice\",))\nconn.commit()\nconn.close()`,
+        language: "python"
+      }
+  ]
+}
 ];
 
 
