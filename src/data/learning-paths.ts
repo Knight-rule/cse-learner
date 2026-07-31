@@ -83,7 +83,7 @@ export const learningPaths: LearningPath[] = [
     estimatedTotalHours: 200,
     courses: [
       { slug: "machine-learning", order: 1, required: false, estimatedHours: 35 },
-      { slug: "deep-learning", order: 2, required: false, estimatedHours: 30, comingSoon: true },
+      { slug: "deep-learning", order: 2, required: false, estimatedHours: 30 },
       { slug: "web-development", order: 3, required: false, estimatedHours: 30 },
       { slug: "mobile-development", order: 4, required: false, estimatedHours: 25, comingSoon: true },
       { slug: "cyber-security", order: 5, required: false, estimatedHours: 30, comingSoon: true },
@@ -134,7 +134,7 @@ export const learningPaths: LearningPath[] = [
       { slug: "python", order: 1, required: true, estimatedHours: 20 },
       { slug: "data-science", order: 2, required: true, estimatedHours: 25, comingSoon: true },
       { slug: "machine-learning", order: 3, required: true, estimatedHours: 35 },
-      { slug: "deep-learning", order: 4, required: true, estimatedHours: 30, comingSoon: true },
+      { slug: "deep-learning", order: 4, required: true, estimatedHours: 30 },
       { slug: "data-structures", order: 5, required: false, estimatedHours: 15 },
       { slug: "algorithms", order: 6, required: false, estimatedHours: 15 },
       { slug: "cloud-computing", order: 7, required: false, estimatedHours: 10, comingSoon: true },
