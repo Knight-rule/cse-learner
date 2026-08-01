@@ -6,7 +6,6 @@ import { courses } from "@/data/courses";
 import { companies } from "@/lib/companies";
 import FloatingCodeVisual from "@/components/FloatingCodeVisual";
 import PremiumStatsBar from "@/components/PremiumStatsBar";
-import PremiumCourseCard from "@/components/PremiumCourseCard";
 import LearningFeatures from "@/components/LearningFeatures";
 
 const testimonials = [
@@ -99,53 +98,6 @@ export default function HomePage() {
 
       {/* ═══════════ LEARNING FEATURES ═══════════ */}
       <LearningFeatures />
-
-      {/* ═══════════ FEATURED COURSES ═══════════ */}
-      <section className="section" style={{ background: "var(--bg-secondary)", position: "relative" }}>
-        {/* Section divider glow */}
-        <div style={{
-          position: "absolute", top: 0, left: "10%", right: "10%", height: 1,
-          background: "linear-gradient(90deg, transparent, rgba(249,115,22,0.15), transparent)",
-        }} />
-
-        <div className="container">
-          <div style={{ textAlign: "center", marginBottom: 48 }}>
-            <span className="badge badge-accent" style={{ display: "inline-flex", marginBottom: 16 }}>
-              {courses.length} Courses
-            </span>
-            <h2 className="heading-xl" style={{ marginBottom: 16 }}>
-              All <span className="gradient-text">CS Courses</span>
-            </h2>
-            <p className="body-lg" style={{ maxWidth: 500, margin: "0 auto" }}>
-              From fundamentals to advanced topics — master the skills that matter most.
-            </p>
-          </div>
-
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(min(300px, 100%), 1fr))",
-            gap: 20,
-          }}>
-            {courses.map((course) => (
-              <PremiumCourseCard
-                key={course.slug}
-                slug={course.slug}
-                title={course.title}
-                description={course.description}
-                icon={course.icon}
-                color={course.color}
-                lessonCount={course.lessons.length}
-              />
-            ))}
-          </div>
-
-          <div style={{ textAlign: "center", marginTop: 40 }}>
-            <Link href="/courses" className="btn btn-outline">
-              View All Courses <ArrowRight size={16} />
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* ═══════════ TOP COMPANIES ═══════════ */}
       <section className="section" style={{ position: "relative" }}>
