@@ -238,10 +238,11 @@ img { max-width: 100%; display: block; }
 }
 .nav-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .nav-theme {
-  padding: 8px; border-radius: var(--radius-sm); color: var(--text-muted);
-  transition: var(--transition); display: flex; align-items: center;
+  padding: 8px 10px; border-radius: var(--radius-sm); color: var(--text-muted);
+  transition: var(--transition); display: flex; align-items: center; justify-content: center;
+  background: var(--surface); border: 1px solid var(--border);
 }
-.nav-theme:hover { color: var(--accent); background: rgba(249, 115, 22, 0.08); }
+.nav-theme:hover { color: var(--accent); background: rgba(249, 115, 22, 0.1); border-color: rgba(249, 115, 22, 0.2); }
 .nav-mobile { display: none; padding: 8px; color: var(--text-muted); }
 .nav-mobile-actions { display: flex; align-items: center; gap: 4px; }
 

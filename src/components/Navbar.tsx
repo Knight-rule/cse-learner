@@ -109,6 +109,13 @@ export default function Navbar() {
 
         {/* Desktop Actions */}
         <div className="nav-actions">
+          <button
+            className="nav-theme"
+            onClick={toggleTheme}
+            aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {mounted ? (dark ? <Sun size={18} /> : <Moon size={18} />) : <Sun size={18} />}
+          </button>
           <Link href="/dashboard" className="btn btn-ghost btn-sm">
             Dashboard
           </Link>
