@@ -120,7 +120,7 @@ export default function LearningFeatures() {
 
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
+          gridTemplateColumns: "repeat(auto-fill, minmax(min(300px, 100%), 1fr))",
           gap: 20,
         }}>
           {features.map((f, i) => (
