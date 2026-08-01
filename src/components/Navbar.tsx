@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/courses", label: "Courses" },
-  { href: "/paths", label: "Learning Paths" },
+  { href: "/paths", label: "Paths" },
   { href: "/practice", label: "Practice" },
   { href: "/certificates", label: "Certificates" },
   { href: "/internships", label: "Internships" },
@@ -90,7 +90,7 @@ export default function Navbar() {
             onClick={toggleTheme}
             aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
           >
-            {mounted ? (dark ? <Sun size={18} /> : <Moon size={18} />) : <Sun size={18} />}
+            {mounted ? (dark ? <Sun size={16} /> : <Moon size={16} />) : <Sun size={16} />}
           </button>
           <Link href="/dashboard" className="btn btn-ghost btn-sm">
             Dashboard
@@ -100,21 +100,21 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Mobile: Theme toggle + Menu button */}
+        {/* Mobile Actions */}
         <div className="nav-mobile-actions">
           <button
             className="nav-theme"
             onClick={toggleTheme}
             aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
           >
-            {mounted ? (dark ? <Sun size={18} /> : <Moon size={18} />) : <Sun size={18} />}
+            {mounted ? (dark ? <Sun size={16} /> : <Moon size={16} />) : <Sun size={16} />}
           </button>
           <button
             className="nav-mobile"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
           >
-            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
@@ -135,7 +135,6 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Mobile CTA */}
           <div className="nav-mobile-cta">
             <Link href="/dashboard" className="btn btn-secondary" onClick={() => setMobileOpen(false)}>
               Dashboard
