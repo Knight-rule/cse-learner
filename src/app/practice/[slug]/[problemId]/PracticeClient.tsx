@@ -41,8 +41,22 @@ interface Props {
   nextId: string | null;
 }
 
+const LANGUAGES = [
+  { id: "javascript", label: "JavaScript" },
+  { id: "python", label: "Python" },
+  { id: "c", label: "C" },
+  { id: "cpp", label: "C++" },
+] as const;
+
+type LangId = typeof LANGUAGES[number]["id"];
+
 export default function PracticeClient({ problem, courseSlug, problemIndex, totalProblems, prevId, nextId }: Props) {
-  const [code, setCode] = useState(problem.starterCode);
+  const [selectedLang, setSelectedLang] = useState<LangId>(
+    (problem.language as LangId) || "javascript"
+  );
+  const [code, setCode] = useState(
+    problem.starterCodes?.[selectedLang] || problem.starterCode
+  );
   const [output, setOutput] = useState<string>("");
   const [isRunning, setIsRunning] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -51,6 +65,13 @@ export default function PracticeClient({ problem, courseSlug, problemIndex, tota
   const [solved, setSolved] = useState<boolean>(() => {
     try { return isPracticeSolved(problem.id); } catch { return false; }
   });
+
+  const handleLangChange = (lang: LangId) => {
+    setSelectedLang(lang);
+    setCode(problem.starterCodes?.[lang] || problem.starterCode);
+    setOutput("");
+    setResults([]);
+  };
 
   const toggleSolved = () => {
     if (!solved) {
@@ -68,7 +89,7 @@ export default function PracticeClient({ problem, courseSlug, problemIndex, tota
   };
 
   const handleReset = () => {
-    setCode(problem.starterCode);
+    setCode(problem.starterCodes?.[selectedLang] || problem.starterCode);
     setOutput("");
     setResults([]);
   };
@@ -79,20 +100,20 @@ export default function PracticeClient({ problem, courseSlug, problemIndex, tota
     setResults([]);
 
     try {
-      if (problem.language === "javascript") {
+      if (selectedLang === "javascript") {
         const testResults = await runJavaScriptTests(code, problem.testCases);
         setResults(testResults);
         const passed = testResults.filter((r) => r.passed).length;
         setOutput(`\n✅ ${passed}/${testResults.length} tests passed\n`);
         if (passed === testResults.length && testResults.length > 0) { markPracticeSolved(problem.id); setSolved(true); }
-      } else if (problem.language === "python") {
+      } else if (selectedLang === "python") {
         const testResults = await runPythonTests(code, problem.testCases);
         setResults(testResults);
         const passed = testResults.filter((r) => r.passed).length;
         setOutput(`\n✅ ${passed}/${testResults.length} tests passed\n`);
         if (passed === testResults.length && testResults.length > 0) { markPracticeSolved(problem.id); setSolved(true); }
-      } else if (problem.language === "c" || problem.language === "cpp") {
-        const testResults = await runCCTests(code, problem.testCases, problem.language);
+      } else if (selectedLang === "c" || selectedLang === "cpp") {
+        const testResults = await runCCTests(code, problem.testCases, selectedLang);
         setResults(testResults);
         const passed = testResults.filter((r) => r.passed).length;
         setOutput(`\n✅ ${passed}/${testResults.length} tests passed\n`);
@@ -107,7 +128,7 @@ export default function PracticeClient({ problem, courseSlug, problemIndex, tota
     } finally {
       setIsRunning(false);
     }
-  }, [code, problem]);
+  }, [code, problem, selectedLang]);
 
   return (
     <div className="practice-layout">
@@ -190,7 +211,29 @@ export default function PracticeClient({ problem, courseSlug, problemIndex, tota
       {/* Right: Code Editor + Output */}
       <div className="practice-editor-pane">
         <div className="practice-editor-toolbar">
-          <span className="badge badge-accent" style={{ fontSize: 11 }}>{problem.language.toUpperCase()}</span>
+          {/* Language Selector */}
+          <div className="flex items-center gap-1" style={{ background: "var(--bg-primary)", borderRadius: 8, padding: 2 }}>
+            {LANGUAGES.map((lang) => (
+              <button
+                key={lang.id}
+                onClick={() => handleLangChange(lang.id)}
+                className="practice-toolbar-btn"
+                style={{
+                  padding: "4px 10px",
+                  borderRadius: 6,
+                  fontSize: 11,
+                  fontWeight: 600,
+                  background: selectedLang === lang.id ? "var(--accent)" : "transparent",
+                  color: selectedLang === lang.id ? "#fff" : "var(--text-muted)",
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "all 0.15s",
+                }}
+              >
+                {lang.label}
+              </button>
+            ))}
+          </div>
           <div className="practice-toolbar-spacer" />
           <button onClick={handleCopy} className="flex items-center gap-1 practice-toolbar-btn" title="Copy code">
             {copied ? <Check size={14} /> : <Copy size={14} />}
@@ -213,7 +256,7 @@ export default function PracticeClient({ problem, courseSlug, problemIndex, tota
           <CodeMirror
             value={code}
             onChange={(val) => setCode(val)}
-            extensions={langExtensions[problem.language] || langExtensions.javascript}
+            extensions={langExtensions[selectedLang] || langExtensions.javascript}
             theme={darkTheme}
             height="100%"
             basicSetup={{ lineNumbers: true, highlightActiveLineGutter: true, highlightActiveLine: true, foldGutter: true }}
