@@ -10,9 +10,6 @@ const navLinks = [
   { href: "/courses", label: "Courses" },
   { href: "/paths", label: "Learning Paths" },
   { href: "/practice", label: "Practice" },
-];
-
-const moreLinks = [
   { href: "/certificates", label: "Certificates" },
   { href: "/internships", label: "Internships" },
   { href: "/contests", label: "Contests" },
@@ -84,27 +81,6 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-
-          {/* More dropdown */}
-          <div className="nav-dropdown">
-            <button className="nav-link nav-dropdown-trigger">
-              More
-              <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            <div className="nav-dropdown-menu">
-              {moreLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`nav-dropdown-item${isActive(link.href) ? " active" : ""}`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          </div>
         </div>
 
         {/* Desktop Actions */}
@@ -148,17 +124,6 @@ export default function Navbar() {
         <div className="nav-mobile-menu">
           <div className="nav-mobile-links">
             {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className={`nav-mobile-link${isActive(link.href) ? " active" : ""}`}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <div className="nav-mobile-divider" />
-            {moreLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
