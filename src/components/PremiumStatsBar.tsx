@@ -61,7 +61,7 @@ export default function PremiumStatsBar() {
           ref={ref}
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
+            gridTemplateColumns: "repeat(auto-fill, minmax(min(200px, 100%), 1fr))",
             gap: 20,
             opacity: visible ? 1 : 0,
             transform: visible ? "translateY(0)" : "translateY(24px)",
