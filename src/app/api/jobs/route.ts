@@ -5,6 +5,7 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const query = searchParams.get("q") || "";
   const category = searchParams.get("category") || "";
+  const level = searchParams.get("level") || "";
 
   const rawPage = parseInt(searchParams.get("page") || "1", 10);
   const rawLimit = parseInt(searchParams.get("limit") || "50", 10);
@@ -15,7 +16,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Query too long" }, { status: 400 });
   }
 
-  const matched = searchCompanies(query, category || undefined);
+  const matched = searchCompanies(query, category || undefined, level || undefined);
 
   const total = matched.length;
   const start = (page - 1) * limit;

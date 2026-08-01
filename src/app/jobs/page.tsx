@@ -2,34 +2,43 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
-import { ChevronRight, Loader2, Building2, Search, X, ExternalLink, Bookmark, BookmarkCheck, Briefcase, Sparkles } from "lucide-react";
+import { ChevronRight, Loader2, Building2, Search, X, ExternalLink, Bookmark, BookmarkCheck, Briefcase, GraduationCap, UserCheck, Sparkles } from "lucide-react";
 import { Company, companies as allCompanies } from "@/lib/companies";
 
-const popularCategories = [
+const fresherCategories = [
+  "India",
+  "FAANG+",
+  "DevTools",
+  "Cloud & Infra",
+  "AI/ML",
+  "Consulting",
+  "Startups",
+];
+
+const experiencedCategories = [
   "FAANG+",
   "AI/ML",
+  "SaaS",
+  "Security",
+  "Fintech",
   "Cloud & Infra",
   "DevTools",
-  "Security",
-  "SaaS",
-  "Fintech",
-  "India",
+  "Robotics",
+  "Gaming",
   "Europe",
   "Asia-Pacific",
   "Middle East",
   "Africa",
   "Latin America",
   "Startups",
-  "Gaming",
-  "Robotics",
 ];
 
 export default function JobsPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
   const [query, setQuery] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [level, setLevel] = useState<"All" | "Fresher" | "Experienced">("All");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(allCompanies.length);
@@ -44,6 +53,7 @@ export default function JobsPage() {
       const params = new URLSearchParams();
       if (query) params.set("q", query);
       if (selectedCategory) params.set("category", selectedCategory);
+      if (level !== "All") params.set("level", level);
       params.set("page", String(page));
       params.set("limit", "50");
 
@@ -51,7 +61,6 @@ export default function JobsPage() {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       setCompanies(data.companies || []);
-      setCategories(data.categories || []);
       setTotalPages(data.pagination?.totalPages || 1);
       if (data.pagination?.total) setTotal(data.pagination.total);
     } catch (err) {
@@ -59,7 +68,7 @@ export default function JobsPage() {
       setCompanies([]);
     }
     setLoading(false);
-  }, [query, selectedCategory, page]);
+  }, [query, selectedCategory, level, page]);
 
   useEffect(() => {
     fetchCompanies();
@@ -71,7 +80,7 @@ export default function JobsPage() {
 
   useEffect(() => {
     setPage(1);
-  }, [query, selectedCategory]);
+  }, [query, selectedCategory, level]);
 
   const handleSearch = (value: string) => {
     setInputValue(value);
@@ -96,9 +105,14 @@ export default function JobsPage() {
     ? companies.filter((c) => savedCompanies.includes(c.slug))
     : companies;
 
+  const currentCategories = level === "Fresher" ? fresherCategories : level === "Experienced" ? experiencedCategories : Array.from(new Set([...fresherCategories, ...experiencedCategories]));
+
+  const fresherCount = allCompanies.filter((c) => c.level === "Fresher" || c.level === "Both").length;
+  const experiencedCount = allCompanies.filter((c) => c.level === "Experienced" || c.level === "Both").length;
+
   return (
     <div style={{ minHeight: "100vh" }}>
-      {/* ═══ Premium Hero ═══ */}
+      {/* ═══ Hero ═══ */}
       <div style={{
         background: "linear-gradient(135deg, rgba(59, 130, 246, 0.06), rgba(16, 185, 129, 0.04), transparent)",
         borderBottom: "1px solid var(--border)",
@@ -116,68 +130,122 @@ export default function JobsPage() {
           <div className="breadcrumb" style={{ marginBottom: 24 }}>
             <Link href="/">Home</Link>
             <ChevronRight size={14} />
-            <span>Companies & Careers</span>
+            <span>Jobs</span>
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 8 }}>
-            <Briefcase size={24} style={{ color: "var(--accent-blue)" }} />
+            <Briefcase size={24} style={{ color: "var(--accent)" }} />
             <h1 style={{
               fontSize: "clamp(28px, 5vw, 36px)",
               fontWeight: 800,
               color: "var(--text-primary)",
               lineHeight: 1.2,
-            }}>Companies & Careers</h1>
+            }}>
+              Jobs for <span className="gradient-text-premium">Every Level</span>
+            </h1>
           </div>
           <p style={{ fontSize: 16, color: "var(--text-secondary)", lineHeight: 1.6, maxWidth: 520 }}>
-            Direct career page links — apply on the company site. {total}+ companies across every tech category.
+            {total}+ companies across every tech category. Pick your level and start applying.
           </p>
         </div>
       </div>
 
       {/* ═══ Content ═══ */}
       <div className="container" style={{ padding: "32px 20px 80px" }}>
+
+        {/* ═══ Level Tabs ═══ */}
+        <div style={{
+          display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: 12, marginBottom: 28,
+        }}>
+          <button
+            onClick={() => setLevel("All")}
+            style={{
+              padding: "18px 20px", borderRadius: "var(--radius-xl)",
+              background: level === "All" ? "var(--gradient)" : "var(--bg-card)",
+              border: `2px solid ${level === "All" ? "transparent" : "var(--border)"}`,
+              color: level === "All" ? "#fff" : "var(--text-primary)",
+              cursor: "pointer", textAlign: "left", transition: "all 0.2s",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+              <Sparkles size={20} />
+              <span style={{ fontSize: 16, fontWeight: 700 }}>All Companies</span>
+            </div>
+            <span style={{ fontSize: 13, opacity: 0.8 }}>{total}+ companies hiring</span>
+          </button>
+
+          <button
+            onClick={() => setLevel("Fresher")}
+            style={{
+              padding: "18px 20px", borderRadius: "var(--radius-xl)",
+              background: level === "Fresher" ? "linear-gradient(135deg, #10b981, #059669)" : "var(--bg-card)",
+              border: `2px solid ${level === "Fresher" ? "transparent" : "var(--border)"}`,
+              color: level === "Fresher" ? "#fff" : "var(--text-primary)",
+              cursor: "pointer", textAlign: "left", transition: "all 0.2s",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+              <GraduationCap size={20} />
+              <span style={{ fontSize: 16, fontWeight: 700 }}>Freshers & New Grads</span>
+            </div>
+            <span style={{ fontSize: 13, opacity: 0.8 }}>{fresherCount} companies · No experience needed</span>
+          </button>
+
+          <button
+            onClick={() => setLevel("Experienced")}
+            style={{
+              padding: "18px 20px", borderRadius: "var(--radius-xl)",
+              background: level === "Experienced" ? "linear-gradient(135deg, #8b5cf6, #7c3aed)" : "var(--bg-card)",
+              border: `2px solid ${level === "Experienced" ? "transparent" : "var(--border)"}`,
+              color: level === "Experienced" ? "#fff" : "var(--text-primary)",
+              cursor: "pointer", textAlign: "left", transition: "all 0.2s",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+              <UserCheck size={20} />
+              <span style={{ fontSize: 16, fontWeight: 700 }}>Experienced Professionals</span>
+            </div>
+            <span style={{ fontSize: 13, opacity: 0.8 }}>{experiencedCount} companies · 3+ years experience</span>
+          </button>
+        </div>
+
         {/* Search */}
         <div style={{
+          display: "flex", alignItems: "center", gap: 10,
+          padding: "12px 16px",
+          borderRadius: "var(--radius-lg)",
           background: "var(--bg-card)",
           border: "1px solid var(--border)",
-          borderRadius: "var(--radius-xl)",
-          padding: 20,
           marginBottom: 20,
+          maxWidth: 480,
         }}>
-          <div style={{
-            display: "flex", alignItems: "center", gap: 10,
-            padding: "12px 16px",
-            borderRadius: "var(--radius-lg)",
-            background: "var(--surface)",
-            border: "1px solid var(--border)",
-          }}>
-            <Search size={18} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
-            <input
-              type="text"
-              placeholder="Search companies... (e.g. Google, AI, Fintech, India)"
-              value={inputValue}
-              onChange={(e) => handleSearch(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  if (searchTimer.current) clearTimeout(searchTimer.current);
-                  setQuery(inputValue);
-                }
-              }}
-              style={{
-                flex: 1, border: "none", outline: "none",
-                background: "transparent", color: "var(--text-primary)",
-                fontSize: 15,
-              }}
-            />
-            {inputValue && (
-              <button onClick={clearSearch} style={{
-                background: "none", border: "none", cursor: "pointer",
-                color: "var(--text-muted)", padding: 4,
-              }}>
-                <X size={18} />
-              </button>
-            )}
-          </div>
+          <Search size={18} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
+          <input
+            type="text"
+            placeholder={level === "Fresher" ? "Search fresher-friendly companies..." : level === "Experienced" ? "Search companies..." : "Search all companies..."}
+            value={inputValue}
+            onChange={(e) => handleSearch(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                if (searchTimer.current) clearTimeout(searchTimer.current);
+                setQuery(inputValue);
+              }
+            }}
+            style={{
+              flex: 1, border: "none", outline: "none",
+              background: "transparent", color: "var(--text-primary)",
+              fontSize: 14,
+            }}
+          />
+          {inputValue && (
+            <button onClick={clearSearch} style={{
+              background: "none", border: "none", cursor: "pointer",
+              color: "var(--text-muted)", padding: 4,
+            }}>
+              <X size={18} />
+            </button>
+          )}
         </div>
 
         {/* Categories */}
@@ -195,25 +263,33 @@ export default function JobsPage() {
           >
             All ({total})
           </button>
-          {popularCategories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(selectedCategory === cat ? "" : cat)}
-              style={{
-                padding: "8px 16px", borderRadius: "var(--radius-lg)",
-                background: selectedCategory === cat ? "var(--gradient)" : "var(--bg-card)",
-                border: `1px solid ${selectedCategory === cat ? "transparent" : "var(--border)"}`,
-                color: selectedCategory === cat ? "#fff" : "var(--text-secondary)",
-                fontSize: 13, fontWeight: 500, cursor: "pointer",
-                transition: "all 0.2s",
-              }}
-            >
-              {cat}
-            </button>
-          ))}
+          {currentCategories.map((cat) => {
+            const count = allCompanies.filter((c) => {
+              const matchCat = c.category === cat;
+              const matchLevel = level === "All" || c.level === level || c.level === "Both";
+              return matchCat && matchLevel;
+            }).length;
+            if (count === 0) return null;
+            return (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(selectedCategory === cat ? "" : cat)}
+                style={{
+                  padding: "8px 16px", borderRadius: "var(--radius-lg)",
+                  background: selectedCategory === cat ? "var(--gradient)" : "var(--bg-card)",
+                  border: `1px solid ${selectedCategory === cat ? "transparent" : "var(--border)"}`,
+                  color: selectedCategory === cat ? "#fff" : "var(--text-secondary)",
+                  fontSize: 13, fontWeight: 500, cursor: "pointer",
+                  transition: "all 0.2s",
+                }}
+              >
+                {cat} ({count})
+              </button>
+            );
+          })}
         </div>
 
-        {/* Tabs */}
+        {/* Saved Tab */}
         <div style={{ display: "flex", gap: 8, marginBottom: 24 }}>
           <button
             onClick={() => setSavedTab(false)}
@@ -225,7 +301,7 @@ export default function JobsPage() {
               fontSize: 13, fontWeight: 600, cursor: "pointer",
             }}
           >
-            All Companies ({total})
+            {level === "Fresher" ? "Fresher Companies" : level === "Experienced" ? "Experienced Companies" : "All Companies"} ({total})
           </button>
           <button
             onClick={() => setSavedTab(true)}
@@ -253,13 +329,13 @@ export default function JobsPage() {
               {savedTab ? "No saved companies" : "No companies found"}
             </div>
             <div style={{ fontSize: 14 }}>
-              {savedTab ? "Bookmark companies to see them here" : "Try a different search term"}
+              {savedTab ? "Bookmark companies to see them here" : "Try a different search term or category"}
             </div>
           </div>
         ) : (
           <div style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fill, minmax(min(340px, 100%), 1fr))",
             gap: 16,
           }}>
             {filteredCompanies.map((company) => (
@@ -301,12 +377,46 @@ export default function JobsPage() {
                     />
                     <div>
                       <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-primary)" }}>{company.name}</h3>
-                      <span style={{
-                        fontSize: 11, fontWeight: 600,
-                        padding: "2px 8px", borderRadius: 6,
-                        background: "rgba(59, 130, 246, 0.1)",
-                        color: "var(--accent-blue)",
-                      }}>{company.category}</span>
+                      <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", marginTop: 4 }}>
+                        <span style={{
+                          fontSize: 11, fontWeight: 600,
+                          padding: "2px 8px", borderRadius: 6,
+                          background: "rgba(59, 130, 246, 0.1)",
+                          color: "var(--accent-blue)",
+                        }}>{company.category}</span>
+                        {company.level === "Fresher" && (
+                          <span style={{
+                            fontSize: 10, fontWeight: 600,
+                            padding: "2px 8px", borderRadius: 6,
+                            background: "rgba(16, 185, 129, 0.1)",
+                            color: "var(--accent-green)",
+                          }}>
+                            <GraduationCap size={10} style={{ display: "inline", verticalAlign: "middle", marginRight: 3 }} />
+                            Fresher
+                          </span>
+                        )}
+                        {company.level === "Experienced" && (
+                          <span style={{
+                            fontSize: 10, fontWeight: 600,
+                            padding: "2px 8px", borderRadius: 6,
+                            background: "rgba(139, 92, 246, 0.1)",
+                            color: "var(--accent-purple)",
+                          }}>
+                            <UserCheck size={10} style={{ display: "inline", verticalAlign: "middle", marginRight: 3 }} />
+                            Senior
+                          </span>
+                        )}
+                        {company.level === "Both" && (
+                          <span style={{
+                            fontSize: 10, fontWeight: 600,
+                            padding: "2px 8px", borderRadius: 6,
+                            background: "rgba(249, 115, 22, 0.1)",
+                            color: "var(--accent-orange)",
+                          }}>
+                            All Levels
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <button
@@ -328,7 +438,7 @@ export default function JobsPage() {
 
                 {/* Tags */}
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 16 }}>
-                  {company.tags.slice(0, 4).map((tag) => (
+                  {company.tags.filter((t) => t !== "new-grad" && t !== "senior").slice(0, 4).map((tag) => (
                     <span key={tag} style={{
                       fontSize: 11, fontWeight: 500,
                       padding: "3px 8px", borderRadius: 6,
@@ -336,8 +446,8 @@ export default function JobsPage() {
                       color: "var(--text-muted)",
                     }}>{tag}</span>
                   ))}
-                  {company.tags.length > 4 && (
-                    <span style={{ fontSize: 11, color: "var(--text-muted)" }}>+{company.tags.length - 4}</span>
+                  {company.tags.filter((t) => t !== "new-grad" && t !== "senior").length > 4 && (
+                    <span style={{ fontSize: 11, color: "var(--text-muted)" }}>+{company.tags.filter((t) => t !== "new-grad" && t !== "senior").length - 4}</span>
                   )}
                 </div>
 
