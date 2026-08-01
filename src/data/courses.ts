@@ -1288,237 +1288,756 @@ console.log(login(new JwtAuth(), "eyJhbGci..."));`,
   },
 
     {
-    slug: "java",
-    title: "Java",
-    description: "Master Java programming from OOP to collections and exception handling.",
-    icon: "☕",
-    color: "from-red-500 to-red-700",
-    category: "Languages",
-    lessons: [
-      {
-        id: "java-1",
-        title: "Java Basics",
-        content: "Java is a powerful, object-oriented programming language used in enterprise applications, Android development, and backend systems. Java is \u201cwrite once, run anywhere\u201d thanks to the JVM.\n\nKey concepts:\n- What is Java?\n- Java vs C vs C++ \u2014 Key Differences\n- Setting Up Java (JDK, JRE, JVM Overview)\n- Your First Java Program (public class Main and System.out.println)\n- Java Program Structure (Class, main Method, Compilation)\n- Java Naming Conventions",
-        codeExample: `public class Main {
+  slug: "java",
+  title: "Java",
+  description: "Master Java from object-oriented programming to collections and concurrency.",
+  icon: "☕",
+  color: "from-red-400 to-orange-500",
+  category: "Languages",
+  notesUrl: "https://github.com/Knight-rule/cse-learner/blob/main/docs/java-notes.md",
+  lessons: [
+    {
+      id: "java-1",
+      title: "Java Fundamentals",
+      content: `## Introduction to Java
+
+Java is a class-based, object-oriented programming language designed for portability — "write once, run anywhere." Java programs compile to bytecode that runs on the Java Virtual Machine (JVM).
+
+### Setting Up
+
+- Install the JDK (Java Development Kit)
+- Use an IDE: IntelliJ IDEA, Eclipse, or VS Code
+- Compile: \`javac Main.java\`
+- Run: \`java Main\`
+
+### Basic Syntax
+
+Every Java file contains a class. The entry point is the \`main\` method:
+
+\`\`\`java
+public class Main {
     public static void main(String[] args) {
         System.out.println("Hello, World!");
     }
-}`,
-        language: "java"
-      },
-      {
-        id: "java-2",
-        title: "Variables and Data Types",
-        content: "Java is statically typed with 8 primitive data types.\n\nKey concepts:\n- Primitive Data Types (byte, short, int, long, float, double, char, boolean)\n- Declaring and Initializing Variables\n- Variable Naming Rules and Conventions\n- Constants (final keyword)\n- Type Casting (Widening and Narrowing)\n- Wrapper Classes\n- var (Local Variable Type Inference \u2014 Java 10+)\n- Strings as Objects (Not Primitive)",
-        codeExample: `public class Variables {
-    public static void main(String[] args) {
-        int age = 25;
-        double salary = 50000.50;
-        char grade = 'A';
-        boolean isStudent = true;
-        final int MAX = 100;
-        String name = "Alice";
+}
+\`\`\`
 
-        System.out.println("Name: " + name);
-        System.out.println("Age: " + age);
-        System.out.println("Size of int: " + Integer.BYTES + " bytes");
-    }
-}`,
-        language: "java"
-      },
-      {
-        id: "java-3",
-        title: "Operators",
-        content: "Operators perform operations on variables and values.\n\nKey concepts:\n- Arithmetic Operators (+, -, *, /, %)\n- Comparison Operators (==, !=, <, >, <=, >=)\n- Logical Operators (&&, ||, !)\n- Assignment Operators (=, +=, -=, *=, /=)\n- Increment and Decrement (++, --)\n- Bitwise Operators (&, |, ^, ~, <<, >>)\n- Ternary Operator (condition ? expr1 : expr2)\n- String Concatenation (+ Operator)",
-        codeExample: `public class Operators {
-    public static void main(String[] args) {
-        int a = 10, b = 3;
-        System.out.println("Sum: " + (a + b));      // 13
-        System.out.println("Modulo: " + (a % b));   // 1
-        System.out.println("AND: " + (a > 5 && b < 5)); // true
-        String result = a > 5 ? "Big" : "Small";
-        System.out.println("Ternary: " + result);   // Big
-    }
-}`,
-        language: "java"
-      },
-      {
-        id: "java-4",
-        title: "Conditionals",
-        content: "Conditionals let you execute different code based on conditions.\n\nKey concepts:\n- if Statement\n- if...else Statement\n- else if Ladder\n- Nested if Statements\n- Ternary Operator\n- switch Statement (with break, default)\n- switch with Strings (Java 7+)",
-        codeExample: `public class Conditionals {
-    public static void main(String[] args) {
-        int score = 85;
-        if (score >= 90) {
-            System.out.println("Grade A");
-        } else if (score >= 80) {
-            System.out.println("Grade B");
-        } else if (score >= 70) {
-            System.out.println("Grade C");
-        } else {
-            System.out.println("Grade F");
-        }
+### Variables and Data Types
 
-        int day = 3;
-        switch (day) {
-            case 1: System.out.println("Monday"); break;
-            case 2: System.out.println("Tuesday"); break;
-            case 3: System.out.println("Wednesday"); break;
-            default: System.out.println("Other day");
-        }
-    }
-}`,
-        language: "java"
-      },
-      {
-        id: "java-5",
-        title: "Loops",
-        content: "Loops execute a block of code repeatedly.\n\nKey concepts:\n- for Loop\n- Enhanced for-each Loop\n- while Loop\n- do...while Loop\n- break and continue\n- Nested Loops\n- Infinite Loops",
-        codeExample: `public class Loops {
-    public static void main(String[] args) {
-        // for loop
-        for (int i = 1; i <= 5; i++) {
-            System.out.println(i);
-        }
+| Type | Size | Default | Range |
+|------|------|---------|-------|
+| \`byte\` | 1 byte | 0 | -128 to 127 |
+| \`short\` | 2 bytes | 0 | -32,768 to 32,767 |
+| \`int\` | 4 bytes | 0 | ±2.1 billion |
+| \`long\` | 8 bytes | 0L | ±9 quintillion |
+| \`float\` | 4 bytes | 0.0f | 7 decimal digits |
+| \`double\` | 8 bytes | 0.0 | 15 decimal digits |
+| \`char\` | 2 bytes | '\\u0000' | 0 to 65,535 |
+| \`boolean\` | 1 bit | false | true/false |
 
-        // for-each loop
-        String[] fruits = {"apple", "banana", "orange"};
-        for (String fruit : fruits) {
-            System.out.println(fruit);
-        }
+### Type Casting
 
-        // while loop
-        int count = 1;
-        while (count <= 5) {
-            System.out.println(count);
-            count++;
-        }
+\`\`\`java
+int x = 10;
+double y = x;        // implicit (widening) — safe
+int z = (int) 3.14;  // explicit (narrowing) — loses precision
+\`\`\`
 
-        // do-while (executes at least once)
-        int x = 1;
-        do {
-            System.out.println(x);
-            x++;
-        } while (x <= 5);
-    }
-}`,
-        language: "java"
-      },
-      {
-        id: "java-6",
-        title: "Classes and Objects",
-        content: "Java is purely object-oriented. Everything lives inside a class.\n\nKey concepts:\n- Defining a Class\n- Creating Objects (with new Keyword)\n- Instance Variables and Methods\n- The this Keyword\n- Constructors (Default and Parameterized)\n- Access Modifiers (public, private, protected, default)\n- Getter and Setter Methods\n- Static Members (static keyword)",
-        codeExample: `public class Dog {
-    String name;
-    int age;
+### Strings
+
+Strings in Java are objects, not primitives:
+
+\`\`\`java
+String name = "Alice";
+String greeting = "Hello, " + name + "!";  // concatenation
+int len = name.length();
+String upper = name.toUpperCase();
+char ch = name.charAt(0);   // 'A'
+\`\`\``,
+      codeExample: `public class Main {\n    public static void main(String[] args) {\n        // Variables\n        String name = "Alice";\n        int age = 25;\n        double gpa = 3.85;\n        boolean active = true;\n\n        System.out.println("Name: " + name);\n        System.out.println("Age: " + age);\n        System.out.println("GPA: " + gpa);\n        System.out.println("Active: " + active);\n\n        // String operations\n        System.out.println("\\nName length: " + name.length());\n        System.out.println("Uppercase: " + name.toUpperCase());\n        System.out.println("First char: " + name.charAt(0));\n        System.out.println("Contains 'lic': " + name.contains("lic"));\n\n        // Type casting\n        int x = 10;\n        double y = x;  // implicit\n        System.out.println("\\nImplicit: int " + x + " → double " + y);\n\n        double pi = 3.14159;\n        int truncated = (int) pi;  // explicit\n        System.out.println("Explicit: double " + pi + " → int " + truncated);\n\n        // String formatting\n        String formatted = String.format("Name: %s, Age: %d, GPA: %.2f", name, age, gpa);\n        System.out.println("\\n" + formatted);\n    }\n}`,
+      language: "java"
+    },
+    {
+      id: "java-2",
+      title: "Control Flow",
+      content: `## Control Flow — Making Decisions
+
+### if / else if / else
+
+\`\`\`java
+int score = 85;
+
+if (score >= 90) {
+    System.out.println("Grade A");
+} else if (score >= 80) {
+    System.out.println("Grade B");
+} else if (score >= 70) {
+    System.out.println("Grade C");
+} else {
+    System.out.println("Grade F");
+}
+\`\`\`
+
+### Ternary Operator
+
+\`\`\`java
+String result = (score >= 50) ? "Pass" : "Fail";
+\`\`\`
+
+### switch Statement
+
+\`\`\`java
+String day = "Monday";
+
+switch (day) {
+    case "Monday":
+    case "Tuesday":
+    case "Wednesday":
+    case "Thursday":
+    case "Friday":
+        System.out.println("Weekday");
+        break;
+    case "Saturday":
+    case "Sunday":
+        System.out.println("Weekend");
+        break;
+    default:
+        System.out.println("Invalid day");
+}
+\`\`\`
+
+### for Loop
+
+\`\`\`java
+// Traditional for loop
+for (int i = 0; i < 5; i++) {
+    System.out.println(i);
+}
+
+// Enhanced for-each loop
+int[] nums = {1, 2, 3, 4, 5};
+for (int n : nums) {
+    System.out.println(n);
+}
+\`\`\`
+
+### while and do-while
+
+\`\`\`java
+int count = 0;
+while (count < 5) {
+    System.out.println(count);
+    count++;
+}
+
+// do-while: runs at least once
+do {
+    System.out.println(count);
+    count--;
+} while (count > 0);
+\`\`\`
+
+### break and continue
+
+\`\`\`java
+// break: exit loop early
+for (int i = 0; i < 10; i++) {
+    if (i == 5) break;
+    System.out.println(i);
+}
+
+// continue: skip to next iteration
+for (int i = 0; i < 10; i++) {
+    if (i % 2 == 0) continue;
+    System.out.println(i);  // prints odd numbers only
+}
+\`\`\``,
+      codeExample: `public class Main {\n    public static void main(String[] args) {\n        // if/else\n        int score = 85;\n        String grade;\n        if (score >= 90) grade = "A";\n        else if (score >= 80) grade = "B";\n        else if (score >= 70) grade = "C";\n        else grade = "F";\n        System.out.println("Score " + score + " → Grade " + grade);\n\n        // switch\n        String day = "Wednesday";\n        switch (day) {\n            case "Monday": case "Tuesday": case "Wednesday":\n            case "Thursday": case "Friday":\n                System.out.println(day + " is a weekday"); break;\n            case "Saturday": case "Sunday":\n                System.out.println(day + " is weekend"); break;\n            default:\n                System.out.println("Invalid day");\n        }\n\n        // for loop\n        System.out.println("\\nMultiplication table for 7:");\n        for (int i = 1; i <= 10; i++) {\n            System.out.printf("7 × %d = %d%n", i, 7 * i);\n        }\n\n        // for-each\n        String[] fruits = {"Apple", "Banana", "Cherry"};\n        System.out.println("\\nFruits:");\n        for (String fruit : fruits) {\n            System.out.println("  - " + fruit);\n        }\n\n        // while\n        System.out.println("\\nCountdown:");\n        int count = 5;\n        while (count > 0) {\n            System.out.println(count);\n            count--;\n        }\n        System.out.println("Liftoff!");\n    }\n}`,
+      language: "java"
+    },
+    {
+      id: "java-3",
+      title: "Object-Oriented Programming",
+      content: `## OOP — Java's Core Paradigm
+
+Java is fundamentally object-oriented. Everything lives inside a class.
+
+### Classes and Objects
+
+\`\`\`java
+public class Student {
+    // Fields (instance variables)
+    private String name;
+    private double gpa;
 
     // Constructor
-    public Dog(String name, int age) {
+    public Student(String name, double gpa) {
         this.name = name;
-        this.age = age;
+        this.gpa = gpa;
     }
 
-    // Method
-    public void bark() {
-        System.out.println(name + " says woof!");
+    // Methods
+    public String getName() { return name; }
+    public double getGpa() { return gpa; }
+
+    public boolean isHonors() {
+        return gpa >= 3.5;
     }
 
-    public static void main(String[] args) {
-        Dog myDog = new Dog("Rex", 3);
-        myDog.bark();
-        System.out.println("Age: " + myDog.age);
-    }
-}`,
-        language: "java"
-      },
-      {
-        id: "java-7",
-        title: "Inheritance and Interfaces",
-        content: "Inheritance lets you create new classes from existing ones.\n\nKey concepts:\n- Inheritance (extends keyword)\n- The super Keyword\n- Method Overriding\n- The final Keyword (Final Classes, Final Methods)\n- Interfaces (interface keyword)\n- Implementing Interfaces (implements)\n- Multiple Interface Implementation\n- Abstract Classes (Basic)",
-        codeExample: `class Animal {
-    void sound() {
-        System.out.println("Some sound");
-    }
-}
-
-class Dog extends Animal {
     @Override
-    void sound() {
-        System.out.println("Bark!");
+    public String toString() {
+        return name + " (GPA: " + gpa + ")";
+    }
+}
+\`\`\`
+
+### Creating Objects
+
+\`\`\`java
+Student alice = new Student("Alice", 3.85);
+System.out.println(alice.getName());     // "Alice"
+System.out.println(alice.isHonors());    // true
+\`\`\`
+
+### Encapsulation
+
+Use \`private\` fields with \`public\` getters/setters:
+
+\`\`\`java
+private String name;
+
+public String getName() { return name; }
+public void setName(String name) {
+    if (name == null || name.isBlank()) {
+        throw new IllegalArgumentException("Name cannot be empty");
+    }
+    this.name = name;
+}
+\`\`\`
+
+### Inheritance
+
+\`\`\`java
+public class Animal {
+    protected String name;
+    public void speak() { System.out.println("..."); }
+}
+
+public class Dog extends Animal {
+    @Override
+    public void speak() {
+        System.out.println(name + " barks!");
+    }
+}
+\`\`\`
+
+### Polymorphism
+
+\`\`\`java
+Animal a = new Dog();
+a.name = "Rex";
+a.speak();  // "Rex barks!" (Dog's version runs)
+\`\`\``,
+      codeExample: `public class Student {\n    private String name;\n    private double gpa;\n\n    // Constructor\n    public Student(String name, double gpa) {\n        this.name = name;\n        this.gpa = gpa;\n    }\n\n    // Getters\n    public String getName() { return name; }\n    public double getGpa() { return gpa; }\n\n    // Methods\n    public boolean isHonors() { return gpa >= 3.5; }\n\n    @Override\n    public String toString() {\n        return String.format("%s (GPA: %.2f)%s", name, gpa, isHonors() ? " ★" : "");\n    }\n\n    public static void main(String[] args) {\n        // Create objects\n        Student alice = new Student("Alice", 3.85);\n        Student bob = new Student("Bob", 2.90);\n        Student carol = new Student("Carol", 3.95);\n\n        System.out.println(alice);\n        System.out.println(bob);\n        System.out.println(carol);\n\n        // Polymorphism with arrays\n        Student[] students = {alice, bob, carol};\n        System.out.println("\\nHonors students:");\n        for (Student s : students) {\n            if (s.isHonors()) {\n                System.out.println("  ★ " + s.getName());\n            }\n        }\n\n        // Average GPA\n        double sum = 0;\n        for (Student s : students) sum += s.getGpa();\n        System.out.printf("\\nAverage GPA: %.2f%n", sum / students.length);\n    }\n}`,
+      language: "java"
+    },
+    {
+      id: "java-4",
+      title: "Interfaces and Abstract Classes",
+      content: `## Interfaces and Abstract Classes
+
+### Abstract Classes
+
+A class that cannot be instantiated — designed to be extended:
+
+\`\`\`java
+public abstract class Shape {
+    protected String color;
+
+    public Shape(String color) { this.color = color; }
+
+    // Abstract method — must be implemented by subclasses
+    public abstract double area();
+
+    // Concrete method — shared implementation
+    public String getColor() { return color; }
+}
+
+public class Circle extends Shape {
+    private double radius;
+    public Circle(String color, double radius) {
+        super(color);
+        this.radius = radius;
+    }
+    @Override
+    public double area() { return Math.PI * radius * radius; }
+}
+\`\`\`
+
+### Interfaces
+
+A contract of methods that a class must implement:
+
+\`\`\`java
+public interface Drawable {
+    void draw();  // implicitly public and abstract
+}
+
+public interface Resizable {
+    void resize(double factor);
+}
+
+// A class can implement multiple interfaces
+public class Button implements Drawable, Resizable {
+    @Override
+    public void draw() { System.out.println("Drawing button"); }
+
+    @Override
+    public void resize(double factor) { System.out.println("Resizing by " + factor); }
+}
+\`\`\`
+
+### Default Methods
+
+Interfaces can provide default implementations:
+
+\`\`\`java
+public interface Logger {
+    void log(String message);
+
+    default void logError(String message) {
+        log("ERROR: " + message);
+    }
+}
+\`\`\`
+
+### When to Use What
+
+| Feature | Abstract Class | Interface |
+|---------|---------------|-----------|
+| Multiple inheritance | No | Yes |
+| Constructors | Yes | No |
+| Instance variables | Yes | Only constants |
+| Method implementations | Yes | Default methods only |
+| Access modifiers | Any | public |`,
+      codeExample: `// Abstract class\nabstract class Animal {\n    protected String name;\n\n    public Animal(String name) { this.name = name; }\n    public abstract void speak();\n    public String getName() { return name; }\n}\n\nclass Dog extends Animal {\n    public Dog(String name) { super(name); }\n    @Override\n    public void speak() { System.out.println(name + " says: Woof!"); }\n}\n\nclass Cat extends Animal {\n    public Cat(String name) { super(name); }\n    @Override\n    public void speak() { System.out.println(name + " says: Meow!"); }\n}\n\n// Interface\ninterface Swimmable {\n    void swim();\n    default String getMedium() { return "water"; }\n}\n\n// Multiple interfaces\nclass Duck extends Animal implements Swimmable {\n    public Duck(String name) { super(name); }\n    @Override\n    public void speak() { System.out.println(name + " says: Quack!"); }\n    @Override\n    public void swim() { System.out.println(name + " is swimming in " + getMedium()); }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Animal[] animals = {\n            new Dog("Rex"),\n            new Cat("Whiskers"),\n            new Duck("Donald")\n        };\n\n        for (Animal a : animals) {\n            a.speak();\n            if (a instanceof Swimmable) {\n                ((Swimmable) a).swim();\n            }\n        }\n    }\n}`,
+      language: "java"
+    },
+    {
+      id: "java-5",
+      title: "Collections Framework",
+      content: `## Collections — Managing Groups of Objects
+
+Java's Collections Framework provides ready-made data structures.
+
+### Core Interfaces
+
+\`\`\`java
+Collection (root interface)
+├── List (ordered, allows duplicates)
+│   ├── ArrayList (fast random access)
+│   └── LinkedList (fast insert/delete)
+├── Set (no duplicates)
+│   ├── HashSet (fast, unordered)
+│   ├── LinkedHashSet (insertion order)
+│   └── TreeSet (sorted)
+└── Queue (FIFO)
+    ├── PriorityQueue
+    └── ArrayDeque
+\`\`\`
+
+### ArrayList
+
+\`\`\`java
+List<String> names = new ArrayList<>();
+names.add("Alice");
+names.add("Bob");
+names.add("Charlie");
+
+names.get(0);           // "Alice"
+names.remove("Bob");    // returns true
+names.contains("Alice"); // true
+names.size();            // 2
+\`\`\`
+
+### HashSet
+
+\`\`\`java
+Set<Integer> numbers = new HashSet<>();
+numbers.add(1);
+numbers.add(2);
+numbers.add(2);  // duplicate ignored
+numbers.size();   // 2
+\`\`\`
+
+### HashMap
+
+\`\`\`java
+Map<String, Integer> scores = new HashMap<>();
+scores.put("Alice", 95);
+scores.put("Bob", 87);
+
+scores.get("Alice");      // 95
+scores.containsKey("Bob"); // true
+scores.remove("Bob");
+
+// Iterate
+for (Map.Entry<String, Integer> entry : scores.entrySet()) {
+    System.out.println(entry.getKey() + ": " + entry.getValue());
+}
+\`\`\`
+
+### Collections Utility
+
+\`\`\`java
+Collections.sort(list);           // sort
+Collections.reverse(list);        // reverse
+Collections.shuffle(list);        // shuffle
+Collections.unmodifiableList(list); // make immutable
+\`\`\``,
+      codeExample: `import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        // ArrayList\n        List<String> fruits = new ArrayList<>();\n        fruits.add("Apple");\n        fruits.add("Banana");\n        fruits.add("Cherry");\n        fruits.add("Date");\n        System.out.println("Fruits: " + fruits);\n        System.out.println("First: " + fruits.get(0));\n        fruits.remove("Banana");\n        System.out.println("After remove: " + fruits);\n\n        // HashSet\n        Set<Integer> nums = new HashSet<>();\n        nums.add(10); nums.add(20); nums.add(30); nums.add(20);\n        System.out.println("\\nSet (no dupes): " + nums);\n\n        // HashMap\n        Map<String, Integer> ages = new HashMap<>();\n        ages.put("Alice", 25);\n        ages.put("Bob", 30);\n        ages.put("Carol", 28);\n        System.out.println("\\nAges: " + ages);\n        System.out.println("Alice's age: " + ages.get("Alice"));\n\n        // Iterating\n        System.out.println("\\nIterating map:");\n        for (Map.Entry<String, Integer> entry : ages.entrySet()) {\n            System.out.printf("  %s → %d%n", entry.getKey(), entry.getValue());\n        }\n\n        // Sorting\n        List<Integer> numbers = new ArrayList<>(Arrays.asList(5, 2, 8, 1, 9));\n        Collections.sort(numbers);\n        System.out.println("\\nSorted: " + numbers);\n\n        // Streaming\n        long count = ages.values().stream()\n            .filter(age -> age > 25)\n            .count();\n        System.out.println("Ages > 25: " + count);\n    }\n}`,
+      language: "java"
+    },
+    {
+      id: "java-6",
+      title: "Exception Handling",
+      content: `## Exception Handling — Managing Errors
+
+Java uses checked and unchecked exceptions to handle errors gracefully.
+
+### Exception Hierarchy
+
+\`\`\`java
+Throwable
+├── Error (serious, don't catch: OutOfMemoryError)
+└── Exception
+    ├── IOException, SQLException (checked — must handle)
+    └── RuntimeException
+        ├── NullPointerException
+        ├── ArrayIndexOutOfBoundsException
+        ├── IllegalArgumentException
+        └── ClassCastException
+\`\`\`
+
+### try-catch-finally
+
+\`\`\`java
+try {
+    int result = 10 / 0;
+} catch (ArithmeticException e) {
+    System.out.println("Error: " + e.getMessage());
+} finally {
+    System.out.println("Always runs");
+}
+\`\`\`
+
+### Multiple Catch Blocks
+
+\`\`\`java
+try {
+    // risky code
+} catch (FileNotFoundException e) {
+    System.out.println("File not found");
+} catch (IOException e) {
+    System.out.println("IO error");
+} catch (Exception e) {
+    System.out.println("Something else went wrong");
+}
+\`\`\`
+
+### Custom Exceptions
+
+\`\`\`java
+public class InsufficientFundsException extends Exception {
+    private double deficit;
+
+    public InsufficientFundsException(double deficit) {
+        super("Insufficient funds. Deficit: " + deficit);
+        this.deficit = deficit;
+    }
+
+    public double getDeficit() { return deficit; }
+}
+\`\`\`
+
+### try-with-resources
+
+Automatically closes resources:
+
+\`\`\`java
+try (BufferedReader br = new BufferedReader(new FileReader("file.txt"))) {
+    String line = br.readLine();
+    System.out.println(line);
+} // br is automatically closed here
+\`\`\`
+
+### Best Practices
+- Catch specific exceptions, not generic \`Exception\`
+- Don't catch \`Error\` — let the JVM handle it
+- Use try-with-resources for auto-closeable resources
+- Always include meaningful messages in custom exceptions`,
+      codeExample: `import java.io.*;\nimport java.util.*;\n\npublic class Main {\n    // Custom exception\n    static class AgeException extends Exception {\n        public AgeException(String msg) { super(msg); }\n    }\n\n    static void validateAge(int age) throws AgeException {\n        if (age < 0) throw new AgeException("Age cannot be negative: " + age);\n        if (age > 150) throw new AgeException("Age too high: " + age);\n    }\n\n    public static void main(String[] args) {\n        // Basic try-catch\n        try {\n            int result = 10 / 0;\n        } catch (ArithmeticException e) {\n            System.out.println("Caught: " + e.getMessage());\n        }\n\n        // Multiple catch\n        try {\n            int[] arr = {1, 2, 3};\n            System.out.println(arr[5]);\n        } catch (ArrayIndexOutOfBoundsException e) {\n            System.out.println("Index error: " + e.getMessage());\n        } catch (Exception e) {\n            System.out.println("Other error: " + e.getMessage());\n        }\n\n        // Custom exception\n        try {\n            validateAge(25);\n            validateAge(-5);\n        } catch (AgeException e) {\n            System.out.println("Validation: " + e.getMessage());\n        }\n\n        // try-with-resources\n        try (Scanner sc = new Scanner("Hello World")) {\n            while (sc.hasNext()) {\n                System.out.print(sc.next() + " ");\n            }\n        }\n        System.out.println("\\n\\nScanner auto-closed!");\n    }\n}`,
+      language: "java"
+    },
+    {
+      id: "java-7",
+      title: "Generics",
+      content: `## Generics — Type-Safe Code
+
+Generics let you write classes, interfaces, and methods that work with any type while maintaining type safety.
+
+### Generic Class
+
+\`\`\`java
+public class Box<T> {
+    private T content;
+
+    public void set(T content) { this.content = content; }
+    public T get() { return content; }
+}
+
+Box<String> stringBox = new Box<>();
+stringBox.set("Hello");
+String value = stringBox.get();  // no casting needed
+\`\`\`
+
+### Multiple Type Parameters
+
+\`\`\`java
+public class Pair<K, V> {
+    private K key;
+    private V value;
+
+    public Pair(K key, V value) { this.key = key; this.value = value; }
+    public K getKey() { return key; }
+    public V getValue() { return value; }
+}
+
+Pair<String, Integer> entry = new Pair<>("age", 25);
+\`\`\`
+
+### Bounded Types
+
+\`\`\`java
+// T must be a Number
+public class Stats<T extends Number> {
+    private T[] nums;
+    public Stats(T[] nums) { this.nums = nums; }
+    public double average() {
+        double sum = 0;
+        for (T num : nums) sum += num.doubleValue();
+        return sum / nums.length;
+    }
+}
+\`\`\`
+
+### Wildcards
+
+\`\`\`java
+// ? extends Number: read-only, accepts Number or subclass
+public void printList(List<? extends Number> list) {
+    for (Number n : list) System.out.println(n);
+}
+
+// ? super Integer: write-only, accepts Integer or superclass
+public void addNumbers(List<? super Integer> list) {
+    list.add(1);
+    list.add(2);
+}
+\`\`\`
+
+### Type Erasure
+
+At runtime, generics are erased — \`List<String>\` and \`List<Integer>\` both become \`List\`. This means:
+- You can't use \`new T()\` or \`instanceof T\`
+- Primitive types can't be used (\`List<int>\` is invalid — use \`List<Integer>\`)`,
+      codeExample: "import java.util.*;\n\npublic class Main {\n    // Generic class\n    static class Box<T> {\n        private T content;\n        public void set(T content) { this.content = content; }\n        public T get() { return content; }\n        @Override\n        public String toString() { return \"Box[\" + content + \"]\"; }\n    }\n\n    // Generic method\n    public static <T> List<T> arrayToList(T[] array) {\n        List<T> list = new ArrayList<>();\n        for (T item : array) list.add(item);\n        return list;\n    }\n\n    // Bounded type\n    static <T extends Comparable<T>> T findMax(T[] array) {\n        T max = array[0];\n        for (T item : array) {\n            if (item.compareTo(max) > 0) max = item;\n        }\n        return max;\n    }\n\n    public static void main(String[] args) {\n        Box<String> strBox = new Box<>();\n        strBox.set(\"Hello\");\n        System.out.println(strBox);\n\n        Box<Integer> intBox = new Box<>();\n        intBox.set(42);\n        System.out.println(intBox);\n\n        // Generic method\n        String[] words = {\"apple\", \"banana\", \"cherry\"};\n        List<String> wordList = arrayToList(words);\n        System.out.println(\"Words: \" + wordList);\n\n        Integer[] numbers = {5, 2, 8, 1, 9};\n        System.out.println(\"Max: \" + findMax(numbers));\n\n        String[] names = {\"Alice\", \"Bob\", \"Charlie\"};\n        System.out.println(\"Max: \" + findMax(names));\n    }\n}",
+      language: "java"
+    },
+    {
+      id: "java-8",
+      title: "Lambda Expressions",
+      content: `## Lambda Expressions — Concise Functions
+
+Lambdas provide a short syntax for writing anonymous functions. Introduced in Java 8.
+
+### Basic Syntax
+
+\`\`\`java
+// Traditional
+Runnable r = new Runnable() {
+    @Override
+    public void run() {
+        System.out.println("Running");
+    }
+};
+
+// Lambda
+Runnable r = () -> System.out.println("Running");
+\`\`\`
+
+### With Parameters
+
+\`\`\`java
+// One parameter
+Comparator<String> comp = (a, b) -> a.compareTo(b);
+
+// Multiple parameters
+BiFunction<Integer, Integer, Integer> add = (a, b) -> a + b;
+
+// No parameters
+Supplier<Double> random = () -> Math.random();
+\`\`\`
+
+### Method References
+
+Shorthand for lambdas that call a method:
+
+\`\`\`java
+// Lambda
+list.forEach(item -> System.out.println(item));
+
+// Method reference
+list.forEach(System.out::println);
+
+// Types of method references
+String::valueOf          // static method
+String::length           // instance method on parameter
+System.out::println      // instance method on specific object
+\`\`\`
+
+### Functional Interfaces
+
+Interfaces with a single abstract method:
+
+\`\`\`java
+@FunctionalInterface
+interface Transformer<T, R> {
+    R transform(T input);
+}
+
+Transformer<String, Integer> len = String::length;
+len.transform("Hello");  // 5
+\`\`\`
+
+### Common Functional Interfaces
+
+| Interface | Method | Description |
+|-----------|--------|-------------|
+| \`Predicate<T>\` | \`boolean test(T)\` | Tests a condition |
+| \`Function<T, R>\` | \`R apply(T)\` | Transforms a value |
+| \`Consumer<T>\` | \`void accept(T)\` | Consumes a value |
+| \`Supplier<T>\` | \`T get()\` | Produces a value |
+
+### Chaining
+
+\`\`\`java
+Function<String, String> trim = String::trim;
+Function<String, String> upper = String::toUpperCase;
+Function<String, String> pipeline = trim.andThen(upper);
+pipeline.apply("  hello  ");  // "HELLO"
+\`\`\``,
+      codeExample: "import java.util.*;\nimport java.util.stream.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        // Lambda basics\n        Runnable greet = () -> System.out.println(\"Hello!\");\n        greet.run();\n\n        // With parameters\n        java.util.function.BiFunction<Integer, Integer, Integer> add = (a, b) -> a + b;\n        System.out.println(\"5 + 3 = \" + add.apply(5, 3));\n\n        // Method references\n        List<String> names = Arrays.asList(\"Alice\", \"Bob\", \"Charlie\");\n        names.forEach(System.out::println);\n\n        // Stream operations with lambdas\n        List<String> result = names.stream()\n            .filter(name -> name.length() > 3)\n            .map(String::toUpperCase)\n            .sorted()\n            .collect(Collectors.toList());\n        System.out.println(\"\\nFiltered: \" + result);\n\n        // Predicate\n        java.util.function.Predicate<Integer> isEven = n -> n % 2 == 0;\n        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8);\n        List<Integer> evens = numbers.stream()\n            .filter(isEven)\n            .collect(Collectors.toList());\n        System.out.println(\"Evens: \" + evens);\n\n        // Reducing\n        int sum = numbers.stream()\n            .reduce(0, Integer::sum);\n        System.out.println(\"Sum: \" + sum);\n\n        // Chaining\n        java.util.function.Function<String, String> trim = String::trim;\n        java.util.function.Function<String, String> upper = String::toUpperCase;\n        java.util.function.Function<String, String> pipeline = trim.andThen(upper);\n        System.out.println(\"Pipeline: \" + pipeline.apply(\"  hello  \"));\n    }\n}",
+      language: "java"
+    },
+    {
+      id: "java-9",
+      title: "Concurrency Basics",
+      content: `## Concurrency — Doing Multiple Things at Once
+
+Java provides built-in support for multithreading and concurrent programming.
+
+### Creating Threads
+
+\`\`\`java
+// 1. Extending Thread
+class MyThread extends Thread {
+    @Override
+    public void run() {
+        System.out.println("Thread running: " + getName());
     }
 }
 
-interface Printable {
-    void print();
+// 2. Implementing Runnable
+Runnable task = () -> {
+    System.out.println("Task running");
+};
+new Thread(task).start();
+
+// 3. ExecutorService (preferred)
+ExecutorService executor = Executors.newFixedThreadPool(3);
+executor.submit(() -> System.out.println("Pool task"));
+executor.shutdown();
+\`\`\`
+
+### Synchronization
+
+Prevent race conditions when multiple threads access shared data:
+
+\`\`\`java
+class Counter {
+    private int count = 0;
+
+    public synchronized void increment() {
+        count++;
+    }
+
+    public int getCount() { return count; }
 }
+\`\`\`
 
-class Document implements Printable {
-    public void print() {
-        System.out.println("Printing document...");
+### volatile Keyword
+
+Ensures visibility of changes across threads:
+
+\`\`\`java
+private volatile boolean running = true;
+
+public void stop() { running = false; }
+
+public void run() {
+    while (running) { /* work */ }
+}
+\`\`\`
+
+### Locks
+
+More flexible than synchronized:
+
+\`\`\`java
+private final ReentrantLock lock = new ReentrantLock();
+
+public void safeMethod() {
+    lock.lock();
+    try {
+        // critical section
+    } finally {
+        lock.unlock();
     }
-}`,
-        language: "java"
-      },
-      {
-        id: "java-8",
-        title: "ArrayLists and Lists",
-        content: "ArrayLists are dynamic arrays that can grow and shrink.\n\nKey concepts:\n- Arrays vs ArrayLists\n- Importing ArrayList\n- Creating and Initializing ArrayLists\n- Adding Elements (add), Removing (remove), Accessing (get)\n- ArrayList Size (size())\n- Iterating Over ArrayLists\n- Sorting ArrayLists (Collections.sort())\n- Comparing ArrayList with Arrays",
-        codeExample: `import java.util.ArrayList;
-import java.util.Collections;
+}
+\`\`\`
 
-public class ListsDemo {
-    public static void main(String[] args) {
-        ArrayList<String> names = new ArrayList<>();
-        names.add("Alice");
-        names.add("Bob");
-        names.add("Charlie");
-        names.remove("Bob");
+### Concurrent Collections
 
-        for (String name : names) {
-            System.out.println(name);
-        }
+\`\`\`java
+ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>();
+\`\`\`
 
-        Collections.sort(names);
-        System.out.println("Sorted: " + names);
+### Best Practices
+- Prefer \`ExecutorService\` over manual thread creation
+- Keep synchronized blocks small
+- Use \`volatile\` for flags, \`synchronized\` for compound operations
+- Avoid shared mutable state when possible`,
+      codeExample: "import java.util.concurrent.*;\nimport java.util.concurrent.atomic.*;\n\npublic class Main {\n    public static void main(String[] args) throws InterruptedException {\n        // Thread basics\n        Thread t = new Thread(() -> {\n            System.out.println(\"Thread: \" + Thread.currentThread().getName());\n        });\n        t.start();\n        t.join();\n\n        // ExecutorService\n        System.out.println(\"\\nExecutorService:\");\n        ExecutorService executor = Executors.newFixedThreadPool(3);\n        for (int i = 0; i < 5; i++) {\n            int taskNum = i;\n            executor.submit(() -> {\n                System.out.printf(\"  Task %d on %s%n\", taskNum, Thread.currentThread().getName());\n            });\n        }\n        executor.shutdown();\n        executor.awaitTermination(5, TimeUnit.SECONDS);\n\n        // AtomicInteger for thread-safe counter\n        AtomicInteger counter = new AtomicInteger(0);\n        Runnable incrementTask = () -> {\n            for (int i = 0; i < 1000; i++) counter.incrementAndGet();\n        };\n\n        Thread t1 = new Thread(incrementTask);\n        Thread t2 = new Thread(incrementTask);\n        t1.start(); t2.start();\n        t1.join(); t2.join();\n        System.out.println(\"\\nCounter (atomic): \" + counter.get()); // 2000\n\n        // CompletableFuture\n        System.out.println(\"\\nCompletableFuture:\");\n        CompletableFuture.supplyAsync(() -> {\n            try { Thread.sleep(500); } catch (Exception e) {}\n            return \"Data loaded\";\n        }).thenAccept(result -> {\n            System.out.println(\"Result: \" + result);\n        }).join();\n    }\n}",
+      language: "java"
     }
-}`,
-        language: "java"
-      },
-      {
-        id: "java-9",
-        title: "Exception Handling",
-        content: "Exception handling manages runtime errors gracefully.\n\nKey concepts:\n- try...catch Block\n- Multiple catch Blocks\n- finally Block\n- throw Statement\n- Custom Exceptions (Basic)\n- Common Exception Types (NullPointerException, ArithmeticException, ArrayIndexOutOfBoundsException)\n- Checked vs Unchecked Exceptions",
-        codeExample: `public class ExceptionDemo {
-    public static void main(String[] args) {
-        try {
-            int result = 10 / 0;
-        } catch (ArithmeticException e) {
-            System.out.println("Cannot divide by zero!");
-        } finally {
-            System.out.println("This always runs.");
-        }
-
-        // Throwing an exception
-        try {
-            setAge(-5);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public static void setAge(int age) {
-        if (age < 0) throw new IllegalArgumentException("Age cannot be negative");
-    }
-}`,
-        language: "java"
-      }
-    ]
-  },
+  ]
+},
 
   {
 
     slug: "c-language",
-
     title: "C Language",
 
     description: "Master C programming from its origins to advanced topics — pointers, memory management, data structures, and system-level programming.",
@@ -5254,191 +5773,645 @@ int main() {
   },
 
     {
-    slug: "javascript",
-    title: "JavaScript",
-    description: "Master JavaScript from basics to DOM manipulation, events, and modern ES6+ features.",
-    icon: "📜",
-    color: "from-yellow-400 to-amber-500",
-    category: "Languages",
-    lessons: [
-      {
-        id: "js-1",
-        title: "JavaScript Basics",
-        content: "Learn JavaScript \u2014 the programming language of the web. JavaScript makes web pages interactive by manipulating HTML and CSS dynamically.\n\nKey concepts:\n- What is JavaScript?\n- JavaScript vs HTML vs CSS \u2014 Roles and Responsibilities\n- Where JavaScript Runs (Browser, Node.js)\n- Adding JavaScript to HTML (script tag, external file)\n- Your First JavaScript Program (console.log)\n- JavaScript Syntax Basics (Semicolons, Case Sensitivity)\n- JavaScript Output Methods (console.log, window.alert, document.write, innerHTML)",
-        codeExample: `console.log("Hello, World!");
-alert("Welcome!");
-document.getElementById("demo").innerHTML = "JavaScript is running!";`,
-        language: "javascript"
-      },
-      {
-        id: "js-2",
-        title: "Variables and Data Types",
-        content: "Variables store data values. JavaScript has flexible typing with let, const, and var.\n\nKey concepts:\n- Declaring Variables (var, let, const)\n- let vs const vs var \u2014 Scoping Differences\n- String, Number, Boolean data types\n- null and undefined\n- typeof Operator\n- Type Conversion (String, Number, Boolean)\n- Template Literals (Backtick Strings)",
-        codeExample: `let name = "Alice";
-const age = 25;
-var isStudent = true;
-let city; // undefined
-console.log(typeof name); // string
-let message = \`Hello, \${name}! You are \${age} years old.\`;
-console.log(message);`,
-        language: "javascript"
-      },
-      {
-        id: "js-3",
-        title: "Operators",
-        content: "Operators perform operations on variables and values.\n\nKey concepts:\n- Arithmetic Operators (+, -, *, /, %, **)\n- Assignment Operators (=, +=, -=, *=, /=)\n- Comparison Operators (==, ===, !=, !==, <, >, <=, >=)\n- Logical Operators (&&, ||, !)\n- Increment and Decrement (++, --)\n- String Operators (+ for concatenation)\n- Truthy and Falsy Values\n- Short-Circuit Evaluation",
-        codeExample: `let a = 10;
-let b = 3;
-console.log(a + b);  // 13
-console.log(a % b);  // 1
-console.log(a === b); // false
-console.log(a > 5 && b < 5); // true
-console.log(!false); // true`,
-        language: "javascript"
-      },
-      {
-        id: "js-4",
-        title: "Conditionals",
-        content: "Conditionals let you execute different code based on conditions.\n\nKey concepts:\n- if Statement\n- else Statement\n- else if Ladder\n- Ternary Operator (condition ? expr1 : expr2)\n- switch Statement\n- switch with break and default\n- Nested Conditionals",
-        codeExample: `let score = 85;
+  slug: "javascript",
+  title: "JavaScript",
+  description: "Master JavaScript from variables and functions to DOM manipulation and async programming.",
+  icon: "⚡",
+  color: "from-yellow-400 to-orange-500",
+  category: "Languages",
+  lessons: [
+    {
+      id: "js-1",
+      title: "JavaScript Basics",
+      content: `## What is JavaScript?
+
+JavaScript is the programming language of the web. It makes web pages interactive — animating elements, validating forms, fetching data, and updating content without reloading the page.
+
+### Where JavaScript Runs
+
+- **Browser** — Chrome, Firefox, Safari, Edge all have JavaScript engines
+- **Node.js** — server-side JavaScript (backend, CLI tools, APIs)
+
+### Adding JavaScript to HTML
+
+\`\`\`html
+<!-- Internal script -->
+<script>
+  console.log("Hello!");
+</script>
+
+<!-- External file (preferred) -->
+<script src="app.js"></script>
+\`\`\`
+
+Place scripts at the end of \`<body>\` or use \`defer\` to avoid blocking page render.
+
+### Output Methods
+
+| Method | Purpose |
+|--------|---------|
+| \`console.log()\` | Debug output in browser console |
+| \`alert()\` | Popup dialog (avoid in production) |
+| \`document.write()\` | Writes directly to the page (avoid) |
+| \`innerHTML\` | Sets HTML content of an element |
+| \`textContent\` | Sets text content of an element |
+
+### JavaScript is NOT Java
+
+Despite the name, they're completely different languages. JavaScript is a high-level, dynamically-typed, interpreted language. Java is statically-typed and compiled.`,
+      codeExample: `// Your first JavaScript program\nconsole.log("Hello, World!");\nconsole.log("JavaScript is fun!");\n\n// Variables\nlet name = "Alice";\nlet age = 25;\nconsole.log(name, age);\n\n// Template literals\nconsole.log(\`Hello, \${name}! You are \${age} years old.\`);\n\n// Arrow function\nconst greet = (name) => \`Hello, \${name}!\`;\nconsole.log(greet("Bob"));`,
+      language: "javascript"
+    },
+    {
+      id: "js-2",
+      title: "Variables and Data Types",
+      content: `## Variables — Storing Data
+
+JavaScript has three ways to declare variables:
+
+| Keyword | Scope | Reassignable | Hoisted |
+|---------|-------|-------------|---------|
+| \`var\` | Function | Yes | Yes (undefined) |
+| \`let\` | Block | Yes | Yes (TDZ) |
+| \`const\` | Block | No | Yes (TDZ) |
+
+**Always use \`const\` by default.** Use \`let\` only when you need to reassign. Avoid \`var\`.
+
+### Data Types
+
+**Primitives** (immutable, stored by value):
+- \`string\`: \`"hello"\`, \`'world'\`, \`\\\`template\\\`\`
+- \`number\`: \`42\`, \`3.14\`, \`Infinity\`, \`NaN\`
+- \`boolean\`: \`true\`, \`false\`
+- \`undefined\`: declared but no value
+- \`null\`: intentional absence of value
+- \`symbol\`: unique identifier
+- \`bigint\`: \`9007199254740991n\`
+
+**Reference types** (mutable, stored by reference):
+- \`object\`: \`{ name: "Alice", age: 25 }\`
+- \`array\`: \`[1, 2, 3]\`
+- \`function\`: \`() => {}\`
+
+### typeof Operator
+
+\`\`\`javascript
+typeof "hello"    // "string"
+typeof 42         // "number"
+typeof true       // "boolean"
+typeof undefined  // "undefined"
+typeof null       // "object" (historical bug)
+typeof {}         // "object"
+typeof []         // "object" (use Array.isArray())
+\`\`\`
+
+### Template Literals
+
+Backtick strings with embedded expressions:
+
+\`\`\`javascript
+const name = "Alice";
+const msg = \`Hello, \${name}! \${1 + 1} = 2\`;
+\`\`\``,
+      codeExample: `// Variables\nconst name = "Alice";     // const — can't reassign\nlet age = 25;              // let — can reassign\nlet isStudent;             // undefined\n\n// Reassignment\nage = 26;\n// name = "Bob";  // TypeError!\n\n// Data types\nconst str = "Hello";       // string\nconst num = 42;            // number\nconst pi = 3.14;           // number\nconst bool = true;         // boolean\nconst nothing = null;      // null\nconst undef = undefined;   // undefined\n\n// typeof\nconsole.log(typeof str);    // "string"\nconsole.log(typeof num);    // "number"\nconsole.log(typeof bool);   // "boolean"\nconsole.log(typeof undef);  // "undefined"\nconsole.log(typeof null);   // "object" (bug!)\n\n// Template literals\nconst greeting = \`Hello, \${name}! You are \${age} years old.\`;\nconsole.log(greeting);\n\n// Multi-line strings\nconst html = \`\n  <div>\n    <h1>\${name}</h1>\n    <p>Age: \${age}</p>\n  </div>\n\`;\nconsole.log(html);`,
+      language: "javascript"
+    },
+    {
+      id: "js-3",
+      title: "Operators",
+      content: `## Operators — Performing Operations
+
+### Arithmetic Operators
+
+| Operator | Meaning | Example |
+|----------|---------|---------|
+| \`+\` | Addition | \`10 + 3\` → 13 |
+| \`-\` | Subtraction | \`10 - 3\` → 7 |
+| \`*\` | Multiplication | \`10 * 3\` → 30 |
+| \`/\` | Division | \`10 / 3\` → 3.333 |
+| \`%\` | Modulo | \`10 % 3\` → 1 |
+| \`**\` | Exponent | \`2 ** 3\` → 8 |
+
+### Comparison Operators
+
+| Operator | Meaning | \`"5" == 5\` | \`"5" === 5\` |
+|----------|---------|-------------|--------------|
+| \`==\` | Loose equality | \`true\` | — |
+| \`===\` | Strict equality | — | \`false\` |
+| \`!=\` | Loose inequality | \`false\` | — |
+| \`!==\` | Strict inequality | — | \`true\` |
+
+**Always use \`===\` and \`!==\`.** Loose equality does type coercion, which causes bugs.
+
+### Logical Operators
+
+\`\`\`javascript
+true && false   // false (AND)
+true || false   // true  (OR)
+!true           // false (NOT)
+\`\`\`
+
+### Truthy and Falsy Values
+
+**Falsy** values (evaluate to \`false\` in boolean context):
+\`false\`, \`0\`, \`""\`, \`null\`, \`undefined\`, \`NaN\`
+
+Everything else is **truthy**, including:
+\`"0"\`, \`"false"\`, \`[]\`, \`{}\`, \`new Number(0)\`
+
+### Short-Circuit Evaluation
+
+\`\`\`javascript
+const name = user && user.name;     // returns user.name or falsy value
+const value = input || "default";   // returns input if truthy, else "default"
+const name = user?.name ?? "Guest"; // nullish coalescing
+\`\`\``,
+      codeExample: `// Arithmetic\nconsole.log(10 + 3);   // 13\nconsole.log(10 - 3);   // 7\nconsole.log(10 * 3);   // 30\nconsole.log(10 / 3);   // 3.333...\nconsole.log(10 % 3);   // 1\nconsole.log(2 ** 3);   // 8\n\n// Strict vs Loose equality\nconsole.log("5" == 5);    // true (type coercion)\nconsole.log("5" === 5);   // false (no coercion)\nconsole.log(null == undefined);  // true\nconsole.log(null === undefined); // false\n\n// Logical operators\nconst age = 25;\nconst hasID = true;\nconsole.log(age >= 18 && hasID);  // true\nconsole.log(age < 18 || !hasID);  // false\n\n// Truthy/Falsy\nif ("hello") console.log("truthy");  // runs\nif (0) console.log("never runs");    // skipped\nif ("0") console.log("also truthy"); // runs!\n\n// Short-circuit\nconst user = null;\nconst name = user && user.name;       // null\nconst fallback = user || "Anonymous"; // "Anonymous"\n\n// Nullish coalescing\nconst input = 0;\nconst val1 = input || 10;   // 10 (0 is falsy!)\nconst val2 = input ?? 10;   // 0  (0 is not null/undefined)`,
+      language: "javascript"
+    },
+    {
+      id: "js-4",
+      title: "Conditionals",
+      content: `## Conditionals — Making Decisions
+
+### if / else if / else
+
+\`\`\`javascript
+const score = 85;
+
 if (score >= 90) {
   console.log("Grade A");
 } else if (score >= 80) {
   console.log("Grade B");
-} else {
+} else if (score >= 70) {
   console.log("Grade C");
+} else {
+  console.log("Grade F");
 }
+\`\`\`
 
-let day = new Date().getDay();
-switch(day) {
-  case 0: console.log("Sunday"); break;
-  case 1: console.log("Monday"); break;
-  default: console.log("Weekday");
+### Ternary Operator
+
+\`\`\`javascript
+const result = score >= 50 ? "Pass" : "Fail";
+\`\`\`
+
+Use for simple assignments. Don't nest ternaries — it hurts readability.
+
+### switch Statement
+
+Best when comparing one value against many constants:
+
+\`\`\`javascript
+const day = "Monday";
+
+switch (day) {
+  case "Monday":
+  case "Tuesday":
+  case "Wednesday":
+  case "Thursday":
+  case "Friday":
+    console.log("Weekday");
+    break;
+  case "Saturday":
+  case "Sunday":
+    console.log("Weekend");
+    break;
+  default:
+    console.log("Invalid day");
 }
+\`\`\`
 
-let result = score >= 50 ? "Pass" : "Fail";`,
-        language: "javascript"
-      },
-      {
-        id: "js-5",
-        title: "Loops",
-        content: "Loops execute a block of code repeatedly.\n\nKey concepts:\n- for Loop\n- while Loop\n- do...while Loop\n- break and continue\n- for...in (Object keys)\n- for...of (Array values)\n- Nested Loops\n- Infinite Loops (and how to avoid them)",
-        codeExample: `for (let i = 0; i < 5; i++) {
+**Remember:** Each case needs \`break\`. Without it, execution falls through to the next case.
+
+### Logical Patterns
+
+\`\`\`javascript
+// Guard clauses
+function getDiscount(age, isStudent) {
+  if (age < 18) return 0.25;
+  if (isStudent) return 0.15;
+  if (age > 65) return 0.20;
+  return 0;
+}
+\`\`\``,
+      codeExample: `// if/else if/else\nconst score = 85;\nlet grade;\n\nif (score >= 90) grade = "A";\nelse if (score >= 80) grade = "B";\nelse if (score >= 70) grade = "C";\nelse grade = "F";\n\nconsole.log(\`Score: \${score} → Grade: \${grade}\`);\n\n// Ternary\nconst pass = score >= 50 ? "Pass" : "Fail";\nconsole.log(pass);\n\n// switch\nconst month = new Date().getMonth();\nlet season;\n\nswitch (month) {\n  case 11: case 0: case 1:\n    season = "Winter"; break;\n  case 2: case 3: case 4:\n    season = "Spring"; break;\n  case 5: case 6: case 7:\n    season = "Summer"; break;\n  case 8: case 9: case 10:\n    season = "Fall"; break;\n}\nconsole.log(\`Month \${month} is \${season}\`);\n\n// Guard clauses\nfunction canVote(age) {\n  if (age < 0) return "Invalid age";\n  if (age < 18) return "Too young";\n  return "Can vote!";\n}\nconsole.log(canVote(25));  // "Can vote!"\nconsole.log(canVote(15));  // "Too young"`,
+      language: "javascript"
+    },
+    {
+      id: "js-5",
+      title: "Loops",
+      content: `## Loops — Repeating Actions
+
+### for Loop
+
+Best when you know the iteration count:
+
+\`\`\`javascript
+for (let i = 0; i < 5; i++) {
   console.log(i);
 }
+// Output: 0 1 2 3 4
+\`\`\`
 
-let arr = ["apple", "banana", "cherry"];
-for (let fruit of arr) {
-  console.log(fruit);
+### while Loop
+
+Best when you don't know when to stop:
+
+\`\`\`javascript
+let count = 0;
+while (count < 5) {
+  console.log(count);
+  count++;
+}
+\`\`\`
+
+### do...while Loop
+
+Guarantees at least one execution:
+
+\`\`\`javascript
+let num;
+do {
+  num = Math.floor(Math.random() * 10);
+} while (num !== 5);
+console.log("Got 5!");\n\`\`\`
+
+### for...in and for...of
+
+\`\`\`javascript
+// for...in — iterates over object KEYS
+const person = { name: "Alice", age: 25 };
+for (let key in person) {
+  console.log(\`\${key}: \${person[key]}\`);
 }
 
-let i = 0;
-while (i < 5) {
-  console.log(i);
-  i++;
-}`,
-        language: "javascript"
-      },
-      {
-        id: "js-6",
-        title: "Functions",
-        content: "Functions are reusable blocks of code.\n\nKey concepts:\n- Function Declaration\n- Function Expression\n- Arrow Functions (() => {})\n- Parameters and Arguments\n- Default Parameters\n- Return Values\n- Scope: Local vs Global Variables\n- The this Keyword (Basic)",
-        codeExample: `// Declaration
+// for...of — iterates over ITERABLE VALUES
+const colors = ["red", "green", "blue"];
+for (let color of colors) {
+  console.log(color);
+}
+\`\`\`
+
+### Array Iteration Methods
+
+\`\`\`javascript
+const nums = [1, 2, 3, 4, 5];
+
+nums.forEach(n => console.log(n));        // iterate
+const doubled = nums.map(n => n * 2);     // transform
+const evens = nums.filter(n => n % 2 === 0); // filter
+const sum = nums.reduce((acc, n) => acc + n, 0); // accumulate
+\`\`\``,
+      codeExample: `// for loop\nconsole.log("=== For Loop ===");\nfor (let i = 1; i <= 5; i++) {\n  console.log(\`\${i} × 5 = \${i * 5}\`);\n}\n\n// while loop\nconsole.log("\\n=== While Loop ===");\nlet n = 16;\nwhile (n > 0) {\n  process.stdout.write(\`\${n} \`);\n  n = Math.floor(n / 2);\n}\nconsole.log();\n\n// for...of\nconsole.log("\\n=== For...of ===");\nconst fruits = ["apple", "banana", "cherry"];\nfor (const fruit of fruits) {\n  console.log(fruit);\n}\n\n// for...in\nconsole.log("\\n=== For...in ===");\nconst person = { name: "Alice", age: 25, city: "NYC" };\nfor (const key in person) {\n  console.log(\`\${key}: \${person[key]}\`);\n}\n\n// Array methods\nconsole.log("\\n=== Array Methods ===");\nconst nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\n\nconst evens = nums.filter(n => n % 2 === 0);\nconsole.log("Evens:", evens);\n\nconst doubled = nums.map(n => n * 2);\nconsole.log("Doubled:", doubled);\n\nconst sum = nums.reduce((acc, n) => acc + n, 0);\nconsole.log("Sum:", sum);\n\nconst firstBig = nums.find(n => n > 7);\nconsole.log("First > 7:", firstBig);\n\nconst hasNegative = nums.some(n => n < 0);\nconsole.log("Has negative:", hasNegative);`,
+      language: "javascript"
+    },
+    {
+      id: "js-6",
+      title: "Functions",
+      content: `## Functions — Reusable Code Blocks
+
+### Three Ways to Define Functions
+
+\`\`\`javascript
+// 1. Function Declaration (hoisted)
 function greet(name) {
   return \`Hello, \${name}!\`;
 }
 
-// Expression
-const greetExpr = function(name) {
+// 2. Function Expression (not hoisted)
+const greet = function(name) {
   return \`Hello, \${name}!\`;
 };
 
-// Arrow function
-const greetArrow = (name) => \`Hello, \${name}!\`;
+// 3. Arrow Function (concise, lexical \`this\`)
+const greet = (name) => \`Hello, \${name}!\`;
+\`\`\`
 
-console.log(greet("Alice"));    // Hello, Alice!
-console.log(greetArrow("Bob")); // Hello, Bob!`,
-        language: "javascript"
-      },
-      {
-        id: "js-7",
-        title: "Arrays",
-        content: "Arrays store multiple values in a single variable.\n\nKey concepts:\n- Creating Arrays ([] and new Array())\n- Accessing Elements by Index\n- Array Length (length)\n- Adding Elements (push, unshift)\n- Removing Elements (pop, shift)\n- Array Methods (slice, splice, concat, join)\n- Iterating Arrays (for, for...of, forEach)\n- map(), filter(), reduce()\n- Array Sorting (sort, reverse)",
-        codeExample: `let fruits = ["apple", "banana", "orange"];
-fruits.push("grape");
-for (let fruit of fruits) {
-  console.log(fruit);
+### Parameters and Defaults
+
+\`\`\`javascript
+function createUser(name, role = "user", active = true) {
+  return { name, role, active };
 }
-let doubled = fruits.map(f => f.toUpperCase());
-let nums = [3, 1, 4, 1, 5];
-nums.sort((a, b) => a - b);
-console.log(nums); // [1, 1, 3, 4, 5]`,
-        language: "javascript"
-      },
-      {
-        id: "js-8",
-        title: "JavaScript Objects",
-        content: "Objects store data as key-value pairs.\n\nKey concepts:\n- Creating Objects (Object Literal, new Object())\n- Object Properties and Methods\n- Accessing Properties (Dot Notation, Bracket Notation)\n- Adding and Removing Properties\n- Object Destructuring\n- Object.keys(), Object.values(), Object.entries()\n- for...in Loop for Objects\n- Spread Operator for Objects ({...obj})",
-        codeExample: `let student = {
+createUser("Alice");           // { name: "Alice", role: "user", active: true }
+createUser("Bob", "admin");    // { name: "Bob", role: "admin", active: true }
+\`\`\`
+
+### Rest Parameters
+
+\`\`\`javascript
+function sum(...numbers) {
+  return numbers.reduce((acc, n) => acc + n, 0);
+}
+sum(1, 2, 3, 4);  // 10
+\`\`\`
+
+### Callback Functions
+
+A function passed as an argument to another function:
+
+\`\`\`javascript
+function fetchData(url, callback) {
+  // simulate API call
+  callback(null, { data: "result" });
+}
+
+fetchData("/api/users", (err, data) => {
+  if (err) console.error(err);
+  else console.log(data);
+});
+\`\`\`
+
+### Closures
+
+A function that remembers its outer scope:
+
+\`\`\`javascript
+function counter() {
+  let count = 0;
+  return {
+    increment: () => ++count,
+    getCount: () => count
+  };
+}
+const c = counter();
+c.increment();  // 1
+c.increment();  // 2
+c.getCount();   // 2
+\`\`\``,
+      codeExample: `// Function declaration\nfunction add(a, b) {\n  return a + b;\n}\nconsole.log(add(5, 3));  // 8\n\n// Arrow function\nconst multiply = (a, b) => a * b;\nconsole.log(multiply(5, 3));  // 15\n\n// Default parameters\nfunction greet(name = "World") {\n  return \`Hello, \${name}!\`;\n}\nconsole.log(greet());        // "Hello, World!"\nconsole.log(greet("Alice")); // "Hello, Alice!"\n\n// Rest parameters\nfunction sum(...nums) {\n  return nums.reduce((a, b) => a + b, 0);\n}\nconsole.log(sum(1, 2, 3, 4));  // 10\n\n// Higher-order function\nconst numbers = [1, 2, 3, 4, 5];\nconst doubled = numbers.map(n => n * 2);\nconsole.log(doubled);  // [2, 4, 6, 8, 10]\n\n// Closure\nfunction createCounter() {\n  let count = 0;\n  return {\n    increment: () => ++count,\n    decrement: () => --count,\n    getCount: () => count\n  };\n}\n\nconst counter = createCounter();\nconsole.log(counter.increment()); // 1\nconsole.log(counter.increment()); // 2\nconsole.log(counter.decrement()); // 1\nconsole.log(counter.getCount());  // 1`,
+      language: "javascript"
+    },
+    {
+      id: "js-7",
+      title: "Arrays",
+      content: `## Arrays — Ordered Collections
+
+Arrays are ordered lists of values. They can hold any type and can be mixed.
+
+### Creating Arrays
+
+\`\`\`javascript
+const arr1 = [1, 2, 3];
+const arr2 = new Array(3);       // [,,] (3 empty slots)
+const arr3 = Array.from("hello"); // ["h","e","l","l","o"]
+\`\`\`
+
+### Essential Methods
+
+| Method | Purpose | Mutates? |
+|--------|---------|----------|
+| \`push()\` | Add to end | Yes |
+| \`pop()\` | Remove from end | Yes |
+| \`shift()\` | Remove from start | Yes |
+| \`unshift()\` | Add to start | Yes |
+| \`splice()\` | Add/remove at index | Yes |
+| \`slice()\` | Copy portion | No |
+| \`concat()\` | Combine arrays | No |
+| \`indexOf()\` | Find index | No |
+| \`includes()\` | Check existence | No |
+| \`join()\` | Array to string | No |
+| \`reverse()\` | Reverse order | Yes |
+| \`sort()\` | Sort (lexicographic!) | Yes |
+
+### Functional Methods (don't mutate)
+
+| Method | Purpose | Returns |
+|--------|---------|---------|
+| \`map()\` | Transform each element | New array |
+| \`filter()\` | Keep elements matching condition | New array |
+| \`reduce()\` | Accumulate into single value | Single value |
+| \`find()\` | First element matching condition | Element |
+| \`some()\` | Does any element match? | Boolean |
+| \`every()\` | Do all elements match? | Boolean |
+
+### Spread Operator
+
+\`\`\`javascript
+const arr = [1, 2, 3];
+const copy = [...arr];          // copy
+const merged = [...arr, 4, 5];  // merge
+\`\`\`
+
+### Destructuring
+
+\`\`\`javascript
+const [first, second, ...rest] = [1, 2, 3, 4, 5];
+// first=1, second=2, rest=[3,4,5]
+\`\`\``,
+      codeExample: `// Creating arrays\nconst fruits = ["apple", "banana", "orange"];\nconsole.log(fruits[0]);  // "apple"\nconsole.log(fruits.length); // 3\n\n// Adding/removing\nfruits.push("grape");      // ["apple","banana","orange","grape"]\nfruits.pop();               // ["apple","banana","orange"]\nfruits.unshift("mango");   // ["mango","apple","banana","orange"]\nfruits.shift();             // ["apple","banana","orange"]\n\n// map — transform\nconst upper = fruits.map(f => f.toUpperCase());\nconsole.log(upper);  // ["APPLE","BANANA","ORANGE"]\n\n// filter — select\nconst nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\nconst evens = nums.filter(n => n % 2 === 0);\nconsole.log(evens);  // [2, 4, 6, 8, 10]\n\n// reduce — accumulate\nconst sum = nums.reduce((acc, n) => acc + n, 0);\nconsole.log("Sum:", sum);  // 55\n\n// find — first match\nconst firstBig = nums.find(n => n > 7);\nconsole.log("First > 7:", firstBig);  // 8\n\n// spread\nconst arr1 = [1, 2, 3];\nconst arr2 = [4, 5, 6];\nconst merged = [...arr1, ...arr2];\nconsole.log(merged);  // [1, 2, 3, 4, 5, 6]\n\n// destructuring\nconst [a, b, ...rest] = [10, 20, 30, 40, 50];\nconsole.log(a, b, rest);  // 10 20 [30, 40, 50]\n\n// sort (careful — lexicographic by default!)\nconst numbers = [10, 1, 21, 2];\nnumbers.sort((a, b) => a - b);  // numeric sort\nconsole.log(numbers);  // [1, 2, 10, 21]`,
+      language: "javascript"
+    },
+    {
+      id: "js-8",
+      title: "JavaScript Objects",
+      content: `## Objects — Key-Value Pairs
+
+Objects store data as properties (key-value pairs) and can include methods (functions).
+
+### Creating Objects
+
+\`\`\`javascript
+// Object literal (preferred)
+const user = {
   name: "Alice",
   age: 25,
-  getGreeting() {
-    return \`Hi, I'm \${this.name}.\`;
+  greet() {
+    return \`Hi, I'm \${this.name}\`;
   }
 };
-console.log(student.name);      // Alice
-console.log(student["age"]);    // 25
-student.grade = "A";
-console.log(Object.keys(student));   // ["name", "age", "getGreeting", "grade"]
-console.log(Object.values(student)); // ["Alice", 25, ƒ, "A"]`,
-        language: "javascript"
-      },
-      {
-        id: "js-9",
-        title: "DOM Manipulation",
-        content: "The DOM (Document Object Model) represents the page structure that JavaScript can manipulate.\n\nKey concepts:\n- What is the DOM?\n- document.getElementById()\n- querySelector() and querySelectorAll()\n- Changing Element Content (textContent, innerHTML)\n- Changing Element Styles (element.style)\n- Changing Attributes (setAttribute, getAttribute)\n- Adding and Removing Classes (classList)\n- Creating and Appending Elements\n- Event Listeners (addEventListener)\n- Event Object and event.target",
-        codeExample: `let btn = document.getElementById("myBtn");
-btn.addEventListener("click", function() {
-  document.getElementById("demo").textContent = "Button clicked!";
-  btn.classList.toggle("active");
+
+// Constructor
+const user = new Object();
+user.name = "Alice";
+\`\`\`
+
+### Accessing Properties
+
+\`\`\`javascript
+user.name          // dot notation (preferred)
+user["name"]       // bracket notation (required for dynamic keys)
+user.greet()       // method call
+\`\`\`
+
+Bracket notation is required when:
+- The key is dynamic: \`user[variable]\`
+- The key has special characters: \`user["first-name"]\`
+- The key is a number: \`user[0]\`
+
+### Object Methods
+
+\`\`\`javascript
+const calculator = {
+  add(a, b) { return a + b; },
+  subtract(a, b) { return a - b; },
+  multiply(a, b) { return a * b; }
+};
+calculator.add(2, 3);  // 5
+\`\`\`
+
+### Destructuring
+
+\`\`\`javascript
+const { name, age, city = "NYC" } = user;
+// name="Alice", age=25, city="NYC" (default)
+\`\`\`
+
+### Spread for Objects
+
+\`\`\`javascript
+const updated = { ...user, age: 26, role: "admin" };
+\`\`\`
+
+### Useful Static Methods
+
+\`\`\`javascript
+Object.keys(user)     // ["name", "age"]
+Object.values(user)   // ["Alice", 25]
+Object.entries(user)  // [["name","Alice"], ["age",25]]
+Object.assign({}, user, { age: 26 })  // merge
+\`\`\``,
+      codeExample: `// Object literal\nconst person = {\n  name: "Alice",\n  age: 25,\n  hobbies: ["reading", "coding"],\n  address: {\n    city: "New York",\n    state: "NY"\n  },\n  greet() {\n    return \`Hi, I'm \${this.name} from \${this.address.city}\`;\n  }\n};\n\n// Access properties\nconsole.log(person.name);       // "Alice"\nconsole.log(person.address.city); // "New York"\nconsole.log(person.greet());     // "Hi, I'm Alice from New York"\n\n// Add/remove properties\nperson.email = "alice@example.com";\ndelete person.age;\nconsole.log(person);\n\n// Destructuring\nconst { name, hobbies, address: { city } } = person;\nconsole.log(name, city, hobbies);\n\n// Object methods\nconst calculator = {\n  result: 0,\n  add(n) { this.result += n; return this; },\n  subtract(n) { this.result -= n; return this; },\n  getValue() { return this.result; }\n};\n\nconst value = calculator.add(10).add(5).subtract(3).getValue();\nconsole.log(value);  // 12\n\n// Spread\nconst user1 = { name: "Alice", role: "user" };\nconst admin = { ...user1, role: "admin", active: true };\nconsole.log(admin);\n\n// Static methods\nconsole.log(Object.keys(person));\nconsole.log(Object.values(person));\nconsole.log(Object.entries(person));`,
+      language: "javascript"
+    },
+    {
+      id: "js-9",
+      title: "DOM Manipulation",
+      content: `## DOM — Making Pages Interactive
+
+The DOM (Document Object Model) is a tree representation of your HTML page. JavaScript can read, add, remove, and change any element in this tree.
+
+### Selecting Elements
+
+\`\`\`javascript
+document.getElementById("myId")           // single element
+document.querySelector(".myClass")       // first match
+document.querySelectorAll("p.highlight") // all matches (NodeList)
+\`\`\`
+
+### Changing Content
+
+\`\`\`javascript
+element.textContent = "New text";        // plain text (safe)
+element.innerHTML = "<b>Bold</b>";       // HTML (careful with XSS)
+element.innerText = "Visible text";      // respects CSS visibility
+\`\`\`
+
+### Changing Styles
+
+\`\`\`javascript
+element.style.color = "red";
+element.style.fontSize = "20px";
+element.classList.add("active");
+element.classList.remove("hidden");
+element.classList.toggle("visible");
+\`\`\`
+
+### Changing Attributes
+
+\`\`\`javascript
+element.setAttribute("href", "https://example.com");
+element.getAttribute("href");
+element.removeAttribute("disabled");
+\`\`\`
+
+### Creating Elements
+
+\`\`\`javascript
+const div = document.createElement("div");
+div.textContent = "Hello!";
+div.classList.add("card");
+document.body.appendChild(div);
+\`\`\`
+
+### Event Listeners
+
+\`\`\`javascript
+button.addEventListener("click", (event) => {
+  event.target.textContent = "Clicked!";
 });
+\`\`\`
 
-let newDiv = document.createElement("div");
-newDiv.textContent = "New element";
-document.body.appendChild(newDiv);`,
-        language: "javascript"
-      },
-      {
-        id: "js-10",
-        title: "Error Handling",
-        content: "Error handling helps you manage runtime errors gracefully.\n\nKey concepts:\n- try...catch Block\n- finally Block\n- throw Statement\n- Custom Errors\n- Common Error Types (TypeError, ReferenceError, SyntaxError)\n- Graceful Error Messages",
-        codeExample: `try {
-  let result = riskyOperation();
+Common events: \`click\`, \`input\`, \`submit\`, \`keydown\`, \`keyup\`, \`mouseover\`, \`mouseout\`, \`load\`, \`scroll\``,
+      codeExample: `// Selecting elements\nconst title = document.querySelector("h1");\nconst items = document.querySelectorAll(".item");\n\n// Changing content\ntitle.textContent = "New Title!";\ntitle.innerHTML = "<em>Emphasized</em> Title";\n\n// Changing styles\ntitle.style.color = "#667eea";\ntitle.style.fontSize = "2.5rem";\n\n// classList\nconst card = document.querySelector(".card");\ncard.classList.add("active", "highlighted");\ncard.classList.remove("hidden");\ncard.classList.toggle("visible");\n\n// Event listeners\nconst button = document.querySelector("#myBtn");\nbutton.addEventListener("click", () => {\n  alert("Button clicked!");\n});\n\n// Form handling\nconst form = document.querySelector("form");\nform.addEventListener("submit", (e) => {\n  e.preventDefault();  // don't reload page\n  const input = form.querySelector("input");\n  console.log("Submitted:", input.value);\n});\n\n// Creating elements dynamically\nfunction createCard(title, description) {\n  const card = document.createElement("div");\n  card.className = "card";\n  card.innerHTML = \`\n    <h3>\${title}</h3>\n    <p>\${description}</p>\n    <button onclick="this.parentElement.remove()">Delete</button>\n  \`;\n  return card;\n}\n\ndocument.body.appendChild(createCard("New Card", "This was created with JS"));`,
+      language: "javascript"
+    },
+    {
+      id: "js-10",
+      title: "Error Handling",
+      content: `## Error Handling — Managing Failures
+
+Runtime errors are inevitable. Good error handling prevents crashes and provides meaningful feedback.
+
+### try...catch...finally
+
+\`\`\`javascript
+try {
+  const data = JSON.parse(invalidJSON);
 } catch (error) {
-  console.error("Something went wrong:", error.message);
+  console.error("Parse failed:", error.message);
 } finally {
-  console.log("This always runs.");
+  console.log("This always runs");
 }
+\`\`\`
 
-// Throwing an error
+### Throwing Errors
+
+\`\`\`javascript
 function divide(a, b) {
   if (typeof a !== "number" || typeof b !== "number") {
-    throw new TypeError("Both arguments must be numbers");
+    throw new TypeError("Arguments must be numbers");
   }
   if (b === 0) {
     throw new Error("Cannot divide by zero");
   }
   return a / b;
-}`,
-        language: "javascript"
-      }
-    ]
-  },
+}
+\`\`\`
+
+### Error Types
+
+| Type | Cause |
+|------|-------|
+| \`TypeError\` | Wrong type: \`null.toFixed()\` |
+| \`ReferenceError\` | Undefined variable: \`console.log(x)\` |
+| \`SyntaxError\` | Bad syntax: \`const = 5\` |
+| \`RangeError\` | Out of range: \`(-1).toFixed(100)\` |
+
+### Async Error Handling
+
+\`\`\`javascript
+// Promises
+fetch("/api/data")
+  .then(res => res.json())
+  .catch(err => console.error("Fetch failed:", err));
+
+// Async/await
+async function getData() {
+  try {
+    const res = await fetch("/api/data");
+    return await res.json();
+  } catch (err) {
+    console.error("Failed:", err);
+  }
+}
+\`\`\`
+
+### Best Practices
+- Always handle errors you can anticipate
+- Use specific error types, not generic \`Error\`
+- Log errors for debugging but show user-friendly messages
+- Never silently swallow errors`,
+      codeExample: `// try...catch\ntry {\n  const result = JSON.parse("{ invalid json }");\n} catch (error) {\n  console.error("Parse error:", error.message);\n} finally {\n  console.log("Cleanup here");\n}\n\n// Throwing errors\nfunction setAge(age) {\n  if (typeof age !== "number") {\n    throw new TypeError("Age must be a number");\n  }\n  if (age < 0 || age > 150) {\n    throw new RangeError("Age must be 0-150");\n  }\n  return age;\n}\n\ntry {\n  console.log(setAge(25));\n  console.log(setAge(-5));  // RangeError\n} catch (error) {\n  console.error(error.constructor.name + ":", error.message);\n}\n\n// Practical example: safe JSON parsing\nfunction safeParse(json) {\n  try {\n    return { data: JSON.parse(json), error: null };\n  } catch (e) {\n    return { data: null, error: e.message };\n  }\n}\n\nconst result1 = safeParse('{"name": "Alice"}');\nconst result2 = safeParse("not json");\nconsole.log(result1); // { data: {name: "Alice"}, error: null }\nconsole.log(result2); // { data: null, error: "..." }\n\n// Async error handling\nasync function fetchUser(id) {\n  try {\n    const res = await fetch(\\\`/api/users/\\\${id}\\\`);\n    if (!res.ok) throw new Error(\\\`HTTP \\\${res.status}\\\`);\n    return await res.json();\n  } catch (err) {\n    console.error("Failed to fetch user:", err.message);\n    return null;\n  }\n}`,
+      language: "javascript"
+    }
+  ]
+},
 
   {
 
     slug: "computer-architecture",
-
     title: "Computer Architecture (COA)",
 
     description: "Understand CPU design, memory hierarchy, pipelining, and instruction set architectures.",
@@ -12622,13 +13595,13 @@ console.log("Metrics:", line.getMetrics());`,
   },
 
 {
-  slug: "python",
+  slug: "python-complete",
 
-  title: "Python",
+  title: "Python Complete",
 
-  description: "Learn Python from basics to advanced concepts with practical examples.",
+  description: "Comprehensive Python course from variables to databases — 30 lessons covering everything you need.",
 
-  icon: "<:>",
+  icon: "🐍",
 
   color: "from-blue-500 to-green-600",
 
@@ -12879,203 +13852,2546 @@ console.log("Metrics:", line.getMetrics());`,
 
 {
   slug: "css",
-
   title: "CSS",
-
-  description: "Learn CSS from basics to advanced styling concepts.",
-
+  description: "Master CSS from selectors and box model to Flexbox, Grid, and responsive design.",
   icon: "🎨",
-
   color: "from-blue-400 to-purple-600",
-
   category: "Languages",
-
   lessons: [
-      {
-        id: "css-1",
-        title: "CSS Basics",
-        content: `s\n- What is CSS?\n- CSS vs HTML \u2014 What Each Does\n- How CSS Works (Selectors, Properties, Values)\n- Adding CSS to HTML (Inline, Internal, External)\n- CSS Syntax (Selector \`{ property: value; }\`)\n- CSS Comments (\`/* comment */\`)\n- Your First CSS Style\n\n**Example:**\n[Code]\n[Code]`,
-        codeExample: `h1 {\n  color: blue;\n  font-size: 32px;\n}`,
-        language: "css"
-      },
+    {
+      id: "css-1",
+      title: "CSS Basics",
+      content: `## What is CSS?
 
-      {
-        id: "css-2",
-        title: "CSS Selectors",
-        content: `s\n- Element/Type Selectors (\`p\`, \`div\`, \`h1\`)\n- Class Selectors (\`.className\`)\n- ID Selectors (\`#myId\`)\n- Universal Selector (\`*\`)\n- Grouping Selectors (\`h1, h2, h3\`)\n- Descendant Selectors (\`div p\`)\n- Child Selectors (\`ul > li\`)\n- Attribute Selectors (\`[type=\"text\"]\`, \`[href]\`)\n- Pseudo-classes (\`:hover\`, \`:first-child\`, \`:nth-child()\`)\n- Pseudo-elements (\`::before\`, \`::after\`, \`::first-line\`)\n\n**Example:**\n[Code]`,
-        codeExample: `/* Element selector */\np { color: black; }\n\n/* Class selector */\n.highlight { background-color: yellow; }\n\n/* ID selector */\n#main-title { font-size: 40px; }\n\n/* Descendant selector */\nnav a { text-decoration: none; }\n\n/* Pseudo-class */\na:hover { color: red; }\n\n/* Pseudo-element */\np::first-line { font-weight: bold; }`,
-        language: "css"
-      },
+CSS (Cascading Style Sheets) is the language that controls how HTML elements look. While HTML structures content (headings, paragraphs, images), CSS handles colors, fonts, spacing, layout, and responsive design.
 
-      {
-        id: "css-3",
-        title: "CSS Fonts and Text",
-        content: `t\n- Font Family (\`font-family\`)\n- Font Size (\`font-size\`)\n- Font Weight (\`font-weight\`, \`@font-face\`)\n- Font Style (\`font-style: italic\`, \`oblique\`)\n- Text Alignment (\`text-align\`)\n- Text Decoration (\`text-decoration: underline\`, \`line-through\`, \`overline\`)\n- Text Transform (\`text-transform: uppercase\`, \`lowercase\`, \`capitalize\`)\n- Letter Spacing (\`letter-spacing\`) and Word Spacing (\`word-spacing\`)\n- Line Height (\`line-height\`)\n- Google Fonts and \`@import\`\n\n**Example:**\n[Code]`,
-        codeExample: `body {\n  font-family: Arial, sans-serif;\n  font-size: 16px;\n  line-height: 1.6;\n}\nh1 {\n  text-align: center;\n  text-transform: uppercase;\n  letter-spacing: 2px;\n}\na {\n  text-decoration: none;\n}`,
-        language: "css"
-      },
+Think of HTML as the skeleton and CSS as the skin and clothes. Without CSS, every webpage would look like a plain Word document.
 
-      {
-        id: "css-4",
-        title: "The Box Model",
-        content: `l\n- Content, Padding, Border, Margin\n- \`width\` and \`height\`\n- \`padding\` (all sides, shorthand)\n- \`border\` (width, style, color)\n- \`margin\` (centering with \`auto\`)\n- \`box-sizing: border-box\`\n- \`outline\` vs \`border\`\n\n**Example:**\n[Code]`,
-        codeExample: `.box {\n  width: 300px;\n  padding: 20px;\n  border: 2px solid #ccc;\n  margin: 10px auto;\n  box-sizing: border-box;\n}`,
-        language: "css"
-      },
+### How CSS Works
 
-      {
-        id: "css-5",
-        title: "Colors in CSS",
-        content: `S\n- Color Names (\`red\`, \`blue\`, \`coral\`)\n- HEX Notation (\`#FF0000\`, \`#F00\`)\n- RGB and RGBA (\`rgb(255,0,0)\`, \`rgba(255,0,0,0.5)\`)\n- HSL and HSLA (\`hsl(0,100%,50%)\`, \`hsla(0,100%,50%,0.5)\`)\n- \`transparent\` and \`currentColor\`\n- Color Contrast and Accessibility\n\n**Example:**\n[Code]`,
-        codeExample: `h1 { color: #FF0000; }\n.box { background-color: rgba(0, 0, 255, 0.3); }\n.text { color: hsl(120, 100%, 25%); }`,
-        language: "css"
-      },
+CSS follows a simple syntax: **selector + declaration block**. A selector targets an HTML element, and the declaration block contains property-value pairs.
 
-      {
-        id: "css-6",
-        title: "Backgrounds",
-        content: `s\n- \`background-color\`\n- \`background-image\` (URL, gradient)\n- \`background-repeat\` (\`no-repeat\`, \`repeat-x\`, \`repeat-y\`)\n- \`background-position\` (\`center\`, \`top left\`, \`50% 50%\`)\n- \`background-size\` (\`cover\`, \`contain\`, \`100px 100px\`)\n- \`background-attachment\` (\`fixed\`, \`scroll\`)\n- Multiple Backgrounds\n- CSS Gradients (linear, radial)\n\n**Example:**\n[Code]`,
-        codeExample: ` body {\n  background-color: #f0f0f0;\n  background-image: url(\"bg.png\");\n  background-repeat: no-repeat;\n  background-position: center;\n  background-size: cover;\n}\n.gradient {\n  background: linear-gradient(to right, red, blue);\n}`,
-        language: "css"
-      },
+\`\`\`css
+selector {
+  property: value;
+  another-property: another-value;
+}
+\`\`\`
 
-      {
-        id: "css-7",
-        title: "Display Property",
-        content: `y\n- \`display: block\`, \`inline\`, \`inline-block\`\n- \`display: none\` vs \`visibility: hidden\`\n- \`display: flex\`\n- \`display: grid\`\n- \`display: position\`\n\n**Example:**\n[Code]`,
-        codeExample: `.container {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n.hidden {\n  display: none;\n}`,
-        language: "css"
-      },
+### Three Ways to Add CSS
 
-      {
-        id: "css-8",
-        title: "Flexbox",
-        content: `x\n- \`flex-direction\` (\`row\`, \`column\`, \`row-reverse\`, \`column-reverse\`)\n- \`flex-wrap\` (\`nowrap\`, \`wrap\`, \`wrap-reverse\`)\n- \`justify-content\` (\`flex-start\`, \`flex-end\`, \`center\`, \`space-between\`, \`space-around\`, \`space-evenly\`)\n- \`align-items\` (\`flex-start\`, \`flex-end\`, \`center\`, \`baseline\`, \`stretch\`)\n- \`align-content\`\n- Flex Grow (\`flex-grow\` or \`flex: 1\`)\n- Flex Shrink (\`flex-shrink\`)\n- Flex Basis (\`flex-basis\`)\n- Flex Shorthand (\`flex: 1 1 auto\`)\n\n**Example:**\n[Code]`,
-        codeExample: `.container {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n}\n.item {\n  flex: 1;\n  margin: 10px;\n}`,
-        language: "css"
-      },
+1. **Inline** — directly on the element (avoid this):
+   \`<p style="color: red;">Hello</p>\`
 
-      {
-        id: "css-9",
-        title: "CSS Grid",
-        content: `d\n- \`display: grid\`\n- \`grid-template-columns\` and \`grid-template-rows\`\n- \`grid-template-areas\`\n- \`gap\` (grid gap)\n- \`grid-column\` and \`grid-row\` for placement\n- Auto-fit and Auto-fill\n- Named Grid Lines\n- \`fr\` (fractional) Unit\n- \`minmax()\` in Grid\n- Responsive Grid Layouts\n\n**Example:**\n[Code]`,
-        codeExample: `.grid {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 20px;\n}\n.sidebar {\n  grid-column: 1 / 3;\n}`,
-        language: "css"
-      },
+2. **Internal** — in a \`<style>\` tag inside \`<head>\`:
+   \`<style> p { color: red; } </style>\`
 
-      {
-        id: "css-10",
-        title: "Media Queries",
-        content: `s\n- Viewport Meta Tag (\`<meta name=\"viewport\">\`)\n- \`@media\` Rules\n- Breakpoints (Common: 480px, 768px, 1024px, 1440px)\n- Mobile-First vs Desktop-First\n- \`min-width\` vs \`max-width\`\n- Combining Media Queries\n- Hide/Show Elements by Screen Size\n\n**Example:**\n[Code]`,
-        codeExample: `/* Mobile-first */\n.container { display: flex; flex-direction: column; }\n\n/* Tablet */\n@media (min-width: 768px) {\n  .container { flex-direction: row; }\n}\n\n/* Desktop */\n@media (min-width: 1024px) {\n  .container { max-width: 1200px; margin: auto; }\n}`,
-        language: "css"
-      }
+3. **External** — a separate \`.css\` file linked via \`<link>\` (best practice):
+   \`<link rel="stylesheet" href="styles.css">\`
+
+External stylesheets are always preferred — they keep style separate from structure, can be cached by browsers, and apply across multiple pages.
+
+### The Cascade
+
+The "C" in CSS stands for Cascading. When multiple rules target the same element, CSS resolves conflicts using:
+1. **Specificity** — \`#id\` beats \`.class\` beats \`element\`
+2. **Source order** — later rules override earlier ones
+3. **Importance** — \`!important\` overrides everything (avoid using it)
+
+### Common Beginner Mistakes
+- Forgetting the semicolon at the end of a declaration
+- Using inline styles instead of external stylesheets
+- Not understanding that CSS specificity determines which rule wins`,
+      codeExample: `/* External stylesheet: styles.css */
+
+/* Element selector — targets all <h1> */
+h1 {
+  color: #2d3748;
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Class selector — targets any element with class="card" */
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* ID selector — targets the element with id="hero" */
+#hero {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+/* Comma grouping — same style for multiple selectors */
+h1, h2, h3 {
+  font-family: 'Georgia', serif;
+  line-height: 1.2;
+}
+
+/* Descendant selector — targets all <a> inside <nav> */
+nav a {
+  text-decoration: none;
+  color: #4a5568;
+}
+
+/* Pseudo-class — styles on state change */
+nav a:hover {
+  color: #667eea;
+  text-decoration: underline;
+}
+
+/* Pseudo-element — inserts virtual content */
+p::first-letter {
+  font-size: 2em;
+  font-weight: bold;
+  color: #667eea;
+}
+
+/* Attribute selector */
+a[target="_blank"]::after {
+  content: " ↗";
+}
+
+/* Combined selectors */
+.card.highlighted {
+  border: 2px solid #667eea;
+}
+
+/* Universal reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}`,
+      language: "css"
+    },
+    {
+      id: "css-2",
+      title: "CSS Selectors",
+      content: `## Selectors — Targeting HTML Elements
+
+Selectors are the foundation of CSS. They tell the browser which elements to style. Mastering selectors means writing less, cleaner CSS.
+
+### Basic Selectors
+
+| Selector | Syntax | Targets | Specificity |
+|----------|--------|---------|-------------|
+| Element | \`p\` | All \`<p>\` elements | Low (0,0,1) |
+| Class | \`.box\` | Elements with \`class="box"\` | Medium (0,1,0) |
+| ID | \`#main\` | The element with \`id="main"\` | High (1,0,0) |
+| Universal | \`*\` | Every element | None (0,0,0) |
+
+### Combinators
+
+| Combinator | Example | Meaning |
+|------------|---------|---------|
+| Descendant | \`div p\` | All \`<p>\` inside \`<div>\` (any depth) |
+| Child | \`ul > li\` | Direct \`<li>\` children of \`<ul>\` |
+| Adjacent sibling | \`h2 + p\` | First \`<p>\` right after \`<h2>\` |
+| General sibling | \`h2 ~ p\` | All \`<p>\` after \`<h2>\` (same parent) |
+
+### Pseudo-Classes
+
+Pseudo-classes target elements based on state or position:
+
+\`:hover\` — when mouse is over the element
+\`:active\` — when element is being clicked
+\`:focus\` — when element has keyboard focus
+\`:first-child\` — the first child of its parent
+\`:last-child\` — the last child of its parent
+\`:nth-child(odd)\` — odd-positioned children (1st, 3rd, 5th...)
+\`:nth-child(3n)\` — every 3rd child
+\`:not(.active)\` — elements that do NOT have class "active"
+
+### Pseudo-Elements
+
+Pseudo-elements create virtual elements that don't exist in the HTML:
+
+\`::before\` — inserts content before the element's content
+\`::after\` — inserts content after the element's content
+\`::first-line\` — targets the first line of text
+\`::first-letter\` — targets the first letter
+\`::selection\` — targets highlighted/selected text
+\`::placeholder\` — styles input placeholder text
+
+### Specificity Rules
+
+Specificity is calculated as (ID, Class, Element):
+- \`#nav .link a\` → (1, 1, 1) = beats \`div p\` → (0, 0, 2)
+- \`!important\` overrides everything — use sparingly
+- Same specificity? The last rule wins (source order)
+
+### Common Mistakes
+- Using \`#id\` for styling when \`.class\` would be more reusable
+- Overusing \`!important\` — it creates specificity wars you can't win
+- Forgetting that pseudo-classes need a colon (\`:\`), not two (\`::\`)`,
+      codeExample: `/* Basic selectors */
+p { color: #333; }               /* all paragraphs */
+.container { max-width: 1200px; } /* class */
+#header { background: #fff; }     /* id */
+
+/* Descendant vs Child */
+nav a { color: blue; }       /* all links inside nav, any depth */
+nav > a { color: red; }      /* only direct child links of nav */
+
+/* Adjacent sibling */
+h2 + p { margin-top: 0; }    /* paragraph immediately after h2 */
+
+/* Pseudo-classes */
+li:first-child { font-weight: bold; }
+li:last-child { border-bottom: none; }
+li:nth-child(odd) { background: #f5f5f5; }
+li:nth-child(3n) { color: #e53e3e; }
+
+/* Dynamic states */
+button:hover { background: #4299e1; }
+button:active { transform: scale(0.98); }
+input:focus { outline: 2px solid #667eea; }
+
+/* :not pseudo-class */
+.nav-item:not(.active) { opacity: 0.6; }
+
+/* Pseudo-elements */
+.quote::before {
+  content: open-quote;
+  font-size: 3em;
+  line-height: 0;
+  vertical-align: -0.4em;
+  margin-right: 0.1em;
+}
+
+.card::after {
+  content: "New";
+  background: #e53e3e;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+::selection {
+  background: #667eea;
+  color: white;
+}
+
+/* Attribute selectors */
+a[href^="https"]::after { content: " 🔗"; }
+input[type="email"] { border-left: 3px solid #4299e1; }`,
+      language: "css"
+    },
+    {
+      id: "css-3",
+      title: "CSS Fonts and Text",
+      content: `## Typography in CSS
+
+Typography makes or breaks a design. Good typography improves readability, establishes hierarchy, and creates visual rhythm.
+
+### Font Families
+
+\`font-family\` specifies which font to use. Browsers fall back to the next font if the previous one isn't available:
+
+\`\`\`css
+font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+\`\`\`
+
+Always end with a generic family (\`serif\`, \`sans-serif\`, \`monospace\`) as a fallback.
+
+### Font Sizes
+
+- **Pixels** (\`16px\`) — absolute, precise
+- **Rems** (\`1rem\`) — relative to root font size (preferred for accessibility)
+- **Ems** (\`1em\`) — relative to parent font size
+
+Best practice: set \`html { font-size: 16px; }\` and use \`rem\` for everything. This makes the entire layout scalable.
+
+### Line Height
+
+\`line-height\` controls the space between lines. This is the single most important typography property for readability.
+
+\`\`\`css
+body { line-height: 1.6; }  /* Recommended: 1.4-1.8 for body text */
+\`\`\`
+
+Use unitless values — they scale with font size.
+
+### Text Properties
+
+- \`text-align\`: \`left\`, \`center\`, \`right\`, \`justify\`
+- \`text-decoration\`: \`none\`, \`underline\`, \`line-through\`
+- \`text-transform\`: \`uppercase\`, \`lowercase\`, \`capitalize\`
+- \`letter-spacing\`: space between characters
+- \`word-spacing\`: space between words
+- \`text-shadow\`: adds shadow to text
+
+### Google Fonts
+
+\`\`\`html
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+\`\`\``,
+      codeExample: `/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+
+/* Base typography */
+html {
+  font-size: 16px;  /* 1rem = 16px */
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1rem;          /* 16px */
+  line-height: 1.6;         /* 25.6px line height */
+  color: #2d3748;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Heading hierarchy */
+h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2.5rem;       /* 40px */
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+  color: #1a202c;
+}
+
+h2 {
+  font-size: 1.75rem;      /* 28px */
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+/* Paragraph */
+p {
+  margin-bottom: 1rem;
+  max-width: 65ch;  /* ~65 characters per line — optimal readability */
+}
+
+/* Links */
+a {
+  color: #4299e1;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+a:hover {
+  border-bottom-color: #4299e1;
+}
+
+/* Text utilities */
+.text-center { text-align: center; }
+.text-uppercase { text-transform: uppercase; letter-spacing: 0.05em; }
+.text-sm { font-size: 0.875rem; }  /* 14px */
+.text-muted { color: #718096; }
+
+/* Drop cap example */
+.article p:first-of-type::first-letter {
+  font-size: 3.5em;
+  font-weight: 700;
+  float: left;
+  line-height: 1;
+  margin-right: 0.1em;
+  color: #667eea;
+}
+
+/* Blockquote */
+blockquote {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-size: 1.25rem;
+  border-left: 4px solid #667eea;
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+  color: #4a5568;
+}`,
+      language: "css"
+    },
+    {
+      id: "css-4",
+      title: "The Box Model",
+      content: `## Every Element Is a Box
+
+The CSS box model is the most important concept to understand. Every HTML element is a rectangular box with four areas:
+
+1. **Content** — the text, image, or child elements
+2. **Padding** — transparent space inside the border
+3. **Border** — a visible (or invisible) line around the padding
+4. **Margin** — transparent space outside the border
+
+### The \`box-sizing\` Problem
+
+By default, \`width\` only sets the content width. If you set \`width: 300px\` and \`padding: 20px\`, the actual rendered width is 340px.
+
+The fix: \`box-sizing: border-box\` makes \`width\` include padding and border. Now \`width: 300px\` always renders at 300px.
+
+\`\`\`css
+*, *::before, *::after { box-sizing: border-box; }
+\`\`\`
+
+Every modern CSS reset starts with this line.
+
+### Margin Collapse
+
+Vertical margins between adjacent elements collapse — the larger margin wins instead of adding. A \`margin-bottom: 30px\` on one element and \`margin-top: 20px\` on the next produces 30px of space, not 50px.
+
+Margin collapse only happens vertically, never horizontally. It doesn't happen inside flex containers or grid items.
+
+### Centering with Margin Auto
+
+\`margin: 0 auto;\` centers a block element horizontally. The element must have a defined width for this to work.`,
+      codeExample: `/* Universal box-sizing reset — ALWAYS include this */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Basic card with all box model properties */
+.card {
+  width: 300px;             /* content width */
+  padding: 1.5rem;          /* 24px inside */
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin: 1rem auto;        /* centered horizontally */
+  /* Total rendered width = 300px (border-box) */
+}
+
+/* Nested box model */
+.card-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  margin: -1.5rem -1.5rem 1rem; /* negative margin to break out */
+}
+
+/* Shorthand padding */
+padding: 10px;                    /* all sides */
+padding: 10px 20px;               /* top/bottom left/right */
+padding: 10px 20px 15px;          /* top left/right bottom */
+padding: 10px 20px 15px 5px;      /* top right bottom left */
+
+/* Outline vs Border */
+input:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;  /* space between border and outline */
+  /* outline doesn't take up space — it won't shift layout */
+}
+
+/* Responsive box model */
+.container {
+  width: min(90%, 1200px);  /* 90% viewport or 1200px max */
+  margin: 0 auto;
+  padding: 0 1rem;
+}`,
+      language: "css"
+    },
+    {
+      id: "css-5",
+      title: "Colors in CSS",
+      content: `## Color Systems in CSS
+
+Color sets mood, creates hierarchy, and guides the eye. CSS offers multiple color formats.
+
+### Color Formats
+
+| Format | Example | When to Use |
+|--------|---------|-------------|
+| Named | \`red\`, \`coral\` | Quick prototyping, 148 names |
+| HEX | \`#FF5733\` | Most common, compact |
+| RGB | \`rgb(255, 87, 51)\` | When you need decimal values |
+| RGBA | \`rgba(255, 87, 51, 0.5)\` | RGB + transparency |
+| HSL | \`hsl(14, 100%, 60%)\` | Most intuitive — Hue, Saturation, Lightness |
+| HSLA | \`hsla(14, 100%, 60%, 0.5)\` | HSL + transparency |
+
+### HSL — The Best Format
+
+- **Hue** (0-360): the color wheel angle
+- **Saturation** (0-100%): how vivid — 0% is gray, 100% is pure color
+- **Lightness** (0-100%): how bright — 0% is black, 50% is normal, 100% is white
+
+To create a color palette: pick one hue, then vary saturation and lightness. This guarantees visual harmony.
+
+### Color Variables (CSS Custom Properties)
+
+\`\`\`css
+:root {
+  --primary: #667eea;
+  --text: #2d3748;
+  --bg: #ffffff;
+}
+
+.button {
+  background: var(--primary);
+  color: var(--bg);
+}
+\`\`\`
+
+### Accessibility — Color Contrast
+
+WCAG 2.1 requires:
+- **Normal text**: contrast ratio ≥ 4.5:1 against background
+- **Large text** (≥18px bold or ≥24px): ≥ 3:1
+- **UI components**: ≥ 3:1`,
+      codeExample: `/* CSS Custom Properties for theming */
+:root {
+  --primary: #667eea;
+  --primary-dark: #5a67d8;
+  --secondary: #ed8936;
+  --success: #48bb78;
+  --danger: #f56565;
+  --text: #2d3748;
+  --bg: #ffffff;
+}
+
+/* All color formats */
+.hex { color: #FF5733; }
+.rgb { color: rgb(255, 87, 51); }
+.rgba { background: rgba(102, 126, 234, 0.1); }
+.hsl { color: hsl(225, 77%, 66%); }
+.hsla { background: hsla(225, 77%, 66%, 0.15); }
+
+/* HSL palette — same hue, different lightness */
+.primary-50  { background: hsl(225, 77%, 95%); }
+.primary-100 { background: hsl(225, 77%, 90%); }
+.primary-500 { background: hsl(225, 77%, 55%); }
+.primary-700 { background: hsl(225, 77%, 35%); }
+
+/* Transparent overlays */
+.overlay { background: rgba(0, 0, 0, 0.5); }
+.glass {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+/* currentColor — inherits text color */
+.icon { color: var(--primary); }
+.icon svg { fill: currentColor; }`,
+      language: "css"
+    },
+    {
+      id: "css-6",
+      title: "Backgrounds",
+      content: `## Backgrounds — More Than Just Colors
+
+Backgrounds create depth, set mood, and draw attention. CSS gives you powerful background options beyond a simple color.
+
+### Background Properties
+
+| Property | Purpose | Example Values |
+|----------|---------|----------------|
+| \`background-color\` | Solid color | \`#667eea\` |
+| \`background-image\` | Image or gradient | \`url('bg.jpg')\` |
+| \`background-size\` | How the image scales | \`cover\`, \`contain\` |
+| \`background-position\` | Where the image sits | \`center\`, \`top left\` |
+| \`background-repeat\` | Tiling behavior | \`no-repeat\` |
+
+### \`cover\` vs \`contain\`
+
+- **cover** — fills the entire container, may crop the image
+- **contain** — fits the entire image inside, may leave empty space
+
+### CSS Gradients
+
+Gradients are \`background-image\` values:
+
+- **Linear gradient**: \`linear-gradient(to right, red, blue)\`
+- **Radial gradient**: \`radial-gradient(circle, red, blue)\`
+- **Conic gradient**: \`conic-gradient(red, yellow, green, blue)\`
+
+### Multiple Backgrounds
+
+\`\`\`css
+background: url('overlay.png'), linear-gradient(to bottom, transparent, #000);
+\`\`\`
+
+The first image listed appears on top.`,
+      codeExample: `/* Hero section with overlay */
+.hero {
+  background: 
+    linear-gradient(135deg, rgba(102,126,234,0.8) 0%, rgba(118,75,162,0.8) 100%),
+    url('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1600');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;  /* parallax effect */
+  color: white;
+  padding: 6rem 2rem;
+  text-align: center;
+}
+
+/* Gradient button */
+.btn-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-gradient:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Text gradient */
+.gradient-text {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+/* Diagonal stripe pattern */
+.pattern-bg {
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(102,126,234,0.05) 10px,
+    rgba(102,126,234,0.05) 20px
+  );
+}
+
+/* Responsive background */
+.cover-bg {
+  background-image: url('photo.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}`,
+      language: "css"
+    },
+    {
+      id: "css-7",
+      title: "Display Property",
+      content: `## Display — How Elements Flow
+
+\`display\` controls how an element generates boxes and participates in layout.
+
+### The Three Core Display Values
+
+| Value | Behavior | Examples |
+|-------|----------|----------|
+| \`block\` | Takes full width, starts on new line | \`div\`, \`p\`, \`h1-h6\`, \`section\` |
+| \`inline\` | Flows with text, ignores width/height | \`span\`, \`a\`, \`strong\`, \`em\` |
+| \`inline-block\` | Inline flow but accepts width/height | Custom buttons, badges |
+
+### Block Elements
+
+Block elements always start on a new line and stretch to fill their container's width. You can set width, height, margin, and padding on all sides.
+
+### Inline Elements
+
+Inline elements flow within text like words. They do NOT respond to \`width\` or \`height\` — only horizontal padding and margin work.
+
+### Inline-Block
+
+The hybrid: flows inline but behaves like a block internally. It accepts width, height, and all margins/padding.
+
+### \`display: none\` vs \`visibility: hidden\`
+
+- **\`none\`** — element is removed from the DOM entirely. Takes no space.
+- **\`visibility: hidden\`** — element is invisible but still occupies its space.`,
+      codeExample: `/* Block — full width, new line */
+.block-example {
+  display: block;
+  width: 200px;
+  background: #667eea;
+  color: white;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Inline — flows like text, ignores width/height */
+.inline-example {
+  display: inline;
+  width: 200px;       /* IGNORED */
+  height: 50px;       /* IGNORED */
+  background: #48bb78;
+  padding: 0.5rem;
+}
+
+/* Inline-block — inline flow + block dimensions */
+.inline-block-example {
+  display: inline-block;
+  width: 150px;
+  height: 80px;
+  background: #ed8936;
+  color: white;
+  text-align: center;
+  line-height: 80px;  /* vertical centering */
+  margin: 0.25rem;
+  border-radius: 8px;
+}
+
+/* none vs visibility hidden */
+.hidden-gone { display: none; }      /* removed from layout */
+.hidden-space { visibility: hidden; } /* invisible but keeps space */
+
+/* Badge */
+.badge {
+  display: inline-block;
+  min-width: 1.5rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  background: #e53e3e;
+  color: white;
+}`,
+      language: "css"
+    },
+    {
+      id: "css-8",
+      title: "Flexbox",
+      content: `## Flexbox — One-Dimensional Layout
+
+Flexbox is the go-to layout system for aligning items in a single row or column.
+
+### How Flexbox Works
+
+Set \`display: flex\` on a container — its direct children become **flex items** positioned along two axes:
+
+- **Main axis** — the primary direction (horizontal by default)
+- **Cross axis** — perpendicular to the main axis (vertical by default)
+
+### Container Properties
+
+| Property | Values | Effect |
+|----------|--------|--------|
+| \`flex-direction\` | \`row\`, \`column\`, \`row-reverse\`, \`column-reverse\` | Direction of main axis |
+| \`flex-wrap\` | \`nowrap\`, \`wrap\`, \`wrap-reverse\` | Allow items to wrap |
+| \`justify-content\` | \`flex-start\`, \`center\`, \`space-between\`, \`space-around\`, \`space-evenly\` | Spacing along main axis |
+| \`align-items\` | \`flex-start\`, \`center\`, \`stretch\`, \`baseline\` | Alignment along cross axis |
+| \`gap\` | \`1rem\`, \`10px 20px\` | Space between items |
+
+### Item Properties
+
+| Property | Effect |
+|----------|--------|
+| \`flex-grow\` | How much an item grows to fill space |
+| \`flex-shrink\` | How much an item shrinks |
+| \`flex-basis\` | Starting size before growing/shrinking |
+| \`flex\` | Shorthand: \`flex: grow shrink basis\` |
+| \`align-self\` | Override \`align-items\` for one item |
+| \`order\` | Visual order (default 0, lower = earlier) |
+
+### The Magic of \`flex: 1\`
+
+\`flex: 1\` means \`flex: 1 1 0%\` — grow equally, shrink equally, start from zero width. All items share space equally.`,
+      codeExample: `/* Flex container */
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Equal-width columns */
+.equal-cols {
+  display: flex;
+  gap: 1rem;
+}
+.col {
+  flex: 1;  /* each column takes equal space */
+  padding: 1.5rem;
+  background: #f7fafc;
+  border-radius: 8px;
+}
+
+/* Sidebar + main layout */
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+.sidebar {
+  width: 250px;
+  flex-shrink: 0;
+  background: #1a202c;
+  color: white;
+  padding: 1rem;
+}
+.main {
+  flex: 1;
+  padding: 2rem;
+}
+
+/* Centering everything */
+.center-all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Card row that wraps */
+.card-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.card-row .card {
+  flex: 1 1 300px;  /* grow, shrink, base width 300px */
+  padding: 1.5rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Footer pinned to bottom */
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.content { flex: 1; }`,
+      language: "css"
+    },
+    {
+      id: "css-9",
+      title: "CSS Grid",
+      content: `## CSS Grid — Two-Dimensional Layout
+
+Grid is the most powerful CSS layout system. While Flexbox handles one dimension (row OR column), Grid handles both simultaneously.
+
+### Grid Fundamentals
+
+\`display: grid\` turns an element into a grid container. Its children become grid items placed into a grid of rows and columns.
+
+### Defining Columns and Rows
+
+\`\`\`css
+grid-template-columns: 200px 1fr 2fr;   /* 3 columns */
+grid-template-rows: 100px auto 1fr;     /* 3 rows */
+\`\`\`
+
+- **\`fr\`** (fraction): distributes remaining space proportionally
+- **\`px\`**, **\`rem\`**: fixed sizes
+- **\`auto\`**: sizes to content
+
+### The \`repeat()\` Function
+
+\`\`\`css
+grid-template-columns: repeat(3, 1fr);    /* 3 equal columns */
+\`\`\`
+
+### The \`minmax()\` Function
+
+\`minmax(200px, 1fr)\` means: at least 200px, at most 1fr.
+
+\`\`\`css
+grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+\`\`\`
+
+Creates as many 300px+ columns as will fit. On 1200px: 3 columns. On 800px: 2. On 400px: 1. All automatic.
+
+### Grid Template Areas
+
+\`\`\`css
+grid-template-areas:
+  "header header header"
+  "sidebar main   main"
+  "footer footer footer";
+\`\`\`
+
+### Grid vs Flexbox
+
+- **Grid**: page-level layouts, 2D, rows AND columns
+- **Flexbox**: component-level, 1D, row OR column`,
+      codeExample: `/* Basic 3-column grid */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+/* Responsive — no media queries */
+.auto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Page layout with named areas */
+.page-layout {
+  display: grid;
+  grid-template-areas:
+    "header  header  header"
+    "sidebar content content"
+    "footer  footer  footer";
+  grid-template-columns: 250px 1fr 1fr;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+}
+
+.header  { grid-area: header; background: #1a202c; color: white; padding: 1rem; }
+.sidebar { grid-area: sidebar; background: #2d3748; color: white; padding: 1rem; }
+.content { grid-area: content; padding: 2rem; }
+.footer  { grid-area: footer; background: #edf2f7; padding: 1rem; text-align: center; }
+
+/* Spanning columns */
+.featured {
+  grid-column: 1 / -1;  /* span all columns */
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 3rem;
+  text-align: center;
+}
+
+/* Image gallery */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+.gallery img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Dashboard */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+.stat-card.wide { grid-column: span 2; }`,
+      language: "css"
+    },
+    {
+      id: "css-10",
+      title: "Media Queries",
+      content: `## Responsive Design with Media Queries
+
+Media queries let CSS respond to the device's characteristics — primarily screen width.
+
+### How Media Queries Work
+
+\`\`\`css
+@media (min-width: 768px) {
+  /* styles that apply only when viewport is ≥ 768px */
+}
+\`\`\`
+
+### Mobile-First vs Desktop-First
+
+**Mobile-first** (recommended):
+\`\`\`css
+/* Base styles = mobile styles */
+.container { padding: 1rem; }
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .container { padding: 2rem; }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .container { max-width: 1200px; margin: 0 auto; }
+}
+\`\`\`
+
+Why mobile-first? Mobile devices have less CPU power and bandwidth. Starting with simpler mobile styles and progressively enhancing is more performant.
+
+### Common Breakpoints
+
+| Device | Width |
+|--------|-------|
+| Mobile | < 640px |
+| Tablet | 640px - 1024px |
+| Laptop | 1024px - 1280px |
+| Desktop | > 1280px |
+
+### Viewport Meta Tag
+
+\`\`\`html
+<meta name="viewport" content="width=device-width, initial-scale=1">
+\`\`\`
+
+Without it, mobile browsers render the page at 960px and shrink it.`,
+      codeExample: `/* Mobile-first base styles */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.container {
+  width: 100%;
+  padding: 0 1rem;
+}
+
+/* Navigation */
+.nav {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background: white;
+}
+.nav-links {
+  display: none;  /* hidden on mobile */
+  list-style: none;
+  gap: 1rem;
+}
+.nav-toggle { display: block; cursor: pointer; }
+
+/* Grid: 1 column on mobile */
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+h1 { font-size: 1.75rem; }
+
+/* ===== Tablet (≥640px) ===== */
+@media (min-width: 640px) {
+  .container { max-width: 640px; margin: 0 auto; }
+  .card-grid { grid-template-columns: repeat(2, 1fr); }
+  h1 { font-size: 2rem; }
+}
+
+/* ===== Laptop (≥1024px) ===== */
+@media (min-width: 1024px) {
+  .container { max-width: 1024px; }
+  .nav { flex-direction: row; justify-content: space-between; align-items: center; }
+  .nav-links { display: flex; }
+  .nav-toggle { display: none; }
+  .card-grid { grid-template-columns: repeat(3, 1fr); }
+  h1 { font-size: 2.5rem; }
+}
+
+/* ===== Desktop (≥1280px) ===== */
+@media (min-width: 1280px) {
+  .container { max-width: 1200px; }
+  h1 { font-size: 3rem; }
+}
+
+/* Print */
+@media print {
+  .nav, .footer { display: none; }
+  body { font-size: 12pt; color: black; }
+}
+
+/* Clamp — smooth responsive typography */
+.hero-title {
+  font-size: clamp(1.5rem, 4vw, 3rem);
+}`,
+      language: "css"
+    }
   ]
 },
 
 {
   slug: "c",
-
-  title: "C",
-
-  description: "Learn C programming from basics to advanced concepts including pointers, memory management, and file handling.",
-
+  title: "C Programming",
+  description: "Master C programming from variables and pointers to memory management and file handling.",
   icon: "📘",
-
   color: "from-gray-500 to-gray-700",
-
-  category: "Systems",
-
+  category: "Languages",
   lessons: [
-      {
-        id: "c-1",
-        title: "Getting Started with C",
-        content: `C\n- What is C? History and Overview\n- Why Learn C? (Efficiency, System Programming, Foundation for Other Languages)\n- Installing a C Compiler (GCC/MinGW, Clang, Online Compilers)\n- Writing Your First C Program (\`Hello, World!\`)\n- Understanding the \`main()\` Function\n- Compiling and Running a C Program (\`gcc hello.c -o hello && ./hello\`)\n- Anatomy of a C Program (\`#include\`, declarations, \`main\`, return)\n\n**Example:**\n[Code]`,
-        codeExample: `#include <stdio.h>\n\nint main() {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}`,
-        language: "c"
-      },
+    {
+      id: "c-1",
+      title: "Getting Started with C",
+      content: `## What is C?
 
-      {
-        id: "c-2",
-        title: "Variables and Data Types",
-        content: `s\n- Writing and Declaring Variables\n- Data Types: \`int\`, \`float\`, \`double\`, \`char\`\n- \`sizeof()\` Operator\n- Signed vs Unsigned Types\n- Constants (\`const\` keyword)\n- Variable Naming Rules and Conventions\n- Type Casting (Implicit and Explicit)\n\n**Example:**\n[Code]`,
-        codeExample: `#include <stdio.h>\n\nint main() {\n    int age = 25;\n    float height = 5.6;\n    double pi = 3.14159;\n    char grade = 'A';\n    const int MAX = 100;\n\n    printf(\"Age: %d\\n\", age);\n    printf(\"Height: %.2f\\n\", height);\n    printf(\"Pi: %.5f\\n\", pi);\n    printf(\"Grade: %c\\n\", grade);\n    printf(\"Size of int: %lu bytes\\n\", sizeof(int));\n    return 0;\n}`,
-        language: "c"
-      },
+C is a general-purpose, procedural programming language created by Dennis Ritchie at Bell Labs in 1972. It has been the foundation of modern computing — operating systems (Linux, Windows, macOS kernels), databases (MySQL, PostgreSQL), compilers, and embedded systems are all written in C.
 
-      {
-        id: "c-3",
-        title: "Operators",
-        content: `s\n- Arithmetic Operators (\`+\`, \`-\`, \`*\`, \`/\`, \`%\`)\n- Increment and Decrement (\`++\`, \`--\`)\n- Relational Operators (\`==\`, \`!=\`, \`<\`, \`>\`, \`<=\`, \`>=\`)\n- Logical Operators (\`&&\`, \`||\`, \`!\`)\n- Assignment Operators (\`=\`, \`+=\`, \`-=\`, \`*=\`, \`/=\`)\n- Bitwise Operators (\`&\`, \`|\`, \`^\`, \`~\`, \`<<\`, \`>>\`)\n- Ternary Operator (\`condition ? expr1 : expr2\`)\n- \`sizeof\` Operator\n- Operator Precedence and Associativity\n\n**Example:**\n[Code]`,
-        codeExample: `int a = 10, b = 3;\nprintf(\"Sum: %d\\n\", a + b);\nprintf(\"Modulo: %d\\n\", a % b);\nprintf(\"Bitwise AND: %d\\n\", a & b);\nprintf(\"Ternary: %d\\n\", a > b ? 1 : 0);`,
-        language: "c"
-      },
+### Why Learn C?
 
-      {
-        id: "c-4",
-        title: "Conditionals (\`if\`, \`else if\`, \`else\`)",
-        content: `)\n- \`if\` Statement\n- \`if...else\` Statement\n- \`else if\` Ladder\n- Nested \`if\` Statements\n- Ternary Operator (One-Line \`if/else\`)\n- Comparison and Logical Operators in Conditions\n\n**Example:**\n[Code]`,
-        codeExample: `int score = 85;\nif (score >= 90) {\n    printf(\"Grade A\\n\");\n} else if (score >= 80) {\n    printf(\"Grade B\\n\");\n} else if (score >= 70) {\n    printf(\"Grade C\\n\");\n} else {\n    printf(\"Grade F\\n\");\n}`,
-        language: "c"
-      },
+1. **Understanding how computers work** — C gives you direct access to memory and hardware
+2. **Performance** — no runtime overhead, no garbage collector
+3. **Foundation for other languages** — C++, Java, Python, Go, Rust all borrow from C
+4. **Embedded systems** — microcontrollers, IoT devices, firmware
+5. **Operating systems** — the Linux kernel is ~28 million lines of C
 
-      {
-        id: "c-5",
-        title: "Loops",
-        content: `s\n- \`for\` Loop\n- \`while\` Loop\n- \`do...while\` Loop (Executes at Least Once)\n- \`break\` and \`continue\` Statements\n- Nested Loops\n- Infinite Loops (\`for(;;)\`, \`while(1)\`)\n\n**Example:**\n[Code]`,
-        codeExample: `// for loop\nfor (int i = 1; i <= 5; i++) {\n    printf(\"%d\\n\", i);\n}\n\n// while loop\nint count = 1;\nwhile (count <= 5) {\n    printf(\"%d\\n\", count);\n    count++;\n}\n\n// do...while (executes at least once)\nint x = 1;\ndo {\n    printf(\"Value: %d\\n\", x);\n    x++;\n} while (x <= 5);`,
-        language: "c"
-      },
+### Your First C Program
 
-      {
-        id: "c-6",
-        title: "Functions",
-        content: `s\n- Function Declaration (Prototype) and Definition\n- Parameters and Arguments\n- Return Values (\`return\`)\n- Void Functions (No Return Value)\n- Scope: Local vs Global Variables\n- Recursion (Basic)\n- Passing Arguments by Value\n\n**Example:**\n[Code]`,
-        codeExample: `#include <stdio.h>\n\nint add(int a, int b) {\n    return a + b;\n}\n\nvoid greet() {\n    printf(\"Hello from a function!\\n\");\n}\n\nint factorial(int n) {\n    if (n <= 1) return 1;\n    return n * factorial(n - 1);\n}`,
-        language: "c"
-      },
+\`\`\`c
+#include <stdio.h>
 
-      {
-        id: "c-7",
-        title: "Arrays",
-        content: `s\n- Declaring and Initializing Arrays\n- Accessing Elements by Index (Zero-Based)\n- Array Length and \`sizeof\`\n- Iterating Over Arrays (\`for\` loop)\n- Multi-Dimensional Arrays (2D Arrays)\n- Arrays and Functions (Passing Arrays)\n- Common Array Mistakes (Out of Bounds)\n\n**Example:**\n[Code]`,
-        codeExample: `int numbers[5] = {10, 20, 30, 40, 50};\nprintf(\"First element: %d\\n\", numbers[0]);\nprintf(\"Array size: %lu\\n\", sizeof(numbers) / sizeof(numbers[0]));\n\n// 2D array\nint matrix[2][3] = {\n    {1, 2, 3},\n    {4, 5, 6}\n};\nprintf(\"Element at [0][1]: %d\\n\", matrix[0][1]);`,
-        language: "c"
-      },
+int main() {
+    printf("Hello, World!\\n");
+    return 0;
+}
+\`\`\`
 
-      {
-        id: "c-8",
-        title: "Strings",
-        content: `s\n- What is a String in C? (Character Arrays)\n- Null Terminator (\`'\\0'\`)\n- Declaring and Initializing Strings\n- String Input (\`scanf\`, \`fgets\`)\n- String Output (\`printf\`, \`puts\`)\n- \`strlen\`, \`strcpy\`, \`strcat\`, \`strcmp\` (from \`<string.h>\`)\n- Common String Functions Reference\n\n**Example:**\n[Code]`,
-        codeExample: `#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char name[50] = \"Alice\";\n    printf(\"Name: %s\\n\", name);\n    printf(\"Length: %lu\\n\", strlen(name));\n\n    char surname[20];\n    strcpy(surname, \"Smith\");\n    strcat(name, \" \");\n    strcat(name, surname);\n    printf(\"Full name: %s\\n\", name);\n\n    int result = strcmp(\"abc\", \"abc\");\n    printf(\"Compare result: %d\\n\", result);\n    return 0;\n}`,
-        language: "c"
-      },
+**Line by line:**
+- \`#include <stdio.h>\` — imports the Standard I/O library (printf lives here)
+- \`int main()\` — the entry point. Every C program starts here
+- \`printf("Hello, World!\\n");\` — prints text to the console
+- \`return 0;\` — tells the OS the program ran successfully
 
-      {
-        id: "c-9",
-        title: "Pointers Basics",
-        content: `s\n- What is a Pointer? (Memory Address)\n- Declaring and Initializing Pointers\n- Address-of Operator (\`&\`)\n- Dereference Operator (\`*\`)\n- NULL Pointer\n- Pointer Arithmetic\n- Pointers and Arrays Relationship\n\n**Example:**\n[Code]`,
-        codeExample: `int number = 42;\nint *ptr = &number;\nprintf(\"Value: %d\\n\", *ptr);\nprintf(\"Address: %p\\n\", ptr);\n\nint arr[] = {10, 20, 30};\nint *arrPtr = arr;\nprintf(\"First element: %d\\n\", *arrPtr);\nprintf(\"Second element: %d\\n\", *(arrPtr + 1));`,
-        language: "c"
-      },
+### Compiling and Running
 
-      {
-        id: "c-10",
-        title: "Structures",
-        content: `s\n- Declaring a \`struct\`\n- Creating Struct Variables\n- Accessing Members (\`.\` Operator, \`->\` with Pointers)\n- Arrays of Structures\n- Pointers to Structures\n- Typedef for Structures\n- Nested Structures\n\n**Example:**\n[Code]`,
-        codeExample: `#include <stdio.h>\n#include <string.h>\n\ntypedef struct {\n    char name[50];\n    int age;\n    float salary;\n} Employee;\n\nint main() {\n    Employee e1 = {\"Alice\", 30, 50000.0};\n    printf(\"Name: %s, Age: %d\\n\", e1.name, e1.age);\n    printf(\"Salary: %.2f\\n\", e1.salary);\n\n    Employee *ptr = &e1;\n    printf(\"Access via pointer: %s\\n\", ptr->name);\n    return 0;\n}`,
-        language: "c"
-      },
+C is a **compiled language** — you must compile it before running:
 
-      {
-        id: "c-11",
-        title: "File Handling",
-        content: `g\n- Opening Files (\`fopen\`)\n- File Modes (\`\"r\"\`, \`\"w\"\`, \`\"a\"\`, \`\"r+\"\`)\n- Reading from Files (\`fscanf\`, \`fgets\`)\n- Writing to Files (\`fprintf\`, \`fputs\`)\n- Closing Files (\`fclose\`)\n- Checking for End-of-File (\`feof\`)\n- Error Handling with \`NULL\` Check\n\n**Example:**\n[Code]`,
-        codeExample: `#include <stdio.h>\n\nint main() {\n    FILE *file = fopen(\"data.txt\", \"w\");\n    if (file == NULL) {\n        printf(\"Error opening file!\\n\");\n        return 1;\n    }\n    fprintf(file, \"Hello, File!\\n\");\n    fprintf(file, \"Second line\\n\");\n    fclose(file);\n\n    // Read back\n    file = fopen(\"data.txt\", \"r\");\n    char line[100];\n    while (fgets(line, 100, file) != NULL) {\n        printf(\"%s\", line);\n    }\n    fclose(file);\n    return 0;\n}`,
-        language: "c"
-      }
+\`\`\`bash
+gcc hello.c -o hello    # compile
+./hello                 # run
+\`\`\`
+
+Common compiler flags:
+- \`gcc -Wall -Wextra\` — enable all warnings
+- \`gcc -o name\` — set output filename
+- \`gcc -std=c11\` — use C11 standard
+
+### Common Mistakes
+- Forgetting \`#include <stdio.h>\` — printf won't work
+- Using \`printf\` without \`\\n\` — output may not flush
+- Forgetting \`return 0;\` — C99+ defaults to 0, but explicit is better`,
+      codeExample: `#include <stdio.h>
+
+int main() {
+    printf("Hello, World!\\n");
+    printf("Welcome to C programming!\\n");
+    printf("C was created in %d at Bell Labs\\n", 1972);
+    return 0;
+}`,
+      language: "c"
+    },
+    {
+      id: "c-2",
+      title: "Variables and Data Types",
+      content: `## Variables — Storing Data
+
+A variable is a named storage location in memory. Every variable has a **type** that determines what kind of data it can hold and how much memory it uses.
+
+### Basic Data Types
+
+| Type | Size | Range | Format Specifier |
+|------|------|-------|-----------------|
+| \`int\` | 4 bytes | ±2.1 billion | \`%d\` |
+| \`float\` | 4 bytes | ±3.4 × 10³⁸ | \`%f\` |
+| \`double\` | 8 bytes | ±1.7 × 10³⁰⁸ | \`%f\` or \`%lf\` |
+| \`char\` | 1 byte | -128 to 127 | \`%c\` |
+
+### Declaring and Initializing
+
+\`\`\`c
+int age = 25;          // declaration + initialization
+float height = 5.9;
+char grade = 'A';
+double pi = 3.14159265358979;
+\`\`\`
+
+### sizeof() — Checking Memory Usage
+
+\`\`\`c
+printf("int: %lu bytes\\n", sizeof(int));
+printf("char: %lu byte\\n", sizeof(char));
+\`\`\`
+
+### Constants
+
+\`\`\`c
+const int MAX_SCORE = 100;    // read-only variable
+#define PI 3.14159            // preprocessor constant (no type checking)
+\`\`\`
+
+Use \`const\` over \`#define\` — it's type-safe and debuggable.
+
+### Type Casting
+
+\`\`\`c
+int a = 7, b = 2;
+float result = (float)a / b;  // explicit cast: 3.500000
+\`\`\`
+
+Without the cast: \`a / b\` = 3 (integer division truncates).
+
+### Variable Naming Rules
+- Must start with a letter or underscore (\`_\`)
+- Can contain letters, digits, underscores
+- Case-sensitive (\`age\` ≠ \`Age\` ≠ \`AGE\`)
+- Cannot use keywords (\`int\`, \`return\`, \`if\`, etc.)
+- Use descriptive names: \`student_count\` not \`sc\``,
+      codeExample: `#include <stdio.h>
+
+int main() {
+    // Basic data types
+    int age = 25;
+    float height = 5.9f;
+    double pi = 3.14159265358979;
+    char grade = 'A';
+    
+    // Print values with format specifiers
+    printf("Age: %d\\n", age);
+    printf("Height: %.1f feet\\n", height);
+    printf("Pi: %.15f\\n", pi);
+    printf("Grade: %c\\n", grade);
+    
+    // sizeof() — memory usage
+    printf("\\nMemory usage:\\n");
+    printf("int:    %lu bytes\\n", sizeof(int));
+    printf("float:  %lu bytes\\n", sizeof(float));
+    printf("double: %lu bytes\\n", sizeof(double));
+    printf("char:   %lu byte\\n", sizeof(char));
+    
+    // Type casting
+    int a = 7, b = 2;
+    printf("\\nInteger division: 7 / 2 = %d\\n", a / b);
+    printf("Float division:   7 / 2 = %.2f\\n", (float)a / b);
+    
+    // Constants
+    const int MAX = 100;
+    printf("Max score: %d\\n", MAX);
+    
+    return 0;
+}`,
+      language: "c"
+    },
+    {
+      id: "c-3",
+      title: "Operators",
+      content: `## Operators — Performing Operations
+
+Operators tell the compiler what mathematical, logical, or bitwise operation to perform on values.
+
+### Arithmetic Operators
+
+| Operator | Meaning | Example | Result |
+|----------|---------|---------|--------|
+| \`+\` | Addition | \`10 + 3\` | 13 |
+| \`-\` | Subtraction | \`10 - 3\` | 7 |
+| \`*\` | Multiplication | \`10 * 3\` | 30 |
+| \`/\` | Division | \`10 / 3\` | 3 (integer!) |
+| \`%\` | Modulo (remainder) | \`10 % 3\` | 1 |
+
+**Common trap:** Integer division truncates. \`7 / 2 = 3\`, not 3.5. Cast to float for decimal results.
+
+### Increment/Decrement
+
+\`\`\`c
+int x = 5;
+x++;    // x is now 6 (post-increment)
+++x;    // x is now 7 (pre-increment)
+x--;    // x is now 6
+\`\`\`
+
+Pre-increment (\`++x\`) returns the new value. Post-increment (\`x++\`) returns the old value.
+
+### Relational Operators
+
+\`\`\`c
+10 == 10   // true (1)
+10 != 5    // true (1)
+10 > 5     // true (1)
+10 < 5     // false (0)
+10 >= 10   // true (1)
+\`\`\`
+
+### Logical Operators
+
+\`\`\`c
+(10 > 5) && (5 > 3)    // AND: both true → 1
+(10 > 5) || (3 > 5)    // OR: one true → 1
+!(10 > 5)               // NOT: flips → 0
+\`\`\`
+
+### Bitwise Operators
+
+| Operator | Meaning | Example |
+|----------|---------|---------|
+| \`&\` | AND | \`5 & 3 = 1\` (0101 & 0011 = 0001) |
+| \`|\` | OR | \`5 | 3 = 7\` (0101 | 0011 = 0111) |
+| \`^\` | XOR | \`5 ^ 3 = 6\` (0101 ^ 0011 = 0110) |
+| \`~\` | NOT | \`~5 = -6\` (flips all bits) |
+| \`<<\` | Left shift | \`5 << 1 = 10\` (multiply by 2) |
+| \`>>\` | Right shift | \`5 >> 1 = 2\` (divide by 2) |
+
+### Ternary Operator
+
+\`\`\`c
+int max = (a > b) ? a : b;  // if a > b, max = a; else max = b
+\`\`\``,
+      codeExample: `#include <stdio.h>
+
+int main() {
+    int a = 10, b = 3;
+    
+    // Arithmetic
+    printf("=== Arithmetic ===\\n");
+    printf("%d + %d = %d\\n", a, b, a + b);
+    printf("%d - %d = %d\\n", a, b, a - b);
+    printf("%d * %d = %d\\n", a, b, a * b);
+    printf("%d / %d = %d  (integer division)\\n", a, b, a / b);
+    printf("%d %% %d = %d  (remainder)\\n", a, b, a % b);
+    printf("Float division: %d / %d = %.2f\\n", a, b, (float)a / b);
+    
+    // Increment/Decrement
+    printf("\\n=== Increment ===\\n");
+    int x = 5;
+    printf("x = %d\\n", x);
+    printf("x++ = %d (post, returns old value)\\n", x++);
+    printf("x = %d\\n", x);
+    printf("++x = %d (pre, returns new value)\\n", ++x);
+    
+    // Relational
+    printf("\\n=== Relational ===\\n");
+    printf("%d == %d: %d\\n", a, b, a == b);
+    printf("%d != %d: %d\\n", a, b, a != b);
+    printf("%d > %d:  %d\\n", a, b, a > b);
+    
+    // Logical
+    printf("\\n=== Logical ===\\n");
+    int p = 1, q = 0;
+    printf("TRUE && FALSE = %d\\n", p && q);
+    printf("TRUE || FALSE = %d\\n", p || q);
+    printf("!TRUE = %d\\n", !p);
+    
+    // Bitwise
+    printf("\\n=== Bitwise ===\\n");
+    printf("5 & 3 = %d\\n", 5 & 3);
+    printf("5 | 3 = %d\\n", 5 | 3);
+    printf("5 ^ 3 = %d\\n", 5 ^ 3);
+    printf("5 << 1 = %d (multiply by 2)\\n", 5 << 1);
+    printf("5 >> 1 = %d (divide by 2)\\n", 5 >> 1);
+    
+    // Ternary
+    printf("\\n=== Ternary ===\\n");
+    int max = (a > b) ? a : b;
+    printf("Max of %d and %d is %d\\n", a, b, max);
+    
+    return 0;
+}`,
+      language: "c"
+    },
+    {
+      id: "c-4",
+      title: "Conditionals",
+      content: `## Conditionals — Making Decisions
+
+Conditionals let your program choose different paths based on conditions.
+
+### if / else if / else
+
+\`\`\`c
+if (score >= 90) {
+    grade = 'A';
+} else if (score >= 80) {
+    grade = 'B';
+} else if (score >= 70) {
+    grade = 'C';
+} else {
+    grade = 'F';
+}
+\`\`\`
+
+**Key rules:**
+- Only one branch executes
+- Conditions are checked top-to-bottom
+- Braces \`{}\` are optional for single statements, but always use them
+
+### Nested if
+
+\`\`\`c
+if (age >= 18) {
+    if (hasLicense) {
+        printf("You can drive");
+    } else {
+        printf("You need a license");
+    }
+} else {
+    printf("Too young to drive");
+}
+\`\`\`
+
+**Tip:** Avoid nesting deeper than 2-3 levels. Use early returns or helper functions instead.
+
+### Ternary Operator (Short if/else)
+
+\`\`\`c
+int max = (a > b) ? a : b;
+\`\`\`
+
+Use for simple assignments. Don't use for complex logic — it hurts readability.
+
+### switch Statement
+
+Best when comparing one variable against many constant values:
+
+\`\`\`c
+switch (day) {
+    case 1: printf("Monday"); break;
+    case 2: printf("Tuesday"); break;
+    case 6: case 7: printf("Weekend"); break;
+    default: printf("Invalid day");
+}
+\`\`\`
+
+**Remember:** Each case needs \`break\`. Without it, execution "falls through" to the next case.
+
+### Common Mistakes
+- Using \`=\` (assignment) instead of \`==\` (comparison) in conditions
+- Forgetting \`break\` in switch cases
+- Floating-point comparison with \`==\` (use \`fabs(a - b) < 0.001\`)`,
+      codeExample: `#include <stdio.h>
+
+int main() {
+    // if/else if/else
+    int score = 85;
+    char grade;
+    
+    if (score >= 90) {
+        grade = 'A';
+    } else if (score >= 80) {
+        grade = 'B';
+    } else if (score >= 70) {
+        grade = 'C';
+    } else if (score >= 60) {
+        grade = 'D';
+    } else {
+        grade = 'F';
+    }
+    
+    printf("Score: %d -> Grade: %c\\n", score, grade);
+    
+    // Nested if
+    int age = 20;
+    int hasLicense = 1;
+    
+    if (age >= 18) {
+        if (hasLicense) {
+            printf("Age %d: You can drive\\n", age);
+        } else {
+            printf("Age %d: You need a license\\n", age);
+        }
+    } else {
+        printf("Age %d: Too young to drive\\n", age);
+    }
+    
+    // Ternary operator
+    int a = 10, b = 20;
+    int max = (a > b) ? a : b;
+    printf("Max of %d and %d is %d\\n", a, b, max);
+    
+    // switch statement
+    int day = 3;
+    printf("Day %d: ", day);
+    
+    switch (day) {
+        case 1: printf("Monday\\n"); break;
+        case 2: printf("Tuesday\\n"); break;
+        case 3: printf("Wednesday\\n"); break;
+        case 4: printf("Thursday\\n"); break;
+        case 5: printf("Friday\\n"); break;
+        case 6:
+        case 7: printf("Weekend\\n"); break;
+        default: printf("Invalid\\n");
+    }
+    
+    // Multiple cases
+    int month = 8;
+    switch (month) {
+        case 12: case 1: case 2:
+            printf("Winter\\n"); break;
+        case 3: case 4: case 5:
+            printf("Spring\\n"); break;
+        case 6: case 7: case 8:
+            printf("Summer\\n"); break;
+        case 9: case 10: case 11:
+            printf("Fall\\n"); break;
+    }
+    
+    return 0;
+}`,
+      language: "c"
+    },
+    {
+      id: "c-5",
+      title: "Loops",
+      content: `## Loops — Repeating Actions
+
+Loops execute a block of code repeatedly until a condition is met.
+
+### for Loop
+
+Best when you know how many times to repeat:
+
+\`\`\`c
+for (int i = 0; i < 5; i++) {
+    printf("%d ", i);
+}
+// Output: 0 1 2 3 4
+\`\`\`
+
+**Parts:** \`for (init; condition; update)\`
+- \`int i = 0\` — runs once before the loop
+- \`i < 5\` — checked before each iteration
+- \`i++\` — runs after each iteration
+
+### while Loop
+
+Best when you don't know how many iterations:
+
+\`\`\`c
+int count = 0;
+while (count < 5) {
+    printf("%d ", count);
+    count++;
+}
+// Output: 0 1 2 3 4
+\`\`\`
+
+**Warning:** If you forget \`count++\`, the loop runs forever.
+
+### do...while Loop
+
+Like \`while\`, but guarantees at least one execution:
+
+\`\`\`c
+int num;
+do {
+    printf("Enter a positive number: ");
+    scanf("%d", &num);
+} while (num <= 0);
+\`\`\`
+
+### break and continue
+
+- **\`break\`** — exits the loop entirely
+- **\`continue\`** — skips to the next iteration
+
+\`\`\`c
+for (int i = 0; i < 10; i++) {
+    if (i == 3) continue;  // skip 3
+    if (i == 7) break;     // stop at 7
+    printf("%d ", i);
+}
+// Output: 0 1 2 4 5 6
+\`\`\`
+
+### Nested Loops
+
+\`\`\`c
+for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+        printf("(%d,%d) ", i, j);
+    }
+}
+// Output: (0,0) (0,1) (0,2) (1,0) (1,1) (1,2) (2,0) (2,1) (2,2)
+\`\`\`
+
+### Common Mistakes
+- Off-by-one errors: \`i <= n\` iterates n+1 times
+- Infinite loops: forgetting to update the loop variable
+- Using \`=\` instead of \`==\` in the condition`,
+      codeExample: `#include <stdio.h>
+
+int main() {
+    // for loop — counting
+    printf("=== For Loop ===\\n");
+    for (int i = 1; i <= 5; i++) {
+        printf("%d ", i);
+    }
+    printf("\\n");
+    
+    // for loop — sum
+    int sum = 0;
+    for (int i = 1; i <= 100; i++) {
+        sum += i;
+    }
+    printf("Sum of 1-100: %d\\n", sum);
+    
+    // while loop
+    printf("\\n=== While Loop ===\\n");
+    int n = 16;
+    while (n > 0) {
+        printf("%d ", n);
+        n /= 2;
+    }
+    printf("\\n");
+    
+    // do...while
+    printf("\\n=== Do-While ===\\n");
+    int num = 1;
+    do {
+        printf("%d ", num);
+        num *= 2;
+    } while (num <= 100);
+    printf("\\n");
+    
+    // break and continue
+    printf("\\n=== Break & Continue ===\\n");
+    for (int i = 0; i < 10; i++) {
+        if (i == 3) continue;  // skip 3
+        if (i == 7) break;     // stop at 7
+        printf("%d ", i);
+    }
+    printf("\\n");
+    
+    // Nested loops — multiplication table
+    printf("\\n=== Multiplication Table ===\\n");
+    for (int i = 1; i <= 5; i++) {
+        for (int j = 1; j <= 5; j++) {
+            printf("%4d", i * j);
+        }
+        printf("\\n");
+    }
+    
+    // Factorial
+    printf("\\n=== Factorial ===\\n");
+    int fact = 1;
+    for (int i = 1; i <= 10; i++) {
+        fact *= i;
+        printf("%2d! = %d\\n", i, fact);
+    }
+    
+    return 0;
+}`,
+      language: "c"
+    },
+    {
+      id: "c-6",
+      title: "Functions",
+      content: `## Functions — Reusable Code Blocks
+
+A function is a self-contained block of code that performs a specific task. Functions are the building blocks of organized programs.
+
+### Function Structure
+
+\`\`\`c
+return_type function_name(parameters) {
+    // body
+    return value;
+}
+\`\`\`
+
+### Declaring vs Defining
+
+- **Declaration** (prototype): tells the compiler the function exists
+- **Definition**: the actual implementation
+
+\`\`\`c
+int add(int a, int b);    // declaration
+int add(int a, int b) {   // definition
+    return a + b;
+}
+\`\`\`
+
+### Pass by Value vs Pass by Value
+
+In C, all arguments are **passed by value** — the function gets a copy. To modify the original, use pointers:
+
+\`\`\`c
+void doubleIt(int *x) {
+    *x = *x * 2;
+}
+int main() {
+    int n = 5;
+    doubleIt(&n);  // n is now 10
+}
+\`\`\`
+
+### Recursion
+
+A function that calls itself:
+
+\`\`\`c
+int factorial(int n) {
+    if (n <= 1) return 1;
+    return n * factorial(n - 1);
+}
+\`\`\`
+
+Every recursion needs a **base case** to stop. Without it, you get infinite recursion (stack overflow).
+
+### Scope
+
+- **Local variables**: declared inside a function, exist only during execution
+- **Global variables**: declared outside all functions, accessible everywhere (avoid them)
+- **Static variables**: \`static int count;\` — persists between function calls
+
+### Common Mistakes
+- Forgetting \`return\` in a non-void function
+- Using \`int\` as the return type for functions that need decimals
+- Modifying global state instead of passing parameters`,
+      codeExample: `#include <stdio.h>
+
+// Function declarations
+int add(int a, int b);
+float celsiusToFahrenheit(float c);
+void swap(int *a, int *b);
+int factorial(int n);
+int fibonacci(int n);
+void printArray(int arr[], int size);
+
+// Main function
+int main() {
+    // Basic function calls
+    printf("=== Basic Functions ===\\n");
+    printf("5 + 3 = %d\\n", add(5, 3));
+    printf("25°C = %.1f°F\\n", celsiusToFahrenheit(25));
+    
+    // Swap (pass by pointer)
+    printf("\\n=== Swap ===\\n");
+    int x = 10, y = 20;
+    printf("Before: x=%d, y=%d\\n", x, y);
+    swap(&x, &y);
+    printf("After:  x=%d, y=%d\\n", x, y);
+    
+    // Recursion
+    printf("\\n=== Recursion ===\\n");
+    printf("5! = %d\\n", factorial(5));
+    printf("Fibonacci(10) = %d\\n", fibonacci(10));
+    
+    // Array parameter
+    printf("\\n=== Array Parameter ===\\n");
+    int arr[] = {5, 3, 8, 1, 9};
+    printArray(arr, 5);
+    
+    return 0;
+}
+
+// Function definitions
+int add(int a, int b) {
+    return a + b;
+}
+
+float celsiusToFahrenheit(float c) {
+    return (c * 9.0 / 5.0) + 32;
+}
+
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int factorial(int n) {
+    if (n <= 1) return 1;
+    return n * factorial(n - 1);
+}
+
+int fibonacci(int n) {
+    if (n <= 0) return 0;
+    if (n == 1) return 1;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+void printArray(int arr[], int size) {
+    printf("[");
+    for (int i = 0; i < size; i++) {
+        printf("%d", arr[i]);
+        if (i < size - 1) printf(", ");
+    }
+    printf("]\\n");
+}`,
+      language: "c"
+    },
+    {
+      id: "c-7",
+      title: "Arrays",
+      content: `## Arrays — Storing Multiple Values
+
+An array is a collection of elements of the same type stored in contiguous memory.
+
+### Declaration and Initialization
+
+\`\`\`c
+int numbers[5] = {10, 20, 30, 40, 50};
+char name[] = "Alice";  // auto-size: 6 bytes (including \\0)
+\`\`\`
+
+### Accessing Elements
+
+\`\`\`c
+numbers[0] = 10;    // first element
+numbers[4] = 50;    // last element
+numbers[2] = 99;    // modify middle
+\`\`\`
+
+**Arrays are zero-indexed.** An array of size 5 has valid indices 0-4.
+
+### Array Size
+
+\`\`\`c
+int arr[10];
+printf("%lu\\n", sizeof(arr) / sizeof(arr[0]));  // 10
+\`\`\`
+
+### Passing Arrays to Functions
+
+Arrays decay to pointers when passed to functions:
+
+\`\`\`c
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
+    }
+}
+\`\`\`
+
+**Important:** You must pass the size separately — the function can't determine it from the pointer.
+
+### Multi-Dimensional Arrays
+
+\`\`\`c
+int matrix[3][3] = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
+\`\`\`
+
+### Common Mistakes
+- Accessing beyond bounds: \`arr[5]\` in an array of size 5 is undefined behavior
+- Forgetting that arrays are 0-indexed
+- Not passing array size to functions
+- Modifying array inside function modifies the original (arrays are passed by reference)`,
+      codeExample: `#include <stdio.h>
+
+void printArray(int arr[], int size);
+void reverseArray(int arr[], int size);
+int findMax(int arr[], int size);
+void bubbleSort(int arr[], int size);
+
+int main() {
+    // Declaration and initialization
+    int numbers[] = {64, 34, 25, 12, 22, 11, 90};
+    int n = sizeof(numbers) / sizeof(numbers[0]);
+    
+    printf("=== Array Basics ===\\n");
+    printf("Array: ");
+    printArray(numbers, n);
+    printf("Size: %lu bytes\\n", sizeof(numbers));
+    printf("Elements: %lu\\n", n);
+    
+    // Finding max
+    printf("\\n=== Find Max ===\\n");
+    printf("Max element: %d\\n", findMax(numbers, n));
+    
+    // Reverse array
+    printf("\\n=== Reverse ===\\n");
+    reverseArray(numbers, n);
+    printf("Reversed: ");
+    printArray(numbers, n);
+    
+    // Bubble sort
+    printf("\\n=== Sorting ===\\n");
+    int unsorted[] = {64, 34, 25, 12, 22, 11, 90};
+    bubbleSort(unsorted, n);
+    printf("Sorted: ");
+    printArray(unsorted, n);
+    
+    // 2D array
+    printf("\\n=== 2D Array ===\\n");
+    int matrix[3][3] = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9}
+    };
+    
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            printf("%4d", matrix[i][j]);
+        }
+        printf("\\n");
+    }
+    
+    return 0;
+}
+
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\\n");
+}
+
+void reverseArray(int arr[], int size) {
+    for (int i = 0; i < size / 2; i++) {
+        int temp = arr[i];
+        arr[i] = arr[size - 1 - i];
+        arr[size - 1 - i] = temp;
+    }
+}
+
+int findMax(int arr[], int size) {
+    int max = arr[0];
+    for (int i = 1; i < size; i++) {
+        if (arr[i] > max) max = arr[i];
+    }
+    return max;
+}
+
+void bubbleSort(int arr[], int size) {
+    for (int i = 0; i < size - 1; i++) {
+        for (int j = 0; j < size - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}`,
+      language: "c"
+    },
+    {
+      id: "c-8",
+      title: "Strings",
+      content: `## Strings — Working with Text
+
+In C, a string is an array of \`char\` terminated by a null character (\`\\0\`).
+
+### String Declaration
+
+\`\`\`c
+char name[] = "Alice";     // { 'A', 'l', 'i', 'c', 'e', '\\0' }
+char greeting[20] = "Hello"; // explicit size, zero-padded
+\`\`\`
+
+### String Length
+
+\`strlen()\` from \`<string.h>\` counts characters before \`\\0\`:
+
+\`\`\`c
+char name[] = "Alice";
+printf("%lu\\n", strlen(name));  // 5 (not 6 — \\0 isn't counted)
+\`\`\`
+
+### String Functions (\`<string.h>\`)
+
+| Function | Purpose | Example |
+|----------|---------|---------|
+| \`strlen(s)\` | Length | \`strlen("Hi")\` → 2 |
+| \`strcpy(dest, src)\` | Copy | \`strcpy(a, b)\` copies b to a |
+| \`strcat(dest, src)\` | Concatenate | \`strcat(a, b)\` appends b to a |
+| \`strcmp(a, b)\` | Compare | \`strcmp("a","b")\` → negative |
+| \`strchr(s, c)\` | Find char | \`strchr("Hi", 'i')\` → pointer |
+| \`strstr(h, n)\` | Find substring | \`strstr("Hello","ll")\` → pointer |
+
+### strcmp Return Values
+
+- **Negative**: first string comes before second
+- **Zero**: strings are equal
+- **Positive**: first string comes after second
+
+\`\`\`c
+strcmp("apple", "banana")  // negative
+strcmp("apple", "apple")   // 0
+\`\`\`
+
+### Reading Strings
+
+\`\`\`c
+char name[50];
+scanf("%49s", name);      // reads one word (stops at space)
+fgets(name, 50, stdin);   // reads entire line (including spaces)
+\`\`\`
+
+### Common Mistakes
+- Buffer overflow: \`strcpy\` doesn't check size — use \`strncpy\` instead
+- Forgetting that strings are mutable arrays — you can modify them
+- Comparing strings with \`==\` (compares addresses, not content) — use \`strcmp\`
+- Not accounting for \`\\0\` when allocating space`,
+      codeExample: `#include <stdio.h>
+#include <string.h>
+
+int main() {
+    // String basics
+    char name[] = "Alice";
+    char greeting[20] = "Hello";
+    
+    printf("=== String Basics ===\\n");
+    printf("Name: %s\\n", name);
+    printf("Length: %lu\\n", strlen(name));
+    printf("Size in memory: %lu bytes\\n", sizeof(name));
+    
+    // String functions
+    printf("\\n=== String Functions ===\\n");
+    
+    // strcpy
+    char dest[50];
+    strcpy(dest, "Hello, World!");
+    printf("Copied: %s\\n", dest);
+    
+    // strcat
+    char str1[50] = "Hello";
+    char str2[] = ", World!";
+    strcat(str1, str2);
+    printf("Concatenated: %s\\n", str1);
+    
+    // strcmp
+    printf("\\nCompare 'apple' vs 'banana': %d\\n", strcmp("apple", "banana"));
+    printf("Compare 'apple' vs 'apple': %d\\n", strcmp("apple", "apple"));
+    printf("Compare 'zebra' vs 'apple': %d\\n", strcmp("zebra", "apple"));
+    
+    // String reversal
+    printf("\\n=== Reverse String ===\\n");
+    char original[] = "Hello";
+    char reversed[50];
+    int len = strlen(original);
+    
+    for (int i = 0; i < len; i++) {
+        reversed[i] = original[len - 1 - i];
+    }
+    reversed[len] = '\\0';
+    printf("Original: %s\\n", original);
+    printf("Reversed: %s\\n", reversed);
+    
+    // Palindrome check
+    printf("\\n=== Palindrome Check ===\\n");
+    char word[] = "racecar";
+    int isPalindrome = 1;
+    len = strlen(word);
+    
+    for (int i = 0; i < len / 2; i++) {
+        if (word[i] != word[len - 1 - i]) {
+            isPalindrome = 0;
+            break;
+        }
+    }
+    printf("'%s' is %s\\n", word, isPalindrome ? "a palindrome" : "not a palindrome");
+    
+    // Character counting
+    printf("\\n=== Character Count ===\\n");
+    char text[] = "hello world";
+    int count[26] = {0};
+    len = strlen(text);
+    
+    for (int i = 0; i < len; i++) {
+        if (text[i] >= 'a' && text[i] <= 'z') {
+            count[text[i] - 'a']++;
+        }
+    }
+    
+    for (int i = 0; i < 26; i++) {
+        if (count[i] > 0) {
+            printf("'%c': %d\\n", 'a' + i, count[i]);
+        }
+    }
+    
+    return 0;
+}`,
+      language: "c"
+    },
+    {
+      id: "c-9",
+      title: "Pointers",
+      content: `## Pointers — Memory Addresses
+
+A pointer is a variable that stores the **memory address** of another variable. Pointers are C's most powerful and dangerous feature.
+
+### Pointer Basics
+
+\`\`\`c
+int x = 42;
+int *p = &x;      // p stores the address of x
+printf("%d\\n", *p);  // 42 (dereferencing — reading the value)
+printf("%p\\n", (void*)p);  // address of x
+\`\`\`
+
+- \`&x\` — "address of x"
+- \`*p\` — "value at address p" (dereference)
+
+### Pointer Arithmetic
+
+\`\`\`c
+int arr[] = {10, 20, 30, 40};
+int *p = arr;      // points to first element
+printf("%d\\n", *p);      // 10
+printf("%d\\n", *(p+1));  // 20
+printf("%d\\n", *(p+2));  // 30
+\`\`\`
+
+Pointer arithmetic advances by the size of the type: \`p+1\` jumps by \`sizeof(int)\` bytes.
+
+### Pass by Pointer (Pass by Reference)
+
+To modify a variable inside a function:
+
+\`\`\`c
+void doubleIt(int *x) {
+    *x = *x * 2;
+}
+int main() {
+    int n = 5;
+    doubleIt(&n);
+    printf("%d\\n", n);  // 10
+}
+\`\`\`
+
+### Pointer and Arrays
+
+Arrays decay to pointers when passed to functions:
+
+\`\`\`c
+void modify(int arr[], int size) {
+    arr[0] = 999;  // modifies the original array
+}
+\`\`\`
+
+### Common Pointer Patterns
+
+\`\`\`c
+int *p = NULL;     // always initialize to NULL
+if (p != NULL) {
+    printf("%d\\n", *p);  // safe to dereference
+}
+\`\`\`
+
+### Common Mistakes
+- Dereferencing NULL or uninitialized pointers (segfault)
+- Dangling pointers: pointer to freed/stack memory
+- Memory leaks: allocating but never freeing
+- Pointer arithmetic beyond array bounds`,
+      codeExample: `#include <stdio.h>
+
+void doubleIt(int *x);
+void swap(int *a, int *b);
+void printAddress(int *p, char *name);
+
+int main() {
+    // Pointer basics
+    printf("=== Pointer Basics ===\\n");
+    int x = 42;
+    int *p = &x;
+    
+    printf("Value of x: %d\\n", x);
+    printf("Address of x: %p\\n", (void*)&x);
+    printf("Value of p: %p\\n", (void*)p);
+    printf("Value at p (*p): %d\\n", *p);
+    
+    // Modify via pointer
+    *p = 100;
+    printf("After *p = 100: x = %d\\n", x);
+    
+    // Swap using pointers
+    printf("\\n=== Swap ===\\n");
+    int a = 10, b = 20;
+    printf("Before: a=%d, b=%d\\n", a, b);
+    swap(&a, &b);
+    printf("After:  a=%d, b=%d\\n", a, b);
+    
+    // Pointer arithmetic
+    printf("\\n=== Pointer Arithmetic ===\\n");
+    int arr[] = {10, 20, 30, 40, 50};
+    int *ptr = arr;
+    
+    for (int i = 0; i < 5; i++) {
+        printf("arr[%d] = %d (address: %p)\\n", i, *(ptr + i), (void*)(ptr + i));
+    }
+    
+    // Pointer and arrays
+    printf("\\n=== Array Decay ===\\n");
+    printf("arr = %p\\n", (void*)arr);
+    printf("ptr = %p\\n", (void*)ptr);
+    printf("arr[2] = %d, *(ptr+2) = %d\\n", arr[2], *(ptr + 2));
+    
+    // NULL pointer safety
+    printf("\\n=== NULL Safety ===\\n");
+    int *safe = NULL;
+    if (safe != NULL) {
+        printf("Value: %d\\n", *safe);
+    } else {
+        printf("Pointer is NULL, cannot dereference\\n");
+    }
+    
+    return 0;
+}
+
+void doubleIt(int *x) {
+    *x = *x * 2;
+}
+
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void printAddress(int *p, char *name) {
+    printf("%s = %d (at %p)\\n", name, *p, (void*)p);
+}`,
+      language: "c"
+    },
+    {
+      id: "c-10",
+      title: "Structures",
+      content: `## Structures — Custom Data Types
+
+A \`struct\` groups related variables under one name, like a class without methods.
+
+### Defining a Structure
+
+\`\`\`c
+struct Student {
+    char name[50];
+    int age;
+    float gpa;
+};
+\`\`\`
+
+### Creating Instances
+
+\`\`\`c
+struct Student s1 = {"Alice", 20, 3.85};
+struct Student s2;
+strcpy(s2.name, "Bob");  // can't assign strings directly
+s2.age = 22;
+s2.gpa = 3.50;
+\`\`\`
+
+### Accessing Members
+
+Use the **dot operator** (\`.\`):
+
+\`\`\`c
+printf("%s (age %d)\\n", s1.name, s1.age);
+\`\`\`
+
+### typedef — Cleaner Syntax
+
+\`\`\`c
+typedef struct {
+    char name[50];
+    int age;
+} Person;
+
+Person p1 = {"Alice", 25};  // no "struct" keyword needed
+\`\`\`
+
+### Structures as Function Parameters
+
+\`\`\`c
+void printStudent(struct Student s) {
+    printf("%s: %.2f\\n", s.name, s.gpa);
+}
+
+// Pass by pointer for large structures (avoids copying)
+void updateGPA(struct Student *s, float newGPA) {
+    s->gpa = newGPA;  // arrow operator for pointers
+}
+\`\`\`
+
+**Dot** (\`.\`) for direct access. **Arrow** (\`->\`) for pointer access.
+
+### Arrays of Structures
+
+\`\`\`c
+struct Student class[3] = {
+    {"Alice", 20, 3.85},
+    {"Bob", 22, 3.50},
+    {"Charlie", 21, 3.92}
+};
+\`\`\`
+
+### Nested Structures
+
+\`\`\`c
+typedef struct {
+    char street[100];
+    char city[50];
+} Address;
+
+typedef struct {
+    char name[50];
+    Address address;  // nested
+} Person;
+\`\`\``,
+      codeExample: `#include <stdio.h>
+#include <string.h>
+
+// Structure definitions
+struct Student {
+    char name[50];
+    int age;
+    float gpa;
+    char grade;
+};
+
+typedef struct {
+    char title[100];
+    char author[50];
+    int year;
+    float price;
+} Book;
+
+typedef struct {
+    char street[100];
+    char city[50];
+    char state[30];
+    int zip;
+} Address;
+
+typedef struct {
+    char name[50];
+    int age;
+    Address address;
+} Person;
+
+// Function that works with structures
+void printStudent(struct Student *s) {
+    printf("Name: %s | Age: %d | GPA: %.2f | Grade: %c\\n",
+           s->name, s->age, s->gpa, s->grade);
+}
+
+void printBook(Book *b) {
+    printf("\"%s\" by %s (%d) - $%.2f\\n",
+           b->title, b->author, b->year, b->price);
+}
+
+int main() {
+    // Structure basics
+    printf("=== Structure Basics ===\\n");
+    struct Student s1 = {"Alice", 20, 3.85, 'A'};
+    struct Student s2;
+    strcpy(s2.name, "Bob");
+    s2.age = 22;
+    s2.gpa = 3.50;
+    s2.grade = 'B';
+    
+    printStudent(&s1);
+    printStudent(&s2);
+    
+    // Array of structures
+    printf("\\n=== Array of Structures ===\\n");
+    struct Student class[] = {
+        {"Charlie", 21, 3.92, 'A'},
+        {"Diana", 23, 3.70, 'B'},
+        {"Eve", 20, 3.55, 'B'},
+        {"Frank", 22, 3.88, 'A'}
+    };
+    int numStudents = sizeof(class) / sizeof(class[0]);
+    
+    for (int i = 0; i < numStudents; i++) {
+        printf("%d. ", i + 1);
+        printStudent(&class[i]);
+    }
+    
+    // Book library
+    printf("\\n=== Book Library ===\\n");
+    Book library[] = {
+        {"The C Programming Language", "Kernighan & Ritchie", 1978, 49.99},
+        {"Clean Code", "Robert Martin", 2008, 39.99},
+        {"Design Patterns", "Gang of Four", 1994, 54.99}
+    };
+    
+    for (int i = 0; i < 3; i++) {
+        printBook(&library[i]);
+    }
+    
+    // Nested structures
+    printf("\\n=== Nested Structures ===\\n");
+    Person people[] = {
+        {"John", 30, {"123 Main St", "New York", "NY", 10001}},
+        {"Jane", 25, {"456 Oak Ave", "Boston", "MA", 02101}}
+    };
+    
+    for (int i = 0; i < 2; i++) {
+        printf("%s, Age %d\\n", people[i].name, people[i].age);
+        printf("  Address: %s, %s, %s %d\\n",
+               people[i].address.street,
+               people[i].address.city,
+               people[i].address.state,
+               people[i].address.zip);
+    }
+    
+    return 0;
+}`,
+      language: "c"
+    },
+    {
+      id: "c-11",
+      title: "File Handling",
+      content: `## File Handling — Reading and Writing Files
+
+C provides functions for reading from and writing to files through \`FILE\` pointers.
+
+### File Operations
+
+| Function | Purpose |
+|----------|---------|
+| \`fopen()\` | Open a file |
+| \`fclose()\` | Close a file |
+| \`fprintf()\` | Write formatted output |
+| \`fscanf()\` | Read formatted input |
+| \`fgets()\` | Read a line |
+| \`fputs()\` | Write a string |
+| \`fread()\` | Read binary data |
+| \`fwrite()\` | Write binary data |
+| \`fseek()\` | Move file position |
+| \`ftell()\` | Get current position |
+
+### File Modes
+
+| Mode | Meaning |
+|------|---------|
+| \`"r"\` | Read (file must exist) |
+| \`"w"\` | Write (creates new or truncates) |
+| \`"a"\` | Append (creates new or appends) |
+| \`"r+"\` | Read + Write (file must exist) |
+| \`"w+"\` | Read + Write (creates new or truncates) |
+| \`"a+"\` | Read + Append |
+| Add \`b\` | Binary: \`"rb"\`, \`"wb"\` |
+
+### Error Handling
+
+Always check if \`fopen\` returns NULL:
+
+\`\`\`c
+FILE *fp = fopen("data.txt", "r");
+if (fp == NULL) {
+    perror("Error opening file");
+    return 1;
+}
+// ... use the file ...
+fclose(fp);
+\`\`\`
+
+### Reading Line by Line
+
+\`\`\`c
+char line[256];
+while (fgets(line, sizeof(line), fp) != NULL) {
+    printf("%s", line);
+}
+\`\`\`
+
+### Writing Formatted Data
+
+\`\`\`c
+fprintf(fp, "Name: %s, Age: %d\\n", name, age);
+\`\`\``,
+      codeExample: `#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct {
+    char name[50];
+    int age;
+    float gpa;
+} Student;
+
+int main() {
+    // Writing to a file
+    printf("=== Writing to File ===\\n");
+    FILE *fp = fopen("students.txt", "w");
+    if (fp == NULL) {
+        printf("Error opening file for writing!\\n");
+        return 1;
+    }
+    
+    fprintf(fp, "Name,Age,GPA\\n");
+    fprintf(fp, "Alice,20,3.85\\n");
+    fprintf(fp, "Bob,22,3.50\\n");
+    fprintf(fp, "Charlie,21,3.92\\n");
+    fclose(fp);
+    printf("Written to students.txt\\n");
+    
+    // Reading from a file
+    printf("\\n=== Reading from File ===\\n");
+    fp = fopen("students.txt", "r");
+    if (fp == NULL) {
+        printf("Error opening file for reading!\\n");
+        return 1;
+    }
+    
+    char line[100];
+    int lineNum = 0;
+    while (fgets(line, sizeof(line), fp) != NULL) {
+        line[strcspn(line, "\\n")] = '\\0';
+        printf("Line %d: %s\\n", lineNum++, line);
+    }
+    fclose(fp);
+    
+    // Reading structured data
+    printf("\\n=== Structured Reading ===\\n");
+    fp = fopen("students.txt", "r");
+    if (fp == NULL) {
+        printf("Error opening file!\\n");
+        return 1;
+    }
+    
+    char name[50];
+    int age;
+    float gpa;
+    
+    fgets(line, sizeof(line), fp);  // skip header
+    printf("Students:\\n");
+    while (fscanf(fp, "%49[^,],%d,%f\\n", name, &age, &gpa) == 3) {
+        printf("  Name: %s, Age: %d, GPA: %.2f\\n", name, age, gpa);
+    }
+    fclose(fp);
+    
+    // Append to file
+    printf("\\n=== Appending ===\\n");
+    fp = fopen("students.txt", "a");
+    if (fp != NULL) {
+        fprintf(fp, "Diana,23,3.70\\n");
+        fclose(fp);
+        printf("Appended Diana's record\\n");
+    }
+    
+    // Verify
+    fp = fopen("students.txt", "r");
+    printf("Updated file:\\n");
+    while (fgets(line, sizeof(line), fp) != NULL) {
+        printf("  %s", line);
+    }
+    fclose(fp);
+    
+    // Binary file I/O
+    printf("\\n=== Binary I/O ===\\n");
+    Student students[] = {
+        {"Eve", 20, 3.60},
+        {"Frank", 22, 3.88}
+    };
+    
+    fp = fopen("students.bin", "wb");
+    if (fp != NULL) {
+        fwrite(students, sizeof(Student), 2, fp);
+        fclose(fp);
+        printf("Written 2 students in binary\\n");
+    }
+    
+    Student readStudents[2];
+    fp = fopen("students.bin", "rb");
+    if (fp != NULL) {
+        fread(readStudents, sizeof(Student), 2, fp);
+        fclose(fp);
+        printf("Read from binary:\\n");
+        for (int i = 0; i < 2; i++) {
+            printf("  %s, Age: %d, GPA: %.2f\\n",
+                   readStudents[i].name, readStudents[i].age, readStudents[i].gpa);
+        }
+    }
+    
+    return 0;
+}`,
+      language: "c"
+    }
   ]
 },
+
   {
     slug: "deep-learning",
     title: "Deep Learning",
