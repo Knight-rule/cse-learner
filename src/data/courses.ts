@@ -39,6 +39,633 @@ export interface Course {
 export const courses: Course[] = [
 
   {
+  slug: "data-structures",
+  title: "Data Structures",
+  description: "Master arrays, linked lists, trees, graphs, hash tables and more.",
+  icon: "🌳",
+  notesUrl: "https://noteslink.in/product/ds-data-structure-kiit/",
+  color: "from-emerald-500 to-teal-600",
+  category: "Core CS",
+  lessons: [
+    {
+      id: "1",
+      title: "Introduction to Data Structures",
+      content: `## Definition
+
+A **data structure** is a specialized format for organizing, processing, retrieving, and storing data in a computer so that it can be used efficiently. It defines the relationship between data elements, the operations that can be performed on them, and the algorithms that implement those operations.
+
+## Introduction
+
+Data structures are the backbone of every software application. Whether you're building a search engine, a social media feed, or a banking system, the way you organize data directly impacts performance, memory usage, and scalability. Choosing the right data structure is like choosing the right tool — you wouldn't use a hammer to cut wood.
+
+## History and Establishment
+
+- **1960s**: Arrays and linked lists were formalized in early programming languages like FORTRAN and ALGOL
+- **1970s**: Donald Knuth published "The Art of Computer Programming," systematically cataloging data structures
+- **1970s**: Hash tables were invented by Hans Peter Luhn at IBM
+- **1980s**: B-trees and red-black trees became standard for database indexing
+- **1990s**: The Java Collections Framework and C++ STL standardized data structure libraries
+
+## Advantages
+
+- **Efficiency**: Correct data structure can reduce time complexity from O(n²) to O(n) or O(log n)
+- **Reusability**: Generic implementations work across applications
+- **Abstraction**: Hides complex implementation details behind simple interfaces
+- **Scalability**: Handles growing data volumes gracefully
+- **Memory optimization**: Specialized structures minimize wasted space
+
+## Disadvantages
+
+- **Complexity**: Advanced structures (tries, skip lists) have steep learning curves
+- **Overhead**: Some structures use extra memory for pointers, balancing, or hashing
+- **Trade-offs**: No single structure is optimal for all operations
+- **Implementation bugs**: Pointer errors, off-by-one, and memory leaks are common
+- **Cache unfriendly**: Pointer-based structures (linked lists) suffer from poor cache locality
+
+## Applications
+
+| Application | Data Structure Used |
+|-------------|-------------------|
+| Phone contacts | Hash table (O(1) lookup) |
+| File system | Tree (hierarchical) |
+| Browser history | Stack (LIFO navigation) |
+| Print queue | Queue (FIFO processing) |
+| GPS routing | Graph (shortest path) |
+| Database indexing | B-tree (disk-friendly) |
+| Autocomplete | Trie (prefix matching) |
+| Task scheduling | Priority queue / Heap |
+
+## Time Complexity Summary
+
+| Structure | Access | Search | Insert | Delete |
+|-----------|--------|--------|--------|--------|
+| Array | O(1) | O(n) | O(n) | O(n) |
+| Linked List | O(n) | O(n) | O(1) | O(1) |
+| Stack | O(n) | O(n) | O(1) | O(1) |
+| Queue | O(n) | O(n) | O(1) | O(1) |
+| Hash Table | O(1)* | O(1)* | O(1)* | O(1)* |
+| BST (balanced) | O(log n) | O(log n) | O(log n) | O(log n) |
+
+*Average case; worst case is O(n) for hash tables.`,
+      codeExample: `// Choosing the right data structure\n\n// Need fast lookup by key? → Hash Map\nconst userMap = new Map();\nuserMap.set("alice", { name: "Alice", age: 25 });\nconsole.log(userMap.get("alice")); // O(1)\n\n// Need FIFO processing? → Queue\nconst printQueue = ["doc1", "doc2", "doc3"];\nconst next = printQueue.shift(); // "doc1"\n\n// Need LIFO (most recent first)? → Stack\nconst undoStack = [];\nundoStack.push("action1");\nundoStack.push("action2");\nconst last = undoStack.pop(); // "action2"\n\n// Need sorted data with fast insert? → BST\n// (See tree lessons for implementation)\n\n// Need to find shortest path? → Graph\n// (See graph lessons for implementation)`,
+      language: "typescript"
+    },
+    {
+      id: "2",
+      title: "Arrays & Dynamic Arrays",
+      content: `## Definition
+
+An **array** is a collection of elements stored at contiguous memory locations, where each element can be accessed directly using its index. A **dynamic array** automatically resizes itself when it runs out of allocated space.
+
+## Introduction
+
+Arrays are the most fundamental data structure. Every other data structure either uses arrays internally or can be implemented using arrays. They provide constant-time access to any element by index, making them ideal when you know the position of the data you need.
+
+## History and Establishment
+
+- **1960s**: Arrays were introduced in FORTRAN (1957), the first high-level language to support them
+- **1970s**: C language formalized array-pointer equivalence: \`arr[i]\` is equivalent to \`*(arr + i)\`
+- **1990s**: Dynamic arrays became standard: C++ \`std::vector\` (1994), Java \`ArrayList\` (1998)
+- **2000s**: Languages like Python and JavaScript made dynamic arrays the default (no fixed-size arrays)
+
+## Advantages
+
+- **O(1) random access**: Access any element in constant time using index
+- **Cache-friendly**: Contiguous memory means CPU prefetching works efficiently
+- **Memory efficient**: No overhead for pointers or metadata
+- **Simple implementation**: Easy to understand and debug
+- **Binary search compatible**: Sorted arrays enable O(log n) search
+
+## Disadvantages
+
+- **Fixed size** (static arrays): Must know size in advance
+- **Costly insertion/deletion**: Inserting/deleting in the middle requires shifting O(n) elements
+- **Wasted memory**: Static arrays may allocate more space than needed
+- **Resizing cost**: Dynamic arrays occasionally double in size, copying all elements (O(n) amortized O(1))
+- **No efficient search**: Unsorted arrays require O(n) linear search
+
+## Syntax
+
+\`\`\`javascript
+// Static array (fixed size)
+const arr = new Array(5);        // [empty × 5]
+const arr = [1, 2, 3, 4, 5];    // initialized
+
+// Dynamic array
+const dynamic = [];
+dynamic.push(1);                  // add to end
+dynamic.pop();                    // remove from end
+dynamic.splice(2, 1);            // remove at index 2
+dynamic.unshift(0);              // add to beginning
+\`\`\`
+
+## Memory Layout
+
+Arrays store elements sequentially in memory. If the base address is \`B\` and each element takes \`S\` bytes:
+
+\`\`\`
+Element at index i is at address: B + (i × S)
+\`\`\`
+
+This formula is why array access is O(1) — it's a single arithmetic calculation.
+
+## Dynamic Array Doubling
+
+When a dynamic array is full and you add an element:
+1. Allocate a new array with double the capacity
+2. Copy all existing elements to the new array
+3. Add the new element
+4. Free the old array
+
+The copy costs O(n), but since it happens only when the array doubles, the amortized cost per insertion is O(1).`,
+      codeExample: `// Two Sum — O(n) with hash map (array + hash map combo)\nfunction twoSum(nums, target) {\n  const map = new Map();\n  for (let i = 0; i < nums.length; i++) {\n    const complement = target - nums[i];\n    if (map.has(complement)) return [map.get(complement), i];\n    map.set(nums[i], i);\n  }\n  return [];\n}\nconsole.log(twoSum([2, 7, 11, 15], 9)); // [0, 1]\n\n// Dynamic array implementation\nclass DynamicArray {\n  constructor() {\n    this.data = new Array(1);\n    this.size = 0;\n  }\n\n  push(val) {\n    if (this.size === this.data.length) {\n      const newArr = new Array(this.data.length * 2);\n      for (let i = 0; i < this.size; i++) newArr[i] = this.data[i];\n      this.data = newArr;\n    }\n    this.data[this.size++] = val;\n  }\n\n  get(i) {\n    if (i < 0 || i >= this.size) throw new Error("Index out of bounds");\n    return this.data[i];\n  }\n}\n\nconst arr = new DynamicArray();\nfor (let i = 0; i < 10; i++) arr.push(i * 10);\nconsole.log(arr.get(5)); // 50`,
+      language: "typescript"
+    },
+    {
+      id: "3",
+      title: "Linked Lists",
+      content: `## Definition
+
+A **linked list** is a linear data structure where elements (nodes) are stored in non-contiguous memory locations. Each node contains data and a reference (pointer) to the next node in the sequence.
+
+## Introduction
+
+Linked lists solve the main limitation of arrays: you can insert and delete elements in O(1) time without shifting other elements. The trade-off is losing random access — to reach the 5th element, you must traverse the first 4.
+
+## History and Establishment
+
+- **1955**: First proposed by Allen Newell and Cliff Shaw in their Information Processing Language
+- **1960s**: Used extensively in LISP (List Processing language)
+- **1970s**: Became a standard teaching data structure in CS curricula
+- **1980s**: Variants emerged: doubly linked lists, circular linked lists, skip lists
+
+## Types
+
+| Type | Description | Use Case |
+|------|-------------|----------|
+| Singly linked | Each node points to next | Simple stacks, queues |
+| Doubly linked | Each node points to next AND previous | Browser history, LRU cache |
+| Circular | Last node points back to first | Round-robin scheduling |
+
+## Advantages
+
+- **O(1) insertion/deletion** at head: Just update pointers
+- **Dynamic size**: No need to pre-allocate memory
+- **Memory efficient**: Only allocates memory for actual elements
+- **Easy insertion in middle**: No shifting needed, just update pointers
+- **Foundation for other structures**: Stacks, queues, and graphs often use linked lists
+
+## Disadvantages
+
+- **O(n) random access**: Must traverse from head to reach element at index i
+- **Extra memory**: Each node stores a pointer (8 bytes on 64-bit systems)
+- **Cache unfriendly**: Nodes scattered in memory cause cache misses
+- **No binary search**: Can't jump to middle element
+- **Pointer management**: Easy to lose head pointer or create cycles
+
+## Syntax
+
+\`\`\`javascript
+// Node structure
+class Node {
+  constructor(val) {
+    this.val = val;
+    this.next = null;
+  }
+}
+
+// Create: 1 → 2 → 3
+const head = new Node(1);
+head.next = new Node(2);
+head.next.next = new Node(3);
+\`\`\`
+
+## Visual Representation
+
+\`\`\`
+head
+  ↓
+[1|→] → [2|→] → [3|→] → null
+\`\`\`
+
+Each box is a node: [data | pointer]. The last node points to null.`,
+      codeExample: `class Node {\n  constructor(val) {\n    this.val = val;\n    this.next = null;\n  }\n}\n\n// Reverse a linked list\nfunction reverseList(head) {\n  let prev = null;\n  let curr = head;\n  while (curr) {\n    const next = curr.next;\n    curr.next = prev;\n    prev = curr;\n    curr = next;\n  }\n  return prev;\n}\n\n// Floyd's cycle detection\nfunction hasCycle(head) {\n  let slow = head, fast = head;\n  while (fast && fast.next) {\n    slow = slow.next;\n    fast = fast.next.next;\n    if (slow === fast) return true;\n  }\n  return false;\n}\n\n// Find middle node\nfunction middleNode(head) {\n  let slow = head, fast = head;\n  while (fast && fast.next) {\n    slow = slow.next;\n    fast = fast.next.next;\n  }\n  return slow;\n}\n\n// Usage\nconst head = new Node(1);\nhead.next = new Node(2);\nhead.next.next = new Node(3);\nhead.next.next.next = new Node(4);\n\nconst reversed = reverseList(head);\nconsole.log(hasCycle(reversed)); // false\nconsole.log(middleNode(reversed)?.val); // 3`,
+      language: "typescript"
+    },
+    {
+      id: "4",
+      title: "Stacks",
+      content: `## Definition
+
+A **stack** is a linear data structure that follows the **LIFO (Last In, First Out)** principle. The last element added is the first one removed.
+
+## Introduction
+
+Stacks are everywhere in computing: function call stacks, undo/redo in text editors, browser back buttons, expression evaluation, and syntax parsing. They're simple but powerful — any problem involving "most recent" or "matching" patterns screams "use a stack."
+
+## History and Establishment
+
+- **1940s**: Stacks were used in early computers for subroutine call management
+- **1957**: The term "stack" was coined by Friedrich Bauer
+- **1960s**: Pushdown automata (stack-based machines) became theoretical foundations of computation
+- **1970s**: Stacks became standard for expression parsing and recursion implementation
+
+## Advantages
+
+- **O(1) push and pop**: Adding and removing from the top is constant time
+- **Memory efficient**: Only stores what's needed, no wasted space
+- **Simple implementation**: Easy to understand and implement
+- **Natural fit for recursion**: Function calls use the call stack implicitly
+- **Easy to reverse**: Push elements, then pop them to get reverse order
+
+## Disadvantages
+
+- **No random access**: Can't access middle elements without popping everything above
+- **Limited operations**: Only top element is accessible
+- **Stack overflow**: Fixed-size stacks can run out of space (recursion depth)
+- **No search**: Must pop elements one by one to find a specific value
+- **LIFO limitation**: Not suitable for FIFO scenarios
+
+## Syntax
+
+\`\`\`javascript
+// Array-based stack
+const stack = [];
+stack.push(1);    // Push: add to top
+stack.push(2);
+stack.push(3);
+stack.pop();      // Pop: remove from top → 3
+stack[stack.length - 1]; // Peek: view top → 2
+
+// Stack class
+class Stack {
+  constructor() { this.items = []; }
+  push(val) { this.items.push(val); }
+  pop() { return this.items.pop(); }
+  peek() { return this.items[this.items.length - 1]; }
+  isEmpty() { return this.items.length === 0; }
+}
+\`\`\`
+
+## Common Applications
+
+1. **Parenthesis matching**: Push opening brackets, pop and match on closing
+2. **Expression evaluation**: Convert infix to postfix, then evaluate
+3. **Undo/redo**: Push actions, pop to undo
+4. **Backtracking**: DFS uses stack (or recursion)
+5. **Function calls**: Call stack tracks active functions`,
+      codeExample: `// Valid Parentheses\nfunction isValid(s) {\n  const stack = [];\n  const pairs = { ')': '(', ']': '[', '}': '{' };\n  for (const c of s) {\n    if ('({['.includes(c)) {\n      stack.push(c);\n    } else if (stack.pop() !== pairs[c]) {\n      return false;\n    }\n  }\n  return stack.length === 0;\n}\nconsole.log(isValid("({[]})")); // true\nconsole.log(isValid("([)]"));   // false\n\n// Min Stack - O(1) getMin\nclass MinStack {\n  constructor() {\n    this.stack = [];\n    this.mins = [];\n  }\n  push(val) {\n    this.stack.push(val);\n    const min = this.mins.length === 0 ? val : Math.min(val, this.mins[this.mins.length - 1]);\n    this.mins.push(min);\n  }\n  pop() {\n    this.stack.pop();\n    this.mins.pop();\n  }\n  getMin() { return this.mins[this.mins.length - 1]; }\n}\n\nconst ms = new MinStack();\nms.push(3); ms.push(1); ms.push(4);\nconsole.log(ms.getMin()); // 1`,
+      language: "typescript"
+    },
+    {
+      id: "5",
+      title: "Queues & Deques",
+      content: `## Definition
+
+A **queue** is a linear data structure that follows the **FIFO (First In, First Out)** principle. The first element added is the first one removed. A **deque (double-ended queue)** allows insertion and deletion at both ends.
+
+## Introduction
+
+Queues model real-world scenarios: customers waiting in line, tasks in a printer queue, messages in a message broker. BFS (Breadth-First Search) uses queues to explore nodes level by level. Deques are more flexible — they can function as both stacks and queues.
+
+## History and Establishment
+
+- **1960s**: Queues were formalized in operations research and simulation
+- **1970s**: Circular queues became standard for buffer management
+- **1980s**: Priority queues (heaps) became essential for scheduling algorithms
+- **1990s**: Deques were added to C++ STL and Java Collections Framework
+
+## Types
+
+| Type | Description | Use Case |
+|------|-------------|----------|
+| Simple queue | FIFO, front and rear only | Print queue |
+| Circular queue | Rear wraps to front | Buffer, ring buffer |
+| Priority queue | Highest priority dequeues first | Task scheduling |
+| Deque | Insert/delete at both ends | Sliding window |
+| Double-ended queue | Same as deque | Palindrome checking |
+
+## Advantages
+
+- **O(1) enqueue/dequeue**: Both operations are constant time
+- **FIFO ordering**: Natural fit for sequential processing
+- **Flexible deque**: Can function as stack or queue
+- **BFS foundation**: Essential for level-order traversal
+- **Thread-safe**: Concurrent queues enable producer-consumer patterns
+
+## Disadvantages
+
+- **No random access**: Can't access middle elements directly
+- **Fixed size** (simple arrays): Circular queue has capacity limit
+- **No search**: Must dequeue elements to find specific values
+- **Memory overhead**: Linked list implementation uses extra pointer memory
+- **Dequeue from empty**: Must handle underflow gracefully
+
+## Syntax
+
+\`\`\`javascript
+// Array-based queue (inefficient for dequeue)\nconst queue = [];\nqueue.push(1);       // Enqueue: add to rear\nqueue.push(2);\nqueue.shift();      // Dequeue: remove from front → 1\n\n// Deque\nclass Deque {\n  constructor() { this.items = []; }\n  addFront(val) { this.items.unshift(val); }\n  addRear(val) { this.items.push(val); }\n  removeFront() { return this.items.shift(); }\n  removeRear() { return this.items.pop(); }\n}\n\`\`\``,
+      codeExample: `// Queue using two stacks (amortized O(1))\nclass Queue {\n  constructor() {\n    this.inbox = [];\n    this.outbox = [];\n  }\n  enqueue(item) { this.inbox.push(item); }\n  dequeue() {\n    if (this.outbox.length === 0) {\n      while (this.inbox.length) this.outbox.push(this.inbox.pop());\n    }\n    return this.outbox.pop();\n  }\n  peek() {\n    if (this.outbox.length === 0) {\n      while (this.inbox.length) this.outbox.push(this.inbox.pop());\n    }\n    return this.outbox[this.outbox.length - 1];\n  }\n}\n\n// Sliding Window Maximum - O(n) using deque\nfunction maxSlidingWindow(nums, k) {\n  const deque = [];\n  const result = [];\n  for (let i = 0; i < nums.length; i++) {\n    while (deque.length && deque[0] < i - k + 1) deque.shift();\n    while (deque.length && nums[deque[deque.length - 1]] < nums[i]) deque.pop();\n    deque.push(i);\n    if (i >= k - 1) result.push(nums[deque[0]]);\n  }\n  return result;\n}\nconsole.log(maxSlidingWindow([1, 3, -1, -3, 5, 3, 6, 7], 3)); // [3,3,5,5,6,7]`,
+      language: "typescript"
+    },
+    {
+      id: "6",
+      title: "Trees & Binary Trees",
+      content: `## Definition
+
+A **tree** is a hierarchical data structure consisting of nodes connected by edges. A **binary tree** is a tree where each node has at most two children (left and right). A **Binary Search Tree (BST)** is a binary tree where left child < parent < right child.
+
+## Introduction
+
+Trees represent hierarchical data naturally: file systems, HTML DOM, organization charts, database indexes. BSTs enable O(log n) search, insert, and delete when balanced. The magic of BSTs: in-order traversal visits nodes in sorted order.
+
+## History and Establishment
+
+- **1960s**: Binary trees were formalized in computer science theory
+- **1970s**: B-trees invented by Bayer and McCreight for database indexing
+- **1978**: Red-black trees invented by Guibas and Sedgewick
+- **1980s**: AVL trees became standard for self-balancing implementations
+- **2000s**: Trees became essential for search engines (trie-based autocomplete)
+
+## Types
+
+| Type | Property | Use Case |
+|------|----------|----------|
+| Binary Tree | ≤ 2 children | General hierarchy |
+| BST | Left < Parent < Right | Search, sort |
+| AVL Tree | Height-balanced BST | Fast lookup |
+| Red-Black Tree | Approximately balanced | Maps, sets |
+| B-Tree | Multi-way, disk-friendly | Database indexes |
+| Trie | Prefix tree | Autocomplete |
+| Heap | Parent ≥ children | Priority queue |
+
+## Advantages
+
+- **O(log n) operations**: Search, insert, delete (when balanced)
+- **Sorted order**: In-order traversal of BST gives sorted data
+- **Hierarchical**: Natural representation of nested data
+- **Flexible**: Many variants for different use cases
+- **Cache-friendly**: Arrays can represent complete trees compactly
+
+## Disadvantages
+
+- **Unbalanced BST degrades to O(n)**: Sorted input creates a linked list
+- **Complex balancing**: AVL and red-black trees are tricky to implement
+- **No O(1) operations**: Every operation requires traversal from root
+- **Memory overhead**: Each node stores pointers to children
+- **Not great for range queries**: Segment trees or Fenwick trees are better
+
+## Syntax
+
+\`\`\`javascript
+class TreeNode {\n  constructor(val) {\n    this.val = val;\n    this.left = null;\n    this.right = null;\n  }\n}\n\n// BST Insert\nfunction insert(root, val) {\n  if (!root) return new TreeNode(val);\n  if (val < root.val) root.left = insert(root.left, val);\n  else if (val > root.val) root.right = insert(root.right, val);\n  return root;\n}\n\`\`\``,
+      codeExample: `class TreeNode {\n  constructor(val) {\n    this.val = val;\n    this.left = null;\n    this.right = null;\n  }\n}\n\n// Validate BST\nfunction isValidBST(root, min = -Infinity, max = Infinity) {\n  if (!root) return true;\n  if (root.val <= min || root.val >= max) return false;\n  return isValidBST(root.left, min, root.val) &&\n         isValidBST(root.right, root.val, max);\n}\n\n// Level order traversal\nfunction levelOrder(root) {\n  if (!root) return [];\n  const result = [];\n  const queue = [root];\n  while (queue.length) {\n    const level = [];\n    for (let i = queue.length; i > 0; i--) {\n      const node = queue.shift();\n      level.push(node.val);\n      if (node.left) queue.push(node.left);\n      if (node.right) queue.push(node.right);\n    }\n    result.push(level);\n  }\n  return result;\n}\n\n// Build BST and traverse\nlet root = null;\n[5, 3, 7, 1, 4, 6, 8].forEach(val => root = insert(root, val));\nconsole.log("Level order:", levelOrder(root));\nconsole.log("Valid BST:", isValidBST(root));`,
+      language: "typescript"
+    },
+    {
+      id: "7",
+      title: "Heaps & Priority Queues",
+      content: `## Definition
+
+A **heap** is a complete binary tree where every parent is greater than or equal to its children (**max-heap**) or less than or equal to its children (**min-heap**). A **priority queue** is an abstract data type where each element has a priority, and the highest-priority element is dequeued first.
+
+## Introduction
+
+Heaps are the underlying data structure for priority queues. They're perfect when you need "the largest" or "the smallest" element quickly — like finding the top K elements, merging sorted lists, or implementing Dijkstra's algorithm. The key insight: heaps don't maintain full sorted order, only the heap property (parent-child relationship).
+
+## History and Establishment
+
+- **1964**: Heapsort algorithm invented by J.W.J. Williams
+- **1964**: Robert Floyd proposed the linear-time heap construction
+- **1970s**: Heaps became standard for priority queue implementations
+- **1980s**: Fibonacci heaps invented for faster decrease-key operations
+- **2000s**: Binary heaps remain the most practical choice for most applications
+
+## Types
+
+| Type | Property | Use Case |
+|------|----------|----------|
+| Binary Heap | Complete binary tree, array-based | General priority queue |
+| Binomial Heap | Collection of binomial trees | Mergeable priority queue |
+| Fibonacci Heap | Amortized O(1) decrease-key | Dijkstra's algorithm |
+| Min-heap | Parent ≤ children | Find minimum |
+| Max-heap | Parent ≥ children | Find maximum |
+
+## Advantages
+
+- **O(1) find-min/find-max**: Root is always the extreme element
+- **O(log n) insert and delete**: Efficient operations
+- **Memory efficient**: Array representation, no pointer overhead
+- **Simple implementation**: Easier than balanced BSTs
+- **Excellent for top-K**: Find k largest/smallest in O(n log k)
+
+## Disadvantages
+
+- **No O(1) search**: Must scan O(n) to find arbitrary element
+- **Not sorted**: Only root is guaranteed to be extreme
+- **Poor cache behavior**: For large heaps, array traversal causes misses
+- **No efficient delete**: Deleting arbitrary element is O(n)
+- **Merge is O(n)**: Combining two binary heaps requires reconstruction
+
+## Syntax
+
+\`\`\`javascript
+// Array-based binary heap
+// Parent of i: Math.floor((i-1)/2)
+// Left child of i: 2*i + 1
+// Right child of i: 2*i + 2
+
+class MinHeap {\n  constructor() { this.heap = []; }\n  peek() { return this.heap[0]; }\n  push(val) {\n    this.heap.push(val);\n    this.bubbleUp(this.heap.length - 1);\n  }\n  pop() {\n    const min = this.heap[0];\n    const last = this.heap.pop();\n    if (this.heap.length > 0) {\n      this.heap[0] = last;\n      this.sinkDown(0);\n    }\n    return min;\n  }\n}\n\`\`\``,
+      codeExample: `class MinHeap {\n  constructor() { this.heap = [];\n  }\n  peek() { return this.heap[0]; }\n  push(val) {\n    this.heap.push(val);\n    this.bubbleUp(this.heap.length - 1);\n  }\n  pop() {\n    const min = this.heap[0];\n    const last = this.heap.pop();\n    if (this.heap.length > 0) {\n      this.heap[0] = last;\n      this.sinkDown(0);\n    }\n    return min;\n  }\n  bubbleUp(i) {\n    while (i > 0) {\n      const parent = Math.floor((i - 1) / 2);\n      if (this.heap[parent] <= this.heap[i]) break;\n      [this.heap[parent], this.heap[i]] = [this.heap[i], this.heap[parent]];\n      i = parent;\n    }\n  }\n  sinkDown(i) {\n    const n = this.heap.length;\n    while (true) {\n      let smallest = i;\n      const left = 2 * i + 1, right = 2 * i + 2;\n      if (left < n && this.heap[left] < this.heap[smallest]) smallest = left;\n      if (right < n && this.heap[right] < this.heap[smallest]) smallest = right;\n      if (smallest === i) break;\n      [this.heap[i], this.heap[smallest]] = [this.heap[smallest], this.heap[i]];\n      i = smallest;\n    }\n  }\n}\n\nconst pq = new MinHeap();\n[5, 3, 7, 1, 4].forEach(n => pq.push(n));\nconsole.log("Min:", pq.pop()); // 1\nconsole.log("Next:", pq.pop()); // 3`,
+      language: "typescript"
+    },
+    {
+      id: "8",
+      title: "Graphs",
+      content: `## Definition
+
+A **graph** is a non-linear data structure consisting of **vertices** (nodes) connected by **edges** (links). Edges can be directed (one-way) or undirected (two-way), and weighted (with a cost) or unweighted.
+
+## Introduction
+
+Graphs model relationships: social networks (friends), road maps (cities and distances), web pages (hyperlinks), dependencies (package managers), and more. Graph problems are among the most challenging in CS — many are NP-hard, and even polynomial algorithms require careful design.
+
+## History and Establishment
+
+- **1736**: Leonhard Euler invented graph theory with the Seven Bridges of Königsberg problem
+- **1950s**: Graph algorithms became central to operations research
+- **1956**: Edsger Dijkstra invented the shortest-path algorithm
+- **1970s**: Graph databases emerged for network analysis
+- **2000s**: Social networks made graph algorithms mainstream (PageRank, community detection)
+
+## Types
+
+| Type | Description | Example |
+|------|-------------|---------|
+| Directed | Edges have direction | Twitter follow |
+| Undirected | Edges are bidirectional | Facebook friend |
+| Weighted | Edges have costs | Road distance |
+| Cyclic | Contains cycles | Web pages |
+| Acyclic | No cycles (DAG) | Task dependencies |
+| Connected | All nodes reachable | Single network |
+| Disconnected | Some nodes isolated | Multiple networks |
+
+## Advantages
+
+- **Model relationships**: Natural representation of connected data
+- **Flexible**: Can represent almost any relational data
+- **Powerful algorithms**: BFS, DFS, Dijkstra, topological sort
+- **Foundation for other structures**: Trees are special graphs
+- **Real-world applicability**: Social networks, GPS, compilers all use graphs
+
+## Disadvantages
+
+- **Complex implementation**: Adjacency lists vs matrices, directed vs undirected
+- **Memory intensive**: Adjacency matrix is O(V²), even for sparse graphs
+- **Slow traversal**: BFS/DFS are O(V + E), can be slow on large graphs
+- **Hard to visualize**: Large graphs are impossible to draw
+- **NP-hard problems**: Many graph problems (TSP, graph coloring) are intractable
+
+## Representations
+
+\`\`\`
+// Adjacency List (space-efficient for sparse graphs)
+const graph = {
+  A: ["B", "C"],
+  B: ["A", "D"],
+  C: ["A"],
+  D: ["B"]
+};
+
+// Adjacency Matrix (O(1) edge check)
+const matrix = [
+  [0, 1, 1, 0],
+  [1, 0, 0, 1],
+  [1, 0, 0, 0],
+  [0, 1, 0, 0]
+];
+\`\`\``,
+      codeExample: `// BFS - Level order traversal\nfunction bfs(graph, start) {\n  const visited = new Set();\n  const queue = [start];\n  visited.add(start);\n  while (queue.length) {\n    const node = queue.shift();\n    for (const neighbor of graph[node]) {\n      if (!visited.has(neighbor)) {\n        visited.add(neighbor);\n        queue.push(neighbor);\n      }\n    }\n  }\n  return visited;\n}\n\n// DFS - Depth first traversal\nfunction dfs(graph, start, visited = new Set()) {\n  visited.add(start);\n  for (const neighbor of graph[start]) {\n    if (!visited.has(neighbor)) dfs(graph, neighbor, visited);\n  }\n  return visited;\n}\n\n// Topological sort (DAG)\nfunction topologicalSort(graph) {\n  const inDegree = {};\n  for (const node in graph) inDegree[node] = 0;\n  for (const node in graph) {\n    for (const neighbor of graph[node]) inDegree[neighbor]++;\n  }\n  const queue = Object.keys(inDegree).filter(n => inDegree[n] === 0);\n  const result = [];\n  while (queue.length) {\n    const node = queue.shift();\n    result.push(node);\n    for (const neighbor of graph[node]) {\n      if (--inDegree[neighbor] === 0) queue.push(neighbor);\n    }\n  }\n  return result;\n}\n\nconst graph = { A: ["B", "C"], B: ["D"], C: [], D: [] };\nconsole.log("BFS:", [...bfs(graph, "A")]);\nconsole.log("Topo:", topologicalSort(graph));`,
+      language: "typescript"
+    },
+    {
+      id: "9",
+      title: "Hash Tables",
+      content: `## Definition
+
+A **hash table** (hash map) is a data structure that maps keys to values using a **hash function**. The hash function converts a key into an array index, enabling average O(1) lookup, insert, and delete.
+
+## Introduction
+
+Hash tables are the most widely used data structure in practice. Dictionaries in Python, objects in JavaScript, HashMaps in Java, and unordered_maps in C++ all use hash tables. They provide O(1) average-case performance for key-value operations, making them indispensable for caching, counting, and lookup tables.
+
+## History and Establishment
+
+- **1953**: Hans Peter Luhn at IBM first proposed hash tables for information retrieval
+- **1954**: IBM used hash tables for keyword indexing
+- **1960s**: Multiple hashing techniques developed (linear probing, quadratic probing, chaining)
+- **1970s**: Cryptographic hash functions developed for security applications
+- **2000s**: Lock-free concurrent hash tables enabled high-performance parallel computing
+
+## Types
+
+| Type | Collision Resolution | Use Case |
+|------|---------------------|----------|
+| Chaining | Each bucket holds a linked list | General purpose |
+| Open Addressing | Find next empty slot | Memory-constrained |
+| Robin Hood | Steal from richer buckets | Reduced variance |
+| Cuckoo | Two hash functions | High load factors |
+
+## Advantages
+
+- **O(1) average**: Lookup, insert, delete in constant time
+- **Flexible keys**: Can hash strings, numbers, objects
+- **Simple API**: get, set, delete operations
+- **Cache-friendly**: Arrays provide good locality
+- **No ordering needed**: When you just need key-value lookup
+
+## Disadvantages
+
+- **O(n) worst case**: All keys hash to same bucket (degenerate case)
+- **No ordering**: Can't iterate in sorted order
+- **Memory overhead**: Pre-allocated buckets may be wasted
+- **Hash collisions**: Performance degrades with poor hash functions
+- **No range queries**: Can't efficiently find all keys in a range
+
+## Collision Resolution
+
+\`\`\`
+Chaining:  bucket → [key1,val1] → [key2,val2] → null
+Open Addressing:  bucket[0]=key1, bucket[1]=key2 (probed)
+\`\`\`
+
+## Load Factor
+
+\`\`\`
+loadFactor = numElements / numBuckets
+\`\`\`
+
+When load factor exceeds threshold (typically 0.75), the table resizes (doubles buckets) and rehashes all entries.`,
+      codeExample: `// Two Sum — O(n) with hash map\nfunction twoSum(nums, target) {\n  const map = new Map();\n  for (let i = 0; i < nums.length; i++) {\n    const complement = target - nums[i];\n    if (map.has(complement)) return [map.get(complement), i];\n    map.set(nums[i], i);\n  }\n  return [];\n}\nconsole.log(twoSum([2, 7, 11, 15], 9)); // [0, 1]\n\n// First non-repeating character\nfunction firstUniqChar(s) {\n  const freq = new Map();\n  for (const c of s) freq.set(c, (freq.get(c) || 0) + 1);\n  for (let i = 0; i < s.length; i++) {\n    if (freq.get(s[i]) === 1) return i;\n  }\n  return -1;\n}\nconsole.log(firstUniqChar("leetcode")); // 0\n\n// Group Anagrams\nfunction groupAnagrams(strs) {\n  const map = new Map();\n  for (const s of strs) {\n    const key = s.split('').sort().join('');\n    if (!map.has(key)) map.set(key, []);\n    map.get(key).push(s);\n  }\n  return Array.from(map.values());\n}\nconsole.log(groupAnagrams(["eat","tea","tan","ate","nat","bat"]));`,
+      language: "typescript"
+    },
+    {
+      id: "10",
+      title: "Strings & Pattern Matching",
+      content: `## Definition
+
+A **string** is a sequence of characters. **Pattern matching** is the problem of finding occurrences of a pattern within a text string. Efficient pattern matching algorithms are critical for text search, DNA sequence analysis, and compiler design.
+
+## Introduction
+
+Every naive pattern matcher uses O(n×m) time — comparing the pattern at every position in the text. For large texts (DNA sequences, log files), this is too slow. KMP (Knuth-Morris-Pratt) achieves O(n+m) by precomputing how much of the pattern can be skipped after a mismatch.
+
+## History and Establishment
+
+- **1970s**: String matching was formalized in automata theory
+- **1977**: Knuth, Morris, and Pratt published the KMP algorithm
+- **1977**: Boyer and Moore published a faster practical algorithm
+- **1980s**: Rabin-Karp introduced hash-based pattern matching
+- **2000s**: Suffix trees and arrays became standard for advanced string problems
+
+## Types
+
+| Algorithm | Time | Preprocessing | Use Case |
+|-----------|------|---------------|----------|
+| Naive | O(nm) | None | Small texts |
+| KMP | O(n+m) | O(m) LPS array | General purpose |
+| Boyer-Moore | O(nm) | O(m) bad character | Practical text search |
+| Rabin-Karp | O(n+m) | O(m) hash | Multiple patterns |
+| Suffix Tree | O(n) build, O(m) search | O(n) | Many queries |
+
+## Advantages
+
+- **KMP guarantees O(n+m)**: No degenerate cases
+- **Boyer-Moore is fastest in practice**: Skips characters, often sublinear
+- **Rabin-Karp handles multiple patterns**: Hash-based, easy to parallelize
+- **Suffix arrays**: Space-efficient for repeated queries
+
+## Disadvantages
+
+- **Preprocessing overhead**: KMP and Boyer-Moore need precomputation
+- **Space for suffix trees**: O(n) but with large constant factors
+- **Complexity of implementation**: Boyer-Moore is notoriously tricky
+- **Not needed for small texts**: Naive is fine for short strings
+
+## KMP Key Insight
+
+When a mismatch occurs at position j in the pattern, the LPS (Longest Proper Prefix that is also Suffix) array tells you the next position to check. You never need to backtrack in the text.
+
+\`\`\`
+Pattern: ABABC
+LPS:     [0, 0, 1, 2, 0]
+\`\`\``,
+      codeExample: `// KMP Pattern Search\nfunction kmpSearch(text, pattern) {\n  const lps = buildLPS(pattern);\n  let i = 0, j = 0;\n  while (i < text.length) {\n    if (text[i] === pattern[j]) { i++; j++; }\n    if (j === pattern.length) return i - j;\n    if (i < text.length && text[i] !== pattern[j]) {\n      j > 0 ? j = lps[j - 1] : i++;\n    }\n  }\n  return -1;\n}\n\nfunction buildLPS(pattern) {\n  const lps = Array(pattern.length).fill(0);\n  let len = 0, i = 1;\n  while (i < pattern.length) {\n    if (pattern[i] === pattern[len]) lps[i++] = ++len;\n    else if (len > 0) len = lps[len - 1];\n    else lps[i++] = 0;\n  }\n  return lps;\n}\n\nconsole.log(kmpSearch("ABABDABACDABABCABAB", "ABABCABAB")); // 10\n\n// Rabin-Karp\nfunction rabinKarp(text, pattern) {\n  const n = text.length, m = pattern.length;\n  let textHash = 0, patternHash = 0;\n  for (let i = 0; i < m; i++) {\n    patternHash += pattern.charCodeAt(i);\n    textHash += text.charCodeAt(i);\n  }\n  for (let i = 0; i <= n - m; i++) {\n    if (textHash === patternHash && text.slice(i, i + m) === pattern) return i;\n    textHash = textHash - text.charCodeAt(i) + text.charCodeAt(i + m);\n  }\n  return -1;\n}\nconsole.log(rabinKarp("hello world", "world")); // 6`,
+      language: "typescript"
+    }
+  ]
+},
+{
 
     slug: "data-structures",
 
