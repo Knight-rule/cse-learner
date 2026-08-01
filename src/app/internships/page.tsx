@@ -2,60 +2,87 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { ChevronRight, Briefcase, Search, ExternalLink, Building2, GraduationCap, Sparkles } from "lucide-react";
+import { ChevronRight, Search, ExternalLink, Building2, GraduationCap, Globe, Wifi, MapPin } from "lucide-react";
 import { internships, internshipCompanies, internshipTypes } from "@/data/internships";
+
+const modeFilters = [
+  { value: "", label: "All Modes", icon: <Globe size={13} /> },
+  { value: "Online", label: "Online", icon: <Wifi size={13} /> },
+  { value: "Offline", label: "Offline", icon: <MapPin size={13} /> },
+  { value: "Hybrid", label: "Hybrid", icon: <Globe size={13} /> },
+];
+
+const originFilters = [
+  { value: "", label: "All Regions" },
+  { value: "International", label: "International" },
+  { value: "India", label: "India" },
+];
 
 export default function InternshipsPage() {
   const [search, setSearch] = useState("");
   const [company, setCompany] = useState("");
   const [type, setType] = useState("");
+  const [mode, setMode] = useState("");
+  const [origin, setOrigin] = useState("");
 
   const filtered = useMemo(() => {
     return internships.filter((i) => {
       const matchSearch = !search || i.name.toLowerCase().includes(search.toLowerCase()) || i.description.toLowerCase().includes(search.toLowerCase()) || i.tags.some((t) => t.toLowerCase().includes(search.toLowerCase()));
       const matchCompany = !company || i.company === company;
       const matchType = !type || i.type === type;
-      return matchSearch && matchCompany && matchType;
+      const matchMode = !mode || i.mode === mode;
+      const matchOrigin = !origin || i.origin === origin;
+      return matchSearch && matchCompany && matchType && matchMode && matchOrigin;
     });
-  }, [search, company, type]);
+  }, [search, company, type, mode, origin]);
+
+  const onlineCount = internships.filter((i) => i.mode === "Online").length;
+  const offlineCount = internships.filter((i) => i.mode === "Offline").length;
+  const hybridCount = internships.filter((i) => i.mode === "Hybrid").length;
 
   return (
     <div style={{ minHeight: "100vh" }}>
-      {/* ═══ Premium Hero ═══ */}
+      {/* ═══ Hero ═══ */}
       <div style={{
         background: "linear-gradient(135deg, rgba(16, 185, 129, 0.06), rgba(59, 130, 246, 0.04), transparent)",
-        borderBottom: "1px solid var(--border)",
-        padding: "48px 0 40px",
-        position: "relative",
-        overflow: "hidden",
+        borderBottom: "1px solid var(--border)", padding: "48px 0 40px",
+        position: "relative", overflow: "hidden",
       }}>
         <div style={{
           position: "absolute", top: 0, right: 0, bottom: 0, left: 0,
           backgroundImage: "radial-gradient(circle at 60% 30%, rgba(16, 185, 129, 0.06), transparent 60%)",
           pointerEvents: "none",
         }} />
-
         <div className="container" style={{ position: "relative", zIndex: 1 }}>
           <div className="breadcrumb" style={{ marginBottom: 24 }}>
             <Link href="/">Home</Link>
             <ChevronRight size={14} />
             <span>Internships</span>
           </div>
-
           <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 8 }}>
             <GraduationCap size={24} style={{ color: "var(--accent-green)" }} />
-            <h1 style={{
-              fontSize: "clamp(28px, 5vw, 36px)",
-              fontWeight: 800,
-              color: "var(--text-primary)",
-              lineHeight: 1.2,
-            }}>
+            <h1 style={{ fontSize: "clamp(28px, 5vw, 36px)", fontWeight: 800, color: "var(--text-primary)", lineHeight: 1.2 }}>
               Free <span className="gradient-text-premium">Internships</span> & Programs
             </h1>
           </div>
           <p style={{ fontSize: 16, color: "var(--text-secondary)", lineHeight: 1.6, maxWidth: 520 }}>
-            Curated internship opportunities, open source programs, and fellowships from top companies.
+            Curated internship opportunities, open source programs, and fellowships from top companies worldwide.
           </p>
+
+          {/* Quick Stats */}
+          <div style={{ display: "flex", gap: 16, marginTop: 16, flexWrap: "wrap" }}>
+            {[
+              { label: "Online", count: onlineCount, color: "var(--accent-green)" },
+              { label: "Offline", count: offlineCount, color: "var(--accent)" },
+              { label: "Hybrid", count: hybridCount, color: "var(--accent-purple)" },
+            ].map((s) => (
+              <div key={s.label} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13 }}>
+                <div style={{ width: 8, height: 8, borderRadius: "50%", background: s.color }} />
+                <span style={{ color: "var(--text-muted)" }}>{s.label}:</span>
+                <strong style={{ color: "var(--text-primary)" }}>{s.count}</strong>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -64,12 +91,9 @@ export default function InternshipsPage() {
         {/* Search */}
         <div style={{
           display: "flex", alignItems: "center", gap: 10,
-          padding: "12px 16px",
-          borderRadius: "var(--radius-lg)",
-          background: "var(--bg-card)",
-          border: "1px solid var(--border)",
-          marginBottom: 20,
-          maxWidth: 480,
+          padding: "12px 16px", borderRadius: "var(--radius-lg)",
+          background: "var(--bg-card)", border: "1px solid var(--border)",
+          marginBottom: 20, maxWidth: 480,
         }}>
           <Search size={18} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
           <input
@@ -77,12 +101,53 @@ export default function InternshipsPage() {
             placeholder="Search internships..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            style={{
-              flex: 1, border: "none", outline: "none",
-              background: "transparent", color: "var(--text-primary)",
-              fontSize: 14,
-            }}
+            style={{ flex: 1, border: "none", outline: "none", background: "transparent", color: "var(--text-primary)", fontSize: 14 }}
           />
+        </div>
+
+        {/* Mode Filter */}
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)", marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>Mode</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {modeFilters.map((f) => (
+              <button
+                key={f.value}
+                onClick={() => setMode(f.value)}
+                style={{
+                  padding: "8px 16px", borderRadius: "var(--radius-lg)",
+                  background: mode === f.value ? "var(--gradient)" : "var(--bg-card)",
+                  border: `1px solid ${mode === f.value ? "transparent" : "var(--border)"}`,
+                  color: mode === f.value ? "#fff" : "var(--text-secondary)",
+                  fontSize: 13, fontWeight: 500, cursor: "pointer", transition: "all 0.2s",
+                  display: "flex", alignItems: "center", gap: 6,
+                }}
+              >
+                {f.icon} {f.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Region Filter */}
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)", marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>Region</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {originFilters.map((f) => (
+              <button
+                key={f.value}
+                onClick={() => setOrigin(f.value)}
+                style={{
+                  padding: "8px 16px", borderRadius: "var(--radius-lg)",
+                  background: origin === f.value ? "var(--gradient)" : "var(--bg-card)",
+                  border: `1px solid ${origin === f.value ? "transparent" : "var(--border)"}`,
+                  color: origin === f.value ? "#fff" : "var(--text-secondary)",
+                  fontSize: 13, fontWeight: 500, cursor: "pointer", transition: "all 0.2s",
+                }}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Type filter */}
@@ -96,8 +161,7 @@ export default function InternshipsPage() {
                 background: !type ? "var(--gradient)" : "var(--bg-card)",
                 border: `1px solid ${!type ? "transparent" : "var(--border)"}`,
                 color: !type ? "#fff" : "var(--text-secondary)",
-                fontSize: 13, fontWeight: 500, cursor: "pointer",
-                transition: "all 0.2s",
+                fontSize: 13, fontWeight: 500, cursor: "pointer", transition: "all 0.2s",
               }}
             >
               All
@@ -111,8 +175,7 @@ export default function InternshipsPage() {
                   background: type === t ? "var(--gradient)" : "var(--bg-card)",
                   border: `1px solid ${type === t ? "transparent" : "var(--border)"}`,
                   color: type === t ? "#fff" : "var(--text-secondary)",
-                  fontSize: 13, fontWeight: 500, cursor: "pointer",
-                  transition: "all 0.2s",
+                  fontSize: 13, fontWeight: 500, cursor: "pointer", transition: "all 0.2s",
                 }}
               >
                 {t}
@@ -132,8 +195,7 @@ export default function InternshipsPage() {
                 background: !company ? "var(--gradient)" : "var(--bg-card)",
                 border: `1px solid ${!company ? "transparent" : "var(--border)"}`,
                 color: !company ? "#fff" : "var(--text-secondary)",
-                fontSize: 13, fontWeight: 500, cursor: "pointer",
-                transition: "all 0.2s",
+                fontSize: 13, fontWeight: 500, cursor: "pointer", transition: "all 0.2s",
               }}
             >
               All
@@ -147,8 +209,7 @@ export default function InternshipsPage() {
                   background: company === c ? "var(--gradient)" : "var(--bg-card)",
                   border: `1px solid ${company === c ? "transparent" : "var(--border)"}`,
                   color: company === c ? "#fff" : "var(--text-secondary)",
-                  fontSize: 13, fontWeight: 500, cursor: "pointer",
-                  transition: "all 0.2s",
+                  fontSize: 13, fontWeight: 500, cursor: "pointer", transition: "all 0.2s",
                 }}
               >
                 {c}
@@ -165,7 +226,7 @@ export default function InternshipsPage() {
         {/* Cards */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(min(340px, 100%), 1fr))",
           gap: 16,
         }}>
           {filtered.map((intern, i) => (
@@ -176,8 +237,7 @@ export default function InternshipsPage() {
               rel="noopener noreferrer"
               className="card-premium"
               style={{
-                display: "flex", flexDirection: "column",
-                padding: 24,
+                display: "flex", flexDirection: "column", padding: 24,
                 textDecoration: "none", color: "inherit",
               }}
             >
@@ -187,8 +247,7 @@ export default function InternshipsPage() {
                 <span style={{
                   fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5,
                   padding: "3px 10px", borderRadius: 8,
-                  background: "rgba(16, 185, 129, 0.1)",
-                  color: "var(--accent-green)",
+                  background: "rgba(16, 185, 129, 0.1)", color: "var(--accent-green)",
                 }}>
                   {intern.type}
                 </span>
@@ -205,13 +264,31 @@ export default function InternshipsPage() {
                 {intern.description}
               </p>
 
+              {/* Mode + Origin Badges */}
+              <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
+                <span style={{
+                  fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 8,
+                  background: intern.mode === "Online" ? "rgba(16,185,129,0.12)" : intern.mode === "Offline" ? "rgba(59,130,246,0.12)" : "rgba(139,92,246,0.12)",
+                  color: intern.mode === "Online" ? "var(--accent-green)" : intern.mode === "Offline" ? "var(--accent)" : "var(--accent-purple)",
+                  display: "flex", alignItems: "center", gap: 4,
+                }}>
+                  {intern.mode === "Online" ? <Wifi size={10} /> : intern.mode === "Offline" ? <MapPin size={10} /> : <Globe size={10} />}
+                  {intern.mode}
+                </span>
+                <span style={{
+                  fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 8,
+                  background: "var(--surface)", color: "var(--text-muted)",
+                }}>
+                  {intern.origin}
+                </span>
+              </div>
+
               {/* Tags */}
               <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 16 }}>
                 {intern.tags.map((tag) => (
                   <span key={tag} style={{
                     fontSize: 11, padding: "3px 8px", borderRadius: 6,
-                    background: "var(--surface)",
-                    color: "var(--text-muted)",
+                    background: "var(--surface)", color: "var(--text-muted)",
                   }}>{tag}</span>
                 ))}
               </div>
@@ -233,7 +310,7 @@ export default function InternshipsPage() {
             <div style={{ fontSize: 18, fontWeight: 600, color: "var(--text-secondary)", marginBottom: 8 }}>
               No internships match your filters
             </div>
-            <div style={{ fontSize: 14 }}>Try different keywords.</div>
+            <div style={{ fontSize: 14 }}>Try different keywords or adjust filters.</div>
           </div>
         )}
       </div>

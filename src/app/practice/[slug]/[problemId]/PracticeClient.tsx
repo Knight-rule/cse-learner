@@ -3,7 +3,6 @@
 import { useState, useCallback } from "react";
 import { Play, RotateCcw, Copy, Check, ChevronRight, ChevronDown, Lightbulb, Loader2, CheckCircle, XCircle, Circle } from "lucide-react";
 import Link from "next/link";
-import { MessageSquare } from "lucide-react";
 import dynamic from "next/dynamic";
 import type { PracticeProblem } from "@/data/practice";
 import { markPracticeSolved, isPracticeSolved } from "@/lib/tracker";
@@ -147,13 +146,6 @@ export default function PracticeClient({ problem, courseSlug, problemIndex, tota
                 <div><span style={{ color: "var(--text-muted)" }}>Expected:</span> <code style={{ color: "var(--accent-green)" }}>{tc.expected}</code></div>
               </div>
             ))}
-          </div>
-
-          {/* Hints */}
-          <div className="mt-6">
-            <Link href={`/discuss/${courseSlug}/${problem.id}`} className="flex items-center gap-2 body-sm discuss-link">
-              <MessageSquare size={16} /> Discuss this problem
-            </Link>
           </div>
 
           <div className="mt-6">
