@@ -74,7 +74,7 @@ export default function HomePage() {
               </div>
 
               {/* Trust badges */}
-              <div style={{ display: "flex", gap: 24, marginTop: 40, opacity: 0.6 }}>
+              <div style={{ display: "flex", gap: 24, marginTop: 40 }}>
                 <span style={{ fontSize: 13, display: "flex", alignItems: "center", gap: 6 }}>
                   <BookOpen size={14} /> {courses.length} Courses
                 </span>
@@ -222,7 +222,7 @@ export default function HomePage() {
             <span className="badge badge-accent" style={{ display: "inline-flex", marginBottom: 16 }}>About</span>
             <h2 className="heading-xl">What We Offer</h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+          <div className="testimonial-grid">
             {testimonials.map((t) => (
               <div key={t.name} style={{
                 padding: 28,

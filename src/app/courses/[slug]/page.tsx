@@ -152,13 +152,13 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
       </div>
 
       {/* ═══ Course Lessons ═══ */}
-      <div className="container-sm" style={{ padding: "48px 20px 80px" }}>
+      <div className="container-sm" style={{ paddingTop: 48, paddingBottom: 80 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
           <GraduationCap size={20} style={{ color: colors[0] }} />
           <h2 style={{ fontSize: 22, fontWeight: 700, color: "var(--text-primary)" }}>Course Lessons</h2>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {course.lessons.map((lesson, i) => (
             <Link
               key={lesson.id}

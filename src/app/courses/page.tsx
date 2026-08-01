@@ -113,7 +113,7 @@ export default function CoursesPage() {
       </div>
 
       {/* ═══ Content ═══ */}
-      <div className="container" style={{ padding: "32px 20px 80px" }}>
+      <div className="container" style={{ paddingTop: 32, paddingBottom: 80 }}>
         {/* Category filters */}
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 32 }}>
           <button
@@ -184,8 +184,8 @@ export default function CoursesPage() {
             {grouped.map((group) => (
               <div key={group.category}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-                  <span style={{ fontSize: 22 }}>{group.icon}</span>
-                  <h2 style={{ fontSize: 20, fontWeight: 700, color: "var(--text-primary)" }}>{group.category}</h2>
+                  <span style={{ fontSize: 20 }}>{group.icon}</span>
+                  <h2 style={{ fontSize: 22, fontWeight: 700, color: "var(--text-primary)" }}>{group.category}</h2>
                   <span style={{
                     fontSize: 12, fontWeight: 600, color: "var(--text-muted)",
                     padding: "2px 8px", borderRadius: 6,
@@ -194,7 +194,7 @@ export default function CoursesPage() {
                 </div>
                 <div style={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(min(320px, 100%), 1fr))",
                   gap: 20,
                 }}>
                   {group.courses.map((course) => (
@@ -216,7 +216,7 @@ export default function CoursesPage() {
           /* Flat grid when filtering */
           <div style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fill, minmax(min(320px, 100%), 1fr))",
             gap: 20,
           }}>
             {searched.map((course) => (
