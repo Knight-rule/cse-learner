@@ -1521,7 +1521,7 @@ public class ListsDemo {
 
     title: "C Language",
 
-    description: "Master C programming from fundamentals to pointers, memory management, and data structures.",
+    description: "Master C programming from its origins to advanced topics — pointers, memory management, data structures, and system-level programming.",
 
     icon: "⚙️",
 
@@ -1529,77 +1529,3651 @@ public class ListsDemo {
     category: "Languages",
 
     lessons: [
-
       {
-
         id: "1",
+        title: "History, Origin & Why Learn C",
+        content: `## Origin of C Language
 
-        title: "C Fundamentals",
+C was developed between 1969 and 1973 at **Bell Labs** by **Dennis Ritchie**. It evolved from an earlier language called **B** (written by Ken Thompson), which itself came from **BCPL** (Basic Combined Programming Language by Martin Richards).
 
-        content: "C is a low-level, procedural language.\n\nKey features:\n- Direct memory access (pointers)\n- Manual memory management\n- Preprocessor directives\n- Structured programming\n\nData types: char, int, float, double, void\n\nArrays and pointers are closely related in C.",
+### Timeline
+- **1969**: Ken Thompson writes B language at Bell Labs for Unix development
+- **1971**: Dennis Ritchie begins developing C to add data types to B
+- **1973**: C language is fully realized; Unix kernel is rewritten in C
+- **1978**: "The C Programming Language" book (K&R C) published by Kernighan & Ritchie
+- **1989**: ANSI C standard (C89/C90) established
+- **1999**: C99 standard — added inline functions, variable-length arrays, // comments
+- **2011**: C11 standard — added _Generic, _Static_assert, threads
+- **2018**: C18 standard — bug fixes for C11
+- **2023**: C23 standard — latest standard with new features
 
-        codeExample: `#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n\nint main() {\n    // Variables\n    int age = 25;\n    float height = 5.6f;\n    char grade = 'A';\n\n    // Arrays\n    int nums[] = {1, 2, 3, 4, 5};\n    int size = sizeof(nums) / sizeof(nums[0]);\n\n    // Pointers\n    int *ptr = &age;\n    printf("Age: %d\\n", *ptr);  // Dereference\n    *ptr = 30;  // Modify through pointer\n    printf("Age: %d\\n", age);   // 30\n\n    // Dynamic memory\n    int *arr = (int*)malloc(5 * sizeof(int));\n    for (int i = 0; i < 5; i++) {\n        arr[i] = i * 10;\n    }\n    free(arr);  // Always free!\n\n    // Strings\n    char str[50] = "Hello";\n    strcat(str, " World");\n    printf("%s\\n", str);  // Hello World\n    printf("Length: %lu\\n", strlen(str));\n\n    return 0;\n}`,
+### Why C Was Created
+Unix was originally written in assembly language. Assembly is:
+- Platform-dependent (tied to specific hardware)
+- Hard to read and maintain
+- Not portable across machines
 
+Ritchie wanted a language that was:
+- Close to the hardware (like assembly)
+- Portable across different machines
+- High-level enough to be readable
+
+C solved all three problems. The Unix kernel was rewritten in C, proving that an operating system could be written in a high-level language.
+
+## Why Learn C?
+
+### 1. Foundation of Modern Programming
+C is the "mother language" of programming. Many languages borrow from C:
+- **C++**: Direct extension of C
+- **Java**: Syntax derived from C
+- **Python**: Written in C (CPython interpreter)
+- **JavaScript**: Syntax influenced by C
+- **Go, Rust, Swift**: All heavily influenced by C
+
+### 2. Operating Systems
+Nearly all operating system kernels are written in C:
+- **Linux** kernel: ~95% C
+- **Windows**: Core written in C
+- **macOS/iOS**: Darwin kernel in C
+- **Android**: Linux kernel (C)
+
+### 3. Embedded Systems & IoT
+C dominates embedded programming because:
+- Minimal runtime overhead
+- Direct hardware access
+- Predictable performance
+- Small binary size
+
+### 4. Performance
+C compiles directly to machine code. No virtual machine, no garbage collector. This makes C one of the fastest languages available.
+
+### 5. Portability
+C code can run on virtually any platform with a C compiler — from microcontrollers to supercomputers.
+
+### 6. Understanding How Computers Work
+Learning C teaches you:
+- How memory actually works (stack vs heap)
+- How data is stored in memory
+- How function calls work at the machine level
+- How operating systems manage processes
+
+## Advantages of C
+- **Speed**: One of the fastest compiled languages
+- **Portability**: Runs on almost any platform
+- **Minimal runtime**: Small executable size
+- **Direct memory access**: Pointers allow low-level control
+- **Rich library**: Standard library covers I/O, strings, math, memory
+- **Extensible**: Can call assembly, be called from other languages
+- **Battle-tested**: 50+ years of use in production systems
+
+## Disadvantages of C
+- **No built-in OOP**: No classes, inheritance, polymorphism
+- **Manual memory management**: Risk of leaks, dangling pointers
+- **No bounds checking**: Array out-of-bounds causes undefined behavior
+- **No garbage collector**: Must manually free memory
+- **Verbose error handling**: No exceptions; must check return codes
+- **No built-in data structures**: No hash maps, trees, etc. — must implement your own`,
+        codeExample: `#include <stdio.h>
+
+// C was created to rewrite Unix in a portable language.
+// This simple program demonstrates C's syntax and philosophy:
+// small, efficient, close to the hardware.
+
+int main() {
+    // C has a minimal runtime — this is the simplest valid program
+    printf("C Language — Created by Dennis Ritchie at Bell Labs (1972)\\n");
+    printf("Unix was rewritten in C, proving high-level languages could build OS\\n\\n");
+
+    // C's philosophy: trust the programmer
+    // You have full control, but also full responsibility
+
+    // Data types — C is statically typed
+    int year = 1972;           // Integer
+    float pi = 3.14f;         // Single precision float
+    double precise = 3.141592653589793; // Double precision
+    char letter = 'C';        // Single character
+    int isAlive = 1;          // Boolean (C99 has _Bool)
+
+    printf("C was born in %d\\n", year);
+    printf("Pi: %.10f\\n", precise);
+    printf("Language: %c\\n", letter);
+    printf("Still relevant: %s\\n", isAlive ? "Yes" : "No");
+
+    // sizeof — C lets you inspect type sizes at compile time
+    printf("\\nType sizes on this system:\\n");
+    printf("char: %lu byte\\n", sizeof(char));
+    printf("int: %lu bytes\\n", sizeof(int));
+    printf("float: %lu bytes\\n", sizeof(float));
+    printf("double: %lu bytes\\n", sizeof(double));
+    printf("pointer: %lu bytes\\n", sizeof(void*));
+
+    return 0;
+}`,
         language: "c"
-
       },
-
       {
-
         id: "2",
+        title: "Environment Setup & First Program",
+        content: `## Setting Up Your C Development Environment
 
-        title: "Pointers & Memory",
+### On Windows
+1. Install **MinGW-w64** (GCC compiler for Windows)
+   - Download from: https://www.mingw-w64.org/
+   - Or use MSYS2: https://www.msys2.org/
+2. Add MinGW bin directory to your PATH
+3. Verify: open Command Prompt and type \`gcc --version\`
 
-        content: "Pointers are variables that store memory addresses.\n\nKey concepts:\n- & (address-of operator)\n- * (dereference operator)\n- Pointer arithmetic\n- Arrays decay to pointers\n- NULL pointer\n- Dangling pointer\n\nMemory allocation:\n- malloc: allocate uninitialized memory\n- calloc: allocate zero-initialized memory\n- realloc: resize allocation\n- free: deallocate memory",
+### On macOS
+1. Install Xcode Command Line Tools:
+   \`xcode-select --install\`
+2. Verify: \`gcc --version\` (uses Apple Clang)
 
-        codeExample: `#include <stdio.h>\n#include <stdlib.h>\n\nvoid swap(int *a, int *b) {\n    int temp = *a;\n    *a = *b;\n    *b = temp;\n}\n\nint main() {\n    int x = 10, y = 20;\n    swap(&x, &y);\n    printf("x=%d, y=%d\\n", x, y);  // x=20, y=10\n\n    // Dynamic array\n    int n = 5;\n    int *arr = (int*)calloc(n, sizeof(int));\n    for (int i = 0; i < n; i++) {\n        arr[i] = i * i;\n    }\n\n    // Reallocate\n    n = 10;\n    arr = (int*)realloc(arr, n * sizeof(int));\n    for (int i = 5; i < n; i++) {\n        arr[i] = i * 2;\n    }\n\n    for (int i = 0; i < n; i++) {\n        printf("%d ", arr[i]);\n    }\n    free(arr);\n\n    return 0;\n}`,
+### On Linux (Ubuntu/Debian)
+\`\`\`bash
+sudo apt update
+sudo apt install build-essential
+gcc --version
+\`\`\`
 
+### Using an Online Compiler
+For quick testing, use:
+- https://onlinegdb.com/online_c_compiler
+- https://www.programiz.com/c-programming/online-compiler
+
+## Compiling and Running
+
+### Basic Compilation
+\`\`\`bash
+gcc program.c -o program
+./program
+\`\`\`
+
+### With Warnings (Recommended)
+\`\`\`bash
+gcc -Wall -Wextra program.c -o program
+\`\`\`
+
+### With Debug Symbols
+\`\`\`bash
+gcc -g program.c -o program
+\`\`\`
+
+## The Compilation Process
+1. **Preprocessing**: Handles #include, #define, macros
+2. **Compilation**: Converts C code to assembly
+3. **Assembly**: Converts assembly to object code (.o)
+4. **Linking**: Combines object files with libraries to create executable
+
+## Anatomy of a C Program
+- \`#include\` — Preprocessor directive to include header files
+- \`int main()\` — Entry point of every C program
+- \`return 0\` — Tells the OS the program ran successfully
+- Semicolons \`;\` — End every statement
+- Curly braces \`{}\` — Define code blocks`,
+        codeExample: `// program.c — Your first C program
+// Compile: gcc program.c -o program
+// Run: ./program (Linux/Mac) or program.exe (Windows)
+
+#include <stdio.h>   // Standard Input/Output library
+#include <string.h>  // String manipulation
+#include <stdlib.h>  // Standard library (malloc, free, etc.)
+#include <math.h>    // Math functions (compile with -lm)
+
+int main() {
+    // ============================================
+    // C PROGRAM STRUCTURE
+    // ============================================
+    // 1. Preprocessor directives (#include)
+    // 2. Global declarations (optional)
+    // 3. main() function — entry point
+    // 4. Other functions (optional)
+
+    printf("=== C Program Structure ===\\n\\n");
+
+    // ============================================
+    // BASIC OUTPUT
+    // ============================================
+    printf("Hello, World!\\n");
+    printf("Welcome to C Programming\\n\\n");
+
+    // ============================================
+    // FORMATTED OUTPUT (printf)
+    // ============================================
+    printf("=== Formatted Output ===\\n");
+    int age = 25;
+    float gpa = 3.85;
+    char grade = 'A';
+
+    printf("Age: %d\\n", age);           // %d = integer
+    printf("GPA: %.2f\\n", gpa);        // %.2f = float with 2 decimals
+    printf("Grade: %c\\n", grade);      // %c = character
+    printf("Name: %s\\n", "Alice");     // %s = string
+    printf("Address: %p\\n", (void*)&age); // %p = pointer address
+    printf("Size of int: %lu bytes\\n", sizeof(int)); // %lu = unsigned long
+
+    // ============================================
+    // BASIC INPUT (scanf)
+    // ============================================
+    printf("\\n=== Input ===\\n");
+    int num;
+    printf("Enter a number: ");
+    scanf("%d", &num);  // & is the address-of operator
+    printf("You entered: %d\\n", num);
+
+    // ============================================
+    // COMMENTS
+    // ============================================
+    // This is a single-line comment
+
+    /*
+       This is a
+       multi-line comment
+    */
+
+    // ============================================
+    // RETURN VALUE
+    // ============================================
+    // return 0 tells the OS the program succeeded
+    // Non-zero return values indicate errors
+    return 0;
+}`,
         language: "c"
-
       },
-
       {
-
         id: "3",
+        title: "Data Types & Variables",
+        content: `## C Data Types
 
-        title: "Structures & Unions",
+C is a **statically typed** language — you must declare the type of every variable before using it.
 
-        content: "Structures group different data types under one name.\n\nKey concepts:\n- struct keyword\n- Dot operator (.) for access\n- Arrow operator (->) via pointer\n- typedef for aliasing\n- Nested structures\n- Unions (shared memory)\n- Enums (named constants)",
+### Fundamental Data Types
 
-        codeExample: `#include <stdio.h>\n#include <string.h>\n\nstruct Student {\n    char name[50];\n    int age;\n    float gpa;\n};\n\nvoid printStudent(struct Student *s) {\n    printf("Name: %s, Age: %d, GPA: %.2f\\n",\n           s->name, s->age, s->gpa);\n}\n\nint main() {\n    struct Student s1 = {"Alice", 20, 3.8};\n    struct Student s2;\n    strcpy(s2.name, "Bob");\n    s2.age = 22;\n    s2.gpa = 3.5;\n\n    printStudent(&s1);\n    printStudent(&s2);\n\n    // Array of structs\n    struct Student class[3] = {\n        {"Charlie", 21, 3.9},\n        {"Diana", 23, 3.7},\n        {"Eve", 20, 3.6}\n    };\n\n    for (int i = 0; i < 3; i++) {\n        printStudent(&class[i]);\n    }\n\n    return 0;\n}`,
+| Type | Size | Range | Format Specifier |
+|------|------|-------|-----------------|
+| char | 1 byte | -128 to 127 | %c |
+| unsigned char | 1 byte | 0 to 255 | %c |
+| short | 2 bytes | -32,768 to 32,767 | %hd |
+| unsigned short | 2 bytes | 0 to 65,535 | %hu |
+| int | 4 bytes | -2.1B to 2.1B | %d |
+| unsigned int | 4 bytes | 0 to 4.2B | %u |
+| long | 8 bytes | Very large | %ld |
+| unsigned long | 8 bytes | 0 to very large | %lu |
+| float | 4 bytes | 6-7 decimal digits | %f |
+| double | 8 bytes | 15-16 decimal digits | %lf |
+| long double | 16 bytes | 18-19 digits | %Lf |
 
+### Type Modifiers
+- \`unsigned\` — Only positive values (doubles the positive range)
+- \`signed\` — Can be positive or negative (default)
+- \`short\` — Smaller storage
+- \`long\` — Larger storage
+- \`long long\` — Even larger (C99)
+
+### Constants
+- \`#define PI 3.14159\` — Preprocessor constant (no type checking)
+- \`const int MAX = 100;\` — Typed constant (type-safe, preferred)
+- \`enum Color { RED, GREEN, BLUE };\` — Enumeration constants
+
+### Variable Naming Rules
+1. Must start with a letter or underscore
+2. Can contain letters, digits, underscores
+3. Case-sensitive (\`count\` ≠ \`Count\` ≠ \`COUNT\`)
+4. Cannot use C keywords (\`int\`, \`return\`, \`if\`, etc.)
+5. No spaces or special characters
+6. Descriptive names are best practice
+
+### Variable Scope
+- **Local variables**: Declared inside a function, exist only during function execution
+- **Global variables**: Declared outside all functions, accessible everywhere
+- **Static variables**: \`static\` keyword — persists between function calls`,
+        codeExample: `#include <stdio.h>
+#include <limits.h>   // For integer limits
+#include <float.h>    // For float limits
+
+int main() {
+    // ============================================
+    // INTEGER TYPES
+    // ============================================
+    printf("=== Integer Types ===\\n");
+
+    char c = 'A';                    // 1 byte
+    unsigned char uc = 255;          // 1 byte, unsigned
+    short s = -32000;                // 2 bytes
+    unsigned short us = 65000;       // 2 bytes, unsigned
+    int n = 1000000;                 // 4 bytes
+    unsigned int un = 3000000000U;   // 4 bytes, unsigned
+    long l = 9999999999L;            // 8 bytes
+    long long ll = 9999999999999LL;  // 8 bytes
+
+    printf("char: %c (%d bytes)\\n", c, sizeof(char));
+    printf("short: %d (%lu bytes)\\n", s, sizeof(short));
+    printf("int: %d (%lu bytes)\\n", n, sizeof(int));
+    printf("long: %ld (%lu bytes)\\n", l, sizeof(long));
+    printf("long long: %lld (%lu bytes)\\n", ll, sizeof(long long));
+
+    // ============================================
+    // FLOATING POINT TYPES
+    // ============================================
+    printf("\\n=== Floating Point Types ===\\n");
+
+    float f = 3.14f;                    // 4 bytes, ~7 digits precision
+    double d = 3.141592653589793;       // 8 bytes, ~15 digits precision
+    long double ld = 3.141592653589793238L; // 16 bytes
+
+    printf("float: %.10f (%lu bytes)\\n", f, sizeof(float));
+    printf("double: %.15lf (%lu bytes)\\n", d, sizeof(double));
+    printf("long double: %.18Lf (%lu bytes)\\n", ld, sizeof(long double));
+
+    // ============================================
+    // TYPE LIMITS
+    // ============================================
+    printf("\\n=== Type Limits ===\\n");
+    printf("int range: %d to %d\\n", INT_MIN, INT_MAX);
+    printf("unsigned int range: 0 to %u\\n", UINT_MAX);
+    printf("float range: %e to %e\\n", FLT_MIN, FLT_MAX);
+    printf("double range: %e to %e\\n", DBL_MIN, DBL_MAX);
+
+    // ============================================
+    // CONSTANTS
+    // ============================================
+    printf("\\n=== Constants ===\\n");
+
+    const double PI = 3.14159265358979;
+    const int MAX_SIZE = 100;
+    const char NEWLINE = '\\n';
+
+    printf("PI = %.10f\\n", PI);
+    printf("MAX_SIZE = %d\\n", MAX_SIZE);
+    printf("sizeof(PI) = %lu bytes\\n", sizeof(PI));
+
+    // ============================================
+    // TYPE CONVERSION (Implicit)
+    // ============================================
+    printf("\\n=== Implicit Type Conversion ===\\n");
+
+    int intVal = 10;
+    double doubleVal = 3.14;
+
+    // int is automatically promoted to double
+    double result = intVal + doubleVal;
+    printf("%d + %.2f = %.2f\\n", intVal, doubleVal, result);
+
+    // char is promoted to int in arithmetic
+    char a = 'A';
+    printf("'A' = %d (ASCII value)\\n", a);
+    printf("'A' + 1 = %d = '%c'\\n", a + 1, a + 1);
+
+    // ============================================
+    // EXPLICIT TYPE CASTING
+    // ============================================
+    printf("\\n=== Explicit Casting ===\\n");
+
+    int x = 7, y = 2;
+    printf("Integer division: %d / %d = %d\\n", x, y, x / y);
+    printf("Float division: %d / %d = %.2f\\n", x, y, (double)x / y);
+
+    return 0;
+}`,
         language: "c"
-
       },
-
       {
-
         id: "4",
+        title: "Operators",
+        content: `## Operators in C
 
-        title: "File Handling",
+Operators are symbols that perform operations on variables and values.
 
-        content: "C provides functions for file operations.\n\nKey functions:\n- fopen: open a file\n- fclose: close a file\n- fprintf/fprintf: write formatted output\n- fscanf: read formatted input\n- fgets/fputs: read/write strings\n- feof: check end of file\n- fopen modes: r, w, a, r+, w+, a+",
+### 1. Arithmetic Operators
+- \`+\` Addition
+- \`-\` Subtraction
+- \`*\` Multiplication
+- \`/\` Division (integer division if both operands are int)
+- \`%\` Modulus (remainder, integers only)
+- \`++\` Increment (prefix and postfix)
+- \`--\` Decrement (prefix and postfix)
 
-        codeExample: `#include <stdio.h>\n#include <stdlib.h>\n\nstruct Student {\n    char name[50];\n    int age;\n    float gpa;\n};\n\nint main() {\n    // Write to file\n    FILE *fp = fopen("students.txt", "w");\n    if (fp == NULL) {\n        printf("Error opening file!\\n");\n        return 1;\n    }\n\n    struct Student students[] = {\n        {"Alice", 20, 3.8},\n        {"Bob", 22, 3.5},\n        {"Charlie", 21, 3.9}\n    };\n\n    for (int i = 0; i < 3; i++) {\n        fprintf(fp, "%s %d %.2f\\n",\n                students[i].name,\n                students[i].age,\n                students[i].gpa);\n    }\n    fclose(fp);\n\n    // Read from file\n    fp = fopen("students.txt", "r");\n    char name[50];\n    int age;\n    float gpa;\n\n    printf("Reading from file:\\n");\n    while (fscanf(fp, "%s %d %f", name, &age, &gpa) != EOF) {\n        printf("Name: %s, Age: %d, GPA: %.2f\\n", name, age, gpa);\n    }\n    fclose(fp);\n\n    return 0;\n}`,
+**Prefix vs Postfix:**
+- \`++x\` — Increments first, then uses the value
+- \`x++\` — Uses the value first, then increments
 
+### 2. Relational (Comparison) Operators
+- \`==\` Equal to
+- \`!=\` Not equal to
+- \`>\` Greater than
+- \`<\` Less than
+- \`>=\` Greater than or equal to
+- \`<=\` Less than or equal to
+
+**Important:** \`==\` (comparison) vs \`=\` (assignment). Using \`=\` in an if condition is a common bug.
+
+### 3. Logical Operators
+- \`&&\` Logical AND — true if both operands are true
+- \`||\` Logical OR — true if at least one operand is true
+- \`!\` Logical NOT — reverses the boolean value
+
+**Short-circuit evaluation:**
+- In \`a && b\`, if \`a\` is false, \`b\` is not evaluated
+- In \`a || b\`, if \`a\` is true, \`b\` is not evaluated
+
+### 4. Bitwise Operators
+- \`&\` AND
+- \`|\` OR
+- \`^\` XOR
+- \`~\` NOT (complement)
+- \`<<\` Left shift
+- \`>>\` Right shift
+
+### 5. Assignment Operators
+- \`=\` Simple assignment
+- \`+=\` Add and assign
+- \`-=\` Subtract and assign
+- \`*=\` Multiply and assign
+- \`/=\` Divide and assign
+- \`%=\` Modulus and assign
+- \`&=\`, \`|=\`, \`^=\`, \`<<=\`, \`>>=\` Bitwise assignments
+
+### 6. Ternary (Conditional) Operator
+\`condition ? expr_if_true : expr_if_false\`
+
+Shorthand for simple if-else statements.
+
+### 7. Sizeof Operator
+\`sizeof(type)\` — Returns the size in bytes of a data type or variable.
+
+### Operator Precedence (Highest to Lowest)
+1. \`()\` \`[]\` \`->\` \`.\` (postfix)
+2. \`++\` \`--\` (postfix)
+3. \`!\` \`~\` \`++\` \`--\` (unary)
+4. \`*\` \`/\` \`%\` (multiplicative)
+5. \`+\` \`-\` (additive)
+6. \`<<\` \`>>\` (shift)
+7. \`<\` \`<=\` \`>\` \`>=\` (relational)
+8. \`==\` \`!=\` (equality)
+9. \`&\` (bitwise AND)
+10. \`^\` (bitwise XOR)
+11. \`|\` (bitwise OR)
+12. \`&&\` (logical AND)
+13. \`||\` (logical OR)
+14. \`?:\` (ternary)
+15. \`=\` \`+=\` etc. (assignment)`,
+        codeExample: `#include <stdio.h>
+
+int main() {
+    // ============================================
+    // ARITHMETIC OPERATORS
+    // ============================================
+    printf("=== Arithmetic Operators ===\\n");
+    int a = 17, b = 5;
+
+    printf("%d + %d = %d\\n", a, b, a + b);    // 22
+    printf("%d - %d = %d\\n", a, b, a - b);    // 12
+    printf("%d * %d = %d\\n", a, b, a * b);    // 85
+    printf("%d / %d = %d\\n", a, b, a / b);    // 3 (integer division)
+    printf("%d %% %d = %d\\n", a, b, a % b);   // 2 (remainder)
+
+    // Increment / Decrement
+    int x = 5;
+    printf("\\nx = %d\\n", x);
+    printf("x++ = %d (postfix, uses then increments)\\n", x++);
+    printf("Now x = %d\\n", x);
+    printf("++x = %d (prefix, increments then uses)\\n", ++x);
+
+    // ============================================
+    // RELATIONAL OPERATORS
+    // ============================================
+    printf("\\n=== Relational Operators ===\\n");
+    int p = 10, q = 20;
+
+    printf("%d == %d: %d\\n", p, q, p == q);   // 0 (false)
+    printf("%d != %d: %d\\n", p, q, p != q);   // 1 (true)
+    printf("%d > %d: %d\\n", p, q, p > q);     // 0
+    printf("%d < %d: %d\\n", p, q, p < q);     // 1
+    printf("%d >= %d: %d\\n", p, q, p >= q);   // 0
+    printf("%d <= %d: %d\\n", p, q, p <= q);   // 1
+
+    // ============================================
+    // LOGICAL OPERATORS
+    // ============================================
+    printf("\\n=== Logical Operators ===\\n");
+    int t = 1, f = 0;
+
+    printf("true && true = %d\\n", t && t);     // 1
+    printf("true && false = %d\\n", t && f);    // 0
+    printf("true || false = %d\\n", t || f);    // 1
+    printf("!true = %d\\n", !t);                // 0
+    printf("!false = %d\\n", !f);               // 1
+
+    // Short-circuit evaluation
+    int val = 0;
+    // Second expression won't execute because first is false
+    if (val != 0 && 10 / val > 2) {
+        printf("Safe division\\n");
+    } else {
+        printf("Short-circuit prevented division by zero\\n");
+    }
+
+    // ============================================
+    // BITWISE OPERATORS
+    // ============================================
+    printf("\\n=== Bitwise Operators ===\\n");
+    unsigned int m = 12, n = 10;  // 12=1100, 10=1010
+
+    printf("%u & %u = %u\\n", m, n, m & n);     // 8  (1000)
+    printf("%u | %u = %u\\n", m, n, m | n);     // 14 (1110)
+    printf("%u ^ %u = %u\\n", m, n, m ^ n);     // 6  (0110)
+    printf("~%u = %u\\n", m, ~m);                // Complement
+    printf("%u << 2 = %u\\n", m, m << 2);       // 48 (110000)
+    printf("%u >> 2 = %u\\n", m, m >> 2);       // 3  (11)
+
+    // ============================================
+    // TERNARY OPERATOR
+    // ============================================
+    printf("\\n=== Ternary Operator ===\\n");
+    int age = 20;
+    printf("Age %d: %s\\n", age, (age >= 18) ? "Adult" : "Minor");
+
+    // ============================================
+    // OPERATOR PRECEDENCE
+    // ============================================
+    printf("\\n=== Precedence Matters ===\\n");
+    int result1 = 2 + 3 * 4;    // 14 (multiplication first)
+    int result2 = (2 + 3) * 4;  // 20 (parentheses override)
+    printf("2 + 3 * 4 = %d\\n", result1);
+    printf("(2 + 3) * 4 = %d\\n", result2);
+
+    return 0;
+}`,
         language: "c"
-
       },
-
       {
-
         id: "5",
+        title: "Control Flow — if, else, switch",
+        content: `## Control Flow in C
 
-        title: "Dynamic Memory & Linked Lists",
+Control flow determines the order in which statements are executed.
 
-        content: "Dynamic memory allocation allows runtime memory management.\n\nKey concepts:\n- malloc, calloc, realloc, free\n- Memory leaks\n- Wild pointers\n\nLinked List in C:\n- Use struct with self-referential pointer\n- malloc for each node\n- free each node when done",
+### if Statement
+Executes a block of code only if the condition is true.
 
-        codeExample: `#include <stdio.h>\n#include <stdlib.h>\n\nstruct Node {\n    int data;\n    struct Node *next;\n};\n\nstruct Node* createNode(int data) {\n    struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));\n    newNode->data = data;\n    newNode->next = NULL;\n    return newNode;\n}\n\nvoid push(struct Node **head, int data) {\n    struct Node *newNode = createNode(data);\n    newNode->next = *head;\n    *head = newNode;\n}\n\nvoid printList(struct Node *head) {\n    struct Node *current = head;\n    while (current != NULL) {\n        printf("%d -> ", current->data);\n        current = current->next;\n    }\n    printf("NULL\\n");\n}\n\nvoid freeList(struct Node *head) {\n    struct Node *temp;\n    while (head != NULL) {\n        temp = head;\n        head = head->next;\n        free(temp);\n    }\n}\n\nint main() {\n    struct Node *head = NULL;\n    push(&head, 3);\n    push(&head, 2);\n    push(&head, 1);\n\n    printList(head);  // 1 -> 2 -> 3 -> NULL\n    freeList(head);\n\n    return 0;\n}`,
+### if-else Statement
+Provides an alternative block when the condition is false.
 
+### if-else if-else Ladder
+Tests multiple conditions in sequence.
+
+### Nested if
+An if statement inside another if statement.
+
+### switch Statement
+A multi-way branch based on the value of an integer expression.
+
+**switch rules:**
+- The expression must evaluate to an integer or character
+- Each case must be a constant expression
+- Use \`break\` after each case (otherwise execution "falls through")
+- \`default\` handles unmatched cases
+- Cases can be in any order
+
+### When to Use switch vs if-else
+- **switch**: When comparing a single variable against multiple constant values
+- **if-else**: When conditions are complex or involve ranges`,
+        codeExample: `#include <stdio.h>
+
+int main() {
+    // ============================================
+    // IF STATEMENT
+    // ============================================
+    printf("=== if Statement ===\\n");
+    int temperature = 35;
+
+    if (temperature > 30) {
+        printf("It's hot outside! (%d°C)\\n", temperature);
+    }
+
+    // ============================================
+    // IF-ELSE
+    // ============================================
+    printf("\\n=== if-else ===\\n");
+    int age = 16;
+
+    if (age >= 18) {
+        printf("You can vote\\n");
+    } else {
+        printf("You cannot vote yet (need %d more years)\\n", 18 - age);
+    }
+
+    // ============================================
+    // IF-ELSE IF-ELSE LADDER
+    // ============================================
+    printf("\\n=== Grading System ===\\n");
+    int marks = 78;
+
+    if (marks >= 90) {
+        printf("Grade: A+ (Excellent)\\n");
+    } else if (marks >= 80) {
+        printf("Grade: A (Very Good)\\n");
+    } else if (marks >= 70) {
+        printf("Grade: B (Good)\\n");
+    } else if (marks >= 60) {
+        printf("Grade: C (Average)\\n");
+    } else if (marks >= 50) {
+        printf("Grade: D (Pass)\\n");
+    } else {
+        printf("Grade: F (Fail)\\n");
+    }
+
+    // ============================================
+    // NESTED IF
+    // ============================================
+    printf("\\n=== Nested if ===\\n");
+    int num = 15;
+
+    if (num > 0) {
+        printf("%d is positive\\n", num);
+        if (num % 2 == 0) {
+            printf("%d is even\\n", num);
+        } else {
+            printf("%d is odd\\n", num);
+        }
+    } else if (num < 0) {
+        printf("%d is negative\\n", num);
+    } else {
+        printf("The number is zero\\n");
+    }
+
+    // ============================================
+    // SWITCH STATEMENT
+    // ============================================
+    printf("\\n=== switch Statement ===\\n");
+    int day = 3;
+
+    switch (day) {
+        case 1:
+            printf("Monday\\n");
+            break;
+        case 2:
+            printf("Tuesday\\n");
+            break;
+        case 3:
+            printf("Wednesday\\n");
+            break;
+        case 4:
+            printf("Thursday\\n");
+            break;
+        case 5:
+            printf("Friday\\n");
+            break;
+        case 6:
+            printf("Saturday\\n");
+            break;
+        case 7:
+            printf("Sunday\\n");
+            break;
+        default:
+            printf("Invalid day (%d)\\n", day);
+    }
+
+    // ============================================
+    // SWITCH — FALL THROUGH (grouping cases)
+    // ============================================
+    printf("\\n=== Weekday vs Weekend ===\\n");
+    switch (day) {
+        case 1: case 2: case 3: case 4: case 5:
+            printf("It's a weekday\\n");
+            break;
+        case 6: case 7:
+            printf("It's the weekend!\\n");
+            break;
+        default:
+            printf("Invalid day\\n");
+    }
+
+    // ============================================
+    // SWITCH — CHARACTER MATCHING
+    // ============================================
+    printf("\\n=== Character switch ===\\n");
+    char grade = 'B';
+
+    switch (grade) {
+        case 'A':
+            printf("Excellent\\n");
+            break;
+        case 'B':
+            printf("Good\\n");
+            break;
+        case 'C':
+            printf("Average\\n");
+            break;
+        default:
+            printf("Unknown grade\\n");
+    }
+
+    // ============================================
+    // TERNARY AS SHORTHAND
+    // ============================================
+    printf("\\n=== Ternary Operator ===\\n");
+    int x = 42;
+    printf("%d is %s\\n", x, (x % 2 == 0) ? "even" : "odd");
+
+    return 0;
+}`,
         language: "c"
-
       },
+      {
+        id: "6",
+        title: "Loops — for, while, do-while",
+        content: `## Loops in C
 
+Loops execute a block of code repeatedly until a condition is met.
+
+### for Loop
+\`for (initialization; condition; update) { ... }\`
+- Best when you know the number of iterations
+- The three parts are separated by semicolons
+- All three parts are optional
+
+### while Loop
+\`while (condition) { ... }\`
+- Tests the condition BEFORE each iteration
+- May execute zero times if condition is initially false
+- Best when the number of iterations is unknown
+
+### do-while Loop
+\`do { ... } while (condition);\`
+- Tests the condition AFTER each iteration
+- Always executes at least once
+- Note the semicolon after while
+
+### Loop Control
+- \`break\` — Immediately exits the loop
+- \`continue\` — Skips to the next iteration
+- \`goto\` — Jumps to a label (generally avoided, but used in error handling)
+
+### Nested Loops
+A loop inside another loop. The inner loop completes all its iterations for each iteration of the outer loop.
+
+### Infinite Loops
+Loops that never end. Can be intentional (event loops, servers) or accidental (missing update).
+
+**Common mistake:** Using \`=\` (assignment) instead of \`==\` (comparison) in the loop condition.`,
+        codeExample: `#include <stdio.h>
+
+int main() {
+    // ============================================
+    // FOR LOOP
+    // ============================================
+    printf("=== for Loop ===\\n");
+
+    // Count from 1 to 10
+    for (int i = 1; i <= 10; i++) {
+        printf("%d ", i);
+    }
+    printf("\\n");
+
+    // Count backwards
+    for (int i = 10; i >= 1; i--) {
+        printf("%d ", i);
+    }
+    printf("\\n");
+
+    // Multiplication table
+    printf("\\nMultiplication table for 7:\\n");
+    for (int i = 1; i <= 10; i++) {
+        printf("7 x %2d = %2d\\n", i, 7 * i);
+    }
+
+    // ============================================
+    // WHILE LOOP
+    // ============================================
+    printf("\\n=== while Loop ===\\n");
+
+    // Sum of first N natural numbers
+    int n = 100;
+    int sum = 0;
+    int i = 1;
+
+    while (i <= n) {
+        sum += i;
+        i++;
+    }
+    printf("Sum of 1 to %d = %d\\n", n, sum);
+
+    // Reverse a number
+    int num = 12345;
+    int reversed = 0;
+    int temp = num;
+
+    while (temp != 0) {
+        reversed = reversed * 10 + temp % 10;
+        temp /= 10;
+    }
+    printf("Reversed %d -> %d\\n", num, reversed);
+
+    // ============================================
+    // DO-WHILE LOOP
+    // ============================================
+    printf("\\n=== do-while Loop ===\\n");
+
+    // Menu-driven program (runs at least once)
+    int choice;
+    do {
+        printf("\\n1. Add\\n2. Subtract\\n3. Multiply\\n0. Exit\\n");
+        printf("Enter choice: ");
+        // In real programs, use scanf here
+        choice = 0; // Simulating exit for demo
+        if (choice != 0) {
+            printf("You chose option %d\\n", choice);
+        }
+    } while (choice != 0);
+    printf("Program exited\\n");
+
+    // ============================================
+    // BREAK AND CONTINUE
+    // ============================================
+    printf("\\n=== break ===\\n");
+
+    // Find the first number divisible by both 3 and 7
+    for (int i = 1; i <= 100; i++) {
+        if (i % 3 == 0 && i % 7 == 0) {
+            printf("First number divisible by 3 and 7: %d\\n", i);
+            break;  // Exit loop once found
+        }
+    }
+
+    printf("\\n=== continue ===\\n");
+
+    // Print only odd numbers (skip even)
+    printf("Odd numbers from 1 to 20: ");
+    for (int i = 1; i <= 20; i++) {
+        if (i % 2 == 0) {
+            continue;  // Skip even numbers
+        }
+        printf("%d ", i);
+    }
+    printf("\\n");
+
+    // ============================================
+    // NESTED LOOPS
+    // ============================================
+    printf("\\n=== Nested Loops — Pattern ===\\n");
+
+    int rows = 5;
+    for (int r = 1; r <= rows; r++) {
+        for (int c = 1; c <= r; c++) {
+            printf("* ");
+        }
+        printf("\\n");
+    }
+
+    // ============================================
+    // FIBONACCI SEQUENCE
+    // ============================================
+    printf("\\n=== Fibonacci (first 15 terms) ===\\n");
+    int a = 0, b = 1;
+    for (int i = 0; i < 15; i++) {
+        printf("%d ", a);
+        int next = a + b;
+        a = b;
+        b = next;
+    }
+    printf("\\n");
+
+    // ============================================
+    // PRIME NUMBER CHECK
+    // ============================================
+    printf("\\n=== Prime Numbers (1 to 50) ===\\n");
+    for (int num = 2; num <= 50; num++) {
+        int isPrime = 1;
+        for (int j = 2; j * j <= num; j++) {
+            if (num % j == 0) {
+                isPrime = 0;
+                break;
+            }
+        }
+        if (isPrime) {
+            printf("%d ", num);
+        }
+    }
+    printf("\\n");
+
+    return 0;
+}`,
+        language: "c"
+      },
+      {
+        id: "7",
+        title: "Functions",
+        content: `## Functions in C
+
+A function is a reusable block of code that performs a specific task.
+
+### Function Syntax
+\`\`\`c
+return_type function_name(parameters) {
+    // body
+    return value;
+}
+\`\`\`
+
+### Function Declaration (Prototype)
+Declares the function before main() so the compiler knows about it.
+\`\`\`c
+int add(int a, int b);  // Prototype
+\`\`\`
+
+### Pass by Value vs Pass by Reference
+- **Pass by value**: A copy of the variable is passed. Changes inside the function don't affect the original.
+- **Pass by reference**: A pointer to the variable is passed. Changes inside the function affect the original.
+
+### Recursion
+A function that calls itself. Must have:
+1. **Base case** — stops the recursion
+2. **Recursive case** — makes progress toward the base case
+
+### Storage Classes
+- \`auto\` — Default for local variables (automatic storage)
+- \`static\` — Persists between function calls, initialized once
+- \`extern\` — Declares a variable defined in another file
+- \`register\` — Suggests storing in a CPU register (rarely used today)`,
+        codeExample: `#include <stdio.h>
+
+// ============================================
+// FUNCTION DECLARATIONS (Prototypes)
+// ============================================
+int add(int a, int b);
+void swap(int *a, int *b);
+int factorial(int n);
+int fibonacci(int n);
+void printArray(int arr[], int size);
+int isPrime(int num);
+
+// ============================================
+// BASIC FUNCTIONS
+// ============================================
+int add(int a, int b) {
+    return a + b;
+}
+
+// Pass by reference — modifies the original variables
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// ============================================
+// RECURSIVE FUNCTIONS
+// ============================================
+int factorial(int n) {
+    if (n <= 1) return 1;       // Base case
+    return n * factorial(n - 1); // Recursive case
+}
+
+int fibonacci(int n) {
+    if (n <= 0) return 0;
+    if (n == 1) return 1;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+// ============================================
+// UTILITY FUNCTIONS
+// ============================================
+void printArray(int arr[], int size) {
+    printf("[");
+    for (int i = 0; i < size; i++) {
+        printf("%d", arr[i]);
+        if (i < size - 1) printf(", ");
+    }
+    printf("]\\n");
+}
+
+int isPrime(int num) {
+    if (num < 2) return 0;
+    for (int i = 2; i * i <= num; i++) {
+        if (num % i == 0) return 0;
+    }
+    return 1;
+}
+
+// ============================================
+// MAIN FUNCTION
+// ============================================
+int main() {
+    // ============================================
+    // BASIC FUNCTION CALLS
+    // ============================================
+    printf("=== Basic Functions ===\\n");
+    int result = add(15, 27);
+    printf("15 + 27 = %d\\n", result);
+
+    // ============================================
+    // PASS BY VALUE vs REFERENCE
+    // ============================================
+    printf("\\n=== Pass by Value vs Reference ===\\n");
+    int x = 10, y = 20;
+
+    printf("Before swap: x=%d, y=%d\\n", x, y);
+
+    // This won't work (pass by value)
+    // swap(x, y);  // Only swaps local copies
+
+    // This works (pass by reference)
+    swap(&x, &y);  // Pass addresses
+    printf("After swap:  x=%d, y=%d\\n", x, y);
+
+    // ============================================
+    // RECURSION
+    // ============================================
+    printf("\\n=== Recursion ===\\n");
+
+    printf("5! = %d\\n", factorial(5));   // 120
+    printf("10! = %d\\n", factorial(10)); // 3628800
+
+    printf("Fibonacci(10) = %d\\n", fibonacci(10)); // 55
+
+    // Print first 10 Fibonacci numbers
+    printf("Fibonacci sequence: ");
+    for (int i = 0; i < 10; i++) {
+        printf("%d ", fibonacci(i));
+    }
+    printf("\\n");
+
+    // ============================================
+    // FUNCTION AS UTILITY
+    // ============================================
+    printf("\\n=== Prime Numbers ===\\n");
+    printf("Primes up to 30: ");
+    for (int i = 2; i <= 30; i++) {
+        if (isPrime(i)) {
+            printf("%d ", i);
+        }
+    }
+    printf("\\n");
+
+    // ============================================
+    // STATIC VARIABLES IN FUNCTIONS
+    // ============================================
+    printf("\\n=== Static Variable ===\\n");
+
+    // Static variable persists between calls
+    // (demonstrated via a counter function concept)
+    printf("Static variables retain their value between function calls\\n");
+    printf("Useful for: counters, caches, state machines\\n");
+
+    return 0;
+}`,
+        language: "c"
+      },
+      {
+        id: "8",
+        title: "Arrays",
+        content: `## Arrays in C
+
+An array is a collection of elements of the same type stored in contiguous memory.
+
+### Array Declaration
+\`\`\`c
+int numbers[10];           // Declares an array of 10 integers
+int nums[] = {1, 2, 3};   // Declaration with initialization
+int arr[5] = {1, 2};      // Remaining elements initialized to 0
+\`\`\`
+
+### Array Access
+- Indexing starts at 0
+- Access: \`arr[index]\`
+- Size: \`sizeof(arr) / sizeof(arr[0])\`
+
+### Array Memory
+- Arrays are stored in contiguous memory locations
+- Array name acts as a pointer to the first element
+- \`arr\` is equivalent to \`&arr[0]\`
+- \`arr[i]\` is equivalent to \`*(arr + i)\`
+
+### Arrays as Function Parameters
+When passing arrays to functions:
+- Arrays always decay to pointers
+- You must pass the size separately
+- Changes to the array inside the function affect the original
+
+### Multidimensional Arrays
+- 2D array: \`int matrix[3][4];\` — 3 rows, 4 columns
+- Stored in row-major order (row by row in memory)
+- Access: \`matrix[row][col]\`
+
+### Common Array Operations
+- Traversal: Visit each element
+- Search: Find an element (linear or binary search)
+- Insert: Add an element at a position
+- Delete: Remove an element from a position
+- Sort: Arrange elements in order
+- Reverse: Reverse the order of elements`,
+        codeExample: `#include <stdio.h>
+
+// Function to print array
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\\n");
+}
+
+// Function to find maximum
+int findMax(int arr[], int size) {
+    int max = arr[0];
+    for (int i = 1; i < size; i++) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+    }
+    return max;
+}
+
+// Function to reverse array
+void reverseArray(int arr[], int size) {
+    for (int i = 0; i < size / 2; i++) {
+        int temp = arr[i];
+        arr[i] = arr[size - 1 - i];
+        arr[size - 1 - i] = temp;
+    }
+}
+
+// Linear search
+int linearSearch(int arr[], int size, int target) {
+    for (int i = 0; i < size; i++) {
+        if (arr[i] == target) return i;
+    }
+    return -1;
+}
+
+int main() {
+    // ============================================
+    // ARRAY DECLARATION & INITIALIZATION
+    // ============================================
+    printf("=== Array Basics ===\\n");
+
+    int numbers[5] = {10, 20, 30, 40, 50};
+    int zeros[5] = {0};                    // All zeros
+    int mixed[] = {1, 2, 3, 4, 5};         // Size inferred
+
+    printf("Size of numbers: %lu elements\\n", sizeof(numbers) / sizeof(numbers[0]));
+    printf("First element: %d\\n", numbers[0]);
+    printf("Last element: %d\\n", numbers[4]);
+
+    // ============================================
+    // ARRAY TRAVERSAL
+    // ============================================
+    printf("\\n=== Traversal ===\\n");
+    printf("Elements: ");
+    printArray(numbers, 5);
+
+    // ============================================
+    // ARRAY OPERATIONS
+    // ============================================
+    printf("\\n=== Operations ===\\n");
+    printf("Max value: %d\\n", findMax(numbers, 5));
+
+    // Linear search
+    int target = 30;
+    int index = linearSearch(numbers, 5, target);
+    printf("Search %d: found at index %d\\n", target, index);
+
+    // Reverse
+    reverseArray(numbers, 5);
+    printf("Reversed: ");
+    printArray(numbers, 5);
+
+    // ============================================
+    // 2D ARRAYS
+    // ============================================
+    printf("\\n=== 2D Array — Matrix ===\\n");
+
+    int matrix[3][4] = {
+        {1, 2, 3, 4},
+        {5, 6, 7, 8},
+        {9, 10, 11, 12}
+    };
+
+    // Print matrix
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 4; j++) {
+            printf("%3d ", matrix[i][j]);
+        }
+        printf("\\n");
+    }
+
+    // Transpose
+    printf("\\nTranspose:\\n");
+    for (int j = 0; j < 4; j++) {
+        for (int i = 0; i < 3; i++) {
+            printf("%3d ", matrix[i][j]);
+        }
+        printf("\\n");
+    }
+
+    // ============================================
+    // ARRAY & POINTER RELATIONSHIP
+    // ============================================
+    printf("\\n=== Array & Pointer ===\\n");
+    int arr[] = {10, 20, 30, 40, 50};
+
+    printf("Array name (address): %p\\n", (void*)arr);
+    printf("&arr[0]:              %p\\n", (void*)&arr[0]);
+    printf("arr[2] = %d\\n", arr[2]);
+    printf("*(arr + 2) = %d\\n", *(arr + 2));  // Same thing
+
+    // ============================================
+    // BUBBLE SORT
+    // ============================================
+    printf("\\n=== Bubble Sort ===\\n");
+    int data[] = {64, 34, 25, 12, 22, 11, 90};
+    int n = sizeof(data) / sizeof(data[0]);
+
+    printf("Before: ");
+    printArray(data, n);
+
+    // Bubble sort algorithm
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (data[j] > data[j + 1]) {
+                int temp = data[j];
+                data[j] = data[j + 1];
+                data[j + 1] = temp;
+            }
+        }
+    }
+
+    printf("After:  ");
+    printArray(data, n);
+
+    return 0;
+}`,
+        language: "c"
+      },
+      {
+        id: "9",
+        title: "Strings",
+        content: `## Strings in C
+
+A string in C is an array of characters terminated by a null character \`\\0\`.
+
+### String Declaration
+\`\`\`c
+char str1[] = "Hello";          // Array form (6 bytes including \\0)
+char str2[10] = "Hello";       // Fixed-size array
+char *str3 = "Hello";          // Pointer to string literal
+\`\`\`
+
+### String vs Character Array
+- \`char arr[] = {'H', 'i', '\\0'};\` — Character array (manually null-terminated)
+- \`char str[] = "Hi";\` — String (automatically null-terminated)
+
+### String Functions (string.h)
+- \`strlen(str)\` — Length (excluding \\0)
+- \`strcpy(dest, src)\` — Copy string
+- \`strcat(dest, src)\` — Concatenate
+- \`strcmp(s1, s2)\` — Compare (0 if equal, <0 if s1<s2, >0 if s1>s2)
+- \`strchr(str, ch)\` — Find first occurrence of character
+- \`strstr(haystack, needle)\` — Find substring
+- \`strrev(str)\` — Reverse (non-standard, not in all compilers)
+
+### String Input
+- \`scanf("%s", str)\` — Reads until whitespace
+- \`fgets(str, size, stdin)\` — Reads a full line (recommended)
+- \`gets(str)\` — **Dangerous, never use** (buffer overflow)
+
+### Common String Operations
+- Length calculation
+- Copying
+- Concatenation
+- Comparison
+- Reversal
+- Case conversion
+- Substring extraction
+- Tokenization (strtok)`,
+        codeExample: `#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+// Custom string length
+int myStrlen(const char *str) {
+    int len = 0;
+    while (str[len] != '\\0') {
+        len++;
+    }
+    return len;
+}
+
+// Custom string copy
+void myStrcpy(char *dest, const char *src) {
+    while (*src != '\\0') {
+        *dest = *src;
+        dest++;
+        src++;
+    }
+    *dest = '\\0';
+}
+
+// Reverse string in place
+void strReverse(char *str) {
+    int len = strlen(str);
+    for (int i = 0; i < len / 2; i++) {
+        char temp = str[i];
+        str[i] = str[len - 1 - i];
+        str[len - 1 - i] = temp;
+    }
+}
+
+// Check palindrome
+int isPalindrome(const char *str) {
+    int len = strlen(str);
+    for (int i = 0; i < len / 2; i++) {
+        if (str[i] != str[len - 1 - i]) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+// Count vowels
+int countVowels(const char *str) {
+    int count = 0;
+    for (int i = 0; str[i] != '\\0'; i++) {
+        char ch = tolower(str[i]);
+        if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u') {
+            count++;
+        }
+    }
+    return count;
+}
+
+int main() {
+    // ============================================
+    // STRING BASICS
+    // ============================================
+    printf("=== String Basics ===\\n");
+
+    char greeting[] = "Hello, World!";
+    printf("String: %s\\n", greeting);
+    printf("Length: %lu\\n", strlen(greeting));
+    printf("Size in memory: %lu bytes\\n", sizeof(greeting));
+
+    // Character by character access
+    printf("Characters: ");
+    for (int i = 0; greeting[i] != '\\0'; i++) {
+        printf("%c ", greeting[i]);
+    }
+    printf("\\n");
+
+    // ============================================
+    // STRING FUNCTIONS
+    // ============================================
+    printf("\\n=== String Functions ===\\n");
+
+    char str1[50] = "Hello";
+    char str2[] = " World";
+
+    // Concatenate
+    strcat(str1, str2);
+    printf("After strcat: %s\\n", str1);
+
+    // Copy
+    char dest[50];
+    strcpy(dest, "Programming");
+    printf("After strcpy: %s\\n", dest);
+
+    // Compare
+    printf("strcmp(\"abc\", \"abc\") = %d\\n", strcmp("abc", "abc"));
+    printf("strcmp(\"abc\", \"abd\") = %d\\n", strcmp("abc", "abd"));
+
+    // Find substring
+    char *pos = strstr("Hello, World!", "World");
+    if (pos) {
+        printf("Found '%s' at position %ld\\n", "World", pos - "Hello, World!");
+    }
+
+    // ============================================
+    // STRING OPERATIONS
+    // ============================================
+    printf("\\n=== Custom Operations ===\\n");
+
+    char text[] = "racecar";
+    printf("'%s' length: %d\\n", text, myStrlen(text));
+    printf("'%s' is palindrome: %s\\n", text, isPalindrome(text) ? "Yes" : "No");
+    printf("Vowels in 'Hello World': %d\\n", countVowels("Hello World"));
+
+    // Reverse
+    char rev[] = "abcdef";
+    printf("Before reverse: %s\\n", rev);
+    strReverse(rev);
+    printf("After reverse:  %s\\n", rev);
+
+    // ============================================
+    // STRING INPUT
+    // ============================================
+    printf("\\n=== String Input ===\\n");
+
+    char name[50];
+    printf("Enter your name: ");
+    fgets(name, sizeof(name), stdin);
+    name[strcspn(name, "\\n")] = '\\0';  // Remove trailing newline
+    printf("Hello, %s!\\n", name);
+
+    // ============================================
+    // STRING TOKENIZATION
+    // ============================================
+    printf("\\n=== Tokenization (strtok) ===\\n");
+
+    char sentence[] = "C is a powerful language";
+    char *token = strtok(sentence, " ");
+
+    printf("Tokens: ");
+    while (token != NULL) {
+        printf("[%s] ", token);
+        token = strtok(NULL, " ");
+    }
+    printf("\\n");
+
+    return 0;
+}`,
+        language: "c"
+      },
+      {
+        id: "10",
+        title: "Pointers — The Heart of C",
+        content: `## Pointers in C
+
+A pointer is a variable that stores the memory address of another variable. Pointers are what make C powerful and unique.
+
+### Pointer Basics
+- \`int *ptr;\` — Declares a pointer to an integer
+- \`ptr = &x;\` — Stores the address of x in ptr
+- \`*ptr\` — Dereferences the pointer (accesses the value at that address)
+
+### Key Operators
+- \`&\` (Address-of): Gets the memory address of a variable
+- \`*\` (Dereference): Gets the value at a memory address
+
+### Pointer Arithmetic
+- \`ptr + 1\` — Moves to the next element (size depends on type)
+- \`ptr - 1\` — Moves to the previous element
+- \`ptr++\` / \`ptr--\` — Increment/decrement pointer
+- \`ptr1 - ptr2\` — Number of elements between two pointers
+
+### Pointers and Arrays
+- Array name decays to a pointer to the first element
+- \`arr[i]\` is equivalent to \`*(arr + i)\`
+- You can use pointer arithmetic to traverse arrays
+
+### Pointers and Functions
+- **Pass by value**: Function gets a copy
+- **Pass by reference**: Function gets a pointer (can modify original)
+- Functions can return pointers
+
+### Common Pointer Pitfalls
+1. **Dangling pointer**: Points to freed/invalid memory
+2. **NULL pointer**: Points to nothing (\`ptr = NULL\`)
+3. **Wild pointer**: Uninitialized pointer (points to random memory)
+4. **Memory leak**: Lost all references to allocated memory
+5. **Buffer overflow**: Writing past array bounds`,
+        codeExample: `#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    // ============================================
+    // POINTER BASICS
+    // ============================================
+    printf("=== Pointer Basics ===\\n");
+
+    int x = 42;
+    int *ptr = &x;  // ptr stores the address of x
+
+    printf("Value of x: %d\\n", x);
+    printf("Address of x: %p\\n", (void*)&x);
+    printf("Value of ptr (address): %p\\n", (void*)ptr);
+    printf("Value at ptr (dereference): %d\\n", *ptr);
+
+    // Modify through pointer
+    *ptr = 100;
+    printf("After *ptr = 100, x = %d\\n", x);
+
+    // ============================================
+    // POINTER ARITHMETIC
+    // ============================================
+    printf("\\n=== Pointer Arithmetic ===\\n");
+
+    int arr[] = {10, 20, 30, 40, 50};
+    int *p = arr;  // Points to first element
+
+    printf("p points to: %d\\n", *p);     // 10
+    printf("p+1 points to: %d\\n", *(p+1)); // 20
+    printf("p+2 points to: %d\\n", *(p+2)); // 30
+
+    // Traverse array with pointer
+    printf("Array: ");
+    for (int i = 0; i < 5; i++) {
+        printf("%d ", *(p + i));
+    }
+    printf("\\n");
+
+    // Increment pointer
+    p++;  // Now points to arr[1]
+    printf("After p++, *p = %d\\n", *p);  // 20
+
+    // ============================================
+    // POINTERS AND ARRAYS
+    // ============================================
+    printf("\\n=== Array-Pointer Equivalence ===\\n");
+
+    int nums[] = {1, 2, 3, 4, 5};
+
+    // These are equivalent:
+    printf("nums[2] = %d\\n", nums[2]);
+    printf("*(nums + 2) = %d\\n", *(nums + 2));
+
+    // Pointer to last element
+    int *last = &nums[4];
+    int *first = nums;
+    printf("Distance: %ld elements\\n", last - first);
+
+    // ============================================
+    // POINTERS AND FUNCTIONS
+    // ============================================
+    printf("\\n=== Pass by Reference ===\\n");
+
+    int a = 10, b = 20;
+    printf("Before swap: a=%d, b=%d\\n", a, b);
+
+    // Swap using pointers
+    int *pa = &a, *pb = &b;
+    int temp = *pa;
+    *pa = *pb;
+    *pb = temp;
+
+    printf("After swap:  a=%d, b=%d\\n", a, b);
+
+    // ============================================
+    // NULL AND DYNAMIC POINTERS
+    // ============================================
+    printf("\\n=== NULL Pointer ===\\n");
+
+    int *nullPtr = NULL;
+    if (nullPtr == NULL) {
+        printf("Pointer is NULL (safe to check before dereferencing)\\n");
+    }
+
+    // ============================================
+    // POINTER TO POINTER
+    // ============================================
+    printf("\\n=== Pointer to Pointer ===\\n");
+
+    int val = 100;
+    int *ptr1 = &val;
+    int **ptr2 = &ptr1;  // Pointer to pointer
+
+    printf("val = %d\\n", val);
+    printf("*ptr1 = %d\\n", *ptr1);
+    printf("**ptr2 = %d\\n", **ptr2);
+
+    **ptr2 = 200;
+    printf("After **ptr2 = 200, val = %d\\n", val);
+
+    // ============================================
+    // COMMON PITFALLS
+    // ============================================
+    printf("\\n=== Common Pitfalls ===\\n");
+
+    // 1. Dangling pointer (demonstration)
+    int *dangling;
+    {
+        int local = 42;
+        dangling = &local;
+    }
+    // local is out of scope — dangling is now invalid
+    printf("Dangling pointer: points to invalid memory\\n");
+
+    // 2. Wild pointer
+    int *wild;  // Uninitialized — could point anywhere
+    printf("Wild pointer: uninitialized, could be anywhere\\n");
+
+    // 3. Safe practice: always initialize pointers
+    int safe = 0;
+    int *safePtr = &safe;
+    printf("Safe pointer: initialized to &safe (%d)\\n", *safePtr);
+
+    return 0;
+}`,
+        language: "c"
+      },
+      {
+        id: "11",
+        title: "Dynamic Memory Management",
+        content: `## Dynamic Memory Allocation in C
+
+C provides functions to allocate and free memory at runtime from the heap.
+
+### Why Dynamic Memory?
+- Stack size is limited (typically 1-8 MB)
+- Need memory whose size is determined at runtime
+- Data structures that grow and shrink (linked lists, trees)
+- Long-lived data that outlives the function that created it
+
+### Memory Functions (stdlib.h)
+- \`malloc(size)\` — Allocates \`size\` bytes, uninitialized (may contain garbage)
+- \`calloc(n, size)\` — Allocates \`n\` elements of \`size\` bytes each, initialized to 0
+- \`realloc(ptr, newSize)\` — Resizes previously allocated memory
+- \`free(ptr)\` — Deallocates memory (makes it available for reuse)
+
+### Important Rules
+1. Always check if malloc/calloc returned NULL (out of memory)
+2. Always free memory when done
+3. Set pointer to NULL after freeing (avoid dangling pointer)
+4. Never use memory after freeing it (undefined behavior)
+5. Never free memory twice (double free = crash/bug)
+6. malloc and calloc return \`void*\` — cast is optional in C
+
+### Memory Layout
+- **Code/Text segment**: Program instructions
+- **Data segment**: Global and static variables
+- **Heap**: Dynamic memory (grows upward)
+- **Stack**: Local variables and function calls (grows downward)`,
+        codeExample: `#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+    // ============================================
+    // MALLOC — Allocate Uninitialized Memory
+    // ============================================
+    printf("=== malloc ===\\n");
+
+    int n = 5;
+    int *arr = (int*)malloc(n * sizeof(int));
+
+    // Always check for NULL
+    if (arr == NULL) {
+        printf("Memory allocation failed!\\n");
+        return 1;
+    }
+
+    // Initialize and use
+    for (int i = 0; i < n; i++) {
+        arr[i] = (i + 1) * 10;
+    }
+
+    printf("Allocated %d integers (%lu bytes)\\n", n, n * sizeof(int));
+    printf("Values: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\\n");
+
+    free(arr);
+    arr = NULL;  // Good practice: set to NULL after freeing
+
+    // ============================================
+    // CALLOC — Allocate Zero-Initialized Memory
+    // ============================================
+    printf("\\n=== calloc ===\\n");
+
+    int *zeros = (int*)calloc(5, sizeof(int));
+
+    if (zeros == NULL) {
+        printf("Memory allocation failed!\\n");
+        return 1;
+    }
+
+    printf("calloc values (all zero): ");
+    for (int i = 0; i < 5; i++) {
+        printf("%d ", zeros[i]);
+    }
+    printf("\\n");
+
+    free(zeros);
+    zeros = NULL;
+
+    // ============================================
+    // REALLOC — Resize Allocation
+    // ============================================
+    printf("\\n=== realloc ===\\n");
+
+    int size = 3;
+    int *data = (int*)malloc(size * sizeof(int));
+
+    if (data == NULL) {
+        printf("Memory allocation failed!\\n");
+        return 1;
+    }
+
+    for (int i = 0; i < size; i++) {
+        data[i] = i * 100;
+    }
+    printf("Original: ");
+    for (int i = 0; i < size; i++) printf("%d ", data[i]);
+    printf("\\n");
+
+    // Resize to 6 elements
+    size = 6;
+    int *temp = (int*)realloc(data, size * sizeof(int));
+
+    if (temp == NULL) {
+        printf("Realloc failed! Original data preserved.\\n");
+        free(data);
+        return 1;
+    }
+    data = temp;
+
+    // Initialize new elements
+    for (int i = 3; i < size; i++) {
+        data[i] = i * 100;
+    }
+    printf("After realloc: ");
+    for (int i = 0; i < size; i++) printf("%d ", data[i]);
+    printf("\\n");
+
+    free(data);
+    data = NULL;
+
+    // ============================================
+    // DYNAMIC 2D ARRAY
+    // ============================================
+    printf("\\n=== Dynamic 2D Array ===\\n");
+
+    int rows = 3, cols = 4;
+
+    // Allocate array of row pointers
+    int **matrix = (int**)malloc(rows * sizeof(int*));
+    if (matrix == NULL) { return 1; }
+
+    // Allocate each row
+    for (int i = 0; i < rows; i++) {
+        matrix[i] = (int*)malloc(cols * sizeof(int));
+        if (matrix[i] == NULL) { return 1; }
+    }
+
+    // Fill matrix
+    int val = 1;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            matrix[i][j] = val++;
+        }
+    }
+
+    // Print matrix
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("%3d ", matrix[i][j]);
+        }
+        printf("\\n");
+    }
+
+    // Free each row, then the pointer array
+    for (int i = 0; i < rows; i++) {
+        free(matrix[i]);
+    }
+    free(matrix);
+
+    // ============================================
+    // COMMON MEMORY ERRORS (Educational)
+    // ============================================
+    printf("\\n=== Common Memory Errors ===\\n");
+    printf("1. Memory leak: Forgetting to free()\\n");
+    printf("2. Double free: Freeing same memory twice\\n");
+    printf("3. Use-after-free: Using pointer after free()\\n");
+    printf("4. Dangling pointer: Pointer to freed memory\\n");
+    printf("5. Buffer overflow: Writing past allocated size\\n");
+
+    return 0;
+}`,
+        language: "c"
+      },
+      {
+        id: "12",
+        title: "Structures & Unions",
+        content: `## Structures & Unions in C
+
+### Structures (struct)
+A structure groups variables of different types under one name.
+
+### Structure Declaration
+\`\`\`c
+struct Person {
+    char name[50];
+    int age;
+    float height;
+};
+\`\`\`
+
+### Accessing Members
+- Dot operator: \`person.name\`
+- Arrow operator (via pointer): \`ptr->name\`
+
+### typedef
+Creates an alias for a type, making code cleaner:
+\`\`\`c
+typedef struct { ... } Person;
+Person p;  // instead of struct Person p
+\`\`\`
+
+### Unions
+A union shares the same memory location for all members. Only one member can hold a value at a time. Size = size of the largest member.
+
+### Enums (enum)
+Named integer constants for readability:
+\`\`\`c
+enum Color { RED, GREEN, BLUE };
+enum Color c = RED;  // c = 0
+\`\`\``,
+        codeExample: `#include <stdio.h>
+#include <string.h>
+
+// ============================================
+// STRUCTURE DECLARATION
+// ============================================
+struct Student {
+    char name[50];
+    int age;
+    float gpa;
+    char grade;
+};
+
+// Using typedef for cleaner syntax
+typedef struct {
+    char title[100];
+    char author[50];
+    int year;
+    float price;
+} Book;
+
+// Nested structure
+typedef struct {
+    char street[100];
+    char city[50];
+    char state[30];
+    int zip;
+} Address;
+
+typedef struct {
+    char name[50];
+    int age;
+    Address address;  // Nested structure
+} Person;
+
+// ============================================
+// STRUCTURE FUNCTIONS
+// ============================================
+void printStudent(struct Student *s) {
+    printf("Name: %s | Age: %d | GPA: %.2f | Grade: %c\\n",
+           s->name, s->age, s->gpa, s->grade);
+}
+
+void printBook(Book *b) {
+    printf("\"%s\" by %s (%d) - $%.2f\\n",
+           b->title, b->author, b->year, b->price);
+}
+
+// ============================================
+// UNION
+// ============================================
+union Data {
+    int i;
+    float f;
+    char str[20];
+};
+
+// ============================================
+// ENUM
+// ============================================
+enum Day { MON=1, TUE, WED, THU, FRI, SAT, SUN };
+
+const char* dayName(enum Day d) {
+    switch (d) {
+        case MON: return "Monday";
+        case TUE: return "Tuesday";
+        case WED: return "Wednesday";
+        case THU: return "Thursday";
+        case FRI: return "Friday";
+        case SAT: return "Saturday";
+        case SUN: return "Sunday";
+        default: return "Unknown";
+    }
+}
+
+int main() {
+    // ============================================
+    // STRUCTURE BASICS
+    // ============================================
+    printf("=== Structure Basics ===\\n");
+
+    struct Student s1 = {"Alice", 20, 3.85, 'A'};
+    struct Student s2;
+    strcpy(s2.name, "Bob");
+    s2.age = 22;
+    s2.gpa = 3.50;
+    s2.grade = 'B';
+
+    printStudent(&s1);
+    printStudent(&s2);
+
+    // ============================================
+    // ARRAY OF STRUCTURES
+    // ============================================
+    printf("\\n=== Array of Structures ===\\n");
+
+    struct Student class[] = {
+        {"Charlie", 21, 3.92, 'A'},
+        {"Diana", 23, 3.70, 'B'},
+        {"Eve", 20, 3.55, 'B'},
+        {"Frank", 22, 3.88, 'A'}
+    };
+    int numStudents = sizeof(class) / sizeof(class[0]);
+
+    printf("Class roster (%d students):\\n", numStudents);
+    for (int i = 0; i < numStudents; i++) {
+        printf("  %d. ", i + 1);
+        printStudent(&class[i]);
+    }
+
+    // ============================================
+    // BOOK STRUCTURE
+    // ============================================
+    printf("\\n=== Book Library ===\\n");
+
+    Book library[] = {
+        {"The C Programming Language", "Kernighan & Ritchie", 1978, 49.99},
+        {"Clean Code", "Robert Martin", 2008, 39.99},
+        {"Design Patterns", "Gang of Four", 1994, 54.99}
+    };
+
+    for (int i = 0; i < 3; i++) {
+        printBook(&library[i]);
+    }
+
+    // ============================================
+    // NESTED STRUCTURES
+    // ============================================
+    printf("\\n=== Nested Structures ===\\n");
+
+    Person people[] = {
+        {"John", 30, {"123 Main St", "New York", "NY", 10001}},
+        {"Jane", 25, {"456 Oak Ave", "Boston", "MA", 02101}}
+    };
+
+    for (int i = 0; i < 2; i++) {
+        printf("%s, Age %d\\n", people[i].name, people[i].age);
+        printf("  Address: %s, %s, %s %d\\n",
+               people[i].address.street,
+               people[i].address.city,
+               people[i].address.state,
+               people[i].address.zip);
+    }
+
+    // ============================================
+    // UNIONS
+    // ============================================
+    printf("\\n=== Unions ===\\n");
+
+    union Data d;
+    printf("Size of union: %lu bytes\\n", sizeof(d));
+
+    d.i = 42;
+    printf("d.i = %d\\n", d.i);
+
+    d.f = 3.14f;
+    printf("d.f = %f (d.i is now corrupted: %d)\\n", d.f, d.i);
+
+    strcpy(d.str, "Hello");
+    printf("d.str = %s\\n", d.str);
+
+    // ============================================
+    // ENUMS
+    // ============================================
+    printf("\\n=== Enums ===\\n");
+
+    enum Day today = WED;
+    printf("Today is %s (value: %d)\\n", dayName(today), today);
+
+    for (int d = MON; d <= SUN; d++) {
+        printf("  %d = %s\\n", d, dayName(d));
+    }
+
+    return 0;
+}`,
+        language: "c"
+      },
+      {
+        id: "13",
+        title: "File Handling",
+        content: `## File Handling in C
+
+C provides functions for reading from and writing to files.
+
+### File Operations
+1. **fopen** — Open a file
+2. **fclose** — Close a file
+3. **fprintf/fprintf** — Write formatted output
+4. **fscanf** — Read formatted input
+5. **fgets/fputs** — Read/write strings
+6. **fread/fwrite** — Read/write binary data
+7. **fseek** — Move file position
+8. **ftell** — Get current file position
+9. **rewind** — Reset to beginning
+10. **feof** — Check end of file
+11. **ferror** — Check for errors
+
+### File Modes
+- \`"r"\` — Read (file must exist)
+- \`"w"\` — Write (creates new or truncates)
+- \`"a"\` — Append (creates new or appends)
+- \`"r+"\` — Read + Write (file must exist)
+- \`"w+"\` — Read + Write (creates new or truncates)
+- \`"a+"\` — Read + Append (creates new or appends)
+- Add \`b\` for binary: \`"rb"\`, \`"wb"\`, etc.
+
+### Error Handling
+Always check if fopen returns NULL. Common reasons:
+- File doesn't exist (for "r" mode)
+- Permission denied
+- Disk full`,
+        codeExample: `#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Structure for student data
+typedef struct {
+    char name[50];
+    int age;
+    float gpa;
+} Student;
+
+int main() {
+    // ============================================
+    // WRITING TO A FILE
+    // ============================================
+    printf("=== Writing to File ===\\n");
+
+    FILE *fp = fopen("students.txt", "w");
+    if (fp == NULL) {
+        printf("Error opening file for writing!\\n");
+        return 1;
+    }
+
+    // Write using fprintf
+    fprintf(fp, "Name,Age,GPA\\n");
+    fprintf(fp, "Alice,20,3.85\\n");
+    fprintf(fp, "Bob,22,3.50\\n");
+    fprintf(fp, "Charlie,21,3.92\\n");
+
+    fclose(fp);
+    printf("Written to students.txt\\n");
+
+    // ============================================
+    // READING FROM A FILE
+    // ============================================
+    printf("\\n=== Reading from File ===\\n");
+
+    fp = fopen("students.txt", "r");
+    if (fp == NULL) {
+        printf("Error opening file for reading!\\n");
+        return 1;
+    }
+
+    char line[100];
+    int lineNum = 0;
+
+    while (fgets(line, sizeof(line), fp) != NULL) {
+        line[strcspn(line, "\\n")] = '\\0';  // Remove newline
+        printf("Line %d: %s\\n", lineNum++, line);
+    }
+    fclose(fp);
+
+    // ============================================
+    // READ STRUCTURES FROM FILE
+    // ============================================
+    printf("\\n=== Reading Structured Data ===\\n");
+
+    fp = fopen("students.txt", "r");
+    if (fp == NULL) {
+        printf("Error opening file!\\n");
+        return 1;
+    }
+
+    char name[50];
+    int age;
+    float gpa;
+
+    // Skip header
+    fgets(line, sizeof(line), fp);
+
+    printf("Students:\\n");
+    while (fscanf(fp, "%49[^,],%d,%f\\n", name, &age, &gpa) == 3) {
+        printf("  Name: %s, Age: %d, GPA: %.2f\\n", name, age, gpa);
+    }
+    fclose(fp);
+
+    // ============================================
+    // APPEND TO FILE
+    // ============================================
+    printf("\\n=== Appending to File ===\\n");
+
+    fp = fopen("students.txt", "a");
+    if (fp == NULL) {
+        printf("Error opening file for appending!\\n");
+        return 1;
+    }
+
+    fprintf(fp, "Diana,23,3.70\\n");
+    fclose(fp);
+    printf("Appended Diana's record\\n");
+
+    // Verify append
+    fp = fopen("students.txt", "r");
+    printf("Updated file contents:\\n");
+    while (fgets(line, sizeof(line), fp) != NULL) {
+        printf("  %s", line);
+    }
+    fclose(fp);
+
+    // ============================================
+    // BINARY FILE I/O
+    // ============================================
+    printf("\\n=== Binary File I/O ===\\n");
+
+    // Write binary
+    Student students[] = {
+        {"Eve", 20, 3.60},
+        {"Frank", 22, 3.88}
+    };
+
+    fp = fopen("students.bin", "wb");
+    if (fp != NULL) {
+        fwrite(students, sizeof(Student), 2, fp);
+        fclose(fp);
+        printf("Written 2 students in binary format\\n");
+    }
+
+    // Read binary
+    Student readStudents[2];
+    fp = fopen("students.bin", "rb");
+    if (fp != NULL) {
+        fread(readStudents, sizeof(Student), 2, fp);
+        fclose(fp);
+
+        printf("Read from binary file:\\n");
+        for (int i = 0; i < 2; i++) {
+            printf("  %s, Age: %d, GPA: %.2f\\n",
+                   readStudents[i].name,
+                   readStudents[i].age,
+                   readStudents[i].gpa);
+        }
+    }
+
+    // ============================================
+    // FILE POSITIONING
+    // ============================================
+    printf("\\n=== File Positioning ===\\n");
+
+    fp = fopen("students.txt", "r");
+    if (fp != NULL) {
+        printf("Current position: %ld\\n", ftell(fp));
+
+        fseek(fp, 0, SEEK_END);  // Move to end
+        printf("File size: %ld bytes\\n", ftell(fp));
+
+        rewind(fp);  // Move to beginning
+        printf("After rewind: %ld\\n", ftell(fp));
+
+        fclose(fp);
+    }
+
+    return 0;
+}`,
+        language: "c"
+      },
+      {
+        id: "14",
+        title: "Preprocessor Directives",
+        content: `## Preprocessor Directives in C
+
+The preprocessor processes directives before compilation begins. They start with \`#\`.
+
+### Common Directives
+- \`#include\` — Include header files
+- \`#define\` — Define macros and constants
+- \`#undef\` — Undefine a macro
+- \`#ifdef\` / \`#ifndef\` — Conditional compilation
+- \`#if\` / \`#elif\` / \`#else\` / \`#endif\` — Conditional compilation
+- \`#pragma\` — Compiler-specific instructions
+- \`#error\` — Generate a compilation error
+- \`#warning\` — Generate a compilation warning (C23)
+
+### Object-like Macros
+\`#define PI 3.14159\` — Simple text replacement
+
+### Function-like Macros
+\`#define MAX(a,b) ((a)>(b)?(a):(b))\`
+
+**Important:** Always wrap macro parameters in parentheses to avoid operator precedence bugs.
+
+### Include Guards
+Prevent headers from being included multiple times:
+\`\`\`c
+#ifndef MYHEADER_H
+#define MYHEADER_H
+// ... header content ...
+#endif
+\`\`\`
+
+### Conditional Compilation
+Useful for platform-specific code, debugging, and feature flags.`,
+        codeExample: `#include <stdio.h>
+
+// ============================================
+// OBJECT-LIKE MACROS
+// ============================================
+#define PI 3.14159265358979
+#define MAX_SIZE 100
+#define GREETING "Hello from the preprocessor!"
+
+// ============================================
+// FUNCTION-LIKE MACROS
+// ============================================
+#define SQUARE(x) ((x) * (x))
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#define ABS(x) ((x) < 0 ? -(x) : (x))
+
+// Safe swap macro (with type checking)
+#define SWAP(a, b) do { \\
+    __typeof__(a) temp = a; \\
+    a = b; \\
+    b = temp; \\
+} while(0)
+
+// ============================================
+// STRINGIFY AND CONCATENATE
+// ============================================
+#define STRINGIFY(x) #x
+#define CONCAT(a, b) a##b
+
+// ============================================
+// CONDITIONAL COMPILATION
+// ============================================
+#define DEBUG 1
+#define PLATFORM_WINDOWS 0
+#define PLATFORM_LINUX 1
+
+// ============================================
+// INCLUDE GUARD (would be in a .h file)
+// ============================================
+#ifndef MYHEADER_H
+#define MYHEADER_H
+// Header content would go here
+#endif
+
+// ============================================
+// PRAGMA
+// ============================================
+// #pragma once — Alternative to include guards (non-standard but widely supported)
+// #pragma GCC warning "This is a custom warning"
+
+int main() {
+    // ============================================
+    // MACRO USAGE
+    // ============================================
+    printf("=== Object-like Macros ===\\n");
+    printf("PI = %.10f\\n", PI);
+    printf("MAX_SIZE = %d\\n", MAX_SIZE);
+    printf("%s\\n", GREETING);
+
+    printf("\\n=== Function-like Macros ===\\n");
+    printf("SQUARE(5) = %d\\n", SQUARE(5));
+    printf("SQUARE(2+3) = %d\\n", SQUARE(2+3));
+    printf("MAX(10, 20) = %d\\n", MAX(10, 20));
+    printf("MIN(10, 20) = %d\\n", MIN(10, 20));
+    printf("ABS(-42) = %d\\n", ABS(-42));
+
+    // SWAP macro
+    int x = 10, y = 20;
+    printf("\\nBefore SWAP: x=%d, y=%d\\n", x, y);
+    SWAP(x, y);
+    printf("After SWAP:  x=%d, y=%d\\n", x, y);
+
+    // ============================================
+    // STRINGIFY AND CONCATENATE
+    // ============================================
+    printf("\\n=== Stringify & Concatenate ===\\n");
+    printf("STRINGIFY(Hello) = %s\\n", STRINGIFY(Hello));
+
+    int ab = 100;
+    printf("CONCAT(a, b) = %d\\n", CONCAT(a, b));
+
+    // ============================================
+    // CONDITIONAL COMPILATION
+    // ============================================
+    printf("\\n=== Conditional Compilation ===\\n");
+
+    #if DEBUG
+    printf("DEBUG mode is ON\\n");
+    #else
+    printf("DEBUG mode is OFF\\n");
+    #endif
+
+    #if PLATFORM_LINUX
+    printf("Compiling for Linux\\n");
+    #elif PLATFORM_WINDOWS
+    printf("Compiling for Windows\\n");
+    #else
+    printf("Unknown platform\\n");
+    #endif
+
+    // ============================================
+    // PREDEFINED MACROS
+    // ============================================
+    printf("\\n=== Predefined Macros ===\\n");
+    printf("__FILE__: %s\\n", __FILE__);
+    printf("__LINE__: %d\\n", __LINE__);
+    printf("__DATE__: %s\\n", __DATE__);
+    printf("__TIME__: %s\\n", __TIME__);
+    printf("__func__: %s\\n", __func__);
+
+    return 0;
+}`,
+        language: "c"
+      },
+      {
+        id: "15",
+        title: "Bitwise Operations",
+        content: `## Bitwise Operations in C
+
+Bitwise operators manipulate individual bits of integers.
+
+### Operators
+- \`&\` (AND): Both bits must be 1 → result is 1
+- \`|\` (OR): At least one bit is 1 → result is 1
+- \`^\` (XOR): Bits are different → result is 1
+- \`~\` (NOT): Flips all bits (complement)
+- \`<<\` (Left shift): Shifts bits left (multiply by 2^n)
+- \`>>\` (Right shift): Shifts bits right (divide by 2^n)
+
+### Common Bitwise Tricks
+- **Check if even/odd**: \`n & 1\` (1 if odd, 0 if even)
+- **Set bit**: \`n | (1 << pos)\`
+- **Clear bit**: \`n & ~(1 << pos)\`
+- **Toggle bit**: \`n ^ (1 << pos)\`
+- **Check bit**: \`(n >> pos) & 1\`
+- **Multiply by 2**: \`n << 1\`
+- **Divide by 2**: \`n >> 1\`
+- **Swap without temp**: \`a ^= b; b ^= a; a ^= b;\`
+
+### Bit Masks
+Used to represent sets of flags or options.`,
+        codeExample: `#include <stdio.h>
+
+// Helper to print binary representation
+void printBinary(unsigned int n, int bits) {
+    for (int i = bits - 1; i >= 0; i--) {
+        printf("%d", (n >> i) & 1);
+    }
+}
+
+int main() {
+    unsigned int a = 12;  // 1100
+    unsigned int b = 10;  // 1010
+
+    // ============================================
+    // BASIC BITWISE OPERATIONS
+    // ============================================
+    printf("=== Bitwise Operations ===\\n");
+    printf("a = %u (", a); printBinary(a, 8); printf(")\\n");
+    printf("b = %u (", b); printBinary(b, 8); printf(")\\n\\n");
+
+    printf("a & b  = %u (", a & b); printBinary(a & b, 8); printf(")  // AND\\n");
+    printf("a | b  = %u (", a | b); printBinary(a | b, 8); printf(")  // OR\\n");
+    printf("a ^ b  = %u (", a ^ b); printBinary(a ^ b, 8); printf(")  // XOR\\n");
+    printf("~a     = %u (", ~a); printBinary(~a, 8); printf(") // NOT\\n");
+    printf("a << 2 = %u (", a << 2); printBinary(a << 2, 8); printf(")  // Left shift\\n");
+    printf("a >> 2 = %u (", a >> 2); printBinary(a >> 2, 8); printf(")  // Right shift\\n");
+
+    // ============================================
+    // BIT MANIPULATION TRICKS
+    // ============================================
+    printf("\\n=== Bit Tricks ===\\n");
+
+    unsigned int n = 42;
+
+    // Check even/odd
+    printf("%u is %s\\n", n, (n & 1) ? "odd" : "even");
+
+    // Set bit at position 3
+    unsigned int set = n | (1 << 3);
+    printf("Set bit 3:    %u -> %u\\n", n, set);
+
+    // Clear bit at position 3
+    unsigned int clear = n & ~(1 << 3);
+    printf("Clear bit 3:  %u -> %u\\n", n, clear);
+
+    // Toggle bit at position 3
+    unsigned int toggle = n ^ (1 << 3);
+    printf("Toggle bit 3: %u -> %u\\n", n, toggle);
+
+    // Check bit at position 3
+    printf("Check bit 3:  %s\\n", ((n >> 3) & 1) ? "set" : "not set");
+
+    // Multiply/Divide by powers of 2
+    printf("\\nMultiply by 4: %u << 2 = %u\\n", n, n << 2);
+    printf("Divide by 4:   %u >> 2 = %u\\n", n, n >> 2);
+
+    // ============================================
+    // SWAP WITHOUT TEMPORARY
+    // ============================================
+    printf("\\n=== Swap Without Temp ===\\n");
+    unsigned int x = 25, y = 37;
+    printf("Before: x=%u, y=%u\\n", x, y);
+
+    x ^= y;
+    y ^= x;
+    x ^= y;
+    printf("After:  x=%u, y=%u\\n", x, y);
+
+    // ============================================
+    // COUNT SET BITS
+    // ============================================
+    printf("\\n=== Count Set Bits ===\\n");
+    unsigned int val = 0b10110101;  // 181
+    int count = 0;
+    unsigned int temp = val;
+
+    while (temp > 0) {
+        count += temp & 1;
+        temp >>= 1;
+    }
+    printf("%u has %d set bits\\n", val, count);
+
+    // ============================================
+    // BIT FLAGS (Practical Use)
+    // ============================================
+    printf("\\n=== Bit Flags ===\\n");
+
+    #define READ    (1 << 0)  // 0001
+    #define WRITE   (1 << 1)  // 0010
+    #define EXECUTE (1 << 2)  // 0100
+    #define ADMIN   (1 << 3)  // 1000
+
+    unsigned int permissions = 0;
+
+    // Grant permissions
+    permissions |= READ;
+    permissions |= WRITE;
+    permissions |= EXECUTE;
+
+    printf("Permissions: ");
+    if (permissions & READ)    printf("READ ");
+    if (permissions & WRITE)   printf("WRITE ");
+    if (permissions & EXECUTE) printf("EXECUTE ");
+    if (permissions & ADMIN)   printf("ADMIN ");
+    printf("\\n");
+
+    // Check specific permission
+    printf("Has READ? %s\\n", (permissions & READ) ? "Yes" : "No");
+    printf("Has ADMIN? %s\\n", (permissions & ADMIN) ? "Yes" : "No");
+
+    // Revoke WRITE
+    permissions &= ~WRITE;
+    printf("After revoking WRITE: ");
+    if (permissions & READ)    printf("READ ");
+    if (permissions & WRITE)   printf("WRITE ");
+    if (permissions & EXECUTE) printf("EXECUTE ");
+    printf("\\n");
+
+    return 0;
+}`,
+        language: "c"
+      },
+      {
+        id: "16",
+        title: "Linked Lists",
+        content: `## Linked Lists in C
+
+A linked list is a data structure where elements (nodes) are connected via pointers.
+
+### Types of Linked Lists
+1. **Singly Linked List**: Each node points to the next
+2. **Doubly Linked List**: Each node points to both next and previous
+3. **Circular Linked List**: Last node points back to the first
+
+### Node Structure
+\`\`\`c
+struct Node {
+    int data;
+    struct Node *next;
+};
+\`\`\`
+
+### Operations
+- **Insert**: At beginning, end, or middle
+- **Delete**: By value or position
+- **Search**: Find a node
+- **Traversal**: Visit all nodes
+
+### Advantages over Arrays
+- Dynamic size (no fixed capacity)
+- Efficient insertion/deletion (O(1) at known position)
+- No memory waste (allocates as needed)
+
+### Disadvantages
+- No random access (must traverse)
+- Extra memory for pointers
+- Cache unfriendly (non-contiguous memory)`,
+        codeExample: `#include <stdio.h>
+#include <stdlib.h>
+
+// ============================================
+// NODE STRUCTURE
+// ============================================
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+// ============================================
+// CREATE NEW NODE
+// ============================================
+struct Node* createNode(int data) {
+    struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed!\\n");
+        exit(1);
+    }
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// ============================================
+// INSERT AT BEGINNING
+// ============================================
+void insertAtBeginning(struct Node **head, int data) {
+    struct Node *newNode = createNode(data);
+    newNode->next = *head;
+    *head = newNode;
+}
+
+// ============================================
+// INSERT AT END
+// ============================================
+void insertAtEnd(struct Node **head, int data) {
+    struct Node *newNode = createNode(data);
+
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+
+    struct Node *current = *head;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+    current->next = newNode;
+}
+
+// ============================================
+// DELETE BY VALUE
+// ============================================
+void deleteNode(struct Node **head, int data) {
+    struct Node *temp = *head;
+    struct Node *prev = NULL;
+
+    // If head node holds the data
+    if (temp != NULL && temp->data == data) {
+        *head = temp->next;
+        free(temp);
+        return;
+    }
+
+    // Search for the data
+    while (temp != NULL && temp->data != data) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == NULL) return;  // Not found
+
+    prev->next = temp->next;
+    free(temp);
+}
+
+// ============================================
+// SEARCH
+// ============================================
+int search(struct Node *head, int data) {
+    int position = 0;
+    struct Node *current = head;
+
+    while (current != NULL) {
+        if (current->data == data) {
+            return position;
+        }
+        current = current->next;
+        position++;
+    }
+    return -1;  // Not found
+}
+
+// ============================================
+// REVERSE LIST
+// ============================================
+void reverseList(struct Node **head) {
+    struct Node *prev = NULL;
+    struct Node *current = *head;
+    struct Node *next = NULL;
+
+    while (current != NULL) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+    *head = prev;
+}
+
+// ============================================
+// PRINT LIST
+// ============================================
+void printList(struct Node *head) {
+    struct Node *current = head;
+    while (current != NULL) {
+        printf("%d", current->data);
+        if (current->next) printf(" -> ");
+        current = current->next;
+    }
+    printf(" -> NULL\\n");
+}
+
+// ============================================
+// FREE LIST
+// ============================================
+void freeList(struct Node *head) {
+    struct Node *temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+}
+
+// ============================================
+// MAIN
+// ============================================
+int main() {
+    struct Node *head = NULL;
+
+    // Insert elements
+    printf("=== Building List ===\\n");
+    insertAtEnd(&head, 10);
+    insertAtEnd(&head, 20);
+    insertAtEnd(&head, 30);
+    insertAtBeginning(&head, 5);
+    insertAtBeginning(&head, 1);
+
+    printf("List: ");
+    printList(head);
+
+    // Search
+    printf("\\n=== Search ===\\n");
+    int pos = search(head, 20);
+    printf("20 found at position: %d\\n", pos);
+    pos = search(head, 99);
+    printf("99 found at position: %d\\n", pos);
+
+    // Delete
+    printf("\\n=== Delete ===\\n");
+    deleteNode(&head, 1);
+    printf("After deleting 1: ");
+    printList(head);
+
+    deleteNode(&head, 20);
+    printf("After deleting 20: ");
+    printList(head);
+
+    // Reverse
+    printf("\\n=== Reverse ===\\n");
+    reverseList(&head);
+    printf("Reversed: ");
+    printList(head);
+
+    // Free memory
+    freeList(head);
+    head = NULL;
+
+    return 0;
+}`,
+        language: "c"
+      },
+      {
+        id: "17",
+        title: "Stacks & Queues",
+        content: `## Stacks & Queues in C
+
+### Stack (LIFO — Last In, First Out)
+A stack is like a stack of plates — you can only add or remove from the top.
+
+**Operations:**
+- \`push\` — Add element to top
+- \`pop\` — Remove element from top
+- \`peek/top\` — View top element without removing
+- \`isEmpty\` — Check if stack is empty
+
+**Implementations:**
+1. **Array-based**: Simple, fixed size
+2. **Linked list-based**: Dynamic size
+
+### Queue (FIFO — First In, First Out)
+A queue is like a line at a store — first person in line is served first.
+
+**Operations:**
+- \`enqueue\` — Add element to rear
+- \`dequeue\` — Remove element from front
+- \`front\` — View front element
+- \`isEmpty\` — Check if queue is empty
+
+**Implementations:**
+1. **Array-based**: Simple but wasteful (need to shift)
+2. **Circular array**: Efficient use of space
+3. **Linked list-based**: Dynamic size`,
+        codeExample: `#include <stdio.h>
+#include <stdlib.h>
+
+// ============================================
+// STACK IMPLEMENTATION (Array-based)
+// ============================================
+#define STACK_SIZE 100
+
+typedef struct {
+    int items[STACK_SIZE];
+    int top;
+} Stack;
+
+void initStack(Stack *s) {
+    s->top = -1;
+}
+
+int isEmpty(Stack *s) {
+    return s->top == -1;
+}
+
+int isFull(Stack *s) {
+    return s->top == STACK_SIZE - 1;
+}
+
+void push(Stack *s, int value) {
+    if (isFull(s)) {
+        printf("Stack overflow!\\n");
+        return;
+    }
+    s->items[++(s->top)] = value;
+}
+
+int pop(Stack *s) {
+    if (isEmpty(s)) {
+        printf("Stack underflow!\\n");
+        return -1;
+    }
+    return s->items[(s->top)--];
+}
+
+int peek(Stack *s) {
+    if (isEmpty(s)) {
+        printf("Stack is empty!\\n");
+        return -1;
+    }
+    return s->items[s->top];
+}
+
+// ============================================
+// QUEUE IMPLEMENTATION (Circular Array)
+// ============================================
+#define QUEUE_SIZE 100
+
+typedef struct {
+    int items[QUEUE_SIZE];
+    int front;
+    int rear;
+    int count;
+} Queue;
+
+void initQueue(Queue *q) {
+    q->front = 0;
+    q->rear = -1;
+    q->count = 0;
+}
+
+int queueIsEmpty(Queue *q) {
+    return q->count == 0;
+}
+
+int queueIsFull(Queue *q) {
+    return q->count == QUEUE_SIZE;
+}
+
+void enqueue(Queue *q, int value) {
+    if (queueIsFull(q)) {
+        printf("Queue overflow!\\n");
+        return;
+    }
+    q->rear = (q->rear + 1) % QUEUE_SIZE;
+    q->items[q->rear] = value;
+    q->count++;
+}
+
+int dequeue(Queue *q) {
+    if (queueIsEmpty(q)) {
+        printf("Queue underflow!\\n");
+        return -1;
+    }
+    int value = q->items[q->front];
+    q->front = (q->front + 1) % QUEUE_SIZE;
+    q->count--;
+    return value;
+}
+
+int queueFront(Queue *q) {
+    if (queueIsEmpty(q)) {
+        printf("Queue is empty!\\n");
+        return -1;
+    }
+    return q->items[q->front];
+}
+
+// ============================================
+// PRACTICAL: BALANCED PARENTHESES CHECK
+// ============================================
+int isBalanced(const char *expr) {
+    Stack s;
+    initStack(&s);
+
+    for (int i = 0; expr[i] != '\\0'; i++) {
+        char ch = expr[i];
+
+        if (ch == '(' || ch == '{' || ch == '[') {
+            push(&s, ch);
+        } else if (ch == ')' || ch == '}' || ch == ']') {
+            if (isEmpty(&s)) return 0;
+
+            char top = pop(&s);
+            if ((ch == ')' && top != '(') ||
+                (ch == '}' && top != '{') ||
+                (ch == ']' && top != '[')) {
+                return 0;
+            }
+        }
+    }
+    return isEmpty(&s);
+}
+
+// ============================================
+// MAIN
+// ============================================
+int main() {
+    // ============================================
+    // STACK DEMO
+    // ============================================
+    printf("=== Stack Operations ===\\n");
+
+    Stack stack;
+    initStack(&stack);
+
+    push(&stack, 10);
+    push(&stack, 20);
+    push(&stack, 30);
+
+    printf("Top: %d\\n", peek(&stack));
+    printf("Pop: %d\\n", pop(&stack));
+    printf("Pop: %d\\n", pop(&stack));
+    printf("Top: %d\\n", peek(&stack));
+
+    // ============================================
+    // QUEUE DEMO
+    // ============================================
+    printf("\\n=== Queue Operations ===\\n");
+
+    Queue queue;
+    initQueue(&queue);
+
+    enqueue(&queue, 10);
+    enqueue(&queue, 20);
+    enqueue(&queue, 30);
+
+    printf("Front: %d\\n", queueFront(&queue));
+    printf("Dequeue: %d\\n", dequeue(&queue));
+    printf("Dequeue: %d\\n", dequeue(&queue));
+    printf("Front: %d\\n", queueFront(&queue));
+
+    // ============================================
+    // BALANCED PARENTHESES
+    // ============================================
+    printf("\\n=== Balanced Parentheses ===\\n");
+
+    printf("\"(([]))\"  → %s\\n", isBalanced("(([]))") ? "Balanced" : "Not balanced");
+    printf("\"([{}])\"  → %s\\n", isBalanced("([{}])") ? "Balanced" : "Not balanced");
+    printf("\"([)]\"    → %s\\n", isBalanced("([)]") ? "Balanced" : "Not balanced");
+    printf("\"{\"       → %s\\n", isBalanced("{") ? "Balanced" : "Not balanced");
+
+    return 0;
+}`,
+        language: "c"
+      },
+      {
+        id: "18",
+        title: "Trees & Graphs",
+        content: `## Trees & Graphs in C
+
+### Binary Tree
+A tree where each node has at most two children (left and right).
+
+**Key concepts:**
+- **Root**: Topmost node
+- **Leaf**: Node with no children
+- **Height**: Longest path from root to leaf
+- **Depth**: Distance from root to a node
+
+### Binary Search Tree (BST)
+A binary tree where:
+- Left subtree values < node value
+- Right subtree values > node value
+
+**Operations:** Insert, Search, Delete, Traversals
+
+### Tree Traversals
+- **Inorder** (Left, Root, Right): Gives sorted order for BST
+- **Preorder** (Root, Left, Right): Used to copy/serialize tree
+- **Postorder** (Left, Right, Root): Used to delete tree
+- **Level-order** (BFS): Visit level by level
+
+### Graph
+A collection of vertices (nodes) and edges (connections).
+
+**Representations:**
+1. **Adjacency Matrix**: 2D array — O(V²) space
+2. **Adjacency List**: Array of lists — O(V+E) space
+
+**Types:**
+- Directed vs Undirected
+- Weighted vs Unweighted
+- Cyclic vs Acyclic
+
+**Traversal:**
+- **BFS** (Breadth-First Search): Uses queue
+- **DFS** (Depth-First Search): Uses stack or recursion`,
+        codeExample: `#include <stdio.h>
+#include <stdlib.h>
+
+// ============================================
+// BINARY SEARCH TREE NODE
+// ============================================
+struct TreeNode {
+    int data;
+    struct TreeNode *left;
+    struct TreeNode *right;
+};
+
+struct TreeNode* createNode(int data) {
+    struct TreeNode *node = (struct TreeNode*)malloc(sizeof(struct TreeNode));
+    node->data = data;
+    node->left = NULL;
+    node->right = NULL;
+    return node;
+}
+
+// ============================================
+// BST INSERT
+// ============================================
+struct TreeNode* insert(struct TreeNode *root, int data) {
+    if (root == NULL) return createNode(data);
+
+    if (data < root->data)
+        root->left = insert(root->left, data);
+    else if (data > root->data)
+        root->right = insert(root->right, data);
+
+    return root;
+}
+
+// ============================================
+// BST SEARCH
+// ============================================
+struct TreeNode* search(struct TreeNode *root, int data) {
+    if (root == NULL || root->data == data)
+        return root;
+
+    if (data < root->data)
+        return search(root->left, data);
+    return search(root->right, data);
+}
+
+// ============================================
+// TREE TRAVERSALS
+// ============================================
+void inorder(struct TreeNode *root) {
+    if (root != NULL) {
+        inorder(root->left);
+        printf("%d ", root->data);
+        inorder(root->right);
+    }
+}
+
+void preorder(struct TreeNode *root) {
+    if (root != NULL) {
+        printf("%d ", root->data);
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+
+void postorder(struct TreeNode *root) {
+    if (root != NULL) {
+        postorder(root->left);
+        postorder(root->right);
+        printf("%d ", root->data);
+    }
+}
+
+// ============================================
+// TREE HEIGHT
+// ============================================
+int height(struct TreeNode *root) {
+    if (root == NULL) return 0;
+    int leftH = height(root->left);
+    int rightH = height(root->right);
+    return 1 + (leftH > rightH ? leftH : rightH);
+}
+
+// ============================================
+// FREE TREE
+// ============================================
+void freeTree(struct TreeNode *root) {
+    if (root == NULL) return;
+    freeTree(root->left);
+    freeTree(root->right);
+    free(root);
+}
+
+// ============================================
+// GRAPH (Adjacency List)
+// ============================================
+struct Graph {
+    int numVertices;
+    int *visited;
+    struct AdjListNode {
+        int dest;
+        struct AdjListNode *next;
+    } **adjLists;
+};
+
+struct Graph* createGraph(int vertices) {
+    struct Graph *graph = (struct Graph*)malloc(sizeof(struct Graph));
+    graph->numVertices = vertices;
+    graph->adjLists = (struct AdjListNode**)malloc(vertices * sizeof(struct AdjListNode*));
+    graph->visited = (int*)calloc(vertices, sizeof(int));
+
+    for (int i = 0; i < vertices; i++) {
+        graph->adjLists[i] = NULL;
+    }
+    return graph;
+}
+
+void addEdge(struct Graph *graph, int src, int dest) {
+    struct AdjListNode *newNode = (struct AdjListNode*)malloc(sizeof(struct AdjListNode));
+    newNode->dest = dest;
+    newNode->next = graph->adjLists[src];
+    graph->adjLists[src] = newNode;
+
+    // For undirected graph, add reverse edge
+    struct AdjListNode *newNode2 = (struct AdjListNode*)malloc(sizeof(struct AdjListNode));
+    newNode2->dest = src;
+    newNode2->next = graph->adjLists[dest];
+    graph->adjLists[dest] = newNode2;
+}
+
+void DFS(struct Graph *graph, int vertex) {
+    graph->visited[vertex] = 1;
+    printf("%d ", vertex);
+
+    struct AdjListNode *temp = graph->adjLists[vertex];
+    while (temp) {
+        if (!graph->visited[temp->dest]) {
+            DFS(graph, temp->dest);
+        }
+        temp = temp->next;
+    }
+}
+
+// ============================================
+// MAIN
+// ============================================
+int main() {
+    // ============================================
+    // BINARY SEARCH TREE
+    // ============================================
+    printf("=== Binary Search Tree ===\\n");
+
+    struct TreeNode *root = NULL;
+    root = insert(root, 50);
+    insert(root, 30);
+    insert(root, 70);
+    insert(root, 20);
+    insert(root, 40);
+    insert(root, 60);
+    insert(root, 80);
+
+    printf("Inorder (sorted): ");
+    inorder(root);
+    printf("\\n");
+
+    printf("Preorder: ");
+    preorder(root);
+    printf("\\n");
+
+    printf("Postorder: ");
+    postorder(root);
+    printf("\\n");
+
+    printf("Tree height: %d\\n", height(root));
+
+    struct TreeNode *found = search(root, 40);
+    printf("Search 40: %s\\n", found ? "Found" : "Not found");
+
+    freeTree(root);
+
+    // ============================================
+    // GRAPH
+    // ============================================
+    printf("\\n=== Graph (DFS Traversal) ===\\n");
+
+    struct Graph *graph = createGraph(6);
+    addEdge(graph, 0, 1);
+    addEdge(graph, 0, 2);
+    addEdge(graph, 1, 3);
+    addEdge(graph, 1, 4);
+    addEdge(graph, 2, 5);
+
+    printf("DFS from vertex 0: ");
+    DFS(graph, 0);
+    printf("\\n");
+
+    return 0;
+}`,
+        language: "c"
+      },
+      {
+        id: "19",
+        title: "Sorting & Searching Algorithms",
+        content: `## Sorting & Searching Algorithms in C
+
+### Sorting Algorithms
+
+**Bubble Sort**: Repeatedly swap adjacent elements if they're in wrong order.
+- Time: O(n²), Space: O(1)
+- Stable: Yes
+- Best for: Small datasets, educational purposes
+
+**Selection Sort**: Find minimum and place it at the beginning.
+- Time: O(n²), Space: O(1)
+- Stable: No
+- Best for: Small datasets, minimal swaps
+
+**Insertion Sort**: Build sorted portion one element at a time.
+- Time: O(n²), Space: O(1)
+- Stable: Yes
+- Best for: Nearly sorted data, small datasets
+
+**Merge Sort**: Divide array in half, sort each half, merge.
+- Time: O(n log n), Space: O(n)
+- Stable: Yes
+- Best for: General-purpose, guaranteed O(n log n)
+
+**Quick Sort**: Partition around pivot, sort partitions recursively.
+- Time: O(n log n) average, O(n²) worst, Space: O(log n)
+- Stable: No
+- Best for: General-purpose, fastest in practice
+
+### Searching Algorithms
+
+**Linear Search**: Check each element one by one.
+- Time: O(n)
+- Works on: Any array (sorted or unsorted)
+
+**Binary Search**: Divide sorted array in half each step.
+- Time: O(log n)
+- Works on: Sorted arrays only`,
+        codeExample: `#include <stdio.h>
+
+// Helper to print array
+void printArray(int arr[], int n) {
+    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
+    printf("\\n");
+}
+
+// ============================================
+// BUBBLE SORT
+// ============================================
+void bubbleSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int swapped = 0;
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+                swapped = 1;
+            }
+        }
+        if (!swapped) break;  // Already sorted
+    }
+}
+
+// ============================================
+// SELECTION SORT
+// ============================================
+void selectionSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int minIdx = i;
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[minIdx]) {
+                minIdx = j;
+            }
+        }
+        int temp = arr[i];
+        arr[i] = arr[minIdx];
+        arr[minIdx] = temp;
+    }
+}
+
+// ============================================
+// INSERTION SORT
+// ============================================
+void insertionSort(int arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+// ============================================
+// MERGE SORT
+// ============================================
+void merge(int arr[], int left, int mid, int right) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+
+    int L[n1], R[n2];
+    for (int i = 0; i < n1; i++) L[i] = arr[left + i];
+    for (int j = 0; j < n2; j++) R[j] = arr[mid + 1 + j];
+
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) arr[k++] = L[i++];
+        else arr[k++] = R[j++];
+    }
+    while (i < n1) arr[k++] = L[i++];
+    while (j < n2) arr[k++] = R[j++];
+}
+
+void mergeSort(int arr[], int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+    }
+}
+
+// ============================================
+// QUICK SORT
+// ============================================
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
+    int temp = arr[i + 1];
+    arr[i + 1] = arr[high];
+    arr[high] = temp;
+    return i + 1;
+}
+
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+// ============================================
+// LINEAR SEARCH
+// ============================================
+int linearSearch(int arr[], int n, int target) {
+    for (int i = 0; i < n; i++) {
+        if (arr[i] == target) return i;
+    }
+    return -1;
+}
+
+// ============================================
+// BINARY SEARCH
+// ============================================
+int binarySearch(int arr[], int n, int target) {
+    int low = 0, high = n - 1;
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        if (arr[mid] == target) return mid;
+        if (arr[mid] < target) low = mid + 1;
+        else high = mid - 1;
+    }
+    return -1;
+}
+
+// ============================================
+// MAIN
+// ============================================
+int main() {
+    int arr[] = {64, 34, 25, 12, 22, 11, 90};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int temp[7];
+
+    // Bubble Sort
+    for (int i = 0; i < n; i++) temp[i] = arr[i];
+    bubbleSort(temp, n);
+    printf("Bubble Sort:    "); printArray(temp, n);
+
+    // Selection Sort
+    for (int i = 0; i < n; i++) temp[i] = arr[i];
+    selectionSort(temp, n);
+    printf("Selection Sort: "); printArray(temp, n);
+
+    // Insertion Sort
+    for (int i = 0; i < n; i++) temp[i] = arr[i];
+    insertionSort(temp, n);
+    printf("Insertion Sort: "); printArray(temp, n);
+
+    // Merge Sort
+    for (int i = 0; i < n; i++) temp[i] = arr[i];
+    mergeSort(temp, 0, n - 1);
+    printf("Merge Sort:     "); printArray(temp, n);
+
+    // Quick Sort
+    for (int i = 0; i < n; i++) temp[i] = arr[i];
+    quickSort(temp, 0, n - 1);
+    printf("Quick Sort:     "); printArray(temp, n);
+
+    // Searching
+    printf("\\n=== Searching ===\\n");
+    printf("Original array: ");
+    printArray(arr, n);
+
+    int target = 22;
+    int idx = linearSearch(arr, n, target);
+    printf("Linear search %d: found at index %d\\n", target, idx);
+
+    int sorted[] = {11, 12, 22, 25, 34, 64, 90};
+    idx = binarySearch(sorted, 7, target);
+    printf("Binary search %d: found at index %d\\n", target, idx);
+
+    return 0;
+}`,
+        language: "c"
+      },
+      {
+        id: "20",
+        title: "Best Practices & Common Mistakes",
+        content: `## C Best Practices & Common Mistakes
+
+### Best Practices
+
+1. **Always initialize variables**
+   - Uninitialized variables contain garbage values
+
+2. **Check return values**
+   - Always check if malloc/calloc/fopen return NULL
+   - Check scanf return value
+
+3. **Use const for read-only data**
+   - \`const int MAX = 100;\` prevents accidental modification
+
+4. **Use meaningful variable names**
+   - Bad: \`int x, y, z;\`
+   - Good: \`int studentCount, totalScore, maxGrade;\`
+
+5. **Always free allocated memory**
+   - Match every malloc/calloc with free
+   - Set pointer to NULL after freeing
+
+6. **Use size_t for sizes and indices**
+   - \`size_t\` is the correct type for array sizes
+
+7. **Avoid buffer overflows**
+   - Use fgets instead of gets
+   - Use strncpy instead of strcpy
+   - Always specify buffer sizes
+
+8. **Use limits.h constants**
+   - \`INT_MAX\`, \`INT_MIN\`, \`UINT_MAX\` instead of magic numbers
+
+9. **Write comments for complex logic**
+   - Explain WHY, not WHAT
+
+10. **Use compiler warnings**
+    - \`gcc -Wall -Wextra\` catches many bugs
+
+### Common Mistakes
+
+1. **Using = instead of == in conditions**
+   \`\`\`c
+   if (x = 5)  // WRONG: assigns 5 to x
+   if (x == 5) // CORRECT: compares
+   \`\`\`
+
+2. **Forgetting & in scanf**
+   \`\`\`c
+   scanf("%d", x);    // WRONG
+   scanf("%d", &x);   // CORRECT
+   \`\`\`
+
+3. **Array index out of bounds**
+   \`\`\`c
+   int arr[5] = {1,2,3,4,5};
+   arr[5] = 10;  // WRONG: valid indices are 0-4
+   \`\`\`
+
+4. **Dereferencing NULL pointer**
+   \`\`\`c
+   int *ptr = NULL;
+   *ptr = 10;  // WRONG: segfault
+   \`\`\`
+
+5. **Memory leaks**
+   \`\`\`c
+   int *p = malloc(sizeof(int));
+   // forgot to free(p) before p goes out of scope
+   \`\`\`
+
+6. **Using string literals as modifiable arrays**
+   \`\`\`c
+   char *str = "Hello";
+   str[0] = 'h';  // WRONG: string literals are read-only
+   \`\`\`
+
+7. **Integer overflow**
+   \`\`\`c
+   int big = INT_MAX;
+   big++;  // Undefined behavior
+   \`\`\`
+
+8. **Off-by-one errors in loops**
+   \`\`\`c
+   for (int i = 0; i <= n; i++)  // Iterates n+1 times
+   for (int i = 0; i < n; i++)   // Correctly iterates n times
+   \`\`\`
+
+9. **Forgetting return statement**
+   \`\`\`c
+   int add(int a, int b) {
+       a + b;  // WRONG: no return
+   }
+   \`\`\`
+
+10. **Not checking for division by zero**
+    \`\`\`c
+    int result = a / b;  // WRONG if b is 0
+    if (b != 0) result = a / b;  // CORRECT
+    \`\`\``,
+        codeExample: `#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <limits.h>
+#include <errno.h>
+
+int main() {
+    printf("=== C Best Practices & Common Mistakes ===\\n\\n");
+
+    // ============================================
+    // 1. ALWAYS INITIALIZE
+    // ============================================
+    printf("--- 1. Initialize Variables ---\\n");
+    int initialized = 0;     // Good
+    // int uninitialized;     // Bad: contains garbage
+    printf("Initialized: %d\\n", initialized);
+
+    // ============================================
+    // 2. CHECK RETURN VALUES
+    // ============================================
+    printf("\\n--- 2. Check Return Values ---\\n");
+
+    FILE *fp = fopen("nonexistent.txt", "r");
+    if (fp == NULL) {
+        printf("fopen failed (expected): %s\\n", strerror(errno));
+    }
+
+    int *p = (int*)malloc(sizeof(int));
+    if (p != NULL) {
+        *p = 42;
+        printf("malloc succeeded: %d\\n", *p);
+        free(p);
+        p = NULL;
+    }
+
+    // ============================================
+    // 3. USE CONST
+    // ============================================
+    printf("\\n--- 3. Use const ---\\n");
+    const int MAX = 100;
+    const char *name = "Alice";
+    printf("MAX = %d, name = %s\\n", MAX, name);
+    // MAX = 200;  // Would cause compilation error
+
+    // ============================================
+    // 4. AVOID BUFFER OVERFLOWS
+    // ============================================
+    printf("\\n--- 4. Safe String Handling ---\\n");
+
+    char safe[20];
+    // strncpy(safe, "This is a long string", sizeof(safe) - 1);
+    // safe[sizeof(safe) - 1] = '\\0';
+    strncpy(safe, "Hello", sizeof(safe) - 1);
+    safe[sizeof(safe) - 1] = '\\0';
+    printf("Safe copy: %s\\n", safe);
+
+    // ============================================
+    // 5. COMMON MISTAKES (Educational)
+    // ============================================
+    printf("\\n--- 5. Common Mistakes ---\\n");
+
+    // Mistake: = vs ==
+    int x = 5;
+    if (x == 5) {
+        printf("Correct comparison (==)\\n");
+    }
+
+    // Mistake: Array bounds
+    int arr[5] = {1, 2, 3, 4, 5};
+    printf("arr[4] = %d (last valid index)\\n", arr[4]);
+    // arr[5] = 10;  // WRONG: out of bounds!
+
+    // Mistake: NULL dereference
+    int *nullPtr = NULL;
+    if (nullPtr != NULL) {
+        printf("Safe dereference\\n");
+    } else {
+        printf("NULL pointer check passed\\n");
+    }
+
+    // ============================================
+    // 6. SAFE MEMORY PATTERN
+    // ============================================
+    printf("\\n--- 6. Safe Memory Pattern ---\\n");
+
+    int *data = (int*)malloc(5 * sizeof(int));
+    if (data == NULL) {
+        printf("Allocation failed\\n");
+        return 1;
+    }
+
+    // Use the memory...
+    for (int i = 0; i < 5; i++) data[i] = i * 10;
+
+    // Always free when done
+    free(data);
+    data = NULL;  // Prevent dangling pointer
+
+    printf("Memory safely allocated, used, and freed\\n");
+
+    // ============================================
+    // 7. USEFUL MACROS
+    // ============================================
+    printf("\\n--- 7. Useful Patterns ---\\n");
+
+    // Array size macro
+    #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+
+    int numbers[] = {10, 20, 30, 40, 50};
+    printf("Array size: %lu elements\\n", ARRAY_SIZE(numbers));
+
+    // Safe max/min
+    #define SAFE_MAX(a, b) ((a) > (b) ? (a) : (b))
+    #define SAFE_MIN(a, b) ((a) < (b) ? (a) : (b))
+
+    printf("Max(10, 20) = %d\\n", SAFE_MAX(10, 20));
+    printf("Min(10, 20) = %d\\n", SAFE_MIN(10, 20));
+
+    // ============================================
+    // SUMMARY
+    // ============================================
+    printf("\\n=== Summary ===\\n");
+    printf("1. Always initialize variables\\n");
+    printf("2. Check return values (malloc, fopen, scanf)\\n");
+    printf("3. Use const for read-only data\\n");
+    printf("4. Use meaningful variable names\\n");
+    printf("5. Always free allocated memory\\n");
+    printf("6. Use safe string functions (strncpy, fgets)\\n");
+    printf("7. Compile with -Wall -Wextra\\n");
+    printf("8. Test edge cases (empty, null, overflow)\\n");
+
+    return 0;
+}`,
+        language: "c"
+      },
     ],
 
   },
