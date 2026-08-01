@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Play, RotateCcw, Copy, Check, ChevronRight, ChevronDown, Lightbulb, Loader2, CheckCircle, XCircle, Circle } from "lucide-react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
@@ -24,6 +24,16 @@ const darkTheme = EditorView.theme({
   ".cm-cursor": { borderLeftColor: "#60a5fa" },
   ".cm-matchingBracket": { backgroundColor: "#3b82f630", outline: "1px solid #3b82f650" },
 }, { dark: true });
+
+const lightTheme = EditorView.theme({
+  "&": { backgroundColor: "#ffffff", color: "#1e293b" },
+  ".cm-gutters": { backgroundColor: "#f8fafc", color: "#94a3b8", border: "none" },
+  ".cm-activeLineGutter": { backgroundColor: "#f1f5f9" },
+  ".cm-activeLine": { backgroundColor: "#f1f5f940" },
+  ".cm-selectionBackground": { backgroundColor: "#3b82f620 !important" },
+  ".cm-cursor": { borderLeftColor: "#3b82f6" },
+  ".cm-matchingBracket": { backgroundColor: "#3b82f620", outline: "1px solid #3b82f640" },
+}, { dark: false });
 
 const langExtensions: Record<string, LanguageSupport[]> = {
   javascript: [javascript({ jsx: true })],
@@ -61,10 +71,19 @@ export default function PracticeClient({ problem, courseSlug, problemIndex, tota
   const [isRunning, setIsRunning] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showHints, setShowHints] = useState(false);
+  const [isDark, setIsDark] = useState(true);
   const [results, setResults] = useState<{ passed: boolean; actual: string; expected: string; input: string }[]>([]);
   const [solved, setSolved] = useState<boolean>(() => {
     try { return isPracticeSolved(problem.id); } catch { return false; }
   });
+
+  useEffect(() => {
+    const check = () => setIsDark(!document.documentElement.classList.contains("light"));
+    check();
+    const observer = new MutationObserver(check);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
 
   const handleLangChange = (lang: LangId) => {
     setSelectedLang(lang);
@@ -257,7 +276,7 @@ export default function PracticeClient({ problem, courseSlug, problemIndex, tota
             value={code}
             onChange={(val) => setCode(val)}
             extensions={langExtensions[selectedLang] || langExtensions.javascript}
-            theme={darkTheme}
+            theme={isDark ? darkTheme : lightTheme}
             height="100%"
             basicSetup={{ lineNumbers: true, highlightActiveLineGutter: true, highlightActiveLine: true, foldGutter: true }}
           />
