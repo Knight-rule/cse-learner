@@ -6885,382 +6885,497 @@ linkerd check`,
   },
 
   {
+  slug: "oop",
+  title: "Object-Oriented Programming (OOP)",
+  description: "Master the four pillars of OOP — encapsulation, inheritance, polymorphism, and abstraction — plus SOLID design principles. Build robust, maintainable software with classes, objects, interfaces, and clean architecture patterns in TypeScript.",
+  icon: "Code2",
+  color: "from-purple-500 to-blue-600",
+  category: "Languages",
+  lessons: [
+    {
+      id: "1",
+      title: "Introduction to OOP",
+      content: `Object-Oriented Programming (OOP) is a programming paradigm based on objects rather than just functions and logic. Think of it as organizing code into self-contained units called objects that bundle data and behavior together. The core idea is to model real-world entities as objects that have properties (data) and methods (functions). OOP promotes code reusability, modularity, and maintainability. The four fundamental principles of OOP are encapsulation, inheritance, polymorphism, and abstraction. These principles help developers write cleaner, more flexible code that is easier to understand and extend. By using objects, we can create systems that mirror real-world relationships, making complex programs easier to design and reason about.`,
+      codeExample: `class Dog {
+  name: string;
+  breed: string;
 
-    slug: "oop",
+  constructor(name: string, breed: string) {
+    this.name = name;
+    this.breed = breed;
+  }
 
-    title: "Object-Oriented Programming",
-
-    description: "Encapsulation, inheritance, polymorphism, and design patterns.",
-
-    icon: "🏗️",
-
-    notesUrl: "https://noteslink.in/product/oopj-notes-kiit/",
-
-    color: "from-teal-500 to-emerald-600",
-    category: "Core CS",
-
-    lessons: [
-
-      {
-
-        id: "1",
-
-        title: "Introduction to OOP",
-
-        content: "OOP mistake #1: Students create classes for everything. 'I need to print Hello World.' 'Let me make a HelloWorldPrinter class first.' Not everything is an object. Start simple, add abstraction when you have REPETITION.\n\nOOP exists because procedural code breaks down when you have multiple things sharing the same behavior. A class is just a blueprint — it lets you create many objects with the same methods but different data.\n\nConstructor trap: Forgetting that constructors run every time you use `new`. Put setup logic there, not in the class body.\n\nInterview trap: 'What's the difference between a class and an object?' Class = cookie cutter. Object = cookie. One blueprint, many instances.\n\nEngineering mindset: OOP is a TOOL, not a religion. If you only have one of something (one logger, one config), you probably don't need a class. A function is fine. OOP earns its keep when you have 5+ things sharing the same shape.",
-
-        codeExample: `// Bad: class for everything
-class HelloPrinter {
-  print() { console.log("Hello"); }
-}
-new HelloPrinter().print(); // Wasteful
-
-// Good: class when you need multiple instances
-class User {
-  constructor(
-    public name: string,
-    public role: "admin" | "viewer"
-  ) {}
-  canEdit(): boolean {
-    return this.role === "admin";
+  bark(): string {
+    return "Woof!";
   }
 }
 
-const users = [
-  new User("Alice", "admin"),
-  new User("Bob", "viewer"),
-  new User("Charlie", "viewer"),
-];
-const editors = users.filter(u => u.canEdit());
-console.log(editors.length); // 1`,
+const myDog = new Dog("Buddy", "Golden Retriever");
+console.log(myDog.bark());`,
+      language: "typescript"
+    },
+    {
+      id: "2",
+      title: "Classes and Objects",
+      content: `A class is a blueprint or template for creating objects. It defines what data an object will hold and what operations it can perform. An object is an instance of a class — when you create an object, you are creating an instance of the class. Classes define properties (variables) and methods (functions) that belong to the objects created from them. The class body contains fields, constructors, and methods. Fields represent the data of the class, constructors are special methods called when an object is instantiated, and methods define the behavior of the class. In TypeScript, classes support access modifiers like public, private, and protected to control visibility.`,
+      codeExample: `class Car {
+  make: string;
+  model: string;
+  year: number;
 
-        language: "typescript"
-
-      },
-
-      {
-
-        id: "2",
-
-        title: "Encapsulation",
-
-        content: "Encapsulation trap: Students make everything public 'for flexibility'. Then in a team project, changing a field name breaks 30 files. That's why private exists — it communicates 'this is internal, don't touch' to other developers.\n\nGetters/setters are NOT just for Java. They let you ADD validation later without changing the API. Start with public fields, but when you need rules (no negative balance, no empty name), switch to getters.\n\nReadonly trap: Students forget readonly exists and rely on convention. Use readonly for anything set once in the constructor. The compiler enforces what comments can't.\n\nInterview trap: 'Why not just make everything public?' Because encapsulation is about contracts, not secrecy. A public field says 'callers depend on this existing forever'. A private field says 'I can change this tomorrow'.\n\nEngineering mindset: Every public member is a binding promise. Make promises sparingly. If a teammate could misuse a field, lock it down now — before it's in 50 files.",
-
-        codeExample: `class Timer {
-  private _elapsed = 0;
-  private _running = false;
-  readonly startedAt: Date;
-
-  constructor() {
-    this.startedAt = new Date();
-  }
-
-  get elapsed(): number {
-    return this._elapsed;
+  constructor(make: string, model: string, year: number) {
+    this.make = make;
+    this.model = model;
+    this.year = year;
   }
 
   start(): void {
-    if (this._running) return;
-    this._running = true;
+    console.log("The car is starting.");
   }
 
-  stop(): void {
-    this._running = false;
-    this._elapsed += 100;
+  getInfo(): string {
+    return \`\${this.year} \${this.make} \${this.model}\`;
   }
 }
 
-const t = new Timer();
-t.start();
-t.stop();
-console.log(t.elapsed); // 100
-// t.startedAt = new Date(); // Error! readonly
-// t._elapsed = 999; // Error! private`,
+const myCar = new Car("Tesla", "Model 3", 2023);
+myCar.start();
+console.log(myCar.getInfo());`,
+      language: "typescript"
+    },
+    {
+      id: "3",
+      title: "Encapsulation",
+      content: `Encapsulation is the practice of bundling data and methods that operate on that data within a single unit, typically a class, and restricting direct access to some of the object's components. This is also known as data hiding. Encapsulation protects an object's internal state from being modified directly by outside code, preventing unintended interference and misuse. In TypeScript, we use the private keyword to mark properties or methods as accessible only within the class. The public keyword makes members accessible from anywhere. The protected keyword allows access within the class and its subclasses. Getter and setter methods provide controlled access to private fields, allowing validation and computed values.`,
+      codeExample: `class BankAccount {
+  private _balance: number = 0;
+  private readonly _accountNumber: string;
 
-        language: "typescript"
-
-      },
-
-      {
-
-        id: "3",
-
-        title: "Inheritance",
-
-        content: "Inheritance abuse: Students love inheritance. 'Cat extends Animal, Dog extends Animal'. Then they need a Robot. Does Robot extend Animal? Suddenly the hierarchy falls apart. Enter composition: Robot has-a Brain, has-a Body. Favor HAS-A over IS-A.\n\nLSP trap (Liskov Substitution): If a child class CHANGES parent behavior instead of EXTENDING it, inheritance is wrong. 'Square extends Rectangle' breaks when Rectangle has setWidth() and Square needs to set both dimensions.\n\nInterview trap: 'Why is multiple inheritance dangerous?' Diamond problem — if A extends B and C, and both B and C have a method doStuff(), which one does A use? TypeScript's interfaces avoid this by having NO implementation.\n\nEngineering mindset: Inheritance creates the tightest coupling in OOP — a child class is permanently tied to its parent. Before you write 'extends', ask: Is this a hierarchy that will NEVER change? If the answer isn't 'yes', use interfaces + composition instead.",
-
-        codeExample: `// Bad: forces artificial hierarchy
-interface Switchable {
-  on(): void;
-  off(): void;
-}
-
-class LightBulb implements Switchable {
-  on() { console.log("Light ON"); }
-  off() { console.log("Light OFF"); }
-}
-
-class Fan implements Switchable {
-  on() { console.log("Fan ON"); }
-  off() { console.log("Fan OFF"); }
-}
-
-// Composition over inheritance
-class RemoteControl {
-  constructor(private device: Switchable) {}
-
-  toggle(on: boolean): void {
-    on ? this.device.on() : this.device.off();
+  constructor(accountNumber: string) {
+    this._accountNumber = accountNumber;
   }
-}
 
-const remote = new RemoteControl(new LightBulb());
-remote.toggle(true);  // Light ON
-remote.toggle(false); // Light OFF`,
-
-        language: "typescript"
-
-      },
-
-      {
-
-        id: "4",
-
-        title: "Polymorphism",
-
-        content: "Polymorphism trap: Students write if-else chains for every type check. `if (animal.type === 'dog') bark(); else if (animal.type === 'cat') meow()`. This is the OPPOSITE of polymorphism. Real polymorphism means you write code that works with ANY type — and each type handles its own behavior.\n\nThe 'new' keyword trap: When you write `new Dog()`, `new Cat()` in your business logic, you've already lost. Polymorphism requires programming to an INTERFACE, not a concrete class.\n\nInterview trap: 'Overloading vs overriding?' Overloading = same name, different params (compile-time). Overriding = child replaces parent method (runtime). TypeScript has REAL overriding — overloading is just type annotations.\n\nEngineering mindset: Polymorphism allows your code to be OPEN for extension without being OPEN for modification. Adding a new type never requires changing existing code that depends on the interface. That's how production systems stay stable while growing.",
-
-        codeExample: `// Bad: manual type checking
-function saveJson(data: string | number) {
-  if (typeof data === "string") return JSON.parse(data);
-  return data; // fine for numbers, what about objects?
-}
-
-// Good: polymorphic serializer
-interface Serializable {
-  serialize(): string;
-}
-
-class UserData implements Serializable {
-  constructor(private name: string, private age: number) {}
-  serialize(): string {
-    return JSON.stringify({ name: this.name, age: this.age });
-  }
-}
-
-class Config implements Serializable {
-  constructor(private theme: string) {}
-  serialize(): string {
-    return JSON.stringify({ theme: this.theme });
-  }
-}
-
-function persist(item: Serializable): void {
-  const data = item.serialize();
-  console.log("Saving:", data);
-}
-
-persist(new UserData("Alice", 30));
-persist(new Config("dark"));`,
-
-        language: "typescript"
-
-      },
-
-      {
-
-        id: "5",
-
-        title: "Abstraction",
-
-        content: "Abstraction trap: Students assume one interface implementation will always be enough. 'Why use an interface if I only have one database?' Six months later you're migrating from MongoDB to Postgres and every file references Mongo-specific types. The interface costs nothing today and saves a rewrite tomorrow.\n\nAbstract class vs interface confusion: Use abstract when classes SHARE STATE (both have a `connection` field). Use interface when they only SHARE BEHAVIOR (both have `connect()`, `query()`).\n\nInterview trap: 'Is abstraction the same as encapsulation?' No — encapsulation hides INTERNAL DATA, abstraction hides IMPLEMENTATION DETAILS. Encapsulation says 'you can't touch this'. Abstraction says 'you don't need to know how this works'.\n\nEngineering mindset: The goal of abstraction isn't to make code 'clean' — it's to make change cheap. Every concrete dependency in your business logic is a future cost. Put an interface in front of anything that could change: databases, APIs, file systems, external services.",
-
-        codeExample: `abstract class NotificationSender {
-  abstract send(message: string): Promise<boolean>;
-
-  async notify(message: string): Promise<void> {
-    const sent = await this.send(message);
-    if (!sent) {
-      console.error(\`Failed to send: \${message}\`);
-      this.fallback(message);
+  deposit(amount: number): void {
+    if (amount > 0) {
+      this._balance += amount;
     }
   }
 
-  private fallback(message: string): void {
-    console.log(\`Stored for retry: \${message}\`);
-  }
-}
-
-class EmailSender extends NotificationSender {
-  async send(message: string): Promise<boolean> {
-    console.log(\`Email: \${message}\`);
-    return true;
-  }
-}
-
-class SmsSender extends NotificationSender {
-  async send(message: string): Promise<boolean> {
-    console.log(\`SMS: \${message}\`);
+  withdraw(amount: number): boolean {
+    if (amount > 0 && amount <= this._balance) {
+      this._balance -= amount;
+      return true;
+    }
     return false;
   }
+
+  getBalance(): number {
+    return this._balance;
+  }
+
+  get accountNumber(): string {
+    return this._accountNumber;
+  }
 }
 
-new EmailSender().notify("Welcome!");
-new SmsSender().notify("OTP: 1234");`,
+const account = new BankAccount("123456789");
+account.deposit(1000);
+console.log(account.getBalance());
+console.log(account.accountNumber);`,
+      language: "typescript"
+    },
+    {
+      id: "4",
+      title: "Inheritance",
+      content: `Inheritance is a mechanism that allows one class to inherit properties and methods from another class. The class that inherits is called the subclass or child class, and the class being inherited from is called the superclass or parent class. Inheritance promotes code reusability by allowing a new class to reuse, extend, or modify the behavior of an existing class. In TypeScript, we use the extends keyword to create a subclass. The super keyword is used inside the subclass constructor to call the parent constructor, ensuring proper initialization. JavaScript and TypeScript support single inheritance — a class can only extend one parent class. However, multiple inheritance can be simulated using mixins or interfaces.`,
+      codeExample: `class Animal {
+  name: string;
+  age: number;
 
-        language: "typescript"
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
 
-      },
+  makeSound(): void {
+    console.log("Some generic sound");
+  }
 
-      {
-
-        id: "6",
-
-        title: "SOLID Principles",
-
-        content: "SOLID trap: Students try to apply all five principles to a 50-line script. SOLID exists for applications that will be maintained for YEARS by multiple people. A single-file utility doesn't need dependency inversion. Apply SOLID proportionally to the code's lifespan and team size.\n\nSRP is the most violated: 'This Utility class handles formatting, file I/O, and API calls.' When the utility file hits 2000 lines, you can't find anything. One responsibility = one reason to change.\n\nOCP trap: 'I modified the existing class instead of extending it.' The OCP violation that haunts teams — every feature sprint modifies the same 5 core files, creating merge conflict hell.\n\nInterview trap: 'Which SOLID principle is most important?' DIP (Dependency Inversion). Because if your high-level code depends on abstractions, the other four principles become achievable. If everything is hard-coded to concrete classes, SRP and OCP are impossible.\n\nEngineering mindset: SOLID is a smell detector, not a checklist. If you violate SRP and nothing breaks for months, fine. If you violate DIP and need to swap a database, you'll pay. Learn which violations hurt, not which rules to follow blindly.",
-
-        codeExample: `// SRP violation: one class does everything
-// ISP violation: fat interface with unused methods
-interface Worker {
-  work(): void;
-  eat(): void;
-  sleep(): void;
+  sleep(): void {
+    console.log(\`\${this.name} is sleeping.\`);
+  }
 }
 
-// ISP fix: segregated interfaces
-interface Workable {
-  work(): void;
+class Cat extends Animal {
+  furColor: string;
+
+  constructor(name: string, age: number, furColor: string) {
+    super(name, age);
+    this.furColor = furColor;
+  }
+
+  makeSound(): void {
+    console.log("Meow!");
+  }
+
+  climb(): void {
+    console.log(\`\${this.name} is climbing.\`);
+  }
 }
-interface Eatable {
-  eat(): void;
+
+const myCat = new Cat("Whiskers", 3, "orange");
+myCat.makeSound();
+myCat.sleep();
+myCat.climb();`,
+      language: "typescript"
+    },
+    {
+      id: "5",
+      title: "Polymorphism",
+      content: `Polymorphism means "many forms." It is the ability of an object to take on multiple forms or behave differently based on its type. In OOP, polymorphism typically occurs when a parent class reference is used to refer to a child class object. The method calls are resolved at runtime based on the actual object type, a behavior known as dynamic method dispatch or late binding. In TypeScript, polymorphism is achieved through method overriding, where a subclass provides its own implementation of a method defined in its parent class. The TypeScript compiler checks for type safety at compile time, ensuring only valid methods are called on an object.`,
+      codeExample: `abstract class Shape {
+  abstract calculateArea(): number;
+
+  describe(): string {
+    return \`This is a shape with area \${this.calculateArea()}\`;
+  }
 }
-interface Sleepable {
-  sleep(): void;
+
+class Circle extends Shape {
+  radius: number;
+
+  constructor(radius: number) {
+    super();
+    this.radius = radius;
+  }
+
+  calculateArea(): number {
+    return Math.PI * this.radius * this.radius;
+  }
 }
 
-class Human implements Workable, Eatable, Sleepable {
-  work() { console.log("Thinking..."); }
-  eat() { console.log("Eating..."); }
-  sleep() { console.log("Sleeping..."); }
+class Rectangle extends Shape {
+  width: number;
+  height: number;
+
+  constructor(width: number, height: number) {
+    super();
+    this.width = width;
+    this.height = height;
+  }
+
+  calculateArea(): number {
+    return this.width * this.height;
+  }
 }
 
-class Robot implements Workable {
-  work() { console.log("Processing..."); }
-  // Robot doesn't need eat() or sleep()
-}`,
+function printArea(shape: Shape): void {
+  console.log(shape.calculateArea());
+}
 
-        language: "typescript"
+const circle = new Circle(5);
+const rectangle = new Rectangle(4, 6);
 
-      },
+printArea(circle);
+printArea(rectangle);`,
+      language: "typescript"
+    },
+    {
+      id: "6",
+      title: "Abstraction",
+      content: `Abstraction is the concept of hiding complex implementation details and showing only the essential features of an object. It focuses on what an object does rather than how it does it. Abstraction allows developers to create simple interfaces for complex operations, reducing complexity and isolating the impact of changes. In TypeScript, abstraction is achieved using abstract classes and interfaces. An abstract class can contain both abstract methods (method signatures without a body) and concrete methods (fully implemented). Abstract classes cannot be instantiated directly — they must be subclassed. Abstract methods defined in the parent class must be implemented by the subclass. This enforces a contract that all subclasses must follow.`,
+      codeExample: `abstract class Vehicle {
+  protected brand: string;
 
-      {
+  constructor(brand: string) {
+    this.brand = brand;
+  }
 
-        id: "7",
+  abstract startEngine(): void;
+  abstract getMaxSpeed(): number;
 
-        title: "Creational Design Patterns",
+  protected logStatus(message: string): void {
+    console.log(\`[\${this.brand}] \${message}\`);
+  }
+}
 
-        content: "Design pattern trap: Students try to memorize all 23 Gang of Four patterns. Real engineers know ~5 patterns deeply and recognize when to reach for them. The rest are vocabulary for code review conversations.\n\nSingleton trap: Students make EVERYTHING a singleton. Logger, config, DB — fine. UserService, PaymentService — BAD. Singletons hide dependencies and make testing impossible. Your unit tests shouldn't need a real database just because Logger is a singleton.\n\nFactory trap: Creating a factory 'in case we need it later'. YAGNI (You Ain't Gonna Need It). Add a factory when you actually have multiple concrete implementations, not when you imagine you might.\n\nBuilder trap: Using Builder for objects with 2 parameters. Builder is for objects with 8+ optional parameters where constructor calls look like encrypted data.\n\nInterview trap: 'Why not just use new everywhere?' Because new couples your code to a concrete class. Factory Method lets the CALLER decide what to create, keeping your library code decoupled.\n\nEngineering mindset: Patterns are proven solutions to REPEATING problems. If you haven't felt the PAIN a pattern solves (god object, constructor explosion, untestable singletons), don't use it. The pattern will still be there when you actually need it.",
+class Motorcycle extends Vehicle {
+  startEngine(): void {
+    this.logStatus("Engine started with a roar!");
+  }
 
-        codeExample: `// Singleton: for infrastructure, NOT business logic
-class Logger {
-  private static instance: Logger;
+  getMaxSpeed(): number {
+    return 180;
+  }
+}
 
-  private constructor() {}
+class Truck extends Vehicle {
+  private cargoCapacity: number;
 
-  static getInstance(): Logger {
-    if (!Logger.instance) {
-      Logger.instance = new Logger();
+  constructor(brand: string, cargoCapacity: number) {
+    super(brand);
+    this.cargoCapacity = cargoCapacity;
+  }
+
+  startEngine(): void {
+    this.logStatus("Heavy-duty engine started.");
+  }
+
+  getMaxSpeed(): number {
+    return 120;
+  }
+
+  getCargoCapacity(): number {
+    return this.cargoCapacity;
+  }
+}
+
+const bike = new Motorcycle("Harley-Davidson");
+const truck = new Truck("Volvo", 20000);
+
+bike.startEngine();
+truck.startEngine();
+console.log(truck.getCargoCapacity());`,
+      language: "typescript"
+    },
+    {
+      id: "7",
+      title: "Constructors and Destructors",
+      content: `A constructor is a special method that is automatically called when an object is instantiated from a class. Its primary purpose is to initialize the object's properties to valid values. In TypeScript, the constructor is defined using the constructor keyword. A class can have only one constructor in TypeScript (unlike some other languages that support constructor overloading). However, TypeScript supports constructor parameter properties, a shorthand syntax that combines declaration and assignment, reducing boilerplate code. Destructors are special methods called when an object is about to be destroyed or garbage collected. JavaScript and TypeScript do not have destructors in the traditional sense, as the garbage collector handles memory management automatically. However, cleanup can be done manually or using weak references when needed.`,
+      codeExample: `class User {
+  id: number;
+  name: string;
+  email: string;
+  private createdAt: Date;
+
+  constructor(id: number, name: string, email: string) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
+    this.createdAt = new Date();
+  }
+
+  getCreatedAt(): Date {
+    return this.createdAt;
+  }
+
+  displayInfo(): void {
+    console.log(\`User: \${this.name}, Email: \${this.email}\`);
+  }
+}
+
+class Product {
+  constructor(
+    public id: string,
+    public name: string,
+    public price: number
+  ) {}
+
+  applyDiscount(discountPercent: number): void {
+    this.price = this.price * (1 - discountPercent / 100);
+  }
+}
+
+const user = new User(1, "Alice", "alice@example.com");
+const product = new Product("P001", "Laptop", 999.99);
+
+user.displayInfo();
+product.applyDiscount(10);
+console.log(product.name, product.price);`,
+      language: "typescript"
+    },
+    {
+      id: "8",
+      title: "Interfaces",
+      content: `An interface in TypeScript is a contract that defines the shape of an object. It specifies what properties and methods an object must have, without providing their implementation. Interfaces are a powerful tool for defining contracts between different parts of a program. They enable type-checking at compile time, ensuring objects conform to a defined structure. TypeScript interfaces are purely a compile-time feature — they do not exist in the compiled JavaScript output. Interfaces can be used to implement multiple inheritance-like behavior, as a class can implement multiple interfaces. Interface segregation is a key principle — small, specific interfaces are preferred over large, general ones. Interfaces define contracts, while classes provide implementations.`,
+      codeExample: `interface Drawable {
+  draw(): void;
+}
+
+interface Resizable {
+  resize(width: number, height: number): void;
+}
+
+interface Colorable {
+  color: string;
+  setColor(color: string): void;
+}
+
+class Canvas implements Drawable, Resizable, Colorable {
+  width: number = 0;
+  height: number = 0;
+  color: string = "white";
+
+  draw(): void {
+    console.log("Drawing on canvas");
+  }
+
+  resize(width: number, height: number): void {
+    this.width = width;
+    this.height = height;
+  }
+
+  setColor(color: string): void {
+    this.color = color;
+  }
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  isActive?: boolean;
+}
+
+const user: User = {
+  id: 1,
+  name: "Bob",
+  email: "bob@example.com",
+  isActive: true
+};
+
+console.log(user.name);`,
+      language: "typescript"
+    },
+    {
+      id: "9",
+      title: "Abstract Classes",
+      content: `An abstract class is a class that cannot be instantiated directly and is intended to be subclassed. It serves as a blueprint for other classes. Abstract classes can contain both abstract methods and concrete methods. Abstract methods are declared but not implemented — the subclass must provide an implementation. Concrete methods are fully implemented and can be used as-is or overridden by subclasses. A subclass inherits from an abstract class using the extends keyword. If the subclass does not implement all abstract methods, it must also be declared abstract. Abstract classes allow us to define a common base with shared functionality while enforcing certain methods to be implemented by concrete subclasses. This provides both structure and flexibility.`,
+      codeExample: `abstract class Employee {
+  protected name: string;
+  protected id: number;
+
+  constructor(id: number, name: string) {
+    this.id = id;
+    this.name = name;
+  }
+
+  getDetails(): string {
+    return \`ID: \${this.id}, Name: \${this.name}\`;
+  }
+
+  abstract calculateSalary(): number;
+  abstract getRole(): string;
+
+  abstract vacationDays: number;
+}
+
+class Manager extends Employee {
+  private bonus: number;
+  vacationDays: number = 25;
+
+  constructor(id: number, name: string, bonus: number) {
+    super(id, name);
+    this.bonus = bonus;
+  }
+
+  calculateSalary(): number {
+    return 80000 + this.bonus;
+  }
+
+  getRole(): string {
+    return "Team Manager";
+  }
+}
+
+class Developer extends Employee {
+  private hourlyRate: number;
+  private hoursWorked: number;
+  vacationDays: number = 15;
+
+  constructor(id: number, name: string, hourlyRate: number, hoursWorked: number) {
+    super(id, name);
+    this.hourlyRate = hourlyRate;
+    this.hoursWorked = hoursWorked;
+  }
+
+  calculateSalary(): number {
+    return this.hourlyRate * this.hoursWorked;
+  }
+
+  getRole(): string {
+    return "Software Developer";
+  }
+}
+
+const manager = new Manager(1, "Sarah", 15000);
+const developer = new Developer(2, "Mike", 50, 160);
+
+console.log(manager.getDetails(), manager.getRole(), manager.calculateSalary());
+console.log(developer.getDetails(), developer.getRole(), developer.calculateSalary());`,
+      language: "typescript"
+    },
+    {
+      id: "10",
+      title: "SOLID Design Principles",
+      content: `SOLID is an acronym of five design principles in object-oriented programming. Single Responsibility Principle states that a class should have only one reason to change, meaning it should have only one job. Open-Closed Principle states that software entities should be open for extension but closed for modification. Liskov Substitution Principle states that objects of a superclass should be replaceable with objects of its subclasses without breaking the application. Interface Segregation Principle states that no client should be forced to depend on methods it does not use. Dependency Inversion Principle states that high-level modules should depend on abstractions, not on concrete implementations. Together, these principles promote code that is more maintainable, understandable, and flexible.`,
+      codeExample: `// Single Responsibility Principle
+class Invoice {
+  constructor(public amount: number, public description: string) {}
+}
+
+class InvoicePrinter {
+  print(invoice: Invoice): void {
+    console.log(\`Invoice: \${invoice.description}, Amount: $\${invoice.amount}\`);
+  }
+}
+
+class InvoiceRepository {
+  save(invoice: Invoice): void {
+    console.log("Saving invoice to database");
+  }
+}
+
+// Open-Closed Principle
+interface DiscountStrategy {
+  calculate(amount: number): number;
+}
+
+class RegularDiscount implements DiscountStrategy {
+  calculate(amount: number): number {
+    return amount * 0.1;
+  }
+}
+
+class BlackFridayDiscount implements DiscountStrategy {
+  calculate(amount: number): number {
+    return amount * 0.3;
+  }
+}
+
+class CheckoutService {
+  process(amount: number, strategy: DiscountStrategy): number {
+    const discount = strategy.calculate(amount);
+    return amount - discount;
+  }
+}
+
+// Dependency Inversion Principle
+interface Database {
+  save(data: string): void;
+}
+
+class MySQLDatabase implements Database {
+  save(data: string): void {
+    console.log("Saved to MySQL");
+  }
+}
+
+class OrderService {
+  constructor(private database: Database) {}
+
+  createOrder(orderData: string): void {
+    this.database.save(orderData);
+  }
+}
+
+const db: Database = new MySQLDatabase();
+const orderService = new OrderService(db);
+orderService.createOrder("Order #123");`,
+      language: "typescript"
     }
-    return Logger.instance;
-  }
-
-  info(msg: string) { console.log(\`[INFO] \${msg}\`); }
-}
-
-// Factory: when creation logic is non-trivial
-interface Cache {
-  get(key: string): string | null;
-  set(key: string, value: string): void;
-}
-
-class MemoryCache implements Cache {
-  private store = new Map<string, string>();
-  get(k: string) { return this.store.get(k) ?? null; }
-  set(k: string, v: string) { this.store.set(k, v); }
-}
-
-class RedisCache implements Cache {
-  get(k: string) { return null; } /* stub */
-  set(k: string, v: string) {}
-}
-
-function createCache(type: "memory" | "redis"): Cache {
-  return type === "memory" ? new MemoryCache() : new RedisCache();
-}`,
-
-        language: "typescript"
-
-      },
-
-      {
-
-        id: "8",
-
-        title: "Structural & Behavioral Patterns",
-
-        content: "Pattern paralysis: Students memorize pattern names but can't spot real-world problems. Here's the shortcut: ask 'WHAT problem am I solving?'\n\nAdapter: You have an external library with a weird interface and can't change it. Wrap it.\n\nDecorator: You need to add behavior to an object WITHOUT changing its class. Adding logging, timing, rate-limiting — decorator wraps, doesn't modify.\n\nObserver/EventEmitter: One thing happens, many things need to react. UI events, state changes, webhooks. If you're polling or chaining callbacks, you need Observer.\n\nStrategy: You have multiple ways to do the same thing (sorting, pricing, auth). Instead of if-else chains, each strategy is a pluggable class.\n\nAnti-pattern to watch: 'Let's use Observer for everything!' — then debugging becomes impossible because you can't trace who's listening. Use patterns surgically.\n\nInterview trap: 'When NOT to use a pattern?' When you can solve the problem with a plain function or a simpler abstraction. Patterns add complexity. Prove you need that complexity.\n\nEngineering mindset: Patterns are the VOCABULARY of design discussions, not the CODE itself. When you say 'this needs an Adapter' in a code review, every engineer immediately knows what you mean. Use patterns to communicate, not to impress.",
-
-        codeExample: `// Adapter: make an external API fit your interface
-interface UserApi {
-  getUser(id: string): { name: string; email: string };
-}
-
-class LegacyUserService {
-  fetch(id: number): { fullName: string; mail: string } {
-    return { fullName: "Alice", mail: "alice@example.com" };
-  }
-}
-
-class UserAdapter implements UserApi {
-  constructor(private legacy: LegacyUserService) {}
-
-  getUser(id: string): { name: string; email: string } {
-    const result = this.legacy.fetch(parseInt(id));
-    return { name: result.fullName, email: result.mail };
-  }
-}
-
-// Strategy: interchangeable algorithms
-interface AuthStrategy {
-  authenticate(token: string): boolean;
-}
-
-class JwtAuth implements AuthStrategy {
-  authenticate(token: string): boolean {
-    return token.length > 10;
-  }
-}
-
-class ApiKeyAuth implements AuthStrategy {
-  authenticate(key: string): boolean {
-    return key.startsWith("sk-");
-  }
-}
-
-function login(strategy: AuthStrategy, cred: string) {
-  return strategy.authenticate(cred) ? "Access granted" : "Access denied";
-}
-
-console.log(login(new JwtAuth(), "eyJhbGci..."));`,
-
-        language: "typescript"
-
-      },
-
-    ],
-
-  },
+  ]
+},
 
   {
 
@@ -12460,284 +12575,441 @@ async function getData() {
 },
 
   {
+  slug: "computer-architecture",
+  title: "Computer Architecture",
+  description: "A comprehensive guide to computer architecture covering digital logic, processor design, memory systems, and performance optimization.",
+  icon: "🏗️",
+  color: "blue",
+  category: "Core CS",
+  lessons: [
+    {
+      id: "1",
+      title: "Introduction to Computer Architecture",
+      content: `Computer Architecture is the study of the design and organization of a computer's central processing unit (CPU) and memory. It defines how hardware components interact to execute instructions and process data.
 
-    slug: "computer-architecture",
-    title: "Computer Architecture (COA)",
+Key concepts include:\n\n- **Instruction Set Architecture (ISA)**: The programmer-visible interface between hardware and software.\n- **Microarchitecture**: The implementation of the ISA in hardware.\n- **Performance**: Measured in terms of CPI (Cycles Per Instruction), clock rate, and MIPS (Millions of Instructions Per Second).
 
-    description: "Understand CPU design, memory hierarchy, pipelining, and instruction set architectures.",
+The Von Neumann architecture forms the foundation of most modern computers, where a single memory stores both instructions and data.
 
-    icon: "🖥️",
+**Moore's Law**: The number of transistors on a chip doubles approximately every two years.\n\n**Amdahl's Law**: The speedup of a program using multiple processors is limited by its sequential portion.`,
+      codeExample: `/* Pseudocode for a simple load-store architecture */
+LOAD R1, [address]  // Load value from memory into register R1
+ADD R1, R1, R2      // R1 = R1 + R2
+STORE R1, [address] // Store result back to memory`,
+      language: "assembly"
+    },
+    {
+      id: "2",
+      title: "Digital Logic & Gates",
+      content: `Digital logic is the foundation of all computer hardware. It deals with signals that are either 0 (low) or 1 (high), representing binary digits.
 
-    notesUrl: "https://noteslink.in/product/coa-computer-architecture-notes/",
+**Basic Logic Gates**:\n\n- AND: Outputs 1 only if both inputs are 1.\n- OR: Outputs 1 if at least one input is 1.\n- NOT: Outputs the inverse of its input.\n- NAND, NOR, XOR, XNOR are derived from these basics.
 
-    color: "from-cyan-500 to-blue-600",
-    category: "Core CS",
+Digital circuits are classified as:\n\n- **Combinational Logic**: Output depends only on current inputs (e.g., adders, multiplexers).\n- **Sequential Logic**: Output depends on current inputs and previous state (e.g., flip-flops, registers, counters).
 
-    lessons: [
-
-      {
-
-        id: "1",
-
-        title: "Fundamentals of Computer Architecture",
-
-        content: "Computer architecture defines the structure and behavior of a computer system. It encompasses the design of the CPU, memory system, and I/O mechanisms.\n\nKey concepts:\n- **Von Neumann Architecture**: Shared memory for instructions and data\n- **Harvard Architecture**: Separate memories for instructions and data\n- **Instruction Cycle**: Fetch → Decode → Execute → Store\n- **Bus**: Address bus, Data bus, Control bus\n\nPerformance equation:\n```\nExecution Time = Instruction Count × CPI × Clock Period\n```\n\nWhere CPI = Cycles Per Instruction.",
-
-        codeExample: `// Simulating instruction cycle
-
-const memory = [0x12, 0x34, 0x56, 0x78];
-
-let PC = 0;
-
-let IR;
-
-let ACC = 0;
-
-
-
-// Fetch
-
-IR = memory[PC];
-
-PC++;
-
-
-
-// Decode & Execute (simplified ADD instruction)
-
-if ((IR & 0xF0) === 0x10) {
-
-  ACC += IR & 0x0F;
-
+A full adder circuit adds two binary digits and a carry-in, producing a sum and a carry-out. By chaining full adders, we can build multi-bit adders for arithmetic operations.`,
+      codeExample: `/* Boolean logic in software */
+bool AND(bool a, bool b) {
+    return a && b;
 }
 
-
-
-console.log("ACC:", ACC);`,
-
-        language: "typescript"
-
-      },
-
-      {
-
-        id: "2",
-
-        title: "CPU Design & Instruction Sets",
-
-        content: "**RISC vs CISC:**\n| Feature | RISC | CISC |\n|---------|------|------|\n| Instructions | Simple, fixed-length | Complex, variable-length |\n| Cycles | 1 per instruction | Multiple per instruction |\n| Registers | Large register file | Fewer registers |\n| Examples | ARM, MIPS, RISC-V | x86, VAX |\n\n**Pipelining** divides instruction execution into stages (IF, ID, EX, MEM, WB).\n\nHazards in pipelining:\n- **Data hazard**: Instruction depends on result of previous instruction\n- **Control hazard**: Branch instruction changes the flow\n- **Structural hazard**: Hardware resource conflict",
-
-        codeExample: `// Simulating a 5-stage pipeline
-
-class Pipeline {
-
-  addInstruction(id: number) {
-
-    const stages = ["IF", "ID", "EX", "MEM", "WB"];
-
-    stages.forEach((stage, i) => {
-
-      setTimeout(() => {
-
-        console.log(\`Inst \${id}: \${stage} at cycle \${i + 1}\`);
-
-      }, i * 100);
-
-    });
-
-  }
-
+bool OR(bool a, bool b) {
+    return a || b;
 }
 
+bool NOT(bool a) {
+    return !a;
+}
 
+// Full Adder Truth Table
+// A | B | Cin | Sum | Cout
+// 0 | 0 |  0  |  0  |  0
+// 0 | 0 |  1  |  1  |  0
+// 0 | 1 |  0  |  1  |  0
+// 0 | 1 |  1  |  0  |  1
+// 1 | 0 |  0  |  1  |  0
+// 1 | 0 |  1  |  0  |  1
+// 1 | 1 |  0  |  0  |  1
+// 1 | 1 |  1  |  1  |  1`,
+      language: "cpp"
+    },
+    {
+      id: "3",
+      title: "Data Representation",
+      content: `Data representation defines how information is stored and processed digitally in a computer system.
 
-const pipe = new Pipeline();
+**Number Systems**:\n\n- Binary (base-2): The native representation for digital systems.\n- Octal (base-8): Groups of 3 bits.\n- Decimal (base-10): Human-readable.\n- Hexadecimal (base-16): Groups of 4 bits, compact representation of binary.
 
-pipe.addInstruction(1);
+**Integer Representation**:\n\n- Unsigned integers represent non-negative values.\n- Signed integers use the **two's complement** representation, where the most significant bit indicates sign (0 = positive, 1 = negative).
 
-setTimeout(() => pipe.addInstruction(2), 100);`,
+Two's complement allows a single adder circuit to handle both addition and subtraction. For an N-bit number, the range is -2^(N-1) to 2^(N-1)-1.
 
-        language: "typescript"
+**Floating-Point Representation** follows the IEEE 754 standard, using three fields: sign bit, exponent, and mantissa (significand). Single-precision uses 32 bits (1 sign, 8 exponent, 23 mantissa); double-precision uses 64 bits (1 sign, 11 exponent, 52 mantissa).
 
-      },
+**Character Encoding**: ASCII (7-bit, 128 characters), extended ASCII (8-bit), Unicode (UTF-8, UTF-16) for global text representation.`,
+      codeExample: `// Two's complement representation
+function toTwosComplement(num, bits) {
+    if (num < 0) {
+        // Convert negative number to two's complement
+        return (1 << bits) + num;
+    }
+    return num;
+}
 
-      {
+// Example: -5 in 8-bit two's complement
+console.log(toTwosComplement(-5, 8).toString(2)); // "11111011"
 
-        id: "3",
+// Floating point IEEE 754 single precision breakdown
+function floatToIEEE754(f) {
+    const buf = new ArrayBuffer(4);
+    new DataView(buf).setFloat32(0, f);
+    return new Uint32Array(buf)[0].toString(2).padStart(32, '0');
+}
 
-        title: "Memory Hierarchy",
+console.log(floatToIEEE754(1.5)); // "00111111110000000000000000000000"`,
+      language: "javascript"
+    },
+    {
+      id: "4",
+      title: "Processor Architecture",
+      content: `Processor Architecture describes the design of the CPU, including its internal structure, datapath, and control logic.
 
-        content: "**Hierarchy (fastest to slowest):**\n1. Registers (CPU) - <1 ns\n2. L1 Cache - 1-2 ns\n3. L2 Cache - 3-10 ns\n4. L3 Cache - 10-20 ns\n5. Main Memory (RAM) - 50-100 ns\n6. SSD - 10-100 μs\n7. HDD - 5-10 ms\n\n**Cache Mapping:**\n- Direct Mapped: Each memory block maps to exactly one cache line\n- Fully Associative: A block can go anywhere\n- Set Associative: Block maps to a specific set\n\n**Cache Performance:**\n```\nEffective Access Time = Hit Time + Miss Rate × Miss Penalty\n```",
+**CPU Components**:\n\n- **ALU (Arithmetic Logic Unit)**: Performs arithmetic (ADD, SUB) and logical (AND, OR, XOR) operations.\n- **Control Unit (CU)**: Generates control signals to direct data flow.\n- **Registers**: Small, fast storage within the CPU (general-purpose, special-purpose).\n- **Program Counter (PC)**: Holds the address of the next instruction to fetch.\n- **Instruction Register (IR)**: Holds the current instruction being decoded/executed.
 
-        codeExample: `// Simulating cache lookup
+**Datapath Design**:\n\n- **Single-cycle**: One instruction completes in one clock cycle (simple but slow).\n- **Multi-cycle**: Each instruction takes multiple cycles (faster, more efficient).\n- **Pipelined**: Overlaps instruction execution stages for higher throughput.
 
+**Register Types**:\n\n- General-purpose registers (GPRs): Used for arithmetic and data manipulation.\n- Special registers: PC, IR, MAR, MDR, Status/condition codes (Zero, Carry, Sign, Overflow flags).
+
+A register file contains multiple registers and can read/write them in a single cycle. The ALU result can be written back to a register or memory, depending on the control signals.`,
+      codeExample: `// Simplified CPU datapath in RTL-like pseudocode
+class SimpleCPU {
+    constructor(memory) {
+        this.registers = new Array(32).fill(0);
+        this.pc = 0;
+        this.memory = memory;
+        this.flags = { zero: 0, carry: 0, sign: 0, overflow: 0 };
+    }
+
+    // Fetch-Decode-Execute cycle
+    step() {
+        const instruction = this.memory[this.pc];
+        this.pc++;
+        const opcode = instruction.opcode;
+        const rd = instruction.rd;
+        const rs1 = instruction.rs1;
+        const rs2 = instruction.rs2;
+
+        switch(opcode) {
+            case 'ADD':
+                this.registers[rd] = this.registers[rs1] + this.registers[rs2];
+                break;
+            case 'SUB':
+                this.registers[rd] = this.registers[rs1] - this.registers[rs2];
+                break;
+            case 'LOAD':
+                this.registers[rd] = this.memory[this.registers[rs1] + instruction.offset];
+                break;
+            case 'STORE':
+                this.memory[this.registers[rs1] + instruction.offset] = this.registers[rs2];
+                break;
+            default:
+                throw new Error('Unknown instruction');
+        }
+        this.updateFlags(this.registers[rd]);
+    }
+}`,
+      language: "javascript"
+    },
+    {
+      id: "5",
+      title: "Instruction Set Architecture (ISA)",
+      content: `Instruction Set Architecture (ISA) is the programmer-visible interface that defines how software communicates with hardware. It specifies instructions, registers, memory addressing modes, and data types.
+
+**RISC (Reduced Instruction Set Computer)**:\n\n- Fewer, simpler instructions that execute in one clock cycle.\n- Fixed-length instructions (typically 32-bit).\n- Load-store architecture: only load and store access memory; arithmetic operates on registers.\n- Hardwired control logic.\n- Examples: ARM, MIPS, RISC-V.
+
+**CISC (Complex Instruction Set Computer)**:\n\n- More complex, varied-length instructions.\n- Some instructions perform multi-step operations (e.g., string copy).\n- Microcode-based control.\n- Fewer registers visible to programmers.\n- Example: x86/x86-64.
+
+**Addressing Modes**:\n\n- Immediate: operand is part of the instruction.\n- Register: operand is a register.\n- Direct: operand address is in the instruction.\n- Indirect: instruction points to a register/memory location holding the address.\n- Indexed, based, and relative addressing for flexible memory access.
+
+RISC-V is an open standard ISA that has gained significant traction, providing a free alternative to proprietary ISAs. It comes in 32-bit (RV32), 64-bit (RV64), and 128-bit (RV128) base variants with optional extensions.`,
+      codeExample: `// RISC-V assembly example
+// Compute the sum of array elements
+# Assume array base address in a0, length in a1
+sum_array:
+    addi t0, zero, 0      # t0 = sum = 0
+    addi t1, zero, 0      # t1 = index i = 0
+
+loop:
+    bge  t1, a1, done     # if i >= length, exit loop
+    slli t2, t1, 2        # t2 = i * 4 (byte offset)
+    add  t3, a0, t2       # t3 = address of array[i]
+    lw   t4, 0(t3)        # t4 = array[i]
+    add  t0, t0, t4       # sum += array[i]
+    addi t1, t1, 1        # i++
+    jal  ra, loop         # jump back to loop
+
+done:
+    add  a0, t0, zero     # return sum in a0
+    jalr zero, 0(ra)      # return`,
+      language: "assembly"
+    },
+    {
+      id: "6",
+      title: "Pipelining & Performance",
+      content: `Pipelining is an implementation technique that overlaps the execution of multiple instructions to improve throughput, analogous to an assembly line.
+
+**Five-stage RISC Pipeline**:\n\n1. IF (Instruction Fetch): Fetch instruction from memory.\n2. ID (Instruction Decode): Decode instruction and read registers.\n3. EX (Execute): Perform ALU operation or calculate address.\n4. MEM (Memory): Access data memory (load/store).\n5. WB (Write Back): Write result to register file.
+
+Pipeline throughput ideally approaches one instruction per cycle if all stages take equal time. The clock cycle is set by the slowest stage.
+
+**Pipeline Hazards**:\n\n- **Structural Hazards**: Hardware resources are insufficient (e.g., single memory port for both instructions and data). Resolved by adding resources.\n- **Data Hazards**: One instruction depends on the result of a previous instruction still in the pipeline. Resolved by forwarding/bypassing or stalling (pipeline bubbles).\n- **Control Hazards**: Caused by branch instructions changing the PC. Resolved by branch prediction or delayed branches.
+
+**Performance Metrics**:\n\n- CPI = (Total Cycles) / (Total Instructions)\n- CPU Time = Instruction Count * CPI * Clock Cycle Time\n- MIPS = (Instruction Count / (Program Time * 10^6))\n\nAmdahl's Law gives the theoretical speedup of parallel processing: Speedup <= 1 / ((1 - P) + P/N), where P is the parallel portion and N is the number of processors.`,
+      codeExample: `// Pipeline simulation with data hazard detection
+class PipelineSimulator {
+    constructor() {
+        this.registers = new Array(32).fill(0);
+        this.pipelineRegisters = {
+            IF_ID: {},
+            ID_EX: {},
+            EX_MEM: {},
+            MEM_WB: {}
+        };
+    }
+
+    // Detect data hazards and insert stalls
+    detectStall(idEx, ifId) {
+        // Check if ID stage instruction reads
+        // a register being written by EX stage
+        if (idEx.writeReg && idEx.writeReg !== 0 &&
+            (idEx.writeReg === ifId.rs1 || idEx.writeReg === ifId.rs2)) {
+            return true; // Insert bubble
+        }
+        return false;
+    }
+
+    // Forward detection unit
+    forwardCheck(rs, exMem, memWb) {
+        if (exMem.writeReg === rs && exMem.writeReg !== 0) {
+            return 'EX'; // Forward from EX/MEM
+        }
+        if (memWb.writeReg === rs && memWb.writeReg !== 0) {
+            return 'MEM'; // Forward from MEM/WB
+        }
+        return null; // No forwarding needed
+    }
+}`,
+      language: "javascript"
+    },
+    {
+      id: "7",
+      title: "Memory Hierarchy",
+      content: `The Memory Hierarchy organizes different types of memory by speed, cost, and capacity to balance performance and cost.
+
+**Memory Hierarchy Levels** (top to bottom, fastest to slowest):\n\n1. **CPU Registers**: Fewest, fastest, built into the CPU. Used for the most frequently accessed data.\n2. **Cache Memory**: Small, fast SRAM on or close to the CPU chip. L1, L2, L3 caches with increasing size and decreasing speed.\n3. **Main Memory (RAM)**: Volatile DRAM, holds the program and data currently in use.\n4. **Secondary Storage (Disk/SSD)**: Non-volatile, magnetic/optical storage. Large capacity but slower.\n5. **Tertiary Storage (Tape/Cloud)**: Archival storage for backups and rarely accessed data.
+
+**Principle of Locality**:\n\n- **Temporal Locality**: If data was accessed recently, it will likely be accessed again soon.\n- **Spatial Locality**: If data was accessed, nearby data will likely be accessed soon.
+
+Cache memory exploits locality by keeping copies of frequently accessed data close to the CPU. When the CPU requests data, it first checks the cache; if found (cache hit), it is fetched quickly. If not found (cache miss), the data is loaded from lower-level memory, incurring a latency penalty.
+
+**Memory Technologies**:\n\n- SRAM: Static RAM, faster, more expensive, used in caches.\n- DRAM: Dynamic RAM, slower, cheaper, used in main memory. Refreshed periodically.\n- Flash: Non-volatile, fast random access, used in SSDs.\n- Magnetic disk: Slowest, cheapest per bit, used in HDDs.`,
+      codeExample: `// Cache simulation with hit/miss tracking
 class Cache {
-
-  private cache: Map<number, number> = new Map();
-
-  private hits = 0;
-
-  private misses = 0;
-
-
-
-  access(address: number): number {
-
-    if (this.cache.has(address)) {
-
-      this.hits++;
-
-      return this.cache.get(address)!;
-
+    constructor(size, lineSize, associativity = 1) {
+        this.lineSize = lineSize;
+        this.numLines = size / lineSize;
+        this.associativity = associativity;
+        this.numSets = this.numLines / associativity;
+        this.sets = new Array(this.numSets);
+        for (let i = 0; i < this.numSets; i++) {
+            this.sets[i] = [];
+        }
+        this.hits = 0;
+        this.misses = 0;
     }
 
-    this.misses++;
+    read(address) {
+        const index = (address / this.lineSize) % this.numSets;
+        const tag = Math.floor(address / (this.lineSize * this.numSets));
 
-    const value = address * 10;
+        const set = this.sets[index];
+        for (let line of set) {
+            if (line.tag === tag) {
+                this.hits++;
+                // Move to most-recently-used position
+                const idx = set.indexOf(line);
+                set.splice(idx, 1);
+                set.push(line);
+                return line.data;
+            }
+        }
 
-    this.cache.set(address, value);
-
-    return value;
-
-  }
-
-
-
-  getStats() {
-
-    const total = this.hits + this.misses;
-
-    return {
-
-      hitRate: (this.hits / total * 100).toFixed(1) + "%",
-
-      missRate: (this.misses / total * 100).toFixed(1) + "%"
-
-    };
-
-  }
-
-}
-
-
-
-const cache = new Cache();
-
-[1, 2, 3, 1, 2, 4, 1].forEach(addr => cache.access(addr));
-
-console.log(cache.getStats());`,
-
-        language: "typescript"
-
-      },
-
-      {
-
-        id: "4",
-
-        title: "I/O Systems & Interrupts",
-
-        content: "**I/O Methods:**\n- **Programmed I/O**: CPU waits for I/O (busy waiting)\n- **Interrupt-Driven I/O**: Device signals CPU when ready\n- **DMA (Direct Memory Access)**: Device transfers data directly to/from memory\n\n**Interrupt Handling:**\n1. Device sends interrupt signal\n2. CPU completes current instruction\n3. CPU saves context (PC, registers)\n4. CPU jumps to interrupt handler (ISR)\n5. ISR services the device\n6. CPU restores context and resumes\n\n**I/O Performance:**\n```\nI/O Time = Seek Time + Rotational Latency + Transfer Time\n```",
-
-        codeExample: `// Simulating interrupt-driven I/O
-
-class CPU {
-
-  private interruptQueue: string[] = [];
-
-
-
-  onInterrupt(device: string, handler: () => void) {
-
-    console.log(\`Registered handler for \${device}\`);
-
-  }
-
-
-
-  handleInterrupt() {
-
-    const device = this.interruptQueue.shift();
-
-    if (device) {
-
-      console.log(\`Processing interrupt from \${device}\`);
-
+        this.misses++;
+        return null; // Cache miss
     }
 
-  }
+    getHitRate() {
+        const total = this.hits + this.misses;
+        return total > 0 ? this.hits / total : 0;
+    }
+}`,
+      language: "javascript"
+    },
+    {
+      id: "8",
+      title: "Cache & Virtual Memory",
+      content: `Cache and virtual memory are two critical subsystems that bridge the gap between CPU speed and memory latency.
 
+**Cache Organization**:\n\nA cache is divided into blocks (cache lines) of typically 32-64 bytes. Three main organizations:\n\n- **Direct-mapped**: Each memory block maps to exactly one cache line (index = block address mod number of lines).\n- **Set-associative**: Each memory block maps to a set of n lines (n-way set associative). A compromise between flexibility and complexity.\n- **Fully associative**: Any memory block can go into any cache line (maximum flexibility but expensive).\n\n**Cache Replacement Policies**:\n\n- LRU (Least Recently Used): Evict the least recently accessed line.\n- FIFO (First In First Out): Evict the oldest line.\n- Random: Evict a random line.\n- Clock (Second Chance): Approximate LRU with a circular pointer.\n\n**Cache Performance**:\n\nAverage Memory Access Time = Hit Time + Miss Rate x Miss Penalty\n\n**Virtual Memory** is a memory management technique that creates the illusion of a large, contiguous, private address space using paging. The Memory Management Unit (MMU) translates virtual addresses to physical addresses using page tables.
+
+A **page table** maps virtual page numbers to physical frame numbers. The TLB (Translation Lookaside Buffer) caches recent translations for speed. When a page is not in physical memory (page fault), the OS loads it from disk (swap space), a process called demand paging.\n\n**TLB Miss**: The OS must walk the page table, adding overhead. Multi-level page tables reduce memory usage for sparse address spaces.`,
+      codeExample: `// Two-level page table for virtual memory
+class PageTable {
+    constructor() {
+        this.pageTable = new Map(); // virtual page -> frame number
+        this.frames = new Set();    // available physical frames
+        this.tlb = new Map();       // TLB cache (virtual -> frame)
+    }
+
+    translate(vaddr) {
+        const vpn = vaddr >> 12; // Page number (4KB pages)
+        const offset = vaddr & 0xFFF; // Page offset
+
+        // Check TLB first
+        if (this.tlb.has(vpn)) {
+            const pfn = this.tlb.get(vpn);
+            return (pfn << 12) | offset;
+        }
+
+        // TLB miss: walk the page table
+        if (this.pageTable.has(vpn)) {
+            const pfn = this.pageTable.get(vpn);
+            this.tlb.set(vpn, pfn); // Update TLB
+            return (pfn << 12) | offset;
+        }
+
+        // Page fault: load from disk (simplified)
+        throw new Error('Page fault');
+    }
+} 
+
+// Cache line structure
+class CacheLine {
+    constructor(lineSize) {
+        this.valid = false;
+        this.tag = 0;
+        this.data = new Uint8Array(lineSize);
+        this.dirty = false; // Write-back policy
+    }
+}`,
+      language: "javascript"
+    },
+    {
+      id: "9",
+      title: "Input/Output Systems",
+      content: `Input/Output (I/O) systems connect the CPU to external devices like keyboards, displays, storage, and networks.
+
+**I/O Techniques**:\n\n- **Programmed I/O (Polling)**: CPU repeatedly checks if a device is ready. Simple but wasteful of CPU time.\n- **Interrupt-driven I/O**: The device sends an interrupt signal when it needs attention. The CPU pauses and runs an interrupt handler.\n- **Direct Memory Access (DMA)**: A DMA controller transfers data directly between I/O device and memory without CPU intervention for each transfer. The CPU is interrupted only when the transfer completes.\n\n**I/O Addressing**:\n\n- **Isolated I/O**: Separate address spaces for memory and I/O (IN/OUT instructions).\n- **Memory-mapped I/O**: I/O devices are mapped to memory addresses; the CPU accesses them like memory locations.
+
+**Device Connectivity**:\n\n- **Buses**: Shared communication pathways (data bus, address bus, control bus).\n- **PCI/PCIe**: Peripheral Component Interconnect buses for expansion cards.\n- **USB**: Universal Serial Bus for connecting peripherals.\n- **SATA**: Serial ATA for storage devices.\n- **Network**: Ethernet, Wi-Fi for network connectivity.
+
+**I/O Performance**:\n\nI/O operations are orders of magnitude slower than CPU and memory operations. To mitigate this:\n\n- Use buffering (queue data in fast memory before writing to slow devices).\n- Use larger block transfers.\n- Use asynchronous I/O (initiate transfer, continue computation, check status later).
+
+Device drivers are kernel-level software that control specific hardware devices, providing a standardized interface to the OS.`,
+      codeExample: `// Simplified interrupt-driven I/O handler
+class IOController {
+    constructor() {
+        this.buffer = [];
+        this.interruptQueue = [];
+    }
+
+    // Interrupt service routine
+    handleInterrupt(interruptType, deviceId, data) {
+        switch(interruptType) {
+            case 'KEYBOARD':
+                this.buffer.push(data);
+                break;
+            case 'DISK_READY':
+                // Data ready for transfer, use DMA
+                this.initiateDMA(deviceId);
+                break;
+            case 'NETWORK_PACKET':
+                this.processPacket(data);
+                break;
+        }
+    }
+
+    initiateDMA(deviceId) {
+        // DMA controller takes over without CPU intervention
+        console.log('DMA transfer initiated for device', deviceId);
+    }
+
+    processPacket(packet) {
+        // Handle incoming network data
+        this.buffer.push(packet);
+    }
 }
 
+// Polling method (CPU-intensive)
+function pollDevice(device, mask, timeout = 1000) {
+    const start = Date.now();
+    while (!(device.status & mask)) {
+        if (Date.now() - start > timeout) {
+            throw new Error('Device timeout');
+        }
+    }
+    return device.data;
+}`,
+      language: "javascript"
+    },
+    {
+      id: "10",
+      title: "RISC vs CISC",
+      content: "RISC vs CISC represents a fundamental architectural philosophy debate that has shaped processor design for decades.\n\n**CISC Characteristics**:\n\n- Many complex instructions that can perform high-level operations (e.g., string copy, complex math).\n- Variable-length instructions.\n- Microcode-based control for complex decoding.\n- Memory-to-memory operations allowed.\n- Fewer general-purpose registers.\n- Designed with the philosophy that complex instructions reduce the number of instructions per program.\n- Examples: Intel x86, x86-64, Motorola 68000, IBM System/360.\n\n**RISC Characteristics**:\n\n- Small set of simple, fixed-length instructions.\n- Load-store architecture: only explicit load/store instructions access memory; ALU operations use registers.\n- Hardwired control logic (no microcode).\n- Large number of registers (e.g., 32 in RISC-V, MIPS).\n- Designed with the philosophy that simple instructions enable faster clock cycles and pipelining.\n- Examples: ARM, MIPS, PowerPC, RISC-V.\n\n**Historical Outcome**:\n\nWhile RISC offered cleaner design, CISC dominated the desktop/server market for decades due to software compatibility. Modern processors use hybrid approaches -- x86 processors internally translate to RISC-like micro-operations before execution.\n\nARM RISC architecture has dominated mobile and embedded markets due to its power efficiency, while x86 dominates desktop/server markets.\n\n**RISC-V**: An open-source RISC ISA that poses a significant threat to ARM and x86 due to its freely available specification, leading to growing adoption in academia, embedded systems, and now high-performance computing.",
+      codeExample: `// CISC-style x86: Many instructions, memory-to-memory
+/*
+; Find max of array (x86 assembly)
+; Multiple complex instructions for one operation
+MAX_ARRAY:
+    MOV  AX, [ARRAY_PTR]    ; Load array address
+    MOV  CX, [LENGTH]       ; Load loop counter
+    MOV  DX, [ARRAY_PTR]    ; Load again for indexing
+    MOV  BX, 0              ; Max = first element
+    MOV  BL, [BX + DX]      ; Load first element
+LOOP1:
+    CMP  CX, 0              ; Check counter
+    JE   DONE               ; Exit if done
+    MOV  AL, [BX + DX]      ; Load element
+    CMP  AL, BL             ; Compare with current max
+    JLE  SKIP               ; Skip if not greater
+    MOV  BL, AL             ; Update max
+SKIP:
+    INC  DX                 ; Next element
+    DEC  CX                 ; Decrement counter
+    JMP  LOOP1              ; Repeat
+DONE:
+*/
 
-
-const cpu = new CPU();
-
-cpu.onInterrupt("keyboard", () => console.log("Key pressed"));
-
-cpu.interruptQueue.push("keyboard");
-
-cpu.handleInterrupt();`,
-
-        language: "typescript"
-
-      },
-
-      {
-
-        id: "5",
-
-        title: "RISC-V & Modern Architectures",
-
-        content: "**RISC-V Key Features:**\n- Open-source ISA (no licensing fees)\n- Modular: Base integer instructions + extensions (M, A, F, D, C)\n- Fixed-length 32-bit instructions\n- Load-store architecture\n- 32 general-purpose registers (x0-x31)\n\n**RISC-V Instruction Formats:**\n- R-type: Register operations\n- I-type: Immediate operations\n- S-type: Store operations\n- B-type: Branch operations\n- U-type: Upper immediate\n- J-type: Jump\n\n**Modern Trends:**\n- Superscalar: Multiple instructions per cycle\n- Out-of-order execution\n- Branch prediction\n- Hardware multithreading",
-
-        codeExample: `// RISC-V assembly simulation
-
-class RISCV {
-
-  registers: number[] = new Array(32).fill(0);
-
-  pc = 0;
-
-  memory: number[] = [];
-
-
-
-  add(rd: number, rs1: number, rs2: number) {
-
-    this.registers[rd] = this.registers[rs1] + this.registers[rs2];
-
-  }
-
-
-
-  addi(rd: number, rs1: number, imm: number) {
-
-    this.registers[rd] = this.registers[rs1] + imm;
-
-  }
-
+/*
+ * RISC-style equivalent (pseudocode):
+ * More instructions, but each is simple and fast
+ */
+findMax(array, length) {
+    let max = array[0];
+    for (let i = 1; i < length; i++) {
+        if (array[i] > max) max = array[i];
+    }
+    return max;
 }
 
-
-
-const cpu = new RISCV();
-
-cpu.addi(1, 0, 10);
-
-cpu.addi(2, 0, 20);
-
-cpu.add(3, 1, 2);
-
-console.log("x3 =", cpu.registers[3]);`,
-
-        language: "typescript"
-
-      },
-
-    ],
-
-  },
+// RISC philosophy: software does more, hardware does less
+// This enables better pipelining, higher clock speeds, 
+// and lower power consumption
+/*`,
+      language: "assembly"
+    }
+  ]
+},
 
   {
 
