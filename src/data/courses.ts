@@ -666,507 +666,6091 @@ LPS:     [0, 0, 1, 2, 0]
   ]
 },
 {
+  slug: "algorithms",
+  title: "Algorithms",
+  description: "Master sorting, searching, graph algorithms, dynamic programming, and complexity analysis.",
+  icon: "🧮",
+  color: "from-blue-500 to-indigo-600",
+  category: "Core CS",
+  lessons: [
+    {
+      id: "1",
+      title: "Introduction to Algorithms",
+      content: `## Definition
+
+An **algorithm** is a finite, well-defined sequence of instructions for solving a problem or performing a computation. It must terminate (not run forever), be deterministic (same input → same output), and be effective (each step is feasible).
+
+## Introduction
 
-    slug: "algorithms",
+Algorithms are the heart of computer science. They transform problems into solutions efficiently. A good algorithm can make the difference between a program that runs in milliseconds and one that takes years.
+
+## History and Establishment
+
+- **300 BC**: Euclid's algorithm for GCD — the oldest known algorithm
+- **820 AD**: Al-Khwarizmi wrote "On the Calculation with Hindu Numerals" — the word "algorithm" derives from his name
+- **1936**: Alan Turing formalized the concept of algorithms with the Turing machine
+- **1960s**: Big-O notation formalized by Bachmann and Landau
+- **1970s**: Complexity classes (P, NP, NP-complete) were defined
+
+## Advantages
 
-    title: "Algorithms",
+- **Efficiency**: Well-designed algorithms minimize time and space usage
+- **Scalability**: Handle growing input sizes gracefully
+- **Reusability**: Same algorithm solves many similar problems
+- **Predictability**: Deterministic behavior enables reliable systems
+- **Optimality**: Some algorithms provably cannot be improved
+
+## Disadvantages
 
-    description: "Learn sorting, searching, dynamic programming, and greedy algorithms.",
+- **Complexity**: Advanced algorithms (FFT, network flow) are hard to understand
+- **Implementation difficulty**: Subtle bugs can produce wrong results
+- **Overhead**: Some algorithms have high constant factors despite good asymptotic behavior
+- **Approximation**: Some problems have no efficient exact solution (NP-hard)
 
-    icon: "⚡",
+## Time Complexity
 
-    notesUrl: "https://noteslink.in/product/daa-design-and-analysis-of-algorithm-kiit/",
+| Notation | Name | Example |
+|----------|------|---------|
+| O(1) | Constant | Array access |
+| O(log n) | Logarithmic | Binary search |
+| O(n) | Linear | Linear scan |
+| O(n log n) | Linearithmic | Merge sort |
+| O(n²) | Quadratic | Bubble sort |
+| O(2ⁿ) | Exponential | Brute-force subsets |
+
+## Space Complexity
+
+The amount of memory an algorithm uses relative to input size. An algorithm using O(n) extra space has O(n) space complexity.`,
+      codeExample: `// Comparing algorithm efficiency\n\n// O(n²) — Bubble Sort\nfunction bubbleSort(arr) {\n  for (let i = 0; i < arr.length; i++)\n    for (let j = 0; j < arr.length - i - 1; j++)\n      if (arr[j] > arr[j + 1]) [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];\n  return arr;\n}\n\n// O(n log n) — Quick Sort\nfunction quickSort(arr) {\n  if (arr.length <= 1) return arr;\n  const pivot = arr[0];\n  const left = arr.slice(1).filter(x => x < pivot);\n  const right = arr.slice(1).filter(x => x >= pivot);\n  return [...quickSort(left), pivot, ...quickSort(right)];\n}\n\nconst data = [5, 3, 8, 1, 9, 2, 7, 4, 6];\nconsole.log("Bubble:", bubbleSort([...data]));\nconsole.log("Quick:", quickSort([...data]));`,
+      language: "typescript"
+    },
+    {
+      id: "2",
+      title: "Sorting Algorithms",
+      content: `## Definition
 
-    color: "from-amber-500 to-orange-600",
-    category: "Core CS",
+**Sorting** is the process of arranging elements in a specific order (ascending or descending). Sorting algorithms are fundamental because many other problems (searching, merging, duplicate detection) become easy once data is sorted.
 
-    lessons: [
+## Introduction
 
-      {
+Sorting is the most-studied problem in computer science. Over 400 sorting algorithms have been invented. In practice, only a few matter: quicksort for general use, mergesort for stability, heapsort for guaranteed O(n log n), and counting/radix sort for special cases.
 
-        id: "1",
+## Types
 
-        title: "Introduction to Algorithms",
+| Algorithm | Time (avg) | Time (worst) | Space | Stable? |
+|-----------|-----------|-------------|-------|---------|
+| Bubble Sort | O(n²) | O(n²) | O(1) | Yes |
+| Selection Sort | O(n²) | O(n²) | O(1) | No |
+| Insertion Sort | O(n²) | O(n²) | O(1) | Yes |
+| Merge Sort | O(n log n) | O(n log n) | O(n) | Yes |
+| Quick Sort | O(n log n) | O(n²) | O(log n) | No |
+| Heap Sort | O(n log n) | O(n log n) | O(1) | No |
+| Counting Sort | O(n+k) | O(n+k) | O(k) | Yes |
+| Radix Sort | O(d×n) | O(d×n) | O(n+k) | Yes |
 
-        content: "Biggest mistake beginners make: treating algorithms as abstract math, not engineering tools. An algorithm isn't just code — it's a decision. Every algorithm you pick trades time against space, precision against performance, simplicity against speed.\n\nThe real problem: you have a working solution, but it times out on large inputs. You don't need a different language. You need to understand growth rates. O(n²) vs O(n log n) is the difference between 1 second and 17 minutes when n = 1,000,000.\n\nCommon trap: assuming lower Big-O always runs faster. O(n) with high constant factors can lose to O(n²) for small n. The hidden constant matters — that's why insertion sort beats quicksort on arrays under ~50 elements.\n\nEngineering mindset: analyze before you optimize. Profile first. Don't guess where the bottleneck is. Amdahl's Law: speeding up 50% of the code by 2x only gives 33% overall gain. Focus on the critical path.\n\nInterview trap: \"What's the time complexity?\" They're not testing if you can recite the answer. They're testing if you can derive it — trace the loops, count operations, explain your reasoning step by step.",
+## Stable vs Unstable
 
-        codeExample: `// The growth rate trap: O(n^2) vs O(n log n)\n// For n=1,000,000:\n// n^2 = 1e12 operations (17 min at 1B ops/sec)\n// n log n ≈ 20e6 operations (0.02 sec at 1B ops/sec)\n\nfunction analyzeTime<T>(\n  label: string,\n  fn: () => T\n): { result: T; timeMs: number } {\n  const start = performance.now();\n  const result = fn();\n  return { result, timeMs: performance.now() - start };\n}\n\nfunction findDuplicatesBrute(arr: number[]): boolean {\n  for (let i = 0; i < arr.length; i++)       // O(n)\n    for (let j = i + 1; j < arr.length; j++) // O(n)\n      if (arr[i] === arr[j]) return true;     // Total: O(n^2)\n  return false;\n}\n\nfunction findDuplicatesSet(arr: number[]): boolean {\n  const seen = new Set<number>();\n  for (const x of arr) {          // O(n)\n    if (seen.has(x)) return true; // O(1)\n    seen.add(x);                  // O(1)\n  }\n  return false;                   // Total: O(n)\n}\n\n// Profile before optimizing\nconst data = Array.from({ length: 100000 }, (_, i) => i);\nconsole.log(\n  analyzeTime(\"brute\", () => findDuplicatesBrute(data)).timeMs,\n  analyzeTime(\"set\", () => findDuplicatesSet(data)).timeMs\n);`,
+A sorting algorithm is **stable** if equal elements maintain their relative order. This matters when sorting by multiple criteria (e.g., sort by name, then by age — stable sort preserves name order within same age).
 
-        language: "typescript"
+## Advantages
 
-      },
+- **Merge sort**: Guaranteed O(n log n), stable, predictable
+- **Quick sort**: Fastest in practice, cache-friendly, in-place variant exists
+- **Heap sort**: O(n log n) guaranteed, in-place
+- **Insertion sort**: Fast for small or nearly-sorted arrays
 
-      {
+## Disadvantages
 
-        id: "2",
+- **Merge sort**: O(n) extra space
+- **Quick sort**: O(n²) worst case (mitigated by randomization)
+- **Heap sort**: Poor cache performance, not stable
+- **All comparison sorts**: Ω(n log n) lower bound — no comparison sort can do better`,
+      codeExample: `// Merge Sort — O(n log n), stable\nfunction mergeSort(arr) {\n  if (arr.length <= 1) return arr;\n  const mid = Math.floor(arr.length / 2);\n  const left = mergeSort(arr.slice(0, mid));\n  const right = mergeSort(arr.slice(mid));\n  return merge(left, right);\n}\n\nfunction merge(left, right) {\n  const result = [];\n  let i = 0, j = 0;\n  while (i < left.length && j < right.length) {\n    if (left[i] <= right[j]) result.push(left[i++]);\n    else result.push(right[j++]);\n  }\n  return [...result, ...left.slice(i), ...right.slice(j)];\n}\n\n// Quick Sort — O(n log n) average\nfunction quickSort(arr) {\n  if (arr.length <= 1) return arr;\n  const pivot = arr[Math.floor(Math.random() * arr.length)];\n  const left = arr.filter(x => x < pivot);\n  const mid = arr.filter(x => x === pivot);\n  const right = arr.filter(x => x > pivot);\n  return [...quickSort(left), ...mid, ...quickSort(right)];\n}\n\n// Insertion Sort — O(n²), best for small arrays\nfunction insertionSort(arr) {\n  for (let i = 1; i < arr.length; i++) {\n    let j = i;\n    while (j > 0 && arr[j - 1] > arr[j]) {\n      [arr[j - 1], arr[j]] = [arr[j], arr[j - 1]];\n      j--;\n    }\n  }\n  return arr;\n}\n\nconst data = [38, 27, 43, 3, 9, 82, 10];\nconsole.log("Merge:", mergeSort([...data]));\nconsole.log("Quick:", quickSort([...data]));\nconsole.log("Insertion:", insertionSort([...data]));`,
+      language: "typescript"
+    },
+    {
+      id: "3",
+      title: "Searching Algorithms",
+      content: `## Definition
 
-        title: "Sorting Algorithms",
+**Searching** is the process of finding a specific element or determining its existence within a data structure. The efficiency of searching directly impacts application performance.
 
-        content: "Biggest sorting mistake: assuming QuickSort is always O(n log n). It isn't. Pivot selection is everything. Always picking first or last element on already-sorted data? That's O(n²). The fix: random pivot or median-of-three.\n\nReal problem: you need a stable sort (preserving original order of equal elements). QuickSort is unstable. Merge Sort is stable. Java's Collections.sort uses TimSort — a hybrid of merge sort and insertion sort — because real-world data often has runs of sorted elements.\n\nInterview trap: \"Implement insertion sort.\" Easy. But follow-up: \"When would you use it?\" Answer: small arrays (n < 50), nearly-sorted data (O(n) on best case), online sorting (sort as elements arrive).\n\nComparing sorts: Merge Sort needs O(n) extra space. QuickSort sorts in-place but its recursive stack is O(log n) on average, O(n) worst case. Heap Sort is in-place and guarantees O(n log n), but has poor cache locality — real-world performance is worse than QuickSort despite same Big-O.\n\nEngineering mindset: Never write your own sort. Use the language's built-in. But understand WHY your language picked its sort so you know when it'll hurt you.",
+## Introduction
 
-        codeExample: `// The pivot trap - bad QuickSort\nfunction badQuickSort(arr: number[]): number[] {\n  // First element pivot: O(n^2) on already-sorted data!\n  if (arr.length <= 1) return arr;\n  const pivot = arr[0]; // Bad choice!\n  const left = arr.slice(1).filter(x => x < pivot);\n  const right = arr.slice(1).filter(x => x >= pivot);\n  return [...badQuickSort(left), pivot, ...badQuickSort(right)];\n}\n\n// Fixed: median-of-three pivot\nfunction goodQuickSort(arr: number[]): number[] {\n  if (arr.length <= 1) return arr;\n  const mid = Math.floor(arr.length / 2);\n  const pivot = [arr[0], arr[mid], arr[arr.length - 1]].sort((a, b) => a - b)[1];\n  const left = arr.filter(x => x < pivot);\n  const right = arr.filter(x => x > pivot);\n  const equal = arr.filter(x => x === pivot);\n  return [...goodQuickSort(left), ...equal, ...goodQuickSort(right)];\n}\n\n// When insertion sort actually wins\nfunction hybridSort(arr: number[], threshold = 50): number[] {\n  if (arr.length <= threshold) {\n    for (let i = 1; i < arr.length; i++) {\n      const key = arr[i]; let j = i - 1;\n      while (j >= 0 && arr[j] > key) { arr[j + 1] = arr[j]; j--; }\n      arr[j + 1] = key;\n    }\n    return arr;\n  }\n  return goodQuickSort(arr);\n}`,
+Searching is the most common operation in computing. Every database query, web search, and file lookup is a search problem. The choice of search algorithm depends on whether the data is sorted, the data structure used, and the frequency of searches.
 
-        language: "typescript"
+## Types
 
-      },
+| Algorithm | Time | Requirement | Use Case |
+|-----------|------|-------------|----------|
+| Linear Search | O(n) | None | Unsorted data |
+| Binary Search | O(log n) | Sorted data | Sorted arrays |
+| Ternary Search | O(log₃ n) | Sorted, unimodal | Peak finding |
+| Exponential Search | O(log n) | Sorted data | Unbounded arrays |
+| Interpolation Search | O(log log n) | Uniform distribution | Uniform data |
 
-      {
+## Binary Search Insight
 
-        id: "3",
+Binary search halves the search space each step. For an array of 1 billion elements, it finds any element in at most 30 comparisons (log₂ 10⁹ ≈ 30).
 
-        title: "Searching Algorithms",
+## Advantages
 
-        content: "Most common interview trap on binary search: infinite loops and off-by-one errors. The root cause? Confusing inclusive vs exclusive bounds. Write `left + Math.floor((right - left) / 2)` not `(left + right) / 2` to avoid integer overflow.\n\nReal problem: binary search assumes sorted data. But what if the data isn't sorted? You can't just binary search. You must sort first (O(n log n)), then search. For single lookups, linear search is faster. For repeated lookups, sorting + binary wins.\n\nInterview trap: \"Search in a rotated sorted array.\" The trick: binary search still works. First determine which half is sorted (compare arr[left] vs arr[mid]), then check if target lies in that sorted range. Many candidates fail because they try to find the rotation point first — unnecessary.\n\nEngineering mindset: not all searches are equals. Hash-based lookups (Set, Map) give O(1) average but use more memory. Binary search gives O(log n) with zero extra memory. For production code, use TreeSet (balanced BST) when you need both search AND ordered traversal.\n\nCommon mistake: binary search on linked lists. Random access is O(n), so binary search is O(n log n) — worse than linear!",
+- **Binary search**: O(log n) — extremely efficient for large sorted data
+- **Linear search**: Simple, works on any data structure
+- **Interpolation search**: Near O(1) for uniformly distributed data
+- **Exponential search**: Good for unbounded/infinite arrays
 
-        codeExample: `// Binary search - correct implementation\nfunction binarySearch(arr: number[], target: number): number {\n  let left = 0;\n  let right = arr.length - 1; // inclusive bound\n\n  while (left <= right) {     // <= not <, crucial!\n    const mid = left + Math.floor((right - left) / 2); // overflow-safe\n\n    if (arr[mid] === target) return mid;\n    if (arr[mid] < target) left = mid + 1;\n    else right = mid - 1;\n  }\n  return -1;\n}\n\n// Search in rotated sorted array - no pivot needed\nfunction searchRotated(nums: number[], target: number): number {\n  let l = 0, r = nums.length - 1;\n  while (l <= r) {\n    const mid = l + Math.floor((r - l) / 2);\n    if (nums[mid] === target) return mid;\n    if (nums[l] <= nums[mid]) {                   // left half is sorted\n      if (target >= nums[l] && target < nums[mid]) r = mid - 1;\n      else l = mid + 1;\n    } else {                                       // right half is sorted\n      if (target > nums[mid] && target <= nums[r]) l = mid + 1;\n      else r = mid - 1;\n    }\n  }\n  return -1;\n}\n\n// Lower bound - first position where arr[i] >= target\nfunction lowerBound(arr: number[], target: number): number {\n  let l = 0, r = arr.length;  // exclusive upper bound\n  while (l < r) {\n    const mid = l + Math.floor((r - l) / 2);\n    if (arr[mid] < target) l = mid + 1;\n    else r = mid;\n  }\n  return l;\n}`,
+## Disadvantages
 
-        language: "typescript"
+- **Binary search**: Requires sorted data
+- **Linear search**: Slow for large datasets
+- **Interpolation search**: Degrades to O(n) for non-uniform data
+- **All search algorithms**: Cannot beat O(1) — you must check at least one element
 
-      },
+## Common Pitfalls
 
-      {
+1. **Off-by-one errors**: \\**mid = Math.floor((lo + hi) / 2)\\** vs \\**mid = lo + (hi - lo) / 2\\** (avoids overflow)
+2. **Infinite loops**: Forgetting to update \\**lo\\** or \\**hi\\** correctly
+3. **Not handling duplicates**: Binary search may return any matching index`,
+      codeExample: `// Linear Search — O(n)\nfunction linearSearch(arr, target) {\n  for (let i = 0; i < arr.length; i++) {\n    if (arr[i] === target) return i;\n  }\n  return -1;\n}\n\n// Binary Search — O(log n)\nfunction binarySearch(arr, target) {\n  let lo = 0, hi = arr.length - 1;\n  while (lo <= hi) {\n    const mid = lo + Math.floor((hi - lo) / 2);\n    if (arr[mid] === target) return mid;\n    if (arr[mid] < target) lo = mid + 1;\n    else hi = mid - 1;\n  }\n  return -1;\n}\n\n// First and Last Position\nfunction searchRange(arr, target) {\n  const first = binarySearch(arr, target);\n  if (first === -1) return [-1, -1];\n  let lo = first, hi = first;\n  while (lo > 0 && arr[lo - 1] === target) lo--;\n  while (hi < arr.length - 1 && arr[hi + 1] === target) hi++;\n  return [lo, hi];\n}\n\nconst sorted = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];\nconsole.log("Linear:", linearSearch(sorted, 5));  // 4\nconsole.log("Binary:", binarySearch(sorted, 5));  // 4\nconsole.log("Range:", searchRange([1,2,3,3,3,4,5], 3)); // [1,3]`,
+      language: "typescript"
+    },
+    {
+      id: "4",
+      title: "Divide and Conquer",
+      content: `## Definition
 
-        id: "4",
+**Divide and Conquer** is an algorithmic paradigm that breaks a problem into smaller subproblems, solves each recursively, and combines the results. It's the foundation for many efficient algorithms.
 
-        title: "Divide and Conquer",
+## Introduction
 
-        content: "Biggest divide-and-conquer mistake: thinking it's just recursion. It's not. Three-phase engineering: DIVIDE (split problem), CONQUER (solve subproblems), COMBINE (merge results). The hard part is always the COMBINE step.\n\nReal problem: Maximum subarray sum. Brute force is O(n³) → O(n²) with prefix sums. Divide and conquer gets it to O(n log n). But Kadane's algorithm (O(n) single pass) beats them all. The lesson: D&C isn't always the fastest. It's the pattern that works when linear scans can't.\n\nInterview trap: \"Write merge sort.\" Everyone memorizes the merge step. But the follow-up: \"What's the space complexity?\" If you answered O(n log n) because of recursion stack + arrays created at each level, you're wrong. Only O(n) extra space — merge arrays at same depth reuse memory.\n\nCommon mistake: ignoring the recursion tree depth. Every recursive call adds to the call stack. On n=1,000,000, merge sort needs ~20 stack frames. Recursive Quicksort could need 1,000,000 — stack overflow! That's why production sorts use iteration or tail recursion.\n\nEngineering mindset: D&C is parallelization-friendly. MapReduce is D&C at scale. Split across machines, solve independently, combine results.",
+The key insight: solving two halves of a problem independently is often faster than solving the whole problem at once. When combined with the "combine" step being efficient, this yields O(n log n) algorithms.
 
-        codeExample: `// Maximum subarray sum - 3 approaches\nfunction maxSubarrayKadane(arr: number[]): number {\n  let max = -Infinity, curr = 0;\n  for (const x of arr) {\n    curr = Math.max(x, curr + x);\n    max = Math.max(max, curr);\n  }\n  return max; // O(n), impossible to beat\n}\n\n// D&C version - overkill but shows the pattern\nfunction maxSubarrayDC(arr: number[], l: number, r: number): number {\n  if (l === r) return arr[l];\n  const mid = Math.floor((l + r) / 2);\n\n  // Must cross mid - the COMBINE step\n  let leftSum = -Infinity, sum = 0;\n  for (let i = mid; i >= l; i--) { sum += arr[i]; leftSum = Math.max(leftSum, sum); }\n  let rightSum = -Infinity; sum = 0;\n  for (let i = mid + 1; i <= r; i++) { sum += arr[i]; rightSum = Math.max(rightSum, sum); }\n\n  return Math.max(\n    maxSubarrayDC(arr, l, mid),\n    maxSubarrayDC(arr, mid + 1, r),\n    leftSum + rightSum\n  ); // O(n log n) - the divide overhead costs\n}\n\n// Merge sort - O(n log n) time, O(n) space\nfunction mergeSort(arr: number[]): number[] {\n  if (arr.length <= 1) return arr;\n  const mid = Math.floor(arr.length / 2);\n  return merge(mergeSort(arr.slice(0, mid)), mergeSort(arr.slice(mid)));\n}\n\nfunction merge(l: number[], r: number[]): number[] {\n  const out: number[] = [];\n  let i = 0, j = 0;\n  while (i < l.length && j < r.length)\n    out.push(l[i] <= r[j] ? l[i++] : r[j++]);\n  return [...out, ...l.slice(i), ...r.slice(j)];\n}`,
+## History and Establishment
 
-        language: "typescript"
+- **300 BC**: Euclid's GCD algorithm is a divide-and-conquer approach
+- **1962**: Karatsuba multiplication — first algorithm faster than grade-school multiplication
+- **1960s**: Merge sort and quick sort formalized as divide-and-conquer
+- **1970s**: Strassen matrix multiplication, FFT (Fast Fourier Transform)
+- **2000s**: Used in parallel computing (MapReduce is essentially divide-and-conquer)
 
-      },
+## The Master Theorem
 
-      {
+For recurrences of the form T(n) = aT(n/b) + O(nᵈ):
 
-        id: "5",
+| Condition | Complexity |
+|-----------|-----------|
+| d < log_b(a) | O(n^(log_b(a))) |
+| d = log_b(a) | O(nᵈ log n) |
+| d > log_b(a) | O(nᵈ) |
 
-        title: "Greedy Algorithms",
+## Advantages
 
-        content: "Biggest greedy mistake: assuming \"pick what looks best now\" always works. It doesn't. The greedy choice property must hold — and proving it is the actual interview.\n\nReal problem: Coin change (minimum coins to make amount). Greedy works for US coins (25, 10, 5, 1) — always pick the largest. But for arbitrary denominations like {1, 3, 4} to make 6? Greedy picks 4+1+1 (3 coins), optimal is 3+3 (2 coins). Greedy fails.\n\nInterview trap: \"Find minimum spanning tree.\" Candidates code Prim's but can't explain WHY the greedy choice works. The cut property: for any cut, the minimum crossing edge belongs to some MST. If you can't articulate the invariant, you haven't understood it.\n\nEngineering mindset: Greedy is for optimization problems with optimal substructure AND the greedy choice property. When both hold, greedy beats DP every time — O(n log n) vs O(n²). When only optimal substructure holds, you need DP. When neither, you need backtracking.\n\nCommon mistake: Activity selection — sorting by end time (correct) vs start time (wrong). If you sort by start time, you get a valid set but not necessarily maximum cardinality. The greedy choice is the activity that finishes earliest, giving the most room for remaining activities.",
+- **Efficient**: Often achieves optimal time complexity
+- **Parallelizable**: Subproblems are independent
+- **Cache-friendly**: Recursive calls on contiguous subarrays
+- **Natural recursion**: Elegant, easy-to-understand code
 
-        codeExample: `// Activity Selection - correct greedy\nfunction activitySelection(\n  start: number[], end: number[]\n): { count: number; selected: number[] } {\n  const activities = start\n    .map((s, i) => ({ s, e: end[i], i }))\n    .sort((a, b) => a.e - b.e); // Greedy: earliest finish first\n\n  const selected = [0];\n  let lastEnd = activities[0].e;\n\n  for (let i = 1; i < activities.length; i++) {\n    if (activities[i].s >= lastEnd) {\n      selected.push(i);\n      lastEnd = activities[i].e;\n    }\n  }\n\n  return { count: selected.length, selected };\n}\n\n// Coin change - greedy fails for {1, 3, 4}, amount = 6\nfunction coinChangeGreedy(coins: number[], amount: number): number {\n  const sorted = [...coins].sort((a, b) => b - a);\n  let remaining = amount, count = 0;\n  for (const coin of sorted) {\n    const take = Math.floor(remaining / coin);\n    count += take;\n    remaining -= take * coin;\n  }\n  return remaining === 0 ? count : -1;\n}\n\n// {1, 3, 4}, amount 6 => greedy picks 4+1+1=3, optimal is 3+3=2\nconsole.log(coinChangeGreedy([1, 3, 4], 6)); // 3 (WRONG)\n\n// Huffman coding - classic greedy\n// Merge the two smallest frequencies, repeat\nfunction huffmanCost(freqs: number[]): number {\n  const heap = [...freqs].sort((a, b) => a - b);\n  let total = 0;\n  while (heap.length > 1) {\n    const a = heap.shift()!, b = heap.shift()!;\n    total += a + b;\n    heap.push(a + b);\n    heap.sort((x, y) => x - y);\n  }\n  return total;\n}`,
+## Disadvantages
 
-        language: "typescript"
+- **Recursion overhead**: Function calls have overhead (stack frames)
+- **Space complexity**: O(log n) to O(n) stack space
+- **Overkill for small inputs**: Simple algorithms may be faster for n < 100
+- **Not always applicable**: Some problems don't decompose nicely
 
-      },
+## Classic Algorithms
 
-      {
+| Algorithm | Problem | Complexity |
+|-----------|---------|-----------|
+| Merge Sort | Sorting | O(n log n) |
+| Quick Sort | Sorting | O(n log n) avg |
+| Binary Search | Searching | O(log n) |
+| Strassen | Matrix multiplication | O(n^2.807) |
+| Karatsuba | Multiplication | O(n^1.585) |
+| FFT | Polynomial evaluation | O(n log n) |`,
+      codeExample: `// Merge Sort — classic divide and conquer\nfunction mergeSort(arr) {\n  if (arr.length <= 1) return arr;\n  const mid = Math.floor(arr.length / 2);\n  const left = mergeSort(arr.slice(0, mid));\n  const right = mergeSort(arr.slice(mid));\n  return merge(left, right);\n}\n\nfunction merge(left, right) {\n  const result = [];\n  let i = 0, j = 0;\n  while (i < left.length && j < right.length) {\n    result.push(left[i] <= right[j] ? left[i++] : right[j++]);\n  }\n  return [...result, ...left.slice(i), ...right.slice(j)];\n}\n\n// Maximum subarray (Kadane's via divide and conquer)\nfunction maxSubarray(arr, lo = 0, hi = arr.length - 1) {\n  if (lo === hi) return arr[lo];\n  const mid = Math.floor((lo + hi) / 2);\n  const leftMax = maxSubarray(arr, lo, mid);\n  const rightMax = maxSubarray(arr, mid + 1, hi);\n  let crossMax = arr[mid], sum = arr[mid];\n  for (let i = mid - 1; i >= lo; i--) crossMax = Math.max(crossMax, sum += arr[i]);\n  sum = 0;\n  for (let i = mid + 1; i <= hi; i++) crossMax = Math.max(crossMax, sum += arr[i]);\n  return Math.max(leftMax, rightMax, crossMax);\n}\n\nconsole.log("Sorted:", mergeSort([38, 27, 43, 3, 9, 82, 10]));\nconsole.log("Max subarray:", maxSubarray([-2, 1, -3, 4, -1, 2, 1, -5, 4])); // 6`,
+      language: "typescript"
+    },
+    {
+      id: "5",
+      title: "Dynamic Programming",
+      content: `## Definition
 
-        id: "6",
+**Dynamic Programming (DP)** is an algorithmic technique that solves complex problems by breaking them into overlapping subproblems, solving each subproblem only once, and storing the results to avoid redundant computation.
 
-        title: "Dynamic Programming",
+## Introduction
 
-        content: "Biggest DP mistake: trying to solve it from the problem statement without framing it as a recursion first. Rule: If brute force tries all subsets/combinations and subproblems repeat, use DP.\n\nDP is confusing because everyone starts with Fibonacci — it's too simple for the framework to click. Real DP struggles start with \"when to use it?\" Decision tree: 1) Can you express the answer in terms of smaller subproblems? 2) Do those subproblems overlap? If yes to both, DP applies.\n\nInterview trap: \"0/1 Knapsack.\" The canonical version: 2D DP where dp[i][w] = max value using first i items with capacity w. Follow-up: \"How do you solve this with 1D array?\" Realization: you iterate w backwards (capacity down to weight[i]) to avoid reusing items.\n\nCommon mistake: forgetting to initialize base cases correctly. In DP, the base case is not trivial — it's the first 1-2 rows/values that define the entire recurrence. Get the base wrong, everything cascades.\n\nEngineering mindset: Bottom-up (tabulation) is safer than top-down (memoization). No recursion depth issues, better cache locality, easier to debug. Use top-down only when the state space is sparse (few states reachable).",
+DP is the most powerful algorithmic paradigm for optimization problems. If a problem has **optimal substructure** (optimal solution contains optimal solutions to subproblems) and **overlapping subproblems** (same subproblems solved repeatedly), DP is the answer.
 
-        codeExample: `// Knapsack: 2D → 1D space optimization\nfunction knapsack2D(weights: number[], values: number[], cap: number): number {\n  const n = weights.length;\n  const dp = Array.from({ length: n + 1 }, () => Array(cap + 1).fill(0));\n  for (let i = 1; i <= n; i++)\n    for (let w = 0; w <= cap; w++)\n      if (weights[i - 1] <= w)\n        dp[i][w] = Math.max(dp[i - 1][w], dp[i - 1][w - weights[i - 1]] + values[i - 1]);\n      else dp[i][w] = dp[i - 1][w];\n  return dp[n][cap];\n}\n\nfunction knapsack1D(weights: number[], values: number[], cap: number): number {\n  const dp = Array(cap + 1).fill(0);\n  for (let i = 0; i < weights.length; i++)\n    // MUST go backwards - otherwise reuses the same item!\n    for (let w = cap; w >= weights[i]; w--)\n      dp[w] = Math.max(dp[w], dp[w - weights[i]] + values[i]);\n  return dp[cap];\n}\n\n// Longest Common Subsequence\nfunction lcs(a: string, b: string): number {\n  const m = a.length, n = b.length;\n  const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));\n  for (let i = 1; i <= m; i++)\n    for (let j = 1; j <= n; j++)\n      dp[i][j] = a[i - 1] === b[j - 1]\n        ? 1 + dp[i - 1][j - 1]\n        : Math.max(dp[i - 1][j], dp[i][j - 1]);\n  return dp[m][n];\n}\n\nconsole.log(knapsack1D([2, 3, 4, 5], [3, 4, 5, 6], 5)); // 7\nconsole.log(lcs(\"ABCBDAB\", \"BDCAB\")); // 4 ("BDAB" or "BCAB")`,
+## History and Establishment
 
-        language: "typescript"
+- **1950s**: Richard Bellman coined "dynamic programming" to hide military research from his secretary
+- **1950s**: Bellman-Ford shortest path algorithm
+- **1960s**: Floyd-Warshall all-pairs shortest path
+- **1970s**: Knapsack problem, sequence alignment (edit distance)
+- **2000s**: DP became central to bioinformatics, NLP, and machine learning
 
-      },
+## Two Approaches
 
-      {
+| Approach | Description | Example |
+|----------|-------------|---------|
+| Top-down (Memoization) | Recursion + cache | Fibonacci |
+| Bottom-up (Tabulation) | Iterative + table fill | Knapsack |
 
-        id: "7",
+## Advantages
 
-        title: "Graph Algorithms",
+- **Optimal solutions**: Guarantees best possible answer
+- **Efficient**: Eliminates redundant computation
+- **Flexible**: Can solve a wide range of optimization problems
+- **Foundation**: Used in algorithms, AI, bioinformatics, economics
 
-        content: "Biggest graph mistake: using recursion (DFS) on a graph with cycles and getting a stack overflow. Always track visited nodes. Even for directed acyclic graphs, you need to avoid revisiting — the \"visited\" set isn't optional, it's necessary for correctness.\n\nReal problem: shortest path in a graph with negative weights. Dijkstra fails — it assumes positive weights. Bellman-Ford handles negatives by relaxing edges V-1 times. But O(VE) is expensive. The engineering tradeoff: use Dijkstra when you know weights are non-negative (95% of real-world cases), Bellman-Ford only when forced.\n\nInterview trap: \"Detect a cycle in a directed graph.\" Many candidates use visited only. But you need THREE states: unvisited (0), visiting (1), visited (2). A back edge to a visiting node means a cycle. A visited node already fully explored? Not a cycle.\n\nCommon mistake: Dijkstra with a priority queue implemented as an array. Each extract-min is O(n), making total O(V²) instead of O((V+E) log V). Always use a binary heap for the priority queue.\n\nEngineering mindset: graphs are everywhere — social networks, dependency resolution, routing, recommendation engines. BFS finds shortest paths in unweighted graphs level by level. DFS explores deep paths, useful for topological sorting and cycle detection.",
+## Disadvantages
 
-        codeExample: `// Dijkstra with proper priority queue\nfunction dijkstra(\n  graph: Map<number, [number, number][]>,\n  source: number\n): Map<number, number> {\n  const dist = new Map<number, number>();\n  const pq: [number, number][] = [];  // [dist, node]\n  dist.set(source, 0);\n  pq.push([0, source]);\n\n  while (pq.length > 0) {\n    pq.sort((a, b) => a[0] - b[0]); // poor man's heap\n    const [d, u] = pq.shift()!;\n    if (d > (dist.get(u) ?? Infinity)) continue; // stale entry\n\n    for (const [v, w] of graph.get(u) ?? []) {\n      const nd = d + w;\n      if (nd < (dist.get(v) ?? Infinity)) {\n        dist.set(v, nd);\n        pq.push([nd, v]);\n      }\n    }\n  }\n  return dist;\n}\n\n// Cycle detection in directed graph - 3 states\nenum State { Unvisited, Visiting, Visited }\n\nfunction hasCycle(graph: number[][]): boolean {\n  const state: State[] = Array(graph.length).fill(State.Unvisited);\n\n  function dfs(u: number): boolean {\n    if (state[u] === State.Visiting) return true;  // back edge = cycle!\n    if (state[u] === State.Visited) return false;\n    state[u] = State.Visiting;\n    for (const v of graph[u]) if (dfs(v)) return true;\n    state[u] = State.Visited;\n    return false;\n  }\n\n  return graph.some((_, i) => state[i] === State.Unvisited && dfs(i));\n}\n\n// Kahn's algorithm - topological sort (BFS-based)\nfunction topologicalSort(n: number, edges: [number, number][]): number[] {\n  const inDeg = Array(n).fill(0);\n  const adj: number[][] = Array.from({ length: n }, () => []);\n  for (const [u, v] of edges) { adj[u].push(v); inDeg[v]++; }\n  const q: number[] = [];\n  for (let i = 0; i < n; i++) if (inDeg[i] === 0) q.push(i);\n  const order: number[] = [];\n  while (q.length > 0) {\n    const u = q.shift()!;\n    order.push(u);\n    for (const v of adj[u]) if (--inDeg[v] === 0) q.push(v);\n  }\n  return order.length === n ? order : []; // empty = cycle exists\n}`,
+- **High space complexity**: Tables can be O(n²) or worse
+- **Complex to design**: Identifying subproblems and recurrence is non-trivial
+- **Not always intuitive**: Solution often seems like magic until understood
+- **Overkill**: If subproblems don't overlap, recursion is simpler
 
-        language: "typescript"
+## Steps to Solve a DP Problem
 
-      },
+1. **Define state**: What does dp[i] represent?
+2. **Find recurrence**: How does dp[i] relate to dp[i-1], dp[i-2], etc.?
+3. **Base cases**: What are the initial values?
+4. **Compute order**: Fill the table in the right order
+5. **Extract answer**: What's the final answer from the table?`,
+      codeExample: `// Fibonacci — naive O(2^n) vs DP O(n)\nfunction fibNaive(n) {\n  if (n <= 1) return n;\n  return fibNaive(n - 1) + fibNaive(n - 2);\n}\n\nfunction fibDP(n) {\n  const dp = [0, 1];\n  for (let i = 2; i <= n; i++) dp[i] = dp[i-1] + dp[i-2];\n  return dp[n];\n}\n\n// 0/1 Knapsack\nfunction knapsack(weights, values, capacity) {\n  const n = weights.length;\n  const dp = Array(n + 1).fill(null).map(() => Array(capacity + 1).fill(0));\n  for (let i = 1; i <= n; i++) {\n    for (let w = 0; w <= capacity; w++) {\n      dp[i][w] = dp[i-1][w];\n      if (weights[i-1] <= w) {\n        dp[i][w] = Math.max(dp[i][w], dp[i-1][w-weights[i-1]] + values[i-1]);\n      }\n    }\n  }\n  return dp[n][capacity];\n}\n\n// Longest Common Subsequence\nfunction lcs(s1, s2) {\n  const m = s1.length, n = s2.length;\n  const dp = Array(m+1).fill(null).map(() => Array(n+1).fill(0));\n  for (let i = 1; i <= m; i++) {\n    for (let j = 1; j <= n; j++) {\n      dp[i][j] = s1[i-1] === s2[j-1] ? dp[i-1][j-1]+1 : Math.max(dp[i-1][j], dp[i][j-1]);\n    }\n  }\n  return dp[m][n];\n}\n\nconsole.log("Fib(10):", fibDP(10));  // 55\nconsole.log("Knapsack:", knapsack([2,3,4,5], [3,4,5,6], 5)); // 7\nconsole.log("LCS:", lcs("abcde", "ace"));  // 3`,
+      language: "typescript"
+    },
+    {
+      id: "6",
+      title: "Greedy Algorithms",
+      content: `## Definition
 
-      {
+A **greedy algorithm** makes the locally optimal choice at each step, hoping to find a global optimum. It builds a solution piece by piece, always choosing the next piece that offers the most immediate benefit.
 
-        id: "8",
+## Introduction
 
-        title: "Backtracking",
+Greedy algorithms are simpler and faster than DP when they work. The key is proving that the local optimum leads to the global optimum — not all problems have this property.
 
-        content: "Biggest backtracking mistake: not pruning aggressively enough. Backtracking is brute force with pruning — if you're not pruning, you're just DFS on the entire search space. The performance gap between naive DFS and good backtracking is the difference between enumerating 10^12 and 10^3 states.\n\nReal problem: N-Queens. The naive approach generates all N! placements on the board and checks validity. The backtracking approach places one queen per row, checking column and diagonal conflicts incrementally. Pruning the moment a placement is invalid cuts the search space dramatically.\n\nInterview trap: \"Generate all subsets.\" Easy with backtracking. The subtlety: does order matter? [1,2] vs [2,1] — subsets ignore order, permutations don't. Subsets need a \"start index\" parameter to avoid generating the same set multiple times. Permutations need a \"used\" boolean array.\n\nCommon mistake: forgetting to undo the last choice (backtrack). After the recursive call returns, you must restore state. push → recurse → pop. mark → recurse → unmark. This undo step is the BACKTRACK part — skip it and your state bleeds across branches.\n\nEngineering mindset: backtracking solves constraint satisfaction problems — Sudoku, N-Queens, graph coloring, crossword puzzles. Constraint propagation (forward checking) prunes earlier by preemptively eliminating impossible values for future variables.",
+## History and Establishment
 
-        codeExample: `// N-Queens with aggressive pruning\nfunction solveNQueens(n: number): string[][] {\n  const result: string[][] = [];\n  const cols = new Set<number>();\n  const diag1 = new Set<number>(); // row - col (constant per diagonal)\n  const diag2 = new Set<number>(); // row + col\n  const board: number[] = [];      // board[row] = col\n\n  function backtrack(row: number): void {\n    if (row === n) {\n      result.push(board.map(\n        c => '.'.repeat(c) + 'Q' + '.'.repeat(n - c - 1)\n      ));\n      return;\n    }\n\n    for (let col = 0; col < n; col++) {\n      // Prune: O(1) conflict check\n      if (cols.has(col) || diag1.has(row - col) || diag2.has(row + col)) continue;\n\n      board.push(col);\n      cols.add(col); diag1.add(row - col); diag2.add(row + col);\n\n      backtrack(row + 1);\n\n      // BACKTRACK: undo everything\n      cols.delete(col); diag1.delete(row - col); diag2.delete(row + col);\n      board.pop();\n    }\n  }\n\n  backtrack(0);\n  return result;\n}\n\n// Generate all subsets (combinations, not permutations)\nfunction subsets(nums: number[]): number[][] {\n  const result: number[][] = [];\n  function backtrack(start: number, curr: number[]) {\n    result.push([...curr]);\n    for (let i = start; i < nums.length; i++) {\n      curr.push(nums[i]);\n      backtrack(i + 1, curr); // i+1 = don't reuse elements\n      curr.pop();              // BACKTRACK undo\n    }\n  }\n  backtrack(0, []);\n  return result;\n}\n\nconsole.log(solveNQueens(4)); // 2 solutions\nconsole.log(subsets([1, 2, 3])); // 8 subsets`,
+- **1950s**: Huffman coding — optimal prefix codes using greedy tree construction
+- **1970s**: Dijkstra's shortest path — greedy on edge weights
+- **1970s**: Kruskal's and Prim's MST algorithms
+- **1980s**: Greedy heuristics for NP-hard problems (set cover approximation)
 
-        language: "typescript"
+## Advantages
 
-      },
+- **Simple to implement**: Usually straightforward logic
+- **Fast**: Often O(n log n) or better
+- **Intuitive**: Easy to understand and explain
+- **Optimal for many problems**: Huffman, MST, activity selection
 
-      {
+## Disadvantages
 
-        id: "9",
+- **Not always optimal**: Knapsack, TSP are not greedily solvable
+- **Hard to prove correctness**: Greedy choice property must be proven
+- **No backtracking**: Once a choice is made, it can't be undone
+- **May need sorting**: Pre-processing step adds overhead
 
-        title: "String Algorithms",
+## When Greedy Works
 
-        content: "Biggest string algorithm mistake: using brute-force substring search (O(n·m)) when writing production parsers, log analyzers, or text editors. For large texts, the naive approach is unacceptable — and most interview candidates don't know KMP or why it works.\n\nReal problem: pattern matching in DNA sequences or log files. Naive O(n·m) means checking every position and, on mismatch, starting over — potentially rechecking characters you've already seen. KMP's insight: when a mismatch occurs, the pattern's prefix structure tells you how far to shift, so the text pointer never goes backward. O(n + m) guaranteed.\n\nInterview trap: \"Write a function that finds all occurrences of a pattern in a string.\" The easy answer is indexOf in a loop or RegExp. But the interviewer wants you to understand that when n = 10^6 and m = 10^4, naive is 10^10 operations — too slow. This is why KMP and Rabin-Karp exist.\n\nCommon mistake: implementing KMP but getting the failure function wrong. The LPS (longest proper prefix that is also a suffix) array is where KMP's entire complexity lives. If LPS construction isn't O(m), the whole algorithm breaks.\n\nEngineering mindset: strings are arrays of characters. All array tricks apply — two pointers, sliding window, prefix sums. Rolling hash (Rabin-Karp) trades correctness probability for speed — use double hashing to avoid collisions.",
+A problem is suitable for greedy if it has:
+1. **Greedy choice property**: A local optimum leads to a global optimum
+2. **Optimal substructure**: Optimal solution contains optimal solutions to subproblems
 
-        codeExample: `// KMP: text pointer never backtracks\nfunction kmpSearch(text: string, pattern: string): number[] {\n  const lps = buildLPS(pattern);\n  const matches: number[] = [];\n  let i = 0, j = 0; // i = text index, j = pattern index\n\n  while (i < text.length) {\n    if (text[i] === pattern[j]) { i++; j++; }\n    if (j === pattern.length) {\n      matches.push(i - j);\n      j = lps[j - 1]; // keep searching, don't reset\n    } else if (i < text.length && text[i] !== pattern[j]) {\n      if (j > 0) j = lps[j - 1]; // shift pattern using LPS\n      else i++;                   // no match possible, move on\n    }\n  }\n  return matches;\n}\n\n// LPS: the heart of KMP\nfunction buildLPS(pattern: string): number[] {\n  const lps = Array(pattern.length).fill(0);\n  let len = 0, i = 1; // len = length of previous longest prefix suffix\n  while (i < pattern.length) {\n    if (pattern[i] === pattern[len]) { lps[i++] = ++len; }\n    else if (len > 0) { len = lps[len - 1]; } // fallback, don't increment i\n    else { lps[i++] = 0; }\n  }\n  return lps;\n}\n\n// Rabin-Karp with rolling hash\nfunction rabinKarp(text: string, pattern: string): number[] {\n  const base = 256n, mod = 10n ** 9n + 7n;\n  const matches: number[] = [];\n  if (pattern.length > text.length) return matches;\n\n  // hash = Σ char * base^(len-1-i)\n  const hash = (s: string, len: number): bigint => {\n    let h = 0n;\n    for (let i = 0; i < len; i++) h = (h * base + BigInt(s.charCodeAt(i))) % mod;\n    return h;\n  };\n\n  const patHash = hash(pattern, pattern.length);\n  let txtHash = hash(text, pattern.length);\n  const power = base ** BigInt(pattern.length - 1) % mod;\n\n  for (let i = 0; i <= text.length - pattern.length; i++) {\n    if (txtHash === patHash && text.slice(i, i + pattern.length) === pattern)\n      matches.push(i);\n    if (i < text.length - pattern.length) {\n      // Rolling: remove left char, add right char\n      txtHash = ((txtHash - BigInt(text.charCodeAt(i)) * power % mod + mod) * base\n        + BigInt(text.charCodeAt(i + pattern.length))) % mod;\n    }\n  }\n  return matches;\n}`,
+## When Greedy Fails
 
-        language: "typescript"
+The 0/1 Knapsack problem: greedy by value-to-weight ratio fails. Items: {(60, 10), (100, 20), (120, 30)}, capacity 50. Greedy picks (120,30) + (100,20) = 220, but optimal is (100,20) + (60,10) = 160... wait, optimal is actually (120,30) + (100,20) = 220. Actually greedy works here too. The classic failure is items: {(60,10), (100,20), (120,30)}, capacity 50 — greedy by ratio gives 160, optimal is 220.`,
+      codeExample: `// Activity Selection — sort by end time, greedily pick\nfunction activitySelection(activities) {\n  activities.sort((a, b) => a.end - b.end);\n  const selected = [activities[0]];\n  let lastEnd = activities[0].end;\n  for (let i = 1; i < activities.length; i++) {\n    if (activities[i].start >= lastEnd) {\n      selected.push(activities[i]);\n      lastEnd = activities[i].end;\n    }\n  }\n  return selected;\n}\n\n// Huffman-like: minimize cost\nfunction minCostToMerge(stones) {\n  stones.sort((a, b) => a - b);\n  let cost = 0;\n  while (stones.length > 1) {\n    const first = stones.shift();\n    const second = stones.shift();\n    cost += first + second;\n    stones.push(first + second);\n    stones.sort((a, b) => a - b);\n  }\n  return cost;\n}\n\n// Fractional Knapsack — greedy works!\nfunction fractionalKnapsack(items, capacity) {\n  items.sort((a, b) => (b.val / b.wt) - (a.val / a.wt));\n  let total = 0;\n  for (const {val, wt} of items) {\n    if (capacity >= wt) { total += val; capacity -= wt; }\n    else { total += val * (capacity / wt); break; }\n  }\n  return total;\n}\n\nconst acts = [{start:1,end:3},{start:2,end:5},{start:4,end:7},{start:6,end:8}];\nconsole.log("Activities:", activitySelection(acts));\nconsole.log("Merge stones:", minCostToMerge([1, 2, 3])); // 9`,
+      language: "typescript"
+    },
+    {
+      id: "7",
+      title: "Graph Algorithms",
+      content: `## Definition
 
-      },
+**Graph algorithms** operate on graph data structures to find paths, detect cycles, determine connectivity, and solve optimization problems on networks.
 
-      {
+## Introduction
 
-        id: "10",
+Graph algorithms are among the most important in computer science. Social networks, GPS navigation, web crawlers, compilers, and network routing all rely on graph algorithms.
 
-        title: "Complexity Theory & NP",
+## History and Establishment
 
-        content: "Biggest misconception: \"NP means non-polynomial.\" Wrong. NP = Nondeterministic Polynomial time — problems whose solutions can be VERIFIED in polynomial time, not necessarily SOLVED in polynomial time. If you get this wrong in an interview, the conversation is over.\n\nReal problem: you're asked to build a scheduling system for 100 employees with 50 constraints (shift preferences, certifications, max hours). This is a constraint satisfaction problem — likely NP-complete. If you try to solve it exactly, it won't scale. Engineering reality: prove it's NP-complete, then apply approximation algorithms or SAT solvers.\n\nInterview trap: \"Prove this problem is NP-complete.\" Two steps: 1) Show it's in NP (verify in poly time). 2) Reduce a known NP-complete problem to it (show it's NP-hard). Common mistake: reducing to the wrong direction. You must reduce FROM known NPC TO your problem, not the other way.\n\nCommon mistake: treating \"intractable\" as \"impossible.\" NP-hardness doesn't mean you can't solve practical instances. SAT solvers handle millions of variables. TSP is solved optimally for thousands of cities. Branch-and-bound, heuristics, and approximation algorithms make NP-hard problems tractable in practice.\n\nEngineering mindset: complexity theory is about classification, not paralysis. Classify the problem, then apply the right tool: polynomial algorithm if P, exact solver if small instance, approximation if large instance, heuristic if time is tight.",
+- **1736**: Euler's Seven Bridges — birth of graph theory
+- **1956**: Dijkstra's shortest path algorithm
+- **1959**: Prim's MST algorithm
+- **1959**: Kruskal's MST algorithm
+- **1970s**: Bellman-Ford, Floyd-Warshall
+- **2000s**: Google's PageRank — graph algorithm on the web
 
-        codeExample: `// SAT solver using DPLL (simplified backtracking)\ntype Clause = number[]; // positive = true, negative = false\n\nfunction dpll(clauses: Clause[], assignment: Map<number, boolean>): boolean {\n  // Unit propagation: if a clause has one literal, assign it\n  function simplify(): Clause[] {\n    let changed = true;\n    let current = clauses;\n    while (changed && current.length > 0) {\n      changed = false;\n      const unit = current.find(c => c.length === 1);\n      if (!unit) break;\n      const lit = unit[0];\n      const var_ = Math.abs(lit);\n      assignment.set(var_, lit > 0);\n      current = current\n        .filter(c => !c.includes(lit))        // remove satisfied\n        .map(c => c.filter(l => l !== -lit)); // shorten falsified\n      changed = true;\n    }\n    return current;\n  }\n\n  clauses = simplify();\n  if (clauses.length === 0) return true;  // all satisfied\n  if (clauses.some(c => c.length === 0)) return false; // conflict\n\n  // Choose unassigned variable\n  const var_ = Math.abs(clauses[0][0]);\n  for (const val of [true, false]) {\n    const newAssign = new Map(assignment);\n    newAssign.set(var_, val);\n    const reduced: Clause[] = clauses\n      .map(c => c.filter(l => Math.abs(l) !== var_))\n      .filter(c => c.length > 0);\n    if (dpll(reduced, newAssign)) {\n      assignment.clear();\n      newAssign.forEach((v, k) => assignment.set(k, v));\n      return true;\n    }\n  }\n  return false;\n}\n\n// Reduction: Vertex Cover → SAT\n// For each vertex, var_i = in cover. Clause (u ∨ v) per edge.\nfunction vertexCoverToSAT(edges: [number, number][], k: number): Clause[] {\n  const clauses: Clause[] = edges.map(([u, v]) => [u, v]); // edge must be covered\n  // At most k vertices: for each subset of size k+1, forbid all\n  // (¬v_i1 ∨ ¬v_i2 ∨ ... ∨ ¬v_i(k+1))\n  const n = Math.max(...edges.flat()) + 1;\n  // Generate cardinality constraint (simplified)\n  return clauses;\n}`,
+## Types
 
-        language: "typescript"
+| Algorithm | Purpose | Complexity |
+|-----------|---------|-----------|
+| BFS | Shortest path (unweighted) | O(V + E) |
+| DFS | Cycle detection, topological sort | O(V + E) |
+| Dijkstra | Shortest path (weighted, non-negative) | O((V+E) log V) |
+| Bellman-Ford | Shortest path (negative weights) | O(VE) |
+| Floyd-Warshall | All-pairs shortest path | O(V³) |
+| Kruskal's | Minimum spanning tree | O(E log E) |
+| Prim's | Minimum spanning tree | O(E log V) |
 
-      },
+## Advantages
 
-    ],
+- **BFS**: Finds shortest path in unweighted graphs
+- **Dijkstra**: Optimal for weighted graphs with non-negative edges
+- **Bellman-Ford**: Handles negative edge weights
+- **Floyd-Warshall**: Solves all-pairs shortest path
 
-  },
+## Disadvantages
+
+- **Dijkstra**: Doesn't work with negative edges
+- **Bellman-Ford**: O(VE) — slow for dense graphs
+- **Floyd-Warshall**: O(V³) — too slow for large graphs
+- **All**: Memory-intensive for large graphs
+
+## When to Use What
+
+- **Unweighted graph shortest path**: BFS
+- **Weighted graph (non-negative)**: Dijkstra
+- **Weighted graph (negative edges)**: Bellman-Ford
+- **All-pairs shortest path**: Floyd-Warshall
+- **Minimum spanning tree**: Kruskal's or Prim's`,
+      codeExample: `// Dijkstra's Algorithm\ndef dijkstra(graph, start) {\n  const dist = {};\n  for (const node in graph) dist[node] = Infinity;\n  dist[start] = 0;\n  const pq = [[0, start]];\n  while (pq.length) {\n    pq.sort((a, b) => a[0] - b[0]);\n    const [d, u] = pq.shift();\n    if (d > dist[u]) continue;\n    for (const [v, w] of graph[u]) {\n      if (dist[u] + w < dist[v]) {\n        dist[v] = dist[u] + w;\n        pq.push([dist[v], v]);\n      }\n    }\n  }\n  return dist;\n}\n\n// BFS shortest path\nfunction bfsShortest(graph, start, end) {\n  const visited = new Set();\n  const queue = [[start, 0]];\n  visited.add(start);\n  while (queue.length) {\n    const [node, dist] = queue.shift();\n    if (node === end) return dist;\n    for (const neighbor of graph[node]) {\n      if (!visited.has(neighbor)) {\n        visited.add(neighbor);\n        queue.push([neighbor, dist + 1]);\n      }\n    }\n  }\n  return -1;\n}\n\nconst g = { A: [["B",1],["C",4]], B: [["C",2]], C: [] };\nconsole.log("Dijkstra:", dijkstra(g, "A"));`,
+      language: "typescript"
+    },
+    {
+      id: "8",
+      title: "Backtracking",
+      content: `## Definition
+
+**Backtracking** is a systematic method for exploring all possible solutions by building candidates incrementally and abandoning a candidate ("backtracking") as soon as it's determined to be invalid.
+
+## Introduction
+
+Backtracking is brute force with pruning. Instead of generating all possible solutions and checking each, it builds solutions step by step and stops exploring a branch the moment it can't lead to a valid solution.
+
+## History and Establishment
+
+- **1850s**: Eight Queens puzzle by Carl Friedrich Gauss
+- **1960s**: Formalized by Lehmer and Wells for combinatorial problems
+- **1970s**: Applied to constraint satisfaction problems (CSPs)
+- **2000s**: Used in SAT solvers, Sudoku solvers, and constraint programming
+
+## Advantages
+
+- **Complete**: Finds all solutions if they exist
+- **Pruning**: Eliminates large portions of search space
+- **Flexible**: Works for many constraint satisfaction problems
+- **Intuitive**: "Try, fail, undo" is easy to understand
+
+## Disadvantages
+
+- **Exponential worst case**: Can still explore O(2ⁿ) paths
+- **Memory intensive**: Must track current state for backtracking
+- **Not always optimal**: Doesn't guarantee shortest/best solution
+- **Hard to optimize**: Pruning heuristics are problem-specific
+
+## When to Use
+
+- Permutations and combinations
+- Constraint satisfaction (Sudoku, N-Queens)
+- Subsets and subsequence problems
+- Path finding with constraints
+- Game playing (minimax)`,
+      codeExample: `// N-Queens\ndef solveNQueens(n) {\n  const solutions = [];\n  const board = Array(n).fill(-1);\n  \n  function isValid(row, col) {\n    for (let i = 0; i < row; i++) {\n      if (board[i] === col || Math.abs(board[i] - col) === row - i) return false;\n    }\n    return true;\n  }\n  \n  function backtrack(row) {\n    if (row === n) { solutions.push([...board]); return; }\n    for (let col = 0; col < n; col++) {\n      if (isValid(row, col)) {\n        board[row] = col;\n        backtrack(row + 1);\n        board[row] = -1;\n      }\n    }\n  }\n  backtrack(0);\n  return solutions;\n}\n\n// Subsets\ndef subsets(nums) {\n  const result = [];\n  function backtrack(start, current) {\n    result.push([...current]);\n    for (let i = start; i < nums.length; i++) {\n      current.push(nums[i]);\n      backtrack(i + 1, current);\n      current.pop();\n    }\n  }\n  backtrack(0, []);\n  return result;\n}\n\nconsole.log("4-Queens solutions:", solveNQueens(4).length); // 2\nconsole.log("Subsets:", subsets([1,2,3]).length); // 8`,
+      language: "typescript"
+    },
+    {
+      id: "9",
+      title: "Bit Manipulation",
+      content: `## Definition
+
+**Bit manipulation** involves performing operations directly on individual bits of integers. It's the most fundamental level of computation — everything in a computer is ultimately bits.
+
+## Introduction
+
+Bit manipulation is essential for low-level programming, cryptography, networking, and competitive programming. Understanding bits gives you superpowers: O(1) parity checks, fast power-of-two tests, and elegant subset enumeration.
+
+## History and Establishment
+
+- **1940s**: Bitwise operations were built into the first computers
+- **1960s**: Bit manipulation techniques became standard in assembly language
+- **1970s**: Cryptography (DES, RSA) relies heavily on bit operations
+- **2000s**: Hash functions, bloom filters, and bitsets use bit manipulation
+
+## Common Operations
+
+| Operation | Symbol | Example |
+|-----------|--------|---------|
+| AND | \\**&\\** | \\**5 & 3 = 1\\** (0101 & 0011 = 0001) |
+| OR | \\**|\\** | \\**5 | 3 = 7\\** (0101 \| 0011 = 0111) |
+| XOR | \\**^\\** | \\**5 ^ 3 = 6\\** (0101 ^ 0011 = 0110) |
+| NOT | \\**~\\** | \\**~5 = -6\\** (in two's complement) |
+| Left shift | \\**<<\\** | \\**5 << 1 = 10\\** |
+| Right shift | \\**>>\\** | \\**5 >> 1 = 2\\** |
+
+## Advantages
+
+- **Speed**: Bitwise operations are the fastest possible operations
+- **Space**: Bitsets pack 32 or 64 boolean values into one integer
+- **Elegant solutions**: Many problems have beautiful bit-based solutions
+- **Cryptography**: Essential for encryption and hashing algorithms
+
+## Disadvantages
+
+- **Low readability**: Bitwise code is hard to read and maintain
+- **Limited to integers**: Can't apply to floats or strings directly
+- **Platform dependent**: Bit width varies across systems
+- **Error-prone**: Off-by-one errors are common with bit shifts`,
+      codeExample: `// Check if number is power of 2\nfunction isPowerOfTwo(n) {\n  return n > 0 && (n & (n - 1)) === 0;\n}\n\n// Count set bits (Hamming weight)\nfunction countBits(n) {\n  let count = 0;\n  while (n) { count++; n &= n - 1; }\n  return count;\n}\n\n// Single number (all appear twice except one)\nfunction singleNumber(nums) {\n  return nums.reduce((acc, n) => acc ^ n, 0);\n}\n\n// Swap without temp\nfunction swap(a, b) {\n  a ^= b; b ^= a; a ^= b;\n  return [a, b];\n}\n\nconsole.log(isPowerOfTwo(16)); // true\nconsole.log(countBits(7));     // 3\nconsole.log(singleNumber([4,1,2,1,2])); // 4`,
+      language: "typescript"
+    },
+    {
+      id: "10",
+      title: "Complexity Analysis",
+      content: `## Definition
+
+**Complexity analysis** is the method of measuring the resources (time and space) an algorithm uses as a function of input size. It provides a theoretical framework for comparing algorithms independently of hardware and implementation.
+
+## Introduction
+
+Without complexity analysis, we can only measure an algorithm by running it — which depends on the computer, input data, and implementation. Big-O notation gives us a universal language to discuss efficiency.
+
+## History and Establishment
+
+- **1894**: Paul Bachmann introduced Big-O notation
+- **1906**: Edmund Landau contributed Landau notation (Little-o)
+- **1960s**: Complexity theory formalized by Hartmanis and Stearns
+- **1970s**: P vs NP problem posed (one of the millennium prize problems)
+- **2000s**: Fine-grained complexity (SETH, OVC) for practical algorithm design
+
+## Big-O Notation
+
+| Notation | Name | Growth | Example |
+|----------|------|--------|---------|
+| O(1) | Constant | Doesn't grow | Array access |
+| O(log n) | Logarithmic | Very slow growth | Binary search |
+| O(n) | Linear | Proportional | Linear scan |
+| O(n log n) | Linearithmic | Slightly superlinear | Merge sort |
+| O(n²) | Quadratic | Grows fast | Bubble sort |
+| O(2ⁿ) | Exponential | Doubles each step | Brute-force subsets |
+| O(n!) | Factorial | Impossible for large n | Permutations |
+
+## Amortized Analysis
+
+Some operations are expensive occasionally but cheap on average. Dynamic array push is O(n) when resizing, but O(1) amortized because resizing happens rarely.
+
+## Space Complexity
+
+- **O(1)**: In-place (swap variables, iterative algorithms)
+- **O(n)**: Linear space (hash map, copy of input)
+- **O(n²)**: Quadratic space (adjacency matrix)
+- **O(log n)**: Recursive algorithms (call stack)
+
+## Best, Worst, Average Case
+
+- **Best case**: Minimum time over all inputs of size n
+- **Worst case**: Maximum time (most useful for guarantees)
+- **Average case**: Expected time over all inputs (most realistic)`,
+      codeExample: `// Comparing complexities in practice\n\n// O(1) — Constant time\nfunction getFirst(arr) { return arr[0]; }\n\n// O(log n) — Binary search\nfunction binarySearch(arr, target) {\n  let lo = 0, hi = arr.length - 1;\n  while (lo <= hi) {\n    const mid = lo + Math.floor((hi - lo) / 2);\n    if (arr[mid] === target) return mid;\n    if (arr[mid] < target) lo = mid + 1;\n    else hi = mid - 1;\n  }\n  return -1;\n}\n\n// O(n) — Linear scan\nfunction linearSearch(arr, target) {\n  for (let i = 0; i < arr.length; i++) {\n    if (arr[i] === target) return i;\n  }\n  return -1;\n}\n\n// O(n²) — Nested loops\nfunction hasDuplicate(arr) {\n  for (let i = 0; i < arr.length; i++)\n    for (let j = i + 1; j < arr.length; j++)\n      if (arr[i] === arr[j]) return true;\n  return false;\n}\n\n// O(2^n) — Subsets\nfunction subsets(arr) {\n  if (arr.length === 0) return [[]];\n  const [first, ...rest] = arr;\n  const withFirst = subsets(rest).map(s => [first, ...s]);\n  return [...subsets(rest), ...withFirst];\n}\n\nconst n = 1000;\nconsole.log("O(1):", getFirst([1,2,3]));\nconsole.log("O(log n): binary search on", n, "elements");\nconsole.log("O(n): linear scan on", n, "elements");\nconsole.log("O(n²): nested loops on", n, "elements");`,
+      language: "typescript"
+    }
+  ]
+},
 
   {
-
-    slug: "operating-systems",
-
-    title: "Operating Systems",
-
-    description: "Understand processes, threads, memory management, and file systems.",
-
-    icon: "🖥️",
-
-    notesUrl: "https://noteslink.in/product/os-notes/",
-
-    color: "from-violet-500 to-purple-600",
-    category: "Systems",
-
-    lessons: [
-
-      {
-
-        id: "1",
-
-        title: "Introduction to Operating Systems",
-
-        content: "Your code runs. You never thank the OS. But when malloc() returns NULL, your app crashes. When another browser tab freezes your editor, the scheduler made a choice. When a file save corrupts, the filesystem driver failed. The OS is not theory — it's the referee between your code and the hardware. Every printf() triggers a write() syscall. Every variable access goes through virtual memory translation. Every thread you spawn competes for CPU time. Common exam trap: 'The OS just manages hardware.' Wrong — it also enforces protection between processes, so one app can't read another's memory. Engineering mindset: Students who skip OS fundamentals write apps that silently leak resources and deadlock under load. The OS doesn't care about your code — it just enforces the rules. Learn the rules and your code stops fighting the system.",
-
-        codeExample: `// Every program interacts with the OS through system calls\nconst fs = require("fs");\nconst os = require("os");\n\nconsole.log("CPU cores:", os.cpus().length);\nconsole.log("Free memory:", os.freemem() / 1024 / 1024, "MB");\nconsole.log("Home dir:", os.homedir());\n\n// Each file read is a syscall — userspace -> kernel -> userspace\nconst start = Date.now();\nfs.readFileSync("test.txt", "utf-8");\nconsole.log("Syscall took:", Date.now() - start, "ms");\n\n// The OS doesn't give you the real memory address\n// It gives you a VIRTUAL address mapped through a page table\nconst mem = Buffer.alloc(1024 * 1024, "A");\nconsole.log("Allocated 1MB — all virtual until actually accessed");`,
-
-        language: "typescript"
-
-      },
-
-      {
-
-        id: "2",
-
-        title: "Processes & Threads",
-
-        content: "Every exam answer says 'process has own memory, thread shares memory.' True. But the real struggle is RACE CONDITIONS. You write two threads updating a shared counter. It works 1000 times locally. Then in production, counter = 1 when it should be 2. Both threads read 0, both write 1. Common exam trap: 'Threads share the heap but have their own stack.' Yes — but the real question is WHAT data can race. Any variable reachable from two threads is a candidate. Trap: thinking context switching is slow. It's microsecond overhead — the real cost is CPU cache misses after switching. Engineering mindset: Every time you reach for a global variable in multi-threaded code, you're creating a potential race. If you can't prove it's thread-safe, it isn't.",
-
-        codeExample: `// Two threads incrementing a shared counter — classic race\nlet counter = 0;\nconst ITERATIONS = 10000;\n\nasync function increment(label: string) {\n  for (let i = 0; i < ITERATIONS; i++) {\n    // Read counter, increment, write back — NOT atomic\n    // Thread can be preempted between read and write\n    counter++;\n  }\n  console.log(\`\${label} done\`);\n}\n\n// Run both concurrently — interleaving is unpredictable\nawait Promise.all([\n  increment("Thread A"),\n  increment("Thread B")\n]);\n\nconsole.log(\`Counter: \${counter}\`);\n// Expected: 20000, Actual: ~11000-19000\nconsole.log(\`Lost updates: \${20000 - counter}\`);`,
-
-        language: "typescript"
-
-      },
-
-      {
-
-        id: "3",
-
-        title: "CPU Scheduling",
-
-        content: "Exam problem: 'Calculate average waiting time for FCFS.' You nail it. But they never ask WHY Round Robin exists. Answer: A long process hogs the CPU for 5 seconds. Your music app stutters. The UI freezes. Users think your app is garbage. Preemptive scheduling fixes this by FORCING processes to share the CPU. Common exam trap: 'SJF is optimal.' Trap: 'optimal' means minimum AVERAGE waiting time, assuming you know future burst times — you don't. That's why SJF is theoretically perfect but practically impossible. Engineering mindset: Scheduling is about user EXPERIENCE, not math. The metric that matters is RESPONSE TIME — how fast does the app react when the user types. No user cares about 'average turnaround time' from an exam problem.",
-
-        codeExample: `// Multi-Level Feedback Queue — what real OSes use\nclass MLFQ {\n  private queues: number[][] = [[], [], []];\n  private timeQuanta = [5, 10, 20];\n\n  enqueue(pid: number, priority: number) {\n    this.queues[priority].push(pid);\n  }\n\n  schedule(): number[] {\n    const order: number[] = [];\n    for (let level = 0; level < 3; level++) {\n      while (this.queues[level].length > 0) {\n        const pid = this.queues[level].shift()!;\n        order.push(pid);\n        // Process that uses entire quantum gets demoted\n        const nextLevel = Math.min(level + 1, 2);\n        this.queues[nextLevel].push(pid);\n      }\n    }\n    return order;\n  }\n}\n\n// Interactive processes stay in high-priority queue\n// CPU-bound processes sink to lower priority`,
-
-        language: "typescript"
-
-      },
-
-      {
-
-        id: "4",
-
-        title: "Memory Management",
-
-        content: "Your app needs 2GB. The machine has 4GB. Why does it crash with 'out of memory' at 1.5GB? Because memory is FRAGMENTED. Paging breaks memory into fixed 4KB chunks so any free page satisfies any request. Segmentation groups related data (code vs stack vs heap) for protection. Common exam trap: 'Paging eliminates external fragmentation.' True. 'Paging has no fragmentation.' False — internal fragmentation exists (last page is partially used, wasting bytes). Engineering mindset: When your server runs at 90% memory, fragmentation can cause allocation failures even though enough total memory is free. That's why memory pools and slab allocators exist — they pre-carve fixed sizes to eliminate fragmentation entirely. The TLB (translation lookaside buffer) caches recent page mappings — missing it doubles memory access time.",
-
-        codeExample: `// Simulating paged memory allocation\nclass PagedAllocator {\n  private pageSize = 4096;\n  private freePages: number[] = [];\n\n  constructor(totalMemory: number) {\n    const pageCount = Math.floor(totalMemory / this.pageSize);\n    this.freePages = Array.from({ length: pageCount }, (_, i) => i);\n  }\n\n  allocate(size: number): number | null {\n    const pagesNeeded = Math.ceil(size / this.pageSize);\n    if (pagesNeeded > this.freePages.length) return null;\n    return this.freePages.splice(0, pagesNeeded)[0];\n  }\n\n  free(page: number): void {\n    this.freePages.push(page);\n  }\n\n  // Internal fragmentation: allocated page may have unused bytes\n  internalWaste(size: number): number {\n    return this.pageSize - (size % this.pageSize || this.pageSize);\n  }\n}\n\nconst mem = new PagedAllocator(4096 * 64);\nmem.allocate(1);       // Uses 1 page, wastes 4095 bytes\nmem.allocate(4097);    // Uses 2 pages, wastes 4095 bytes\nconsole.log("Waste for 1 byte:", mem.internalWaste(1));`,
-
-        language: "typescript"
-
-      },
-
-      {
-
-        id: "5",
-
-        title: "Virtual Memory & Page Replacement",
-
-        content: "Your app uses 2GB. The machine has 512MB RAM. How? Virtual memory keeps only active pages in RAM; the rest sit on disk. Access a missing page → PAGE FAULT → OS fetches from disk (~10ms vs ~100ns RAM hit). When your working set exceeds RAM, the system THRASHES — constantly swapping pages in and out, dropping performance 100x. Common exam trap: 'FIFO is simple and fair.' Trap: Belady's Anomaly — adding MORE RAM can INCREASE page faults with FIFO. LRU doesn't have this problem. Engineering mindset: Your database scans 10GB of data with a 1GB buffer pool. That's 90% page faults. The query is slow not because of CPU but because every miss is a disk read. Measure page fault rate, not CPU, to find the real bottleneck.",
-
-        codeExample: `// FIFO vs LRU page replacement — watch Belady's Anomaly\nfunction pageFaults(\n  pages: number[], frames: number, algo: "fifo" | "lru"\n): number {\n  const memory: number[] = [];\n  let faults = 0;\n\n  for (const page of pages) {\n    const idx = memory.indexOf(page);\n    if (idx === -1) {\n      faults++;  // Page fault — fetch from disk\n      if (memory.length >= frames) {\n        algo === "fifo" ? memory.shift() : memory.shift();\n      }\n    } else if (algo === "lru") {\n      memory.splice(idx, 1);  // Move to front\n    }\n    if (idx === -1 || algo === "lru") memory.push(page);\n  }\n  return faults;\n}\n\nconst refs = [1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5];\nconsole.log(\"FIFO 3 frames:\", pageFaults(refs, 3, \"fifo\"));\nconsole.log(\"FIFO 4 frames:\", pageFaults(refs, 4, \"fifo\")); // May increase!\nconsole.log(\"LRU  3 frames:\", pageFaults(refs, 3, \"lru\"));`,
-
-        language: "typescript"
-
-      },
-
-      {
-
-        id: "6",
-
-        title: "Deadlocks",
-
-        content: "Transaction A locks Row 1. Transaction B locks Row 2. A needs Row 2. B needs Row 1. Both wait forever. That's a deadlock. The four Coffman conditions aren't exam trivia — they're your debugging checklist: (1) Mutual exclusion — resource can't be shared, (2) Hold and wait — processes hold resources while waiting, (3) No preemption — can't force a release, (4) Circular wait — cycle in the wait graph. Break ANY ONE and the deadlock dissolves. Common exam trap: 'Banker's algorithm prevents deadlock.' No — it AVOIDS deadlock by checking safety before allocation. Prevention means structurally breaking conditions (e.g., enforcing total resource ordering). Engineering mindset: In production, you don't prevent deadlocks — you DETECT and recover. Set lock timeouts. If a transaction waits >5s, abort and retry. That's real-world deadlock handling.",
-
-        codeExample: `// Wait-for graph deadlock detection using DFS cycle check\nclass WaitForGraph {\n  private graph = new Map<number, Set<number>>();\n\n  wait(process: number, resource: number) {\n    if (!this.graph.has(process))\n      this.graph.set(process, new Set());\n    this.graph.get(process)!.add(resource);\n  }\n\n  release(process: number, resource: number) {\n    this.graph.get(process)?.delete(resource);\n  }\n\n  detectDeadlock(): number[] | null {\n    const visited = new Set<number>();\n    const inStack = new Set<number>();\n\n    const dfs = (node: number): number[] | null => {\n      visited.add(node);\n      inStack.add(node);\n      for (const next of this.graph.get(node) || []) {\n        if (!visited.has(next)) {\n          const cycle = dfs(next);\n          if (cycle) return [...cycle, node];\n        } else if (inStack.has(next)) {\n          return [node, next];  // Cycle found\n        }\n      }\n      inStack.delete(node);\n      return null;\n    };\n\n    for (const node of this.graph.keys()) {\n      if (!visited.has(node)) {\n        const cycle = dfs(node);\n        if (cycle) return cycle;\n      }\n    }\n    return null;\n  }\n}\n\nconst wfg = new WaitForGraph();\nwfg.wait(1, 2); wfg.wait(2, 3);\nwfg.wait(3, 1);  // Creates cycle\nconsole.log(\"Deadlock:\", wfg.detectDeadlock());`,
-
-        language: "typescript"
-
-      },
-
-      {
-
-        id: "7",
-
-        title: "File Systems",
-
-        content: "You delete a file. Run recovery software. Get garbled text. Why? Because 'deleting' just marks the inode as free. The data blocks stay — until overwritten. File systems are data structures on disk: inodes store metadata (size, permissions, block pointers), directories map names to inodes, and the block bitmap tracks free space. Common exam trap: 'A file is just a name for data.' No — a file is an inode pointed to by directory entries (hard links). Different names, same inode, same data. Deleting one 'name' doesn't delete the data until the last link is removed. Engineering mindset: Ext4 uses journaling to prevent corruption — write the intent first, then the data. If the system crashes mid-write, the journal replays incomplete operations. Without journaling, a crash corrupts the entire filesystem metadata structure.",
-
-        codeExample: `// Inode-based filesystem simulation\nclass Inode {\n  constructor(\n    public id: number,\n    public size: number = 0,\n    public blocks: number[] = [],\n    public links: number = 1  // Hard link count\n  ) {}\n}\n\nclass SimpleFS {\n  private inodes = new Map<number, Inode>();\n  private dir = new Map<string, number>();\n  private nextId = 1;\n\n  create(name: string): Inode {\n    const inode = new Inode(this.nextId++);\n    this.inodes.set(inode.id, inode);\n    this.dir.set(name, inode.id);\n    return inode;\n  }\n\n  link(existing: string, newName: string): boolean {\n    const id = this.dir.get(existing);\n    if (!id) return false;\n    this.dir.set(newName, id);\n    this.inodes.get(id)!.links++;\n    return true;  // Same inode — hard link, not copy\n  }\n\n  delete(name: string): boolean {\n    const id = this.dir.get(name);\n    if (!id) return false;\n    const inode = this.inodes.get(id)!;\n    inode.links--;\n    if (inode.links === 0) this.inodes.delete(id);  // Actually freed\n    this.dir.delete(name);\n    return true;\n  }\n}\n\nconst fs = new SimpleFS();\nconst f = fs.create(\"data.txt\");\nfs.link(\"data.txt\", \"backup.txt\");  // Same file, two names\nconsole.log(\"Links after delete:\", f.links);  // Still 2\nfs.delete(\"data.txt\");\nconsole.log(\"Links after one delete:\", f.links);  // Still 1 — data alive`,
-
-        language: "typescript"
-
-      },
-
-      {
-
-        id: "8",
-
-        title: "Synchronization & Concurrency",
-
-        content: "Two threads increment a counter. Thread 1 reads 0, Thread 2 reads 0, Thread 1 writes 1, Thread 2 writes 1. Final value: 1 instead of 2. That's a race condition — and it breaks everything from bank balances to game state. Mutexes fix this by ensuring only one thread enters the critical section at a time. Semaphores generalize this to N threads accessing N identical resources. Common exam trap: 'A mutex and a binary semaphore are the same.' Wrong. A mutex has OWNERSHIP — the same thread must lock and unlock it. A semaphore can be signaled by any thread. Use the wrong one and your code silently corrupts data. Engineering mindset: Lock-free programming (atomic compare-and-swap) avoids mutexes entirely. Databases, kernel schedulers, and high-frequency trading rely on it. But unless you're writing kernel code, just use a mutex. Correctness first, optimization later.",
-
-        codeExample: `// Race condition vs mutex-protected counter\nlet sharedCounter = 0;\nlet safeCounter = 0;\nlet locked = false;\n\nasync function lock() {\n  while (locked) await Promise.resolve();\n  locked = true;\n}\nfunction unlock() { locked = false; }\n\nasync function unsafeIncrement() {\n  for (let i = 0; i < 5000; i++) sharedCounter++;\n}\n\nasync function safeIncrement() {\n  for (let i = 0; i < 5000; i++) {\n    await lock();\n    safeCounter++;  // Only one thread here at a time\n    unlock();\n  }\n}\n\nawait Promise.all([unsafeIncrement(), unsafeIncrement()]);\nawait Promise.all([safeIncrement(), safeIncrement()]);\n\nconsole.log(\"Unsafe:\", sharedCounter);  // ~5000-9000\nconsole.log(\"Safe:\",   safeCounter);     // 10000\n\n// Real mutexes (Pthreads, std::mutex) do this in hardware\n// with atomic compare-and-swap — no busy-waiting loop`,
-
-        language: "typescript"
-
-      },
-
-    ],
-
-  },
+  slug: "operating-systems",
+  title: "Operating Systems",
+  description: "Understand OS fundamentals, processes, memory management, file systems, and concurrency.",
+  icon: "🖥️",
+  color: "from-sky-500 to-cyan-600",
+  category: "Systems",
+  lessons: [
+    {
+      id: "1",
+      title: "Introduction to Operating Systems",
+      content: `## Definition
+
+An **operating system (OS)** is system software that manages computer hardware and provides common services for computer programs. It acts as an intermediary between users and the computer hardware.
+
+## Introduction
+
+Operating systems are the foundation of all computing. They provide the environment in which all other software runs. Modern OSes have evolved from simple batch systems to complex, multitasking, distributed systems that power everything from smartphones to supercomputers.
+
+## History and Establishment
+
+- **1950s**: Early batch systems (IBM 704)
+- **1960s**: Timesharing systems (MIT CTSS)
+- **1970s**: Unix and Windows developed
+- **1980s**: Windows became dominant on PCs, Unix dominated servers
+- **1990s**: Linux kernel development started
+- **2000s**: Mobile OSes (iOS, Android) became important
+- **2010s**: Cloud computing and containerization (Docker, Kubernetes)
+
+## Monolithic vs Microkernel
+
+| Architecture | Description | Example |
+|--------------|-------------|---------|
+| Monolithic | All OS services run in kernel space | Windows NT, older Unix |
+| Microkernel | Minimal kernel, most services are user processes | Mach, modern Linux (via modules) |
+
+## Advantages
+
+- **Monolithic**: Direct system calls, high performance
+- **Microkernel**: Modularity, easier to maintain, more secure
+- **Hybrid**: Many modern OSes use hybrid approaches
+
+## Disadvantages
+
+- **Monolithic**: Single point of failure, harder to debug
+- **Microkernel**: Inter-process communication overhead
+
+## Key Functions
+
+1. **Process Management**: Creating, scheduling, terminating processes
+2. **Memory Management**: Managing physical and virtual memory
+3. **File System Management**: Organizing and accessing files
+4. **Device Management**: Controlling I/O devices
+5. **Security and Access Control**: Managing permissions and authentication
+6. **System Calls**: Interface between applications and OS
+
+## Modern OS Challenges
+
+- **Concurrency**: Supporting multiple processes and threads
+- **Scalability**: Handling increasing numbers of users and devices
+- **Security**: Protecting against malware and unauthorized access
+- **Cloud Integration**: Supporting virtualization and containerization
+- **Mobile Optimization**: Power efficiency and touch interfaces
+
+## Examples
+
+- **Desktop**: Windows 11, macOS, Linux
+- **Mobile**: iOS, Android
+- **Servers**: Windows Server, Linux distributions
+- **Embedded**: FreeRTOS, VxWorks
+
+## Future Trends
+
+- **Wasm (WebAssembly)**: New execution environment for OS services
+- **Quantum OS**: Operating systems for quantum computers
+- **Edge Computing**: OSes for IoT and edge devices
+- **Declarative OS**: Configuration-based OS management`,
+      codeExample: `// Simple process creation example in C
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+int main() {
+    pid_t pid = fork();
+    
+    if (pid < 0) {
+        fprintf(stderr, "Fork failed!\n");
+        return 1;
+    } else if (pid == 0) {
+        // Child process
+        printf("Child process running\n");
+        printf("Child PID: %d\n", getpid());
+        execlp("ls", "ls", "-l", NULL);
+        fprintf(stderr, "Exec failed!\n");
+        return 1;
+    } else {
+        // Parent process
+        int status;
+        waitpid(pid, &status, 0);
+        printf("Parent process waiting for child to complete\n");
+        printf("Child exited with status: %d\n", WEXITSTATUS(status));
+    }
+    
+    return 0;
+}
+
+// Output example:
+// Child process running
+// Child PID: 12345
+// -rw-r--r--  1 user  group  4096 Aug 10 10:00 file.txt
+// Parent process waiting for child to complete
+// Child exited with status: 0`,
+      language: "c"
+    },
+    {
+      id: "2",
+      title: "Processes and Threads",
+      content: `## Definition
+
+A **process** is an instance of a program being executed. It contains the program code, data, stack, and system resources. A **thread** (or lightweight process) is a single sequence of instructions within a process.
+
+## Introduction
+
+Modern operating systems support multitasking — running multiple processes and threads concurrently. Processes are isolated from each other, while threads within the same process share memory and resources.
+
+## History and Establishment
+
+- **1960s**: Multics and early time-sharing systems introduced processes
+- **1970s**: Unix V6 formalized the process concept
+- **1980s**: Threads emerged (Java threads, POSIX threads)
+- **1990s**: Windows NT introduced symmetric multiprocessing (SMP)
+- **2000s**: User-level vs kernel-level threads became standard
+
+## Types
+
+| Type | Description | Example |
+|------|-------------|---------|
+| Process | Heavy-weight, separate address space | Windows Notepad, Safari |
+| Thread | Lightweight, shares process memory | Web page rendering, video decoding |
+| Kernel Thread | Managed by OS kernel | Linux kernel threads |
+| User Thread | Managed by user-level library | Java threads (pre-Java 5) |
+
+## Process States
+
+| State | Description |
+|-------|-------------|
+| New | Process created, not yet running |
+| Ready | Ready to run, waiting for CPU |
+| Running | Currently executing |
+| Blocked | Waiting for I/O or event |
+| Terminated | Finished execution |
+
+## Thread States
+
+| State | Description |
+|-------|-------------|
+| Runnable | Ready to execute |
+| Running | Currently executing |
+| Blocked | Waiting for monitor lock or I/O |
+| Dead | Terminated |
+
+## Process Management Functions
+
+1. **Creation**: Fork, exec, spawn, create process
+2. **Scheduling**: Decide which process runs next
+3. **Synchronization**: Wait for process termination
+4. **Communication**: Pipes, sockets, shared memory
+5. **Termination**: Clean up resources
+
+## Thread Management Functions
+
+1. **Creation**: spawn thread, create thread
+2. **Scheduling**: Thread scheduler decides which thread runs
+3. **Synchronization**: Mutexes, semaphores, condition variables
+4. **Communication**: Shared memory, message queues
+
+## Process vs Thread Comparison
+
+| Aspect | Process | Thread |
+|--------|---------|--------|
+| Memory | Separate address space | Shared address space |
+| Isolation | Fully isolated | Can communicate easily |
+| Overhead | High (context switch cost) | Low (fast context switch) |
+| Creation | Expensive | Cheap |
+| Usage | Main program entry point | Concurrent execution within program |
+
+## Practical Examples
+
+1. **Web Browser**: One process per tab, multiple threads per tab
+2. **Database Server**: Multiple processes handling different clients
+3. **Video Player**: One process, multiple threads (decoding, rendering, networking)
+4. **IDE**: One process with multiple threads (code editing, compilation, debugging)`,
+      codeExample: `// Creating and managing processes in C
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <string.h>
+
+int main() {
+    // Example 1: Simple child process creation
+    pid_t pid = fork();
+    if (pid == 0) {
+        // Child process
+        printf("Child process with PID: %d\n", getpid());
+        // Execute new program (ls)
+        execlp("ls", "ls", "-la", NULL);
+        return 0;
+    } else if (pid > 0) {
+        // Parent process
+        waitpid(pid, NULL, 0);
+        printf("Parent process waiting completed\n");
+    }
+    
+    // Example 2: Multiple child processes
+    printf("Creating multiple child processes...\n");
+    for (int i = 0; i < 3; i++) {
+        pid = fork();
+        if (pid == 0) {
+            printf("Child %d with PID: %d\n", i + 1, getpid());
+            printf("I am child %d\n", i + 1);
+            exit(i + 1);
+        }
+    }
+    
+    // Parent continues
+    for (int i = 0; i < 3; i++) {
+        waitpid(-1, NULL, 0);
+    }
+    
+    printf("All children completed\n");
+    return 0;
+}
+
+// Example 3: Thread creation (pthreads)
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+void* thread_function(void* arg) {
+    int thread_id = *(int*)arg;
+    printf("Thread %d started\n", thread_id);
+    sleep(1);
+    printf("Thread %d finished\n", thread_id);
+    return NULL;
+}
+
+int main() {
+    const int NUM_THREADS = 3;
+    pthread_t threads[NUM_THREADS];
+    int thread_ids[NUM_THREADS];
+    
+    for (int i = 0; i < NUM_THREADS; i++) {
+        thread_ids[i] = i;
+        pthread_create(&threads[i], NULL, thread_function, &thread_ids[i]);
+    }
+    
+    for (int i = 0; i < NUM_THREADS; i++) {
+        pthread_join(threads[i], NULL);
+    }
+    
+    printf("All threads joined\n");
+    return 0;
+}
+
+// Expected output:
+// Thread 0 started
+// Thread 1 started
+// Thread 2 started
+// Thread 0 finished
+// Thread 1 finished
+// Thread 2 finished
+// All threads joined`,
+      language: "c"
+    },
+    {
+      id: "3",
+      title: "Memory Management",
+      content: `## Definition
+
+**Memory management** is the process of allocating, tracking, and deallocating memory in a computer system. It includes both physical memory (RAM) and virtual memory.
+
+## Introduction
+
+Memory is the most expensive resource in computing. Efficient memory management determines how many programs can run simultaneously, how large they can be, and how fast they perform. Modern OSes provide virtual memory abstraction to simplify programming and make memory usage more efficient.
+
+## History and Establishment
+
+- **1950s**: Early memory allocation (first-fit, best-fit algorithms)
+- **1960s**: Virtual memory and paging introduced
+- **1970s**: Demand paging became standard (IBM System/370)
+- **1980s**: Protected memory and memory protection units (MPU)
+- **1990s**: Large address space support (32-bit -> 64-bit)
+- **2000s**: Transparent huge pages, memory overcommit
+
+## Memory Management Techniques
+
+### 1. Allocation Algorithms
+
+| Algorithm | Description | Example |
+|-----------|-------------|---------|
+| First-Fit | Use first available block | Common in malloc() implementations |
+| Best-Fit | Find smallest suitable block | Minimizes fragmentation |
+| Worst-Fit | Find largest block | Reduces fragmentation for small allocations |
+
+### 2. Memory Protection
+
+- **Bounds checking**: Prevent buffer overflows
+- **Segmentation**: Divide memory into segments
+- **Paging**: Fixed-size blocks
+- **Virtual memory**: Abstraction of physical memory
+
+### 3. Swap Space
+
+- **Definition**: Disk space used as overflow memory
+- **Page swapping**: Moving unused pages to disk
+- **Thrashing prevention**: Balancing between memory and disk usage
+
+## Memory Allocation Schemes
+
+### Static Allocation
+
+- **Definition**: Memory size determined at compile time
+- **Advantages**: Simple, no runtime overhead
+- **Disadvantages**: Rigid, can't adapt to varying workloads
+- **Usage**: Global variables, static arrays
+
+### Dynamic Allocation
+
+- **Definition**: Memory allocated at runtime
+- **Advantages**: Flexible, can handle varying data sizes
+- **Disadvantages**: Memory fragmentation, allocation/deallocation overhead
+- **Usage**: Heap allocation via malloc/free, new/delete
+
+### Virtual Memory
+
+- **Concept**: Each process has its own address space
+- **Benefits**:
+  - Larger address space than physical memory
+  - Memory protection between processes
+  - Shared memory between processes
+  - Simplified memory management for programmers
+- **Implementation**:
+  - Page tables
+  - Translation lookaside buffer (TLB)
+  - Demand paging
+  - Page replacement algorithms
+
+## Memory Management Functions
+
+1. **Allocation**: allocate(), malloc(), new()
+2. **Deallocation**: free(), delete()
+3. **Reallocation**: realloc()
+4. **Protection**: mprotect()
+5. **Querying**: brk(), sbrk()
+
+## Page Replacement Algorithms
+
+| Algorithm | Description | Effectiveness |
+|-----------|-------------|--------------|
+| FIFO | First-In, First-Out | Poor for working sets |
+| LRU | Least Recently Used | Good for most cases |
+| Optimal | Replace farthest in future | Theoretical best |
+| Second Chance | Enhanced FIFO | Better than FIFO |
+
+## Memory Fragmentation
+
+### External Fragmentation
+
+- **Definition**: Many small free blocks between allocated blocks
+- **Problem**: Can't satisfy large allocation requests
+- **Solution**: Compaction, paging, better allocation algorithms
+
+### Internal Fragmentation
+
+- **Definition**: Wasted space within allocated blocks
+- **Problem**: Fixed-size allocation units
+- **Solution**: Multiple allocation sizes, buddy system
+
+## Practical Examples
+
+1. **Malloc in C**: Implementation of malloc, free, realloc
+2. **Memory pools**: Pre-allocated blocks for performance-critical applications
+3. **Smart pointers**: Automatic memory management in C++
+4. **Garbage collection**: Automatic memory reclamation in managed languages
+
+## Memory Management APIs
+
+- **Unix/Linux**: malloc(), free(), mmap(), mprotect()
+- **Windows**: VirtualAlloc(), HeapAlloc(), HeapFree()
+- **POSIX Threads**: pthread_attr_setstack()
+- **Java**: System.gc(), Memory.allocate()
+- **C++**: new, delete, std::allocator
+
+## Future Trends
+
+- **Memory pooling**: Reducing allocation overhead
+- **NUMA optimization**: Handling non-uniform memory architectures
+- **Memory persistence**: Persistent memory (NVMe, Intel Optane)
+- **AI-driven management**: Machine learning for memory optimization`,
+      codeExample: `// Memory allocation in C
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int *arr1 = (int*)malloc(10 * sizeof(int));
+    if (!arr1) {
+        fprintf(stderr, "Memory allocation failed!\n");
+        return 1;
+    }
+    
+    for (int i = 0; i < 10; i++) arr1[i] = i * 2;
+    
+    for (int i = 0; i < 10; i++) printf("%d ", arr1[i]);
+    printf("\n");
+    
+    // Reallocation
+    int *arr2 = (int*)realloc(arr1, 20 * sizeof(int));
+    if (!arr2) {
+        free(arr1);
+        fprintf(stderr, "Memory reallocation failed!\n");
+        return 1;
+    }
+    arr1 = arr2;
+    
+    for (int i = 10; i < 20; i++) arr1[i] = i * 3;
+    
+    for (int i = 0; i < 20; i++) printf("%d ", arr1[i]);
+    printf("\n");
+    
+    free(arr1);
+    return 0;
+}
+
+// Buddy System Implementation
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+#define MAX_ORDER 10  // Maximum block order (2^10 = 1024 bytes)
+
+typedef struct Block {
+    size_t size;    // Size of the block (including header)
+    int order;     // Order of the block (2^order bytes)
+    struct Block* next;  // Next free block
+    struct Block* prev;  // Previous free block
+    int free;      // 1 if free, 0 if allocated
+    void* data;     // Actual data
+} Block;
+
+Block* buddy_pool = NULL;
+
+Block* get_buddy(Block* block, int order) {
+    size_t offset = block->size * (1 << order);
+    if ((size_t)block + offset == (size_t)block - block->size) {
+        return (Block*)((size_t)block + offset);
+    }
+    return (Block*)((size_t)block - offset);
+}
+
+void* my_malloc(size_t size) {
+    // Round up size to nearest power of 2
+    int order = 0;
+    while ((1 << order) < size + sizeof(Block)) order++;
+    
+    // Find suitable block
+    Block *curr = buddy_pool;
+    while (curr) {
+        if (curr->free && curr->order == order) {
+            // Found suitable block
+            curr->free = 0;
+            return curr->data;
+        }
+        curr = curr->next;
+    }
+    
+    // Need to allocate new block
+    size_t total_size = 1 << (order + 3);  // Add header overhead
+    Block* new_block = (Block*)malloc(total_size);
+    if (!new_block) return NULL;
+    
+    new_block->size = total_size;
+    new_block->order = order;
+    new_block->free = 0;
+    new_block->data = (void*)((size_t)new_block + sizeof(Block));
+    new_block->next = buddy_pool;
+    if (buddy_pool) buddy_pool->prev = new_block;
+    buddy_pool = new_block;
+    
+    return new_block->data;
+}
+
+void my_free(void* ptr) {
+    if (!ptr) return;
+    
+    Block* block = (Block*)((size_t)ptr - sizeof(Block));
+    block->free = 1;
+    
+    // Merge with buddies
+    int order = block->order;
+    Block* buddy = get_buddy(block, order);
+    while (buddy && buddy->free && buddy->order == order) {
+        if ((size_t)block < (size_t)buddy) {
+            Block* temp = buddy->next;
+            block->next = temp;
+            if (temp) temp->prev = block;
+            buddy->next = NULL;
+            buddy->prev = NULL;
+            buddy->free = 0;
+            block->size += buddy->size;
+            block->order++;
+        } else {
+            Block* temp = block->next;
+            buddy->next = temp;
+            if (temp) temp->prev = buddy;
+            block->next = NULL;
+            block->prev = NULL;
+            block->free = 0;
+            buddy->size += block->size;
+            buddy->order++;
+            block = buddy;
+        }
+    }
+}
+
+int main() {
+    int *ptr1 = (int*)my_malloc(100);
+    int *ptr2 = (int*)my_malloc(200);
+    int *ptr3 = (int*)my_malloc(50);
+    
+    *ptr1 = 10; *ptr2 = 20; *ptr3 = 30;
+    
+    printf("Values: %d, %d, %d\n", *ptr1, *ptr2, *ptr3);
+    
+    my_free(ptr3);
+    my_free(ptr2);
+    my_free(ptr1);
+    
+    return 0;
+}
+
+// Output:
+// Values: 10, 20, 30`,
+      language: "c"
+    },
+    {
+      id: "4",
+      title: "File Systems",
+      content: `## Definition
+
+A **file system** is a method of organizing and storing computer files on a storage device. It provides a logical view of physical data on a block device or partition.
+
+## Introduction
+
+File systems are the backbone of modern computing. They organize data, manage access permissions, support directories and hierarchical structures, and ensure data integrity and recovery. Every operating system includes a file system to manage persistent storage.
+
+## History and Establishment
+
+- **1950s**: First file systems (IBM 350 RAMAC)
+- **1960s**: UNIX file system (UFS) became standard
+- **1970s**: NTFS developed by Microsoft
+- **1980s**: HFS+ (Mac OS Extended)
+- **1990s**: ext4, NTFS, exFAT became widespread
+- **2000s**: Case-sensitive vs case-insensitive file systems
+- **2010s**: APFS, ReFS, exFAT improved for large files
+
+## File System Components
+
+### 1. Superblock
+
+- **Definition**: Metadata about the file system
+- **Contents**: Block size, total blocks, free blocks, inodes
+- **Importance**: Critical for file system integrity and recovery
+
+### 2. Inodes (Index Nodes)
+
+- **Definition**: Data structure storing file metadata
+- **Contents**: Permissions, ownership, size, timestamps, block pointers
+- **Example**: Inode number for "file.txt" in ext4: 12345
+
+### 3. Data Blocks
+
+- **Definition**: Actual file data storage
+- **Types**:
+  - Direct blocks: Direct file pointers
+  - Indirect blocks: Single-level indirect pointers
+  - Double indirect blocks: Two-level indirect pointers
+  - Triple indirect blocks: Three-level indirect pointers
+
+### 4. Directories
+
+- **Definition**: Special files containing entries mapping filenames to inodes
+- **Structure**: DOT (.), DOTDOT (..) entries, file entries
+- **Permissions**: Read, write, execute permissions
+
+## File System Types
+
+### 1. Hierarchical File Systems
+
+- **Definition**: Tree-like directory structure
+- **Examples**: Unix-like systems, Windows
+- **Advantages**:
+  - Logical organization
+  - Easy navigation
+  - Support for long file names
+
+### 2. Flat File Systems
+
+- **Definition**: All files stored directly in root directory
+- **Advantages**:
+  - Simpler implementation
+  - Faster directory operations
+- **Disadvantages**:
+  - Hard to organize large numbers of files
+  - Poor support for nested structures
+
+### atosensory File Systems
+
+- **Definition**: File system that presents a uniform view across storage devices
+- **Examples**: NFS, SMB, FTP
+- **Advantages**:
+  - Remote file access
+  - Network collaboration
+  - Transparent access to distributed files
+
+### 4. journaling File Systems
+
+- **Definition**: File system that maintains transaction log
+- **Examples**: ext3, ext4, NTFS
+- **Advantages**:
+  - Faster recovery after crashes
+  - Reduced file system corruption
+
+## File Operations
+
+### 1. Creation
+
+- **Purpose**: Create new files
+- **Functions**: creat(), fopen(), open()
+- **Parameters**: Path, permissions, flags
+
+### 2. Reading
+
+- **Purpose**: Read file content
+- **Functions**: read(), fread(), open() with read
+- **Methods**: Buffered, unbuffered
+
+### 3. Writing
+
+- **Purpose**: Write file content
+- **Functions**: write(), fwrite(), open() with write
+- **Methods**: Append, overwrite
+
+### 4. Deletion
+
+- **Purpose**: Remove files
+- **Functions**: remove(), unlink(), delete()
+
+### 5. Renaming/Moving
+
+- **Purpose**: Change file names or locations
+- **Functions**: rename(), mv(), renameat()
+
+## File Permissions
+
+### UNIX/Linux Permissions
+
+| Character | Owner | Group | Others |
+|-----------|-------|-------|--------|
+| r | Read | Read | Read |
+| w | Write | Write | Write |
+| x | Execute | Execute | Execute |
+
+### Windows Permissions
+
+- **Security Descriptor**: ACL-based permissions
+- **Access Control Entries**: User/group permissions
+- **Inheritable Permissions**: Propagated to sub-objects
+
+## File System Metadata
+
+### 1. timestamps
+
+- **Creation Time**: When file was first created
+- **Modification Time**: When file was last modified
+- **Access Time**: When file was last read
+- **Change Time**: When file's metadata was last changed
+
+### 2. File Size
+
+- **Bytes**: Total file size in bytes
+- **Blocks**: Number of disk blocks used
+
+### 3. Ownership
+
+- **User ID**: ID of file owner
+- **Group ID**: ID of file group
+- **Permissions**: Read, write, execute bits
+
+## File System Structures
+
+### 1. FAT (File Allocation Table)
+
+- **Structure**: Simple, easily damaged
+- **Usage**: USB drives, embedded systems
+- **Limitations**: File size limits (4GB for FAT32)
+
+### 2. ext4 (Fourth Extended)
+
+- **Structure**: Journaling file system
+- **Features**: Extent-based allocation, large files, fast directories
+- **Usage**: Linux default file system
+
+### 3. NTFS (New Technology File System)
+
+- **Structure**: Advanced features
+- **Features**: Encryption (EFS), compression, disk quotas
+- **Usage**: Windows NT/2000/XP/Vista/7/8/10/11
+
+### 4. APFS (Apple File System)
+
+- **Structure**: Designed for Apple devices
+- **Features**: Space efficiency, crash protection, snapshots
+- **Usage**: macOS, iOS
+
+## File System Operations
+
+### 1. File Creation
+
+\**\**\`c
+int fd = open("file.txt", O_CREAT | O_WRONLY, 0644);
+\**\**\`
+
+### 2. Writing to File
+
+\**\**\`c
+write(fd, buffer, size, 0);
+\**\**\`
+
+### 3. Reading from File
+
+\**\**\`c
+char buffer[100];
+read(fd, buffer, sizeof(buffer), 0);
+\**\**\`
+
+### 4. Closing File
+
+\**\**\`c
+close(fd);
+\**\**\`
+
+## File System Examples
+
+### 1. ls Command
+
+\**\**\`bash
+ls -la          # List all files with permissions
+ls -la /home    # List home directory files
+\**\**\`
+
+### 2. mkdir Command
+
+\**\**\`bash
+mkdir directory_name    # Create directory
+mkdir -p path/to/dir    # Create parent directories
+\**\**\`
+
+### 3. rm Command
+
+\**\**\`bash
+rm file.txt                    # Remove file
+rm -r directory_name           # Remove directory and contents
+\**\**\`
+
+### 4. cp Command
+
+\**\**\`bash
+cp source.txt destination.txt    # Copy file
+cp -r source_dir destination_dir  # Copy directory
+\**\**\`
+
+## File System Security
+
+### 1. Access Control
+
+- **File Permissions**: Restrict who can read, write, execute
+- **Capabilities**: Additional security mechanism
+- **SELinux**: Mandatory Access Control
+
+### 2. File System Encryption
+
+- **LUKS**: Linux Unified Key Setup
+- **FileVault**: Windows encryption
+- **APFS Cipher**: Apple file system encryption
+
+### 3. Digital Signatures
+
+- **Timestamps**: Prove file existence at a specific time
+- **Checksums**: Verify file integrity
+- **Hashes**: Create file fingerprints
+
+## File System Monitoring
+
+### 1. df Command
+
+\**\**\`bash
+df -h               # Show disk free space
+df -i              # Show inode free space
+\**\**\`
+
+### 2. du Command
+
+\**\**\`bash
+du -sh directory_name           # Show directory size
+du -sh --apparent directory_name  # Show apparent size
+\**\**\`
+
+## File System Recovery
+
+### 1. fsck Command
+
+\**\**\`bash
+fsck /dev/sda1              # Check file system
+\**\**\`
+
+### 2. Data Recovery
+
+- **Tools**: TestDisk, Photorec
+- **Techniques**: Sector-by-sector recovery
+- **Limitations**: Cannot recover from hardware damage
+
+## Future Trends
+
+- **Overlay File Systems**: Virtual file systems on top of others
+- **Distributed File Systems**: HDFS, Ceph
+- **Software-Defined Storage**: Storage virtualization
+- **Quantum File Systems**: Quantum computing integration
+
+## File System APIs
+
+### 1. POSIX File API
+
+- **Functions**: open(), close(), read(), write(), seek()
+- **Headers**: <fcntl.h>, <unistd.h>, <sys/types.h>
+
+### 2. Windows API
+
+- **Functions**: CreateFile(), ReadFile(), WriteFile()
+- **Headers**: <windows.h>, <fileapi.h>
+
+### 3. Python File API
+
+- **Functions**: open(), read(), write(), close()
+- **Example**: \**with open("file.txt") as f: f.write("Hello")\**
+
+## File System Performance Considerations
+
+### 1. Block Size
+
+- **Small blocks**: Efficient for small files
+- **Large blocks**: Efficient for large files
+- **Trade-off**: Space efficiency vs. fragmentation
+
+### 2. Directory Structure
+
+- **Deep directories**: Slower access
+- **Wide directories**: Hard to manage
+- **Trade-off**: Organization vs. performance
+
+### 3. Journaling
+
+- **Trade-off**: Safety vs. performance
+- **Options**: Force journaling, write-back, read-only
+
+## File System Examples
+
+### 1. Simple File Operations in C
+
+\**\**\`c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    FILE *file = fopen("example.txt", "w");
+    if (file == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+    
+    fprintf(file, "Hello, World!\n");
+    
+    fclose(file);
+    return 0;
+}
+\**\**\`
+
+### 2. File Operations in Python
+
+\**\**\`python
+def file_operations():
+    # Write to file
+    with open("example.txt", "w") as f:
+        f.write("Hello, World!\n")
+    
+    # Read from file
+    with open("example.txt", "r") as f:
+        content = f.read()
+        print(content)
+\**\**\`
+
+### 3. File Operations in Java
+
+\**\**\`java
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.BufferedReader;
+
+public class FileExample {
+    public static void main(String[] args) throws Exception {
+        FileWriter fw = new FileWriter("example.txt");
+        BufferedWriter bw = new BufferedWriter(fw);
+        
+        bw.write("Hello, World!");
+        bw.newLine();
+        
+        bw.close();
+        
+        FileReader fr = new FileReader("example.txt");
+        BufferedReader br = new BufferedReader(fr);
+        
+        String line;
+        while ((line = br.readLine()) != null) {
+            System.out.println(line);
+        }
+        
+        br.close();
+    }
+}
+\**\**\`
+
+## Conclusion
+
+File systems are fundamental to modern computing. They provide the foundation for data storage, organization, and access. Understanding file system concepts is essential for developing robust, efficient, and secure applications.`,
+      codeExample: `// File operations in C
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+    FILE *file = fopen("example.txt", "w");
+    if (file == NULL) {
+        perror("Error opening file");
+        return 1;
+    }
+    
+    // Write to file
+    fprintf(file, "Hello, World!\n");
+    fprintf(file, "This is a test file.\n");
+    
+    fclose(file);
+    
+    // Read from file
+    file = fopen("example.txt", "r");
+    if (file == NULL) {
+        perror("Error opening file for reading");
+        return 1;
+    }
+    
+    char buffer[100];
+    while (fgets(buffer, sizeof(buffer), file) != NULL) {
+        printf("%s", buffer);
+    }
+    
+    fclose(file);
+    return 0;
+}
+
+// Output:
+// Hello, World!
+// This is a test file.
+
+// File operations in Python
+
+def file_operations():
+    # Write to file
+    with open("example.txt", "w") as f:
+        f.write("Hello, World!\n")
+        f.write("This is a test file.\n")
+    
+    # Read from file
+    with open("example.txt", "r") as f:
+        content = f.read()
+        print(content)
+
+// Output:
+// Hello, World!
+// This is a test file.
+
+// File operations in Java
+
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.IOException;
+
+public class FileExample {
+    public static void main(String[] args) {
+        try {
+            FileWriter fw = new FileWriter("example.txt");
+            BufferedWriter bw = new BufferedWriter(fw);
+            
+            bw.write("Hello, World!");
+            bw.newLine();
+            bw.write("This is a test file.");
+            
+            bw.close();
+            
+            FileReader fr = new FileReader("example.txt");
+            BufferedReader br = new BufferedReader(fr);
+            
+            String line;
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+            
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+// Output:
+// Hello, World!
+// This is a test file.
+
+// File system commands example
+
+// Create a directory
+mkdir -p directory_name
+
+// Copy a file
+cp source.txt destination.txt
+
+// List directory contents
+ls -la
+ds -sh directory_name
+
+// Check disk space
+df -h
+
+// Remove a file
+rm file.txt
+
+// Rename a file
+mv old_name.txt new_name.txt`,
+      language: "c"
+    },
+    {
+      id: "5",
+      title: "Virtual Memory",
+      content: `## Definition
+
+**Virtual memory** is a memory management technique that provides an idealized, uniform view of memory to processes. It allows a process to have a larger address space than physically available in RAM.
+
+## Introduction
+
+Virtual memory is a fundamental concept in modern operating systems. It enables programs to use more memory than physically available by using disk space as an extension of RAM. It also provides memory isolation between processes and simplifies memory allocation.
+
+## History and Establishment
+
+- **1960s**: Introduction of virtual memory (IBM System/360 Model 67)
+- **1970s**: Demand paging became standard
+- **1980s**: Paging hardware support in microprocessors
+- **1990s**: Large address space support (32-bit -> 64-bit)
+- **2000s**: Transparent huge pages, memory overcommit
+- **2010s**: Software-defined memory, memory pooling
+
+## Virtual Memory Concepts
+
+### 1. Page-Based Virtual Memory
+
+- **Definition**: Memory divided into fixed-size pages (typically 4KB)
+- **Advantage**: Simple, efficient, and easy to manage
+- **Typical Page Size**: 4KB (x86), 8KB (ARM)
+
+### 2. Address Translation
+
+- **Definition**: Mapping virtual addresses to physical addresses
+- **Mechanism**: Page tables, translation lookaside buffer (TLB)
+- **Process**: Every memory access requires address translation
+
+### 3. Demand Paging
+
+- **Definition**: Load pages only when needed (not in advance)
+- **Trigger**: Page fault when accessing non-existent page
+- **Performance Impact**: Page faults cause context switches
+
+## Virtual Memory Components
+
+### 1. Page Table
+
+- **Definition**: Data structure mapping virtual page numbers to physical frames
+- **Structure**: Contains page frame number, valid bit, protection bits
+- **Types**:
+  - Single-level page table
+  - Multi-level page table (hierarchical)
+  - Hashed page table
+  - Inverted page table
+
+### 2. Translation Lookaside Buffer (TLB)
+
+- **Definition**: Cache for page table entries
+- **Purpose**: Speed up address translation
+- **Structure**: associative memory (content-addressable memory)
+
+### 3. Swap Space
+
+- **Definition**: Disk space used for page out (swap out)
+- **Location**: Usually a dedicated partition or file
+- **Management**: OS decides when to swap pages
+
+### 4. Memory Management Unit (MMU)
+
+- **Definition**: Hardware component for address translation
+- **Functions**: Page table management, protection, caching
+- **Location**: Integrated into most modern CPUs
+
+## Virtual Memory Operations
+
+### 1. Page Fault Handling
+
+1. Trigger: Access to non-present page
+2. Find free frame or evict existing page
+3. Load page from swap/disk into frame
+4. Update page table
+5. Resume process
+
+### 2. Page Replacement
+
+- **Goal**: Choose victim page when no free frame available
+- **Algorithms**:
+  - FIFO: First-In-First-Out
+  - LRU: Least Recently Used
+  - Optimal: Replace page used farthest in future
+  - Second Chance: Enhanced FIFO
+  - Clock: Circular scan algorithm
+
+### 3. Belady's Anomaly
+
+- **Definition**: Some page replacement algorithms perform worse with more frames
+- **Example**: FIFO algorithm
+
+## Virtual Memory Functions
+
+### 1. Page Allocation
+
+- **Function**: Allocate frames for pages
+- **API**: mmap(), brk(), sbrk()
+- **Management**: Page frame allocation
+
+### 2. Page Deallocation
+
+- **Function**: Return frames to free pool
+- **API**: munmap(), brk()
+- **Management**: Frame reuse
+
+### 3. Page Protection
+
+- **Function**: Set protection attributes for pages
+- **API**: mprotect()
+- **Protection**: Read, write, execute permissions
+
+### 4. Address Space Management
+
+- **Function**: Manage process address spaces
+- **API**: exec(), fork()
+- **Management**: Process creation, destruction
+
+## Virtual Memory Algorithms
+
+### 1. Optimal Page Replacement (Belady's Algorithm)
+
+\**\**\`c
+int optimal_page_replacement(int pages[], int n, int frames) {
+    int hits = 0;
+    vector<int> frames;
+    
+    for (int i = 0; i < n; i++) {
+        int page = pages[i];
+        if (find(frames.begin(), frames.end(), page) != frames.end()) {
+            hits++;
+        } else {
+            if (frames.size() < frames) {
+                frames.push_back(page);
+            } else {
+                int future_idx = -1;
+                for (int j = i + 1; j < n; j++) {
+                    if (find(frames.begin(), frames.end(), pages[j]) != frames.end()) {
+                        future_idx = j;
+                        break;
+                    }
+                }
+                if (future_idx == -1) {
+                    frames[0] = page;
+                } else {
+                    int pos = find(frames.begin(), frames.end(), pages[future_idx]) - frames.begin();
+                    frames[pos] = page;
+                }
+            }
+        }
+    }
+    
+    return hits;
+}
+\**\**\`
+
+### 2. LRU Page Replacement
+
+\**\**\`c
+#include <unordered_map>
+#include <list>
+
+class LRUCache {
+private:
+    int capacity;
+    list<pair<int, int>> lru_list;
+    unordered_map<int, list<pair<int, int>>::iterator> cache_map;
+    
+public:
+    LRUCache(int cap) : capacity(cap) {}
+    
+    int get(int key) {
+        if (cache_map.find(key) == cache_map.end()) return -1;
+        
+        int value = cache_map[key]->second;
+        lru_list.splice(lru_list.begin(), lru_list, cache_map[key]);
+        return value;
+    }
+    
+    void put(int key, int value) {
+        if (cache_map.find(key) != cache_map.end()) {
+            lru_list.splice(lru_list.begin(), lru_list, cache_map[key]);
+            cache_map[key]->second = value;
+            return;
+        }
+        
+        if (cache_map.size() >= capacity) {
+            int lru_key = lru_list.back().first;
+            lru_list.pop_back();
+            cache_map.erase(lru_key);
+        }
+        
+        lru_list.emplace_front(key, value);
+        cache_map[key] = lru_list.begin();
+    }
+};
+\**\**\`
+
+### 3. Working Set Model
+
+\**\**\`c
+struct WorkingSet {
+    int min_time;
+    int max_time;
+    bool contains(int page) {
+        return page >= min_time && page <= max_time;
+    }
+};
+\**\**\`
+
+### 4. Clock Page Replacement Algorithm
+
+\**\**\`c
+class ClockAlgorithm {
+private:
+    vector<bool> referenced_bits;
+    int pointer;
+    int frame_count;
+    
+public:
+    ClockAlgorithm(int frames) {
+        referenced_bits = vector<bool>(frames, false);
+        pointer = 0;
+        frame_count = frames;
+    }
+    
+    int reference_page(int page) {
+        int victim = -1;
+        bool found_free = false;
+        
+        while (victim == -1 && !found_free) {
+            if (!referenced_bits[pointer]) {
+                victim = pointer;
+                referenced_bits[pointer] = true;
+                found_free = true;
+            } else {
+                referenced_bits[pointer] = false;
+                pointer = (pointer + 1) % frame_count;
+            }
+        }
+        
+        if (found_free) {
+            return -1; // No replacement, just marked referenced
+        } else {
+            return victim;
+        }
+    }
+};
+\**\**\`
+
+## Virtual Memory Issues
+
+### 1. Thrashing
+
+- **Definition**: Excessive paging causing severe performance degradation
+- **Symptoms**: High page fault rate, low CPU utilization
+- **Causes**: Insufficient memory, poor page replacement algorithm
+- **Solutions**: Working set model, page fault frequency
+
+### 2. Belady's Anomaly
+
+- **Definition**: Some page replacement algorithms perform worse with more frames
+- **Example**: FIFO algorithm
+- **Impact**: Non-monotonic behavior
+
+### 3. TLB Miss
+
+- **Definition**: Page table miss when looking up TLB
+- **Impact**: Additional memory access required
+- **Solution**: Large TLB entries, software-managed TLB
+
+## Virtual Memory Architectures
+
+### 1. Two-Level Paging
+
+- **Structure**: Page directory + page tables
+- **Benefit**: Reduced page table memory usage
+- **Example**: x86 architecture
+
+### 2. Three-Level Paging
+
+- **Structure**: Page directory + page middle directory + page tables
+- **Benefit**: Even larger virtual address spaces
+- **Example**: 64-bit architectures
+
+### 3. Inverted Page Table
+
+- **Structure**: Hash table mapping physical frames to virtual pages
+- **Benefit**: Reduced memory usage
+- **Example**: Some RISC architectures
+
+## Virtual Memory APIs
+
+### 1. POSIX Shared Memory
+
+\**\**\`c
+#include <sys/mman.h>
+
+// Create shared memory
+void *ptr = mmap(NULL, SIZE, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+
+// Use shared memory
+memcpy(ptr, data, SIZE);
+
+// Destroy shared memory
+munmap(ptr, SIZE);
+\**\**\`
+
+### 2. Windows Virtual Memory
+
+\**\**\`c
+#include <windows.h>
+
+// Allocate virtual memory
+LPVOID ptr = VirtualAlloc(NULL, SIZE, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+
+// Use virtual memory
+memcpy(ptr, data, SIZE);
+
+// Free virtual memory
+VirtualFree(ptr, SIZE, MEM_RELEASE);
+\**\**\`
+
+### 3. Java Virtual Memory
+
+\**\**\`java
+// Use ByteBuffer for virtual memory-like operations
+ByteBuffer buffer = ByteBuffer.allocateDirect(SIZE);
+
+// Use memory-mapped file
+FileChannel channel = FileChannel.open(Paths.get("file.txt"), StandardOpenOption.READ);
+MappedByteBuffer mapped = channel.map(MapMode.READ_ONLY, 0, channel.size());
+
+// Use direct buffer
+DirectByteBuffer buf = (DirectByteBuffer) mapped;
+\**\**\`
+
+## Virtual Memory Optimization
+
+### 1. Page Size Optimization
+
+- **Small Pages**: Better for small working sets
+- **Large Pages**: Better for large working sets
+- **Trade-off**: Memory waste vs. TLB efficiency
+
+### 2. TLB Optimization
+
+- **Large TLB Entries**: Reduced TLB misses
+- **Software-Managed TLB**: Dynamic TLB management
+- **Multi-Level TLB**: Hierarchical TLB organization
+
+### 3. Working Set Optimization
+
+- **Working Set Size**: Estimating process memory requirements
+- **Page Fault Frequency**: Controlling page fault rate
+- **Load Management**: Balancing memory demand and supply
+
+## Virtual Memory Examples
+
+### 1. Page Fault Example
+
+\**\**\`c
+// Program that triggers page fault
+int main() {
+    int size = 1000000; // Large array
+    int *array = new int[size]; // This may cause page fault
+    
+    for (int i = 0; i < size; i++) {
+        array[i] = i * i; // Access elements
+    }
+    
+    return 0;
+}
+\**\**\`
+
+### 2. TLB Miss Example
+
+\**\**\`c
+// Program that causes TLB miss
+void process_large_array(int size) {
+    int *array = new int[size];
+    
+    for (int i = 0; i < size; i++) {
+        // This causes TLB miss
+        printf("%d ", array[i]);
+    }
+    
+    delete[] array;
+}
+\**\**\`
+
+### 3. Page Replacement Example
+
+\**\**\`c
+void page_replacement_example() {
+    int pages[] = {7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2};
+    int frames = 4;
+    int faults = 0;
+    
+    int current_frames[4] = {-1, -1, -1, -1};
+    
+    for (int i = 0; i < 12; i++) {
+        int page = pages[i];
+        bool found = false;
+        
+        for (int j = 0; j < frames; j++) {
+            if (current_frames[j] == page) {
+                found = true;
+                break;
+            }
+        }
+        
+        if (!found) {
+            int lru_idx = 0;
+            for (int j = 1; j < frames; j++) {
+                // Find LRU
+            }
+            
+            current_frames[lru_idx] = page;
+            faults++;
+        }
+    }
+    
+    printf("Page faults: %d\n", faults);
+}
+\**\**\`
+
+## Virtual Memory Programming
+
+### 1. Memory Mapping
+
+\**\**\`c
+#include <sys/mman.h>
+#include <fcntl.h>
+#include <stdio.h>
+
+int main() {
+    const char *filename = "data.bin";
+    size_t file_size = 1024; // 1KB
+    
+    int fd = open(filename, O_RDWR | O_CREAT, 0644);
+    if (fd == -1) {
+        perror("open");
+        return 1;
+    }
+    
+    // Resize file
+    if (ftruncate(fd, file_size) == -1) {
+        perror("ftruncate");
+        close(fd);
+        return 1;
+    }
+    
+    // Memory map file
+    void *ptr = mmap(NULL, file_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    if (ptr == MAP_FAILED) {
+        perror("mmap");
+        close(fd);
+        return 1;
+    }
+    
+    // Use mapped memory
+    char *data = (char *)ptr;
+    for (size_t i = 0; i < file_size; i++) {
+        data[i] = i % 256;
+    }
+    
+    // Unmap memory
+    munmap(ptr, file_size);
+    
+    close(fd);
+    
+    return 0;
+}
+\**\**\`
+
+### 2. Custom Allocator
+
+\**\**\`c
+#include <stdlib.h>
+#include <stdio.h>
+
+#define ALIGNMENT 16  // 16-byte alignment
+
+typedef struct Block {
+    size_t size;
+    int free;
+    struct Block *next;
+} Block;
+
+Block *head = NULL;
+
+void *my_malloc(size_t size) {
+    size_t total_size = size + sizeof(Block) + ALIGNMENT - 1;
+    size_t aligned_size = (total_size + ALIGNMENT - 1) & ~(ALIGNMENT - 1);
+    
+    Block *current = head;
+    Block *prev = NULL;
+    
+    while (current != NULL) {
+        if (current->free && current->size >= aligned_size) {
+            if (current->size == aligned_size) {
+                current->free = 0;
+                return (void *)(current + 1);
+            } else {
+                Block *new_block = (Block *)((char *)current + aligned_size);
+                new_block->size = current->size - aligned_size;
+                new_block->free = 1;
+                new_block->next = current->next;
+                
+                current->size = aligned_size;
+                current->free = 0;
+                current->next = new_block;
+                
+                return (void *)(current + 1);
+            }
+        }
+        
+        prev = current;
+        current = current->next;
+    }
+    
+    Block *new_block = (Block *)malloc(aligned_size);
+    if (!new_block) return NULL;
+    
+    new_block->size = aligned_size;
+    new_block->free = 0;
+    new_block->next = NULL;
+    
+    if (prev) prev->next = new_block;
+    else head = new_block;
+    
+    return (void *)(new_block + 1);
+}
+
+void my_free(void *ptr) {
+    if (!ptr) return;
+    
+    Block *block = (Block *)ptr - 1;
+    block->free = 1;
+    
+    Block *current = head;
+    while (current != NULL && current->next != NULL) {
+        if (current->next == block) {
+            current->next = block->next;
+            break;
+        }
+        current = current->next;
+    }
+    
+    // Try to merge with next free block
+    if (block->next && block->next->free) {
+        block->size += block->next->size;
+        block->next = block->next->next;
+    }
+}
+
+int main() {
+    int *a = (int *)my_malloc(sizeof(int) * 10);
+    int *b = (int *)my_malloc(sizeof(int) * 20);
+    int *c = (int *)my_malloc(sizeof(int) * 5);
+    
+    for (int i = 0; i < 10; i++) a[i] = i;
+    for (int i = 0; i < 20; i++) b[i] = i * 2;
+    for (int i = 0; i < 5; i++) c[i] = i * 3;
+    
+    printf("Array a: ");
+    for (int i = 0; i < 10; i++) printf("%d ", a[i]);
+    printf("\n");
+    
+    my_free(c);
+    my_free(b);
+    my_free(a);
+    
+    return 0;
+}
+\**\**\`
+
+### 3. Page Fault Handler
+
+\**\**\`c
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/mman.h>
+
+void page_fault_handler(int sig, siginfo_t *info, void *context) {
+    printf("Page fault at address: %p\n", info->si_addr);
+    
+    // Allocate page
+    void *page = mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    if (page == MAP_FAILED) {
+        perror("mmap");
+        exit(1);
+    }
+    
+    // Handle page fault
+    // ...
+    
+    // Return from handler
+    sigreturn(context);
+}
+
+int main() {
+    struct sigaction sa;
+    sa.sa_sigaction = page_fault_handler;
+    sa.sa_flags = SA_SIGINFO;
+    
+    if (sigaction(SIGSEGV, &sa, NULL) == -1) {
+        perror("sigaction");
+        return 1;
+    }
+    
+    // Trigger page fault
+    int *arr = (int *)mmap(NULL, sizeof(int) * 1000000, 
+                           PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    
+    if (arr == MAP_FAILED) {
+        perror("mmap");
+        return 1;
+    }
+    
+    // Access array to trigger page fault
+    for (int i = 0; i < 1000000; i++) {
+        arr[i] = i;
+    }
+    
+    munmap(arr, sizeof(int) * 1000000);
+    
+    return 0;
+}
+\**\**\`
+
+## Virtual Memory Best Practices
+
+### 1. Use Appropriate Allocation Functions
+
+- **malloc/free**: General-purpose memory allocation
+- **calloc**: Allocate and initialize to zero
+- **realloc**: Resize allocated memory
+- **mmap**: Memory map files
+
+### 2. Use Virtual Memory Wisely
+
+- **mmap**: Use for large files, shared memory
+- **munmap**: Always unmap memory when done
+- **mprotect**: Control memory permissions
+- **mlock**: Lock memory in RAM (for real-time applications)
+
+### 3. Handle Errors
+
+- **Check return values**: Always check malloc, mmap return values
+- **Handle signals**: Handle SIGSEGV for custom page fault handling
+- **Use safe functions**: Use bounds checking functions
+
+### 4. Performance Optimization
+
+- **Minimize allocations**: Allocate memory in large blocks
+- **Reuse memory**: Reuse memory when possible
+- **Use pools**: Use memory pools for performance-critical code
+
+## Virtual Memory Summary
+
+Virtual memory is a fundamental OS feature that provides:
+
+1. **Abstraction**: Simplifies memory management
+2. **Protection**: Isolates processes from each other
+3. **Efficiency**: Optimizes memory usage
+4. **Flexibility**: Supports large applications
+
+Key concepts:
+
+- **Paging**: Memory divided into fixed-size pages
+- **Demand Paging**: Load pages only when needed
+- **Page Replacement**: Choose victim pages when memory is full
+- **Address Translation**: Map virtual to physical addresses
+- **TLB**: Speed up address translation
+
+Future trends:
+
+- **Persistent Memory**: Non-volatile memory with byte-addressability
+- **Memory Disaggregation**: Separate memory from compute
+- **Software-Defined Memory**: Dynamic memory management
+- **Memory QoS**: Quality of service for memory allocation
+
+Virtual memory programming requires understanding of:
+
+- **Memory allocation**: malloc, calloc, realloc, mmap
+- **Memory protection**: mprotect, mlock
+- **Page faults**: Handling and recovery
+- **Memory mapping**: File mapping, shared memory
+- **Error handling**: Robust error handling
+
+In conclusion, virtual memory is a complex but essential OS feature. It requires deep understanding of memory management, paging, and address translation. Proper use of virtual memory APIs and best practices can lead to more efficient and robust applications.`,
+      codeExample: `// Virtual memory example with custom allocator and page fault handling
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/mman.h>
+#include <signal.h>
+#include <unistd.h>
+
+// Custom allocator
+#define ALIGNMENT 16
+typedef struct Block { size_t size; int free; struct Block *next; } Block;
+Block *head = NULL;
+
+void* my_malloc(size_t size) {
+    size_t total = size + sizeof(Block) + ALIGNMENT - 1;
+    size_t aligned = (total + ALIGNMENT - 1) & ~(ALIGNMENT - 1);
+    Block *cur = head, *prev = NULL;
+    while (cur) {
+        if (cur->free && cur->size >= aligned) {
+            if (cur->size == aligned) { cur->free = 0; return (void*)(cur + 1); }
+            Block *nb = (Block*)((char*)cur + aligned);
+            nb->size = cur->size - aligned; nb->free = 1; nb->next = cur->next;
+            cur->size = aligned; cur->free = 0; cur->next = nb;
+            return (void*)(cur + 1);
+        }
+        prev = cur; cur = cur->next;
+    }
+    Block *nb = (Block*)malloc(aligned);
+    if (!nb) return NULL;
+    nb->size = aligned; nb->free = 0; nb->next = NULL;
+    if (prev) prev->next = nb; else head = nb;
+    return (void*)(nb + 1);
+}
+void my_free(void *p) {
+    if (!p) return;
+    Block *b = (Block*)p - 1; b->free = 1;
+    Block *cur = head;
+    while (cur && cur->next) {
+        if (cur->next == b) { cur->next = b->next; break; }
+        cur = cur->next;
+    }
+    if (b->next && b->next->free) {
+        b->size += b->next->size;
+        b->next = b->next->next;
+    }
+}
+
+// Page fault handler for custom allocation demonstration
+void page_fault_handler(int sig, siginfo_t *si, void *ctx) {
+    printf("Page fault at: %p\n", si->si_addr);
+    // In production, you'd track page usage and implement LRU
+    // Here we just demonstrate the concept
+}
+
+int main() {
+    // Setup page fault handler
+    struct sigaction sa = { .sa_sigaction = page_fault_handler, .sa_flags = SA_SIGINFO };
+    sigaction(SIGSEGV, &sa, NULL);
+    
+    // Use custom allocator to demonstrate virtual memory
+    int *arr = (int*)my_malloc(sizeof(int) * 1000000);
+    if (!arr) { printf("Alloc failed\n"); return 1; }
+    
+    // This will cause page faults as we access pages
+    for (int i = 0; i < 1000000; i++) arr[i] = i;
+    
+    printf("Successfully allocated and accessed 1M integers\n");
+    my_free(arr);
+    return 0;
+}`,
+      language: "c"
+    }
+  ]
+},
 
   {
-
     slug: "dbms",
-
     title: "Database Systems",
-
     description: "SQL, normalization, indexing, transactions, and query optimization.",
-
     icon: "🗄️",
-
     notesUrl: "https://noteslink.in/product/dbms-notes-kiit/",
-
     color: "from-rose-500 to-pink-600",
     category: "Systems",
-
     lessons: [
+  {
+    id: "dbms-001",
+    title: "Introduction to DBMS",
+    language: "sql",
+    content: `
+## Introduction to Database Management Systems (DBMS)
 
-      {
+### Definition
+A **Database Management System (DBMS)** is a software package designed to define, manipulate, retrieve, and manage data in a database. A DBMS generally manipulates the data itself, the data format, field names, file structure, and record structure. It also allows users to create, read, update, and delete data in a systematic way. Examples include MySQL, PostgreSQL, Oracle Database, Microsoft SQL Server, and MongoDB.
 
-        id: "1",
+### Introduction
+A DBMS sits between the user and the database, providing an interface for users to interact with data without needing to understand the underlying physical storage. It serves as an abstraction layer that simplifies data management tasks. Without a DBMS, developers would need to write complex low-level code to store and retrieve data from files, handling concurrency, security, and integrity manually. The DBMS automates all of these concerns, allowing developers and analysts to focus on the business logic and data analysis rather than data mechanics.
 
-        title: "SQL Fundamentals",
+### History
+The concept of databases dates back to the 1960s. The **hierarchical model** was introduced by IBM with their Information Management System (IMS) in 1966. The **network model** followed shortly after, standardized by the CODASYL group in 1969. In 1970, Dr. Edgar F. Codd of IBM published his landmark paper describing the **relational model**, which organized data into tables (relations). The first commercial relational DBMS, Oracle, was released in 1979. The 1980s saw the rise of SQL as a standard language, with DB2, Ingres, and MySQL following. The 2000s brought **NoSQL** databases like MongoDB, Cassandra, and Redis to handle big data and unstructured data needs. Today, modern systems often use polyglot persistence, combining relational and non-relational databases.
 
-        content: "SQL (Structured Query Language) is the standard for relational databases.\n\nDQL (Query): SELECT, WHERE, GROUP BY, HAVING, ORDER BY\nDML (Manipulation): INSERT, UPDATE, DELETE\nDDL (Definition): CREATE, ALTER, DROP\nDCL (Control): GRANT, REVOKE\n\nJoins:\n- INNER JOIN: Matching rows\n- LEFT/RIGHT JOIN: All from one side + matching\n- FULL OUTER JOIN: All from both sides\n- CROSS JOIN: Cartesian product",
+### Advantages
+- **Data Redundancy Control**: A DBMS eliminates duplicate data by normalizing and centralizing storage.
+- **Data Consistency**: Changes propagate across all views and queries, ensuring consistency.
+- **Data Integrity**: Constraints and rules ensure data accuracy and validity.
+- **Data Security**: User authentication, authorization, and encryption protect sensitive data.
+- **Concurrent Access**: Multiple users can access data simultaneously without conflicts.
+- **Backup and Recovery**: Built-in mechanisms automate data backup and disaster recovery.
+- **Data Independence**: Applications are insulated from changes in data storage structure.
+- **Efficient Data Access**: Query optimization engines retrieve data faster than manual file access.
 
-        codeExample: `-- Complex SQL query\nSELECT \n  d.department_name,\n  COUNT(e.employee_id) as emp_count,\n  AVG(e.salary) as avg_salary\nFROM departments d\nLEFT JOIN employees e ON d.dept_id = e.dept_id\nWHERE e.hire_date >= '2023-01-01'\nGROUP BY d.department_name\nHAVING COUNT(e.employee_id) > 5\nORDER BY avg_salary DESC;\n\n-- Window function\nSELECT \n  employee_name,\n  salary,\n  RANK() OVER (ORDER BY salary DESC) as rank,\n  salary - LAG(salary) OVER (ORDER BY salary) as diff_from_prev\nFROM employees;`,
+### Disadvantages
+- **Cost**: Licensing fees for commercial DBMS can be expensive.
+- **Complexity**: Setting up and maintaining a DBMS requires skilled administrators.
+- **Performance Overhead**: The abstraction layer adds overhead compared to direct file access.
+- **Single Point of Failure**: If the DBMS server fails, all dependent applications may go down.
+- **Vendor Lock-In**: Migrating from one DBMS to another can be costly and complex.
+- **Size**: DBMS software requires significant disk space and memory.
 
-        language: "sql"
+### Uses and Applications
+- **Banking and Finance**: Managing accounts, transactions, and customer records.
+- **Healthcare**: Storing patient records, medical history, and treatment plans.
+- **E-commerce**: Product catalogs, inventory management, and order processing.
+- **Education**: Student information systems, grades, and enrollment records.
+- **Social Media**: User profiles, posts, messages, and friend connections.
+- **Telecommunications**: Call records, subscriber data, and network management.
+- **Government**: Tax records, census data, and public service databases.
+    `,
+    codeExample: `
+-- Creating a simple database and table in MySQL
+CREATE DATABASE school_db;
 
-      },
+USE school_db;
 
-      {
+CREATE TABLE students (
+    student_id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    date_of_birth DATE,
+    enrollment_date DATE DEFAULT (CURRENT_DATE),
+    gpa DECIMAL(3, 2) CHECK (gpa >= 0.00 AND gpa <= 4.00)
+);
 
-        id: "2",
+-- Insert sample data
+INSERT INTO students (first_name, last_name, email, date_of_birth, gpa)
+VALUES
+    ('John', 'Doe', 'john.doe@school.edu', '2002-05-15', 3.75),
+    ('Jane', 'Smith', 'jane.smith@school.edu', '2001-09-22', 3.92),
+    ('Bob', 'Johnson', 'bob.j@school.edu', '2003-01-10', 2.88);
 
-        title: "Normalization",
+-- Query the data
+SELECT first_name, last_name, gpa
+FROM students
+WHERE gpa >= 3.5
+ORDER BY gpa DESC;
+    `
+  },
+  {
+    id: "dbms-002",
+    title: "Relational Database Concepts",
+    language: "sql",
+    content: `
+## Relational Database Concepts
 
-        content: "Normalization reduces data redundancy and improves integrity.\n\nNormal Forms:\n- 1NF: Atomic values, no repeating groups\n- 2NF: 1NF + no partial dependencies\n- 3NF: 2NF + no transitive dependencies\n- BCNF: Every determinant is a candidate key\n\nBenefits:\n- Eliminates update anomalies\n- Reduces storage\n- Improves data consistency\n\nTrade-off: More joins may reduce query performance.",
+### Definition
+A **relational database** is a type of database that stores and provides access to data points that are related to one another. The relational model organizes data into one or more **tables** (or **relations**) of columns and rows, with a unique key identifying each row. Relationships between tables are established through **foreign keys**, creating a structured and logical data model based on relational algebra and first-order predicate logic.
 
-        codeExample: `-- Unnormalized (repeating groups)\n-- Orders: {1, [A,B], 100}\n\n-- 1NF: Atomic values\n-- Orders: {1, A, 100}, {1, B, 100}\n\n-- 2NF: Remove partial dependencies\nCREATE TABLE Orders (\n  order_id INT PRIMARY KEY,\n  product_id INT,\n  quantity INT,\n  product_name VARCHAR(100),\n  price DECIMAL(10,2)\n);\n\n-- 3NF: Remove transitive dependencies\nCREATE TABLE Orders (\n  order_id INT PRIMARY KEY,\n  product_id INT,\n  quantity INT\n);\n\nCREATE TABLE Products (\n  product_id INT PRIMARY KEY,\n  product_name VARCHAR(100),\n  price DECIMAL(10,2)\n);`,
+### Introduction
+The relational model is the most widely used data model for databases today. It was introduced by Edgar F. Codd in 1970 and remains the foundation of systems like MySQL, PostgreSQL, SQL Server, and Oracle. In a relational database, every piece of data is connected through relationships. For example, a customer can place many orders, and each order can contain many products. These relationships are expressed through primary keys and foreign keys, enabling complex queries that join data from multiple tables. Understanding relational concepts is essential for anyone working with databases.
 
-        language: "sql"
+### History
+Edgar F. Codd published his seminal paper "A Relational Model of Data for Large Shared Data Banks" in 1970 while working at IBM. The paper proposed organizing data into relations (tables) and using a formal algebra to manipulate them. Early implementations included System R (IBM, 1974), Ingres (UC Berkeley, 1976), and Oracle (1979). The SQL language emerged from System R and was standardized by ANSI in 1986 and ISO in 1987. The relational model evolved with additions like **referential integrity** (foreign keys), **transaction support** (ACID properties), and **query optimization**. The model has proven so robust that even modern NoSQL databases are adopting relational concepts.
 
-      },
+### Key Concepts
 
-      {
+**Tables (Relations)**: Data is stored in tables with rows (tuples) and columns (attributes). Each table represents an entity like students, orders, or products.
 
-        id: "3",
+**Primary Key**: A column or set of columns that uniquely identifies each row in a table. No two rows can have the same primary key value, and it cannot be NULL.
 
-        title: "Indexing",
+**Foreign Key**: A column in one table that references the primary key of another table, creating a relationship between the two tables.
 
-        content: "Indexes improve query performance by allowing fast lookups.\n\nTypes:\n- B-Tree: Default, good for range queries\n- Hash: Exact match lookups, O(1)\n- Bitmap: Low-cardinality columns\n- Composite: Multiple columns\n\nWhen to index:\n- Columns in WHERE clause\n- Columns in JOIN conditions\n- Columns with high cardinality\n\nWhen NOT to index:\n- Small tables\n- Columns frequently updated\n- Columns with low cardinality",
+**Relationships**:
+- **One-to-One (1:1)**: Each record in Table A relates to exactly one record in Table B.
+- **One-to-Many (1:N)**: Each record in Table A can relate to many records in Table B.
+- **Many-to-Many (M:N)**: Records in Table A can relate to many records in Table B and vice versa. This requires a junction table.
 
-        codeExample: `-- Create index\nCREATE INDEX idx_emp_name ON employees(last_name);\n\n-- Composite index\nCREATE INDEX idx_emp_dept ON employees(dept_id, last_name);\n\n-- Partial index (PostgreSQL)\nCREATE INDEX idx_active ON employees(dept_id)\nWHERE status = 'active';\n\n-- Analyze query plan\nEXPLAIN ANALYZE\nSELECT * FROM employees\nWHERE last_name = 'Smith' AND dept_id = 5;\n\n-- Covering index (includes all needed columns)\nCREATE INDEX idx_emp_cover ON employees(last_name, dept_id)\nINCLUDE (first_name, salary);`,
+**Schema**: The logical structure of the database, including table definitions, column data types, constraints, and relationships.
 
-        language: "sql"
+**Data Types**: Each column has a defined data type such as INT, VARCHAR, DATE, DECIMAL, BOOLEAN, TEXT, BLOB, and TIMESTAMP.
 
-      },
+### Advantages
+- **Structured Data Organization**: Data is organized in a clear, tabular format.
+- **ACID Compliance**: Supports transactions with Atomicity, Consistency, Isolation, and Durability.
+- **Data Integrity**: Constraints enforce rules at the database level.
+- **Flexible Querying**: SQL allows complex joins, aggregations, and subqueries.
+- **Mature Technology**: Decades of optimization, tooling, and best practices.
+- **Standardization**: SQL is a well-defined standard across implementations.
 
-      {
+### Disadvantages
+- **Rigid Schema**: Changes to table structure can require migrations and downtime.
+- **Horizontal Scaling Difficulty**: Scaling across multiple servers is complex.
+- **Object-Relational Impedance Mismatch**: Mapping objects to tables can be cumbersome.
+- **Performance with Deep Joins**: Queries joining many tables can become slow.
+- **Overhead for Simple Data**: For simple key-value data, relational databases may be overkill.
 
-        id: "4",
+### Uses and Applications
+- **Enterprise Resource Planning (ERP)**: SAP, Oracle ERP, and similar systems rely on relational databases.
+- **Customer Relationship Management (CRM)**: Salesforce and similar platforms use relational models.
+- **Financial Systems**: Ledger management, transaction processing, and reporting.
+- **Inventory Management**: Tracking products, warehouses, and stock levels.
+- **Human Resources**: Employee records, payroll, and benefits management.
+    `,
+    codeExample: `
+-- Creating tables with relationships
 
-        title: "Transactions & ACID",
+CREATE DATABASE company_db;
+USE company_db;
 
-        content: "A transaction is a logical unit of work.\n\nACID properties:\n- Atomicity: All or nothing\n- Consistency: Valid state transitions\n- Isolation: Concurrent transactions don't interfere\n- Durability: Committed data persists\n\nIsolation levels:\n- Read Uncommitted: Dirty reads possible\n- Read Committed: No dirty reads\n- Repeatable Read: No non-repeatable reads\n- Serializable: Full isolation",
+-- Departments table (parent)
+CREATE TABLE departments (
+    dept_id INT PRIMARY KEY AUTO_INCREMENT,
+    dept_name VARCHAR(100) NOT NULL,
+    location VARCHAR(100)
+);
 
-        codeExample: `-- Transaction example\nBEGIN TRANSACTION;\n\nUPDATE accounts SET balance = balance - 100\nWHERE account_id = 1;\n\nUPDATE accounts SET balance = balance + 100\nWHERE account_id = 2;\n\n-- Verify no negative balance\nIF EXISTS (SELECT 1 FROM accounts WHERE balance < 0)\n  ROLLBACK;\nELSE\n  COMMIT;\n\n-- Set isolation level\nSET TRANSACTION ISOLATION LEVEL REPEATABLE READ;\n\n-- Savepoint\nSAVEPOINT sp1;\nDELETE FROM orders WHERE order_id = 100;\n-- Rollback to savepoint\nROLLBACK TO sp1;`,
+-- Employees table (child with foreign key)
+CREATE TABLE employees (
+    emp_id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    salary DECIMAL(10, 2),
+    hire_date DATE,
+    dept_id INT,
+    FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
+);
 
-        language: "sql"
+-- Projects table
+CREATE TABLE projects (
+    project_id INT PRIMARY KEY AUTO_INCREMENT,
+    project_name VARCHAR(150) NOT NULL,
+    start_date DATE,
+    end_date DATE
+);
 
-      },
+-- Junction table for Many-to-Many relationship (employees to projects)
+CREATE TABLE employee_projects (
+    emp_id INT,
+    project_id INT,
+    role VARCHAR(50) DEFAULT 'Member',
+    assigned_date DATE DEFAULT (CURRENT_DATE),
+    PRIMARY KEY (emp_id, project_id),
+    FOREIGN KEY (emp_id) REFERENCES employees(emp_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (project_id) REFERENCES projects(project_id)
+        ON DELETE CASCADE
+);
 
-    ],
+-- Insert sample data
+INSERT INTO departments (dept_name, location) VALUES
+    ('Engineering', 'Building A'),
+    ('Marketing', 'Building B'),
+    ('Finance', 'Building C');
 
+INSERT INTO employees (first_name, last_name, email, salary, hire_date, dept_id) VALUES
+    ('Alice', 'Williams', 'alice@company.com', 95000.00, '2021-03-15', 1),
+    ('Charlie', 'Brown', 'charlie@company.com', 72000.00, '2022-06-01', 2),
+    ('Diana', 'Prince', 'diana@company.com', 105000.00, '2020-01-10', 1);
+
+INSERT INTO projects (project_name, start_date, end_date) VALUES
+    ('Website Redesign', '2024-01-01', '2024-06-30'),
+    ('Mobile App', '2024-03-01', '2024-12-31');
+
+INSERT INTO employee_projects (emp_id, project_id, role) VALUES
+    (1, 1, 'Lead Developer'),
+    (1, 2, 'Architect'),
+    (3, 2, 'Backend Engineer');
+
+-- Query with JOIN to retrieve related data
+SELECT
+    e.first_name,
+    e.last_name,
+    d.dept_name,
+    p.project_name,
+    ep.role
+FROM employees e
+JOIN departments d ON e.dept_id = d.dept_id
+JOIN employee_projects ep ON e.emp_id = ep.emp_id
+JOIN projects p ON ep.project_id = p.project_id
+ORDER BY e.last_name, p.project_name;
+    `
+  },
+  {
+    id: "dbms-003",
+    title: "SQL Fundamentals and DDL",
+    language: "sql",
+    content: `
+## SQL Fundamentals and Data Definition Language (DDL)
+
+### Definition
+**SQL (Structured Query Language)** is a standardized programming language used to manage and manipulate relational databases. **DDL (Data Definition Language)** is a subset of SQL used to define, modify, and delete database structures such as tables, indexes, and schemas. DDL commands include **CREATE**, **ALTER**, **DROP**, **TRUNCATE**, and **RENAME**. These commands define the structure (schema) of the database rather than the data within it.
+
+### Introduction
+SQL is the universal language of relational databases. Whether you use MySQL, PostgreSQL, SQL Server, or Oracle, SQL is the primary way to interact with data. DDL is the first step in building any database application. Before you can insert, query, or update data, you must first create the database structure. DDL commands define what tables exist, what columns they have, what data types those columns accept, and what constraints enforce data integrity. Mastering DDL is essential for database designers and developers.
+
+### History
+SQL originated from IBM's System R project in the 1970s. The original language was called SEQUEL (Structured English Query Language), designed by Donald D. Chamberlin and Raymond F. Boyce. IBM released it commercially as SQL/DS in 1981. Oracle (then Relational Software, Inc.) released the first commercial SQL RDBMS in 1979. The American National Standards Institute (ANSI) adopted SQL as a standard in 1986, and the International Organization for Standardization (ISO) followed in 1987. SQL-86 was the first standard, followed by SQL-89, SQL-92 (a major revision), SQL:1999 (adding object-relational features), SQL:2003, SQL:2006, SQL:2008, SQL:2011, SQL:2016, and SQL:2023. Each version added new features like window functions, JSON support, and temporal data.
+
+### DDL Commands in Detail
+
+**CREATE**: Creates new database objects. You can create databases, tables, views, indexes, stored procedures, triggers, and users. The CREATE TABLE statement defines column names, data types, and constraints.
+
+**ALTER**: Modifies existing database objects. You can add, modify, or drop columns. You can also add or remove constraints, change data types, and rename objects. ALTER TABLE is one of the most commonly used DDL commands.
+
+**DROP**: Permanently deletes database objects. When you DROP a table, all data, indexes, and constraints are removed. The object ceases to exist in the database.
+
+**TRUNCATE**: Removes all rows from a table but keeps the table structure intact. It is faster than DELETE because it does not log individual row deletions. The table structure, columns, indexes, and constraints remain.
+
+**RENAME**: Changes the name of an existing database object.
+
+### Data Types in SQL
+- **Numeric**: INT, SMALLINT, BIGINT, DECIMAL, NUMERIC, FLOAT, REAL
+- **String**: CHAR, VARCHAR, TEXT, BINARY, VARBINARY, BLOB
+- **Date/Time**: DATE, TIME, DATETIME, TIMESTAMP, INTERVAL
+- **Boolean**: BOOLEAN (TRUE, FALSE, NULL)
+- **JSON**: JSON, JSONB (PostgreSQL)
+- **UUID**: UUID (universally unique identifier)
+
+### Constraints
+- **NOT NULL**: Column cannot contain NULL values.
+- **UNIQUE**: All values in the column must be different.
+- **PRIMARY KEY**: Combines NOT NULL and UNIQUE; uniquely identifies each row.
+- **FOREIGN KEY**: Enforces referential integrity between tables.
+- **CHECK**: Ensures values satisfy a specific condition.
+- **DEFAULT**: Provides a default value when no value is specified.
+
+### Advantages of DDL
+- **Declarative Syntax**: You describe what you want, not how to do it.
+- **Portability**: SQL DDL is largely portable across database systems.
+- **Data Integrity**: Constraints are enforced at the database level.
+- **Self-Documenting**: Schema definitions serve as documentation.
+- **Centralized Control**: All data structure changes go through DDL.
+
+### Disadvantages of DDL
+- **Schema Changes Can Be Expensive**: ALTER TABLE on large tables can lock the table.
+- **Limited Expressiveness**: Complex business rules may require application code.
+- **Vendor Differences**: While standardized, each DBMS has proprietary extensions.
+- **Migration Complexity**: DDL changes across environments need careful versioning.
+
+### Uses and Applications
+- **Database Design**: Creating the initial schema for new applications.
+- **Schema Migrations**: Modifying tables as requirements evolve.
+- **Database Versioning**: Tracking schema changes with migration tools like Flyway or Liquibase.
+- **Environment Setup**: Creating development, testing, and production databases.
+- **Data Modeling**: Translating ER diagrams into physical database schemas.
+    `,
+    codeExample: `
+-- DDL Examples: Creating and modifying database structures
+
+-- Create a database
+CREATE DATABASE IF NOT EXISTS bookstore;
+
+USE bookstore;
+
+-- Create tables with various data types and constraints
+CREATE TABLE genres (
+    genre_id INT PRIMARY KEY AUTO_INCREMENT,
+    genre_name VARCHAR(50) NOT NULL UNIQUE,
+    description TEXT
+);
+
+CREATE TABLE authors (
+    author_id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    birth_date DATE,
+    nationality VARCHAR(50),
+    website VARCHAR(200)
+);
+
+CREATE TABLE books (
+    book_id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(200) NOT NULL,
+    isbn VARCHAR(13) UNIQUE NOT NULL,
+    publication_date DATE,
+    price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),
+    stock_quantity INT DEFAULT 0 CHECK (stock_quantity >= 0),
+    genre_id INT,
+    author_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (genre_id) REFERENCES genres(genre_id)
+        ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY (author_id) REFERENCES authors(author_id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Alter table: add a new column
+ALTER TABLE books ADD COLUMN pages INT CHECK (pages > 0);
+
+-- Alter table: modify a column data type
+ALTER TABLE books MODIFY COLUMN isbn VARCHAR(17);
+
+-- Alter table: drop a column
+ALTER TABLE books DROP COLUMN website;
+
+-- Create an index for faster searches
+CREATE INDEX idx_books_title ON books(title);
+CREATE INDEX idx_books_isbn ON books(isbn);
+CREATE INDEX idx_authors_name ON authors(last_name, first_name);
+
+-- Rename a table
+-- RENAME TABLE books TO library_books;
+
+-- Truncate a table (remove all rows, keep structure)
+-- TRUNCATE TABLE books;
+
+-- Drop a table (permanently delete)
+-- DROP TABLE IF EXISTS old_table;
+    `
+  },
+  {
+    id: "dbms-004",
+    title: "SQL DML and Queries",
+    language: "sql",
+  content: `
+## SQL Data Manipulation Language (DML) and Queries
+
+### Definition
+**DML (Data Manipulation Language)** is the subset of SQL used to insert, retrieve, update, and delete data within database tables. The primary DML commands are **SELECT**, **INSERT**, **UPDATE**, and **DELETE**. These commands operate on the data itself rather than the database structure. The SELECT statement is the most powerful and complex DML command, supporting filtering, sorting, aggregation, joining, subqueries, and window functions.
+
+### Introduction
+While DDL defines the structure of a database, DML is where the real work happens. DML commands are used millions of times per day in production systems. Every time a user loads a page, places an order, or searches for information, DML queries execute behind the scenes. Understanding how to write efficient DML queries is critical for application performance. A poorly written SELECT query can bring a production database to its knees, while an optimized query can retrieve millions of rows in milliseconds. DML mastery separates novice developers from experienced database engineers.
+
+### History
+DML commands have been part of SQL since its inception in the 1970s. The SELECT statement was originally designed to be simple, but it has grown enormously in capability. SQL-92 introduced subqueries and joins. SQL:1999 added common table expressions (CTEs) and recursive queries. SQL:2003 introduced window functions (OVER clause, ROW_NUMBER, RANK, LEAD, LAG), which revolutionized analytical queries. SQL:2011 added temporal query support. Each SQL standard has expanded DML capabilities, making it one of the most feature-rich query languages in existence.
+
+### SELECT Statement in Depth
+
+The SELECT statement retrieves data from one or more tables. Its clauses include:
+
+**FROM**: Specifies the table(s) to query. Supports JOIN operations.
+**WHERE**: Filters rows based on conditions. Uses operators like =, <>, <, >, <=, >=, IN, BETWEEN, LIKE, IS NULL.
+**GROUP BY**: Groups rows by column values for aggregation.
+**HAVING**: Filters groups (used with GROUP BY, like WHERE for groups).
+**ORDER BY**: Sorts the result set by one or more columns. ASC for ascending, DESC for descending.
+**LIMIT/OFFSET**: Restricts the number of rows returned (pagination).
+**JOIN**: Combines rows from two or more tables based on related columns.
+  - **INNER JOIN**: Returns rows with matching values in both tables.
+  - **LEFT JOIN**: Returns all rows from the left table and matched rows from the right.
+  - **RIGHT JOIN**: Returns all rows from the right table and matched rows from the left.
+  - **FULL JOIN**: Returns all rows when there is a match in either table.
+  - **CROSS JOIN**: Returns the Cartesian product of both tables.
+  - **SELF JOIN**: A table joined with itself.
+
+**Subqueries**: Queries nested inside other queries. Can appear in SELECT, FROM, WHERE, or HAVING clauses.
+
+**Common Table Expressions (CTEs)**: Named temporary result sets defined with WITH clause. Improve readability of complex queries.
+
+**Window Functions**: Perform calculations across a set of rows related to the current row without collapsing them. Functions include ROW_NUMBER, RANK, DENSE_RANK, NTILE, SUM, AVG, MIN, MAX with OVER clause.
+
+### INSERT Statement
+Adds new rows to a table. Supports single-row inserts, multi-row inserts, and INSERT ... SELECT (insert from query results).
+
+### UPDATE Statement
+Modifies existing rows in a table. Uses SET to specify new values and WHERE to filter which rows to update. Without WHERE, all rows are updated.
+
+### DELETE Statement
+Removes rows from a table. Uses WHERE to filter which rows to delete. Without WHERE, all rows are deleted.
+
+### Advantages
+- **Declarative**: You describe what data you want, not how to get it.
+- **Powerful Aggregation**: Built-in functions like COUNT, SUM, AVG, MIN, MAX.
+- **Flexible Joins**: Combine data from multiple tables in a single query.
+- **Subqueries and CEs**: Nest queries for complex logic.
+- **Window Functions**: Advanced analytics without self-joins.
+- **Standardization**: SQL DML works across all relational databases.
+
+### Disadvantages
+- **Performance Complexity**: Bad queries can be very slow on large datasets.
+- **SQL Injection Risk**: Dynamic SQL construction can lead to security vulnerabilities.
+- **Readability**: Complex queries with many joins and subqueries can be hard to understand.
+- **Limited Procedural Logic**: While improving, SQL is not ideal for complex procedural logic.
+- **Debugging Difficulty**: Analyzing query execution plans requires specialized knowledge.
+
+### Uses and Applications
+- **Reporting**: Generating business reports and analytics dashboards.
+- **CRUD Operations**: Creating, reading, updating, and deleting application data.
+- **Data Migration**: Moving data between systems using INSERT ... SELECT.
+- **ETL Processes**: Extracting, transforming, and loading data in data warehouses.
+- **Real-time Analytics**: Running aggregations on live production data.
+    `,
+    codeExample: `
+-- DML Examples: Working with data
+
+-- INSERT: Adding data
+INSERT INTO genres (genre_name, description) VALUES
+    ('Science Fiction', 'Fiction dealing with imaginative concepts'),
+    ('Mystery', 'Fiction dealing with puzzling events'),
+    ('Non-Fiction', 'Factual writing');
+
+INSERT INTO authors (first_name, last_name, birth_date, nationality) VALUES
+    ('Isaac', 'Asimov', '1920-01-02', 'American'),
+    ('Agatha', 'Christie', '1890-09-15', 'British'),
+    ('Stephen', 'Hawking', '1942-01-08', 'British');
+
+INSERT INTO books (title, isbn, publication_date, price, stock_quantity, pages, genre_id, author_id) VALUES
+    ('Foundation', '9780553293357', '1951-06-01', 12.99, 45, 244, 1, 1),
+    ('Murder on the Orient Express', '9780062073501', '1934-01-01', 11.99, 30, 256, 2, 2),
+    ('A Brief History of Time', '9780553380163', '1988-04-01', 15.99, 60, 212, 3, 3),
+    ('The Caves of Steel', '9780553293340', '1954-01-01', 10.99, 25, 206, 1, 1);
+
+-- SELECT: Basic querying
+SELECT title, price, stock_quantity FROM books;
+
+-- SELECT with WHERE clause
+SELECT title, price
+FROM books
+WHERE price < 15.00
+ORDER BY price ASC;
+
+-- SELECT with JOIN
+SELECT
+    b.title,
+    b.price,
+    a.first_name || ' ' || a.last_name AS author_name,
+    g.genre_name
+FROM books b
+INNER JOIN authors a ON b.author_id = a.author_id
+LEFT JOIN genres g ON b.genre_id = g.genre_id;
+
+-- Aggregation with GROUP BY
+SELECT
+    g.genre_name,
+    COUNT(b.book_id) AS book_count,
+    AVG(b.price) AS avg_price,
+    SUM(b.stock_quantity) AS total_stock
+FROM books b
+JOIN genres g ON b.genre_id = g.genre_id
+GROUP BY g.genre_name
+HAVING COUNT(b.book_id) >= 1;
+
+-- Subquery
+SELECT title, price
+FROM books
+WHERE price > (SELECT AVG(price) FROM books);
+
+-- Window function
+SELECT
+    title,
+    price,
+    genre_id,
+    ROW_NUMBER() OVER (PARTITION BY genre_id ORDER BY price DESC) AS price_rank,
+    RANK() OVER (ORDER BY price DESC) AS overall_rank
+FROM books;
+
+-- Common Table Expression (CTE)
+WITH expensive_books AS (
+    SELECT book_id, title, price
+    FROM books
+    WHERE price > 12.00
+)
+SELECT eb.title, eb.price, a.first_name || ' ' || a.last_name AS author
+FROM expensive_books eb
+JOIN authors a ON eb.book_id = a.author_id;
+
+-- UPDATE: Modifying data
+UPDATE books
+SET price = price * 1.10
+WHERE genre_id = 1;
+
+-- DELETE: Removing data
+DELETE FROM books
+WHERE stock_quantity < 20;
+    `
+  },
+  {
+    id: "dbms-005",
+    title: "Normalization",
+    language: "sql",
+    content: `
+## Normalization
+
+### Definition
+**Normalization** is the process of organizing data in a database to reduce redundancy and improve data integrity. It involves decomposing tables into smaller, well-structured tables and defining relationships between them. The goal is to isolate data so that additions, deletions, and modifications of a field can be made in just one table and propagate through the rest of the database via relationships. Normalization is guided by **normal forms**, which are a series of progressively stricter rules.
+
+### Introduction
+Normalization is one of the most important concepts in relational database design. Without normalization, databases suffer from anomalies that make data maintenance difficult and error-prone. Consider a table storing customer orders with customer details repeated for every order. If a customer changes their address, you must update every row containing that customer's information. Missing even one row creates inconsistency. Normalization eliminates this problem by ensuring each piece of data is stored in exactly one place. The process was developed by Edgar F. Codd and further refined by Raymond F. Boyce and C.J. Date. While over-normalization can hurt performance (due to excessive joins), proper normalization is essential for data correctness.
+
+### History
+Normalization theory was introduced by Edgar F. Codd in 1970 alongside the relational model. His initial paper described the first three normal forms. In 1974, Codd introduced a stronger version of the third normal form. C.J. Date and others further developed the theory in the 1970s and 1980s. The Boyce-Codd Normal Form (BCNF) was introduced in 1974 by Codd and Boyce. Fourth Normal Form (4NF) was introduced by Ronald Fagin in 1977, and Fifth Normal Form (5NF) was described by him in 1979. The concept of Sixth Normal Form (6NF) was developed for temporal databases. The theory has evolved to address increasingly complex data modeling challenges.
+
+### Normal Forms
+
+**First Normal Form (1NF)**: Each column contains atomic (indivisible) values. There are no repeating groups or arrays. Each row is unique, identified by a primary key.
+
+**Second Normal Form (2NF)**: The table is in 1NF, and every non-key column is fully functionally dependent on the entire primary key. This eliminates partial dependencies (where a non-key column depends on only part of a composite primary key).
+
+**Third Normal Form (3NF)**: The table is in 2NF, and no non-key column is transitively dependent on the primary key. In other words, non-key columns should depend only on the primary key, not on other non-key columns.
+
+**Boyce-Codd Normal Form (BCNF)**: A stricter version of 3NF. For every functional dependency X -> Y, X must be a superkey. This handles cases where 3NF is not sufficient.
+
+**Fourth Normal Form (4NF)**: The table is in BCNF and has no multi-valued dependencies. A multi-valued dependency exists when one column determines a set of values for another column, independent of other columns.
+
+**Fifth Normal Form (5NF)**: The table is in 4NF and cannot be decomposed into smaller tables without loss of data. This addresses join dependencies.
+
+### Anomalies Prevented by Normalization
+- **Insertion Anomaly**: Cannot insert data about an entity without other unrelated data.
+- **Update Anomaly**: Updating one piece of data requires updating multiple rows.
+- **Deletion Anomaly**: Deleting one piece of data inadvertently deletes other important data.
+
+### Advantages
+- **Reduced Data Redundancy**: Data is stored only once.
+- **Improved Data Integrity**: Consistent data across the database.
+- **Easier Maintenance**: Changes need to be made in only one place.
+- **Better Query Optimization**: Smaller tables are faster to scan and index.
+- **Logical Data Organization**: Clear relationships between entities.
+
+### Disadvantages
+- **Complex Queries**: More joins are needed to retrieve related data.
+- **Performance Impact**: Excessive normalization can slow down read-heavy applications.
+- **Design Complexity**: Proper normalization requires careful analysis.
+- **Over-Normalization**: Sometimes denormalization is better for performance.
+- **Migration Effort**: Restructuring a normalized schema can be difficult.
+
+### Uses and Applications
+- **OLTP Systems**: Online transaction processing benefits greatly from normalization.
+- **Data Warehouses**: While often denormalized for performance, the design process starts with normalization.
+- **Enterprise Applications**: ERP, CRM, and HR systems use normalized schemas.
+- **Any Relational Database**: Normalization is a fundamental principle of good database design.
+    `,
+    codeExample: `
+-- Normalization Example: From Unnormalized to 3NF
+
+-- UNNORMALIZED TABLE (has repeating groups and redundancy)
+-- This is what we want to avoid:
+-- orders_unnorm (order_id, customer_name, customer_email, product1, product2, product3)
+
+-- Step 1: Create properly normalized tables
+
+CREATE DATABASE normalization_demo;
+USE normalization_demo;
+
+-- Customers table (3NF)
+CREATE TABLE customers (
+    customer_id INT PRIMARY KEY AUTO_INCREMENT,
+    customer_name VARCHAR(100) NOT NULL,
+    customer_email VARCHAR(100) UNIQUE NOT NULL,
+    city VARCHAR(50),
+    state VARCHAR(50)
+);
+
+-- Products table (3NF)
+CREATE TABLE products (
+    product_id INT PRIMARY KEY AUTO_INCREMENT,
+    product_name VARCHAR(100) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    unit_price DECIMAL(10, 2) NOT NULL CHECK (unit_price > 0)
+);
+
+-- Orders table (3NF - each row is one order)
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY AUTO_INCREMENT,
+    customer_id INT NOT NULL,
+    order_date DATE NOT NULL DEFAULT (CURRENT_DATE),
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+);
+
+-- Order items (3NF - junction table for orders and products)
+CREATE TABLE order_items (
+    order_item_id INT PRIMARY KEY AUTO_INCREMENT,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL CHECK (quantity > 0),
+    price_at_purchase DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
+);
+
+-- Insert normalized data
+INSERT INTO customers (customer_name, customer_email, city, state) VALUES
+    ('Alice Johnson', 'alice@email.com', 'New York', 'NY'),
+    ('Bob Smith', 'bob@email.com', 'Los Angeles', 'CA'),
+    ('Carol White', 'carol@email.com', 'Chicago', 'IL');
+
+INSERT INTO products (product_name, category, unit_price) VALUES
+    ('Laptop', 'Electronics', 999.99),
+    ('Mouse', 'Electronics', 29.99),
+    ('Desk', 'Furniture', 249.99),
+    ('Chair', 'Furniture', 149.99);
+
+INSERT INTO orders (customer_id, order_date) VALUES
+    (1, '2024-01-15'),
+    (1, '2024-02-20'),
+    (2, '2024-01-18');
+
+INSERT INTO order_items (order_id, product_id, quantity, price_at_purchase) VALUES
+    (1, 1, 1, 999.99),
+    (1, 2, 2, 29.99),
+    (2, 3, 1, 249.99),
+    (3, 4, 1, 149.99);
+
+-- Query normalized data using JOINs
+SELECT
+    o.order_id,
+    c.customer_name,
+    c.city,
+    o.order_date,
+    p.product_name,
+    oi.quantity,
+    oi.price_at_purchase,
+    (oi.quantity * oi.price_at_purchase) AS line_total
+FROM orders o
+JOIN customers c ON o.customer_id = c.customer_id
+JOIN order_items oi ON o.order_id = oi.order_id
+JOIN products p ON oi.product_id = p.product_id
+ORDER BY o.order_date;
+    `
+  },
+  {
+    id: "dbms-006",
+    title: "Indexing and Query Optimization",
+    language: "sql",
+  content: `
+## Indexing and Query Optimization
+
+### Definition
+**Indexing** is a technique used to speed up data retrieval operations in a database at the cost of additional storage space and slower writes. An **index** is a data structure that provides quick lookup of data in a column or columns of a table. It works similarly to a book's index, which lets you find a topic without reading every page. **Query optimization** is the process of improving the performance of SQL queries by choosing the most efficient execution plan. Most relational databases use a **query optimizer** that automatically selects the best plan, but understanding indexing helps developers write queries that the optimizer can handle efficiently.
+
+### Introduction
+As databases grow to millions or billions of rows, query performance becomes critical. Without indexes, every SELECT query must scan the entire table (a full table scan), which is extremely slow for large datasets. Indexes allow the database engine to jump directly to the relevant rows. However, indexes are not free. They consume disk space, slow down INSERT, UPDATE, and DELETE operations (because the index must also be updated), and can become fragmented over time. The art of database optimization lies in choosing the right indexes for the right columns. Most performance problems in database applications are caused by missing or poorly designed indexes.
+
+### History
+The concept of indexing predates computers. Libraries have used indexing systems for centuries. In databases, early systems used simple hash indexes. The **B-tree** index, invented by Rudolf Bayer and Edward McCreight in 1970 at Boeing Research Labs, became the dominant index structure for relational databases. B-trees provide O(log n) lookup time and are efficient for range queries. The **B+ tree** variant, which stores all data in leaf nodes, is used by most modern databases. In the 1990s, **bitmap indexes** were developed for data warehousing. **Hash indexes** are used for exact-match lookups. More recently, **GiST** (Generalized Search Tree), **GIN** (Generalized Inverted Index), and **BRIN** (Block Range Index) have been added to PostgreSQL. **Partial indexes** and **expression indexes** provide more targeted indexing options.
+
+### Types of Indexes
+
+**B-Tree Index**: The default index type. Balanced tree structure efficient for equality and range queries. Suitable for columns with high cardinality (many distinct values).
+
+**Hash Index**: Uses a hash function for O(1) lookup. Only supports equality comparisons (=), not range queries (<, >, BETWEEN). Good for exact-match lookups.
+
+**Composite Index**: An index on two or more columns. Useful for queries that filter on multiple columns. The order of columns matters (leftmost prefix rule).
+
+**Unique Index**: Ensures all values in the indexed column(s) are unique. Automatically creates a constraint.
+
+**Partial Index**: Indexes only rows that satisfy a condition. Saves space when you frequently query a subset of rows.
+
+**Expression Index**: Indexes the result of a function or expression. Useful when queries filter on computed values.
+
+**Covering Index**: An index that contains all columns needed by a query, eliminating the need to access the table data (index-only scan).
+
+### Query Optimization Techniques
+- **Use WHERE clauses** to filter data early.
+- **Avoid SELECT *** and only retrieve needed columns.
+- **Use JOINs** instead of subqueries when possible.
+- **Add indexes** on columns used in WHERE, JOIN, ORDER BY, and GROUP BY.
+- **Analyze execution plans** using EXPLAIN or EXPLAIN ANALYZE.
+- **Avoid functions on indexed columns** in WHERE clauses (prevents index usage).
+- **Use LIMIT** for pagination and debugging.
+- **Batch inserts** instead of inserting one row at a time.
+
+### Advantages of Indexing
+- **Faster Data Retrieval**: Queries can find rows in milliseconds instead of seconds.
+- **Efficient Sorting**: ORDER BY can use indexes to avoid sorting operations.
+- **Enforced Uniqueness**: Unique indexes prevent duplicate values.
+- **Faster JOINs**: Indexed foreign keys speed up join operations.
+- **Covering Indexes**: Can satisfy queries entirely from the index.
+
+### Disadvantages of Indexing
+- **Storage Overhead**: Each index consumes disk space.
+- **Write Performance**: INSERT, UPDATE, DELETE are slower due to index maintenance.
+- **Maintenance**: Indexes can become fragmented and need rebuilding.
+- **Over-Indexing**: Too many indexes hurt write performance.
+- **Index Misuse**: Wrong indexes provide no benefit.
+
+### Uses and Applications
+- **Search Functionality**: Full-text search indexes for product search, content search.
+- **Reporting Queries**: Indexes on date ranges and category filters.
+- **Foreign Key Performance**: Indexing foreign key columns for faster joins.
+- **Unique Constraints**: Enforcing business rules like unique emails or usernames.
+- **Data Warehouse**: Bitmap indexes for low-cardinality columns in star schemas.
+    `,
+    codeExample: `
+-- Indexing and Query Optimization Examples
+
+CREATE DATABASE optimization_demo;
+USE optimization_demo;
+
+-- Create a large table for demonstration
+CREATE TABLE employees (
+    emp_id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    department VARCHAR(50) NOT NULL,
+    salary DECIMAL(10, 2) NOT NULL,
+    hire_date DATE NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE
+);
+
+-- Create various indexes
+CREATE INDEX idx_emp_department ON employees(department);
+CREATE INDEX idx_emp_salary ON employees(salary);
+CREATE INDEX idx_emp_hire_date ON employees(hire_date);
+CREATE INDEX idx_emp_active_dept ON employees(is_active, department);
+CREATE INDEX idx_emp_name ON employees(last_name, first_name);
+
+-- Composite index for common query patterns
+CREATE INDEX idx_emp_dept_salary ON employees(department, salary);
+
+-- Partial index (PostgreSQL syntax, MySQL uses a different approach)
+-- CREATE INDEX idx_emp_active ON employees(department) WHERE is_active = TRUE;
+
+-- Expression index (PostgreSQL syntax)
+-- CREATE INDEX idx_emp_email_domain ON employees(SUBSTRING_INDEX(email, '@', -1));
+
+-- Insert sample data
+INSERT INTO employees (first_name, last_name, email, department, salary, hire_date, is_active)
+SELECT
+    CONCAT('First', n),
+    CONCAT('Last', n),
+    CONCAT('user', n, '@company.com'),
+    CASE
+        WHEN n % 5 = 0 THEN 'Engineering'
+        WHEN n % 5 = 1 THEN 'Marketing'
+        WHEN n % 5 = 2 THEN 'Sales'
+        WHEN n % 5 = 3 THEN 'Finance'
+        ELSE 'HR'
+    END,
+    ROUND(50000 + (RAND() * 100000), 2),
+    DATE_ADD('2020-01-01', INTERVAL FLOOR(RAND() * 1460) DAY),
+    IF(RAND() > 0.1, TRUE, FALSE)
+FROM (
+    SELECT @row := @row + 1 AS n
+    FROM information_schema.columns a,
+         information_schema.columns b,
+         (SELECT @row := 0) r
+    LIMIT 1000
+) numbers;
+
+-- Use EXPLAIN to analyze query execution
+EXPLAIN SELECT * FROM employees WHERE department = 'Engineering';
+
+EXPLAIN SELECT first_name, last_name, salary
+FROM employees
+WHERE department = 'Engineering' AND salary > 75000
+ORDER BY salary DESC;
+
+-- This query benefits from the composite index
+SELECT first_name, last_name, salary
+FROM employees
+WHERE department = 'Engineering' AND salary > 75000
+ORDER BY salary DESC
+LIMIT 20;
+
+-- Query using covering index (all columns in index)
+SELECT department, salary
+FROM employees
+WHERE department = 'Sales' AND salary > 80000;
+
+-- Avoid this: function on indexed column prevents index usage
+SELECT * FROM employees WHERE YEAR(hire_date) = 2023;
+
+-- Do this instead: keep the column bare so index can be used
+SELECT * FROM employees
+WHERE hire_date >= '2023-01-01' AND hire_date < '2024-01-01';
+
+-- Analyze query performance
+EXPLAIN ANALYZE
+SELECT d.department, COUNT(*) AS emp_count, AVG(e.salary) AS avg_salary
+FROM employees e
+WHERE e.is_active = TRUE
+GROUP BY d.department
+HAVING COUNT(*) > 10
+ORDER BY avg_salary DESC;
+    `
+  },
+  {
+    id: "dbms-007",
+    title: "Transactions and ACID Properties",
+    language: "sql",
+  content: `
+## Transactions and ACID Properties
+
+### Definition
+A **transaction** is a logical unit of work that consists of one or more SQL statements that must be executed atomically. Either all statements in the transaction succeed, or none of them take effect. **ACID** stands for **Atomicity**, **Consistency**, **Isolation**, and **Durability** — the four properties that guarantee database transactions are processed reliably. These properties ensure that even in the event of system failures, power outages, or concurrent access, the database remains in a valid state.
+
+### Introduction
+In any multi-user database system, transactions are essential for maintaining data integrity. Consider a bank transfer: moving money from Account A to Account B requires two operations — debiting Account A and crediting Account B. If the system crashes after debiting Account A but before crediting Account B, money would vanish. Transactions prevent this by grouping these operations into an atomic unit. If either operation fails, the entire transaction is rolled back, and both accounts remain unchanged. The ACID properties formalize these guarantees, and every major relational database implements them. Understanding transactions is critical for building reliable applications.
+
+### History
+The concept of transactions emerged in the 1960s with airline reservation systems (like SABRE) that needed to handle concurrent bookings. Jim Gray at IBM formalized the concept of transactions in the 1970s and received the Turing Award in 1998 for his work on transaction processing. The term "ACID" was coined by Andreas Reuter and Theo Härder in 1983, though the concepts predate the acronym. Early transaction processing systems included IBM's CICS (1969) and Tandem's NonStop SQL (1979). The two-phase commit protocol was developed in the 1980s for distributed transactions. Modern databases implement sophisticated concurrency control mechanisms like Multi-Version Concurrency Control (MVCC) to handle high-traffic transactional workloads.
+
+### ACID Properties in Detail
+
+**Atomicity**: A transaction is treated as a single, indivisible unit. Either all operations within the transaction complete successfully, or none of them are applied. If any part fails, the entire transaction is rolled back to its state before the transaction began. This is implemented using transaction logs that record all changes, allowing the database to undo incomplete transactions.
+
+**Consistency**: A transaction brings the database from one valid state to another. All constraints, rules, and cascades must be satisfied at the beginning and end of a transaction. If a transaction violates any constraint, it is rolled back. For example, a CHECK constraint ensuring salary > 0 must be true after every transaction.
+
+**Isolation**: Concurrent transactions execute as if they were running sequentially. One transaction's intermediate state is not visible to other transactions. Isolation levels control the degree to which transactions are isolated: READ UNCOMMITTED, READ COMMITTED, REPEATABLE READ, and SERIALIZABLE. Higher isolation provides more safety but reduces concurrency.
+
+**Durability**: Once a transaction is committed, its effects are permanent even in the event of system failure. This is achieved through write-ahead logging (WAL), where changes are written to stable storage before being applied to the database. Crash recovery mechanisms replay the log to restore committed transactions.
+
+### Transaction Control Statements
+- **BEGIN TRANSACTION** (or BEGIN): Starts a new transaction.
+- **COMMIT**: Permanently saves all changes made during the transaction.
+- **ROLLBACK**: Undoes all changes made during the transaction.
+- **SAVEPOINT**: Creates a point within a transaction to which you can roll back.
+- **ROLLBACK TO SAVEPOINT**: Rolls back to a specific savepoint without aborting the entire transaction.
+- **SET TRANSACTION ISOLATION LEVEL**: Sets the isolation level for the transaction.
+
+### Isolation Levels
+- **READ UNCOMMITTED**: Lowest isolation. Allows dirty reads (reading uncommitted data from other transactions).
+- **READ COMMITTED**: Prevents dirty reads. Only committed data is visible. Most common default.
+- **REPEATABLE READ**: Ensures that if you read a row twice in the same transaction, you get the same values. Prevents non-repeatable reads.
+- **SERIALIZABLE**: Highest isolation. Transactions execute as if serialized (one after another). Prevents phantom reads but has the lowest concurrency.
+
+### Concurrency Problems
+- **Dirty Read**: Reading data that has been modified by another transaction but not yet committed.
+- **Non-Repeatable Read**: Reading the same row twice in one transaction yields different values because another transaction modified it between reads.
+- **Phantom Read**: A query returns different rows because another transaction inserted or deleted rows between executions.
+- **Lost Update**: Two transactions read the same row and update it based on the read, causing one update to overwrite the other.
+
+### Advantages
+- **Data Integrity**: Guarantees consistent database state.
+- **Reliability**: Changes survive system failures.
+- **Concurrency**: Multiple users can work simultaneously without conflicts.
+- **Error Recovery**: Failed operations can be rolled back cleanly.
+- **Trust**: Applications can rely on the database for correctness.
+
+### Disadvantages
+- **Performance Overhead**: Transaction management adds processing cost.
+- **Locking**: High isolation levels can cause lock contention and deadlocks.
+- **Complexity**: Distributed transactions across multiple databases are complex.
+- **Reduced Concurrency**: Stronger isolation limits parallelism.
+- **Recovery Time**: Large transactions can take time to roll back.
+
+### Uses and Applications
+- **Banking**: Transferring funds between accounts.
+- **E-commerce**: Processing orders (inventory check, payment, shipping).
+- **Booking Systems**: Reserving flights, hotels, or tickets.
+- **Inventory Management**: Processing stock movements.
+- **Any Multi-Step Operation**: Where partial completion would leave the system in an invalid state.
+    `,
+    codeExample: `
+-- Transaction and ACID Examples
+
+CREATE DATABASE transaction_demo;
+USE transaction_demo;
+
+CREATE TABLE accounts (
+    account_id INT PRIMARY KEY AUTO_INCREMENT,
+    account_name VARCHAR(100) NOT NULL,
+    balance DECIMAL(15, 2) NOT NULL CHECK (balance >= 0),
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE transaction_log (
+    log_id INT PRIMARY KEY AUTO_INCREMENT,
+    from_account INT,
+    to_account INT,
+    amount DECIMAL(15, 2),
+    status ENUM('COMMITTED', 'ROLLED_BACK', 'PENDING'),
+    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (from_account) REFERENCES accounts(account_id),
+    FOREIGN KEY (to_account) REFERENCES accounts(account_id)
+);
+
+-- Insert sample accounts
+INSERT INTO accounts (account_name, balance) VALUES
+    ('Alice Savings', 5000.00),
+    ('Bob Checking', 3000.00),
+    ('Charlie Business', 10000.00);
+
+-- Basic transaction: Transfer money between accounts
+START TRANSACTION;
+
+UPDATE accounts SET balance = balance - 500.00 WHERE account_id = 1;
+UPDATE accounts SET balance = balance + 500.00 WHERE account_id = 2;
+
+-- Log the transaction
+INSERT INTO transaction_log (from_account, to_account, amount, status)
+VALUES (1, 2, 500.00, 'COMMITTED');
+
+COMMIT;
+
+-- Verify the transfer
+SELECT account_name, balance FROM accounts WHERE account_id IN (1, 2);
+
+-- Transaction with ROLLBACK
+START TRANSACTION;
+
+UPDATE accounts SET balance = balance - 20000.00 WHERE account_id = 2;
+
+-- This will fail due to CHECK constraint (balance >= 0)
+-- The entire transaction rolls back
+ROLLBACK;
+
+-- Verify Alice's balance is unchanged
+SELECT account_name, balance FROM accounts WHERE account_id = 2;
+
+-- Transaction with SAVEPOINT
+START TRANSACTION;
+
+UPDATE accounts SET balance = balance - 100.00 WHERE account_id = 3;
+
+SAVEPOINT after_first_deduction;
+
+UPDATE accounts SET balance = balance - 100.00 WHERE account_id = 3;
+
+-- Oops, second deduction was a mistake. Rollback to savepoint.
+ROLLBACK TO SAVEPOINT after_first_deduction;
+
+-- Only the first deduction is applied
+COMMIT;
+
+SELECT account_name, balance FROM accounts WHERE account_id = 3;
+
+-- Batch transaction with error handling (MySQL syntax)
+DELIMITER //
+CREATE PROCEDURE safe_transfer(
+    IN from_acct INT,
+    IN to_acct INT,
+    IN transfer_amount DECIMAL(15,2)
+)
+BEGIN
+    DECLARE insufficient_funds CONDITION FOR SQLSTATE '45000';
+
+    DECLARE EXIT HANDLER FOR sqlexception
+    BEGIN
+        ROLLBACK;
+        INSERT INTO transaction_log (from_account, to_account, amount, status)
+        VALUES (from_acct, to_acct, transfer_amount, 'ROLLED_BACK');
+    END;
+
+    START TRANSACTION;
+
+    -- Check balance first
+    IF (SELECT balance FROM accounts WHERE account_id = from_acct) < transfer_amount THEN
+        SIGNAL sqlstate '45000'
+        SET message_text = 'Insufficient funds';
+    END IF;
+
+    UPDATE accounts SET balance = balance - transfer_amount WHERE account_id = from_acct;
+    UPDATE accounts SET balance = balance + transfer_amount WHERE account_id = to_acct;
+
+    INSERT INTO transaction_log (from_account, to_account, amount, status)
+    VALUES (from_acct, to_acct, transfer_amount, 'COMMITTED');
+
+    COMMIT;
+END //
+DELIMITER ;
+
+-- Use the stored procedure
+CALL safe_transfer(1, 3, 250.00);
+
+-- Check results
+SELECT * FROM transaction_log ORDER BY transaction_date DESC;
+    `
+  },
+  {
+    id: "dbms-008",
+    title: "Views and Stored Procedures",
+    language: "sql",
+    content: `
+## Views and Stored Procedures
+
+### Definition
+A **view** is a virtual table based on the result set of a SQL statement. It contains no data itself but retrieves data from underlying tables when queried. Views can simplify complex queries, restrict access to specific columns or rows, and provide a consistent interface even when the underlying schema changes. A **stored procedure** is a prepared SQL code that you can save and reuse. It can accept parameters, perform operations, and return results. Stored procedures are stored in the database and executed by calling them by name.
+
+### Introduction
+Views and stored procedures are powerful database objects that improve code organization, security, and maintainability. Views abstract complex queries into simple, reusable objects. A developer can query a view just like a table, without needing to write complex JOINs every time. For example, a view named **employee_details** could join employees, departments, and locations into a single virtual table. Stored procedures encapsulate business logic at the database level. Instead of sending multiple SQL statements from the application, you can call a single procedure. This reduces network traffic, ensures consistent logic, and allows database administrators to optimize performance independently. Both views and stored procedures are fundamental to enterprise database development.
+
+### History
+Views have been part of the relational model since Codd's original work. SQL-86 included CREATE VIEW syntax. Views became widely used for security (restricting column/row access) and for simplifying complex queries in data warehouses. Stored procedures evolved from early mainframe systems. Oracle's PL/SQL (1988) and Microsoft's T-SQL (1984) brought stored procedures to mainstream relational databases. The concept was influenced by the need to reduce network round-trips in client-server architectures. Modern databases support stored procedures with procedural language features including variables, loops, conditionals, exception handling, and cursors.
+
+### Views in Detail
+
+**Simple Views**: Based on a single table. Can be used for INSERT, UPDATE, and DELETE operations (with restrictions).
+
+**Complex Views**: Based on multiple tables with JOINs, aggregations, or subqueries. Generally read-only.
+
+**Materialized Views**: Physical copies of query results stored on disk. Must be refreshed periodically. Used in data warehouses for expensive queries.
+
+**Updatable Views**: Views that allow modification of underlying data through the view. Rules include no aggregate functions, no DISTINCT, no GROUP BY, and the view must include the primary key.
+
+**WITH CHECK OPTION**: A constraint that ensures INSERT and UPDATE operations through the view produce rows that satisfy the view's WHERE clause.
+
+### Stored Procedures in Detail
+
+**Parameters**: Procedures can accept IN (input), OUT (output), and INOUT (both) parameters.
+
+**Variables**: Local variables for intermediate calculations.
+
+**Control Flow**: IF/ELSE, CASE, WHILE loops, FOR loops, and cursor-based iteration.
+
+**Exception Handling**: TRY/CATCH blocks or DECLARE HANDLER for error management.
+
+**Return Values**: Can return result sets, output parameters, or status codes.
+
+**Transactions**: Procedures can manage transactions (BEGIN, COMMIT, ROLLBACK).
+
+**Permissions**: Procedures can execute with the privileges of the procedure owner (EXECUTE AS).
+
+### Advantages
+- **Code Reusability**: Write once, use many times.
+- **Security**: Grant access to views/procedures without exposing underlying tables.
+- **Abstraction**: Hide complexity from application developers.
+- **Performance**: Stored procedures are compiled and cached by the database.
+- **Maintainability**: Business logic changes in one place (the database).
+- **Reduced Network Traffic**: Single call instead of multiple SQL statements.
+
+### Disadvantages
+- **Vendor Lock-In**: Stored procedure syntax varies between databases.
+- **Debugging Difficulty**: Debugging stored procedures is harder than application code.
+- **Version Control**: Database objects need separate version control strategies.
+- **Testing Complexity**: Unit testing stored procedures requires specialized tools.
+- **Resource Usage**: Complex procedures can consume significant database resources.
+- **Migration Challenges**: Moving stored procedures between databases is non-trivial.
+
+### Uses and Applications
+- **Data Security**: Views restrict sensitive columns (e.g., hiding salary data).
+- **Report Generation**: Views pre-join tables for reporting queries.
+- **Business Logic**: Stored procedures implement order processing, calculations, and validations.
+- **Batch Processing**: Procedures handle large data transformations.
+- **API Layer**: Stored procedures serve as an API for the database.
+- **Data Warehousing**: Materialized views pre-compute expensive aggregations.
+    `,
+    codeExample: `
+-- Views and Stored Procedures Examples
+
+CREATE DATABASE views_sp_demo;
+USE views_sp_demo;
+
+-- Create base tables
+CREATE TABLE employees (
+    emp_id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    salary DECIMAL(10, 2),
+    department_id INT,
+    hire_date DATE
+);
+
+CREATE TABLE departments (
+    dept_id INT PRIMARY KEY AUTO_INCREMENT,
+    dept_name VARCHAR(100) NOT NULL,
+    location VARCHAR(100)
+);
+
+CREATE TABLE projects (
+    project_id INT PRIMARY KEY AUTO_INCREMENT,
+    project_name VARCHAR(150) NOT NULL,
+    budget DECIMAL(15, 2)
+);
+
+CREATE TABLE employee_projects (
+    emp_id INT,
+    project_id INT,
+    hours_allocated INT,
+    PRIMARY KEY (emp_id, project_id),
+    FOREIGN KEY (emp_id) REFERENCES employees(emp_id),
+    FOREIGN KEY (project_id) REFERENCES projects(project_id)
+);
+
+-- Insert sample data
+INSERT INTO departments (dept_name, location) VALUES
+    ('Engineering', 'Building A'),
+    ('Marketing', 'Building B'),
+    ('Finance', 'Building C');
+
+INSERT INTO employees (first_name, last_name, email, salary, department_id, hire_date) VALUES
+    ('Alice', 'Williams', 'alice@co.com', 95000, 1, '2021-03-15'),
+    ('Bob', 'Jones', 'bob@co.com', 72000, 2, '2022-06-01'),
+    ('Carol', 'Davis', 'carol@co.com', 110000, 1, '2019-01-10'),
+    ('David', 'Wilson', 'david@co.com', 88000, 3, '2023-02-20');
+
+INSERT INTO projects (project_name, budget) VALUES
+    ('Website Redesign', 50000),
+    ('Mobile App', 120000),
+    ('Data Migration', 30000);
+
+INSERT INTO employee_projects (emp_id, project_id, hours_allocated) VALUES
+    (1, 1, 120), (1, 2, 80), (3, 2, 200), (3, 3, 60), (4, 3, 100);
+
+-- ==========================================
+-- VIEWS
+-- ==========================================
+
+-- Simple view: employee details with department
+CREATE VIEW v_employee_details AS
+SELECT
+    e.emp_id,
+    e.first_name,
+    e.last_name,
+    e.email,
+    e.salary,
+    d.dept_name,
+    d.location,
+    e.hire_date
+FROM employees e
+JOIN departments d ON e.department_id = d.dept_id;
+
+-- Query the view like a table
+SELECT * FROM v_employee_details WHERE dept_name = 'Engineering';
+
+-- View with aggregation: department statistics
+CREATE VIEW v_dept_stats AS
+SELECT
+    d.dept_name,
+    COUNT(e.emp_id) AS employee_count,
+    ROUND(AVG(e.salary), 2) AS avg_salary,
+    MIN(e.salary) AS min_salary,
+    MAX(e.salary) AS max_salary
+FROM departments d
+LEFT JOIN employees e ON d.dept_id = e.department_id
+GROUP BY d.dept_name;
+
+SELECT * FROM v_dept_stats ORDER BY avg_salary DESC;
+
+-- View with computed columns: project workload
+CREATE VIEW v_project_workload AS
+SELECT
+    p.project_name,
+    p.budget,
+    COUNT(ep.emp_id) AS team_size,
+    SUM(ep.hours_allocated) AS total_hours,
+    ROUND(p.budget / NULLIF(SUM(ep.hours_allocated), 0), 2) AS cost_per_hour
+FROM projects p
+LEFT JOIN employee_projects ep ON p.project_id = ep.project_id
+GROUP BY p.project_id, p.project_name, p.budget;
+
+SELECT * FROM v_project_workload;
+
+-- Materialized view equivalent (PostgreSQL syntax, MySQL uses summary tables)
+-- CREATE MATERIALIZED VIEW mv_dept_summary AS
+-- SELECT dept_name, COUNT(*), AVG(salary)
+-- FROM v_employee_details
+-- GROUP BY dept_name;
+
+-- ==========================================
+-- STORED PROCEDENCES
+-- ==========================================
+
+DELIMITER //
+
+-- Simple stored procedure: get employees by department
+CREATE PROCEDURE sp_get_employees_by_dept(
+    IN p_dept_name VARCHAR(100)
+)
+BEGIN
+    SELECT first_name, last_name, salary, hire_date
+    FROM v_employee_details
+    WHERE dept_name = p_dept_name
+    ORDER BY last_name;
+END //
+
+-- Procedure with output parameter
+CREATE PROCEDURE sp_get_dept_count(
+    OUT p_total_depts INT
+)
+BEGIN
+    SELECT COUNT(*) INTO p_total_depts FROM departments;
+END //
+
+-- Procedure with business logic: give a raise
+CREATE PROCEDURE sp_give_raise(
+    IN p_emp_id INT,
+    IN p_percent DECIMAL(5, 2),
+    OUT p_new_salary DECIMAL(10, 2)
+)
+BEGIN
+    DECLARE v_current_salary DECIMAL(10, 2);
+
+    SELECT salary INTO v_current_salary
+    FROM employees WHERE emp_id = p_emp_id;
+
+    IF v_current_salary IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Employee not found';
+    END IF;
+
+    SET p_new_salary = v_current_salary * (1 + p_percent / 100);
+
+    UPDATE employees
+    SET salary = p_new_salary
+    WHERE emp_id = p_emp_id;
+END //
+
+-- Procedure with cursor: process all employees
+CREATE PROCEDURE sp_generate_salary_report()
+BEGIN
+    DECLARE v_done INT DEFAULT FALSE;
+    DECLARE v_name VARCHAR(100);
+    DECLARE v_salary DECIMAL(10, 2);
+    DECLARE v_dept VARCHAR(100);
+
+    DECLARE emp_cursor CURSOR FOR
+        SELECT first_name || ' ' || last_name, salary, dept_name
+        FROM v_employee_details;
+
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_done = TRUE;
+
+    CREATE TEMPORARY TABLE IF NOT EXISTS salary_report (
+        employee_name VARCHAR(100),
+        salary DECIMAL(10, 2),
+        department VARCHAR(100),
+        salary_grade VARCHAR(20)
+    );
+
+    OPEN emp_cursor;
+
+    read_loop: LOOP
+        FETCH emp_cursor INTO v_name, v_salary, v_dept;
+        IF v_done THEN
+            LEAVE read_loop;
+        END IF;
+
+        INSERT INTO salary_report VALUES (
+            v_name,
+            v_salary,
+            v_dept,
+            CASE
+                WHEN v_salary >= 100000 THEN 'Senior'
+                WHEN v_salary >= 75000 THEN 'Mid-Level'
+                ELSE 'Junior'
+            END
+        );
+    END LOOP;
+
+    CLOSE emp_cursor;
+
+    SELECT * FROM salary_report;
+    DROP TEMPORARY TABLE salary_report;
+END //
+
+DELIMITER ;
+
+-- Call stored procedures
+CALL sp_get_employees_by_dept('Engineering');
+
+CALL sp_get_dept_count(@total);
+SELECT @total AS total_departments;
+
+CALL sp_give_raise(1, 10.00, @new_sal);
+SELECT @new_sal AS updated_salary;
+
+CALL sp_generate_salary_report();
+    `
+  },
+  {
+    id: "dbms-009",
+    title: "Database Security",
+    language: "sql",
+    content: `
+## Database Security
+
+### Definition
+**Database security** encompasses the mechanisms, processes, and policies used to protect a database from unauthorized access, misuse, data breaches, and cyberattacks. It includes **authentication** (verifying user identity), **authorization** (granting permissions), **encryption** (protecting data at rest and in transit), **auditing** (tracking who did what), and **network security** (restricting access to database servers). Database security is a critical component of any organization's overall security posture.
+
+### Introduction
+Databases store an organization's most valuable assets: customer data, financial records, intellectual property, and operational information. A database breach can result in millions of dollars in damages, regulatory fines, legal liability, and reputational damage. The 2017 Equifax breach exposed 147 million records. The 2019 Capital One breach exposed 100 million records. These incidents underscore the importance of robust database security. Modern database security is multi-layered, involving network-level controls, database-level permissions, encryption, monitoring, and compliance with regulations like GDPR, HIPAA, PCI DSS, and SOX. Every developer and DBA must understand these concepts.
+
+### History
+Database security has evolved alongside the threats it addresses. In the 1970s and 1980s, security was primarily physical (locking the server room). The 1990s brought network-based attacks and the need for authentication and authorization mechanisms. SQL injection was first described by Jeff Forristal in 1998. The early 2000s saw a surge in data breaches, leading to regulations like SOX (2002), PCI DSS (2004), and HIPAA (enforced from 1996). The OWASP Top 10 has consistently listed injection attacks as a top threat. Today, database security includes advanced techniques like data masking, tokenization, database activity monitoring (DAM), and cloud-native security features.
+
+### Security Layers
+
+**Network Security**: Firewall rules, VPNs, network segmentation, and TLS/SSL for data in transit. Restrict which IP addresses can connect to the database server.
+
+**Authentication**: Verify user identity. Methods include passwords, certificate-based authentication, LDAP/Active Directory integration, multi-factor authentication (MFA), and IAM roles (for cloud databases).
+
+**Authorization**: Control what authenticated users can do. Uses GRANT and REVOKE to assign privileges at the database, table, column, and row levels. The principle of least privilege states that users should have only the minimum permissions needed.
+
+**Encryption**: Protect data from being read if storage is compromised. **At-rest encryption** encrypts data on disk (Transparent Data Encryption, column-level encryption). **In-transit encryption** uses TLS/SSL for network communication. **Application-level encryption** encrypts data before it reaches the database.
+
+**Auditing and Monitoring**: Track all database activities. Audit logs record who accessed what data, when, and from where. Database Activity Monitoring (DAM) tools provide real-time alerting on suspicious activities.
+
+**Data Masking**: Replaces sensitive data with realistic but fake data for non-production environments. Static masking creates a masked copy. Dynamic masking hides data at query time based on user privileges.
+
+### SQL Injection
+SQL injection is an attack where malicious SQL code is inserted into application queries. It occurs when user input is concatenated directly into SQL strings without sanitization. Prevention methods include **parameterized queries** (prepared statements), **stored procedures**, **input validation**, and **ORM frameworks**.
+
+### Common Vulnerabilities
+- **Default credentials**: Using default usernames/passwords.
+- **Excessive privileges**: Users with more access than needed.
+- **Unpatched databases**: Known vulnerabilities left unpatched.
+- **Unencrypted data**: Sensitive data stored in plain text.
+- **SQL injection**: Dynamic SQL with unsanitized input.
+- **Insufficient auditing**: No logging of access or changes.
+- **Backup exposure**: Backups stored without encryption.
+
+### Advantages of Database Security
+- **Data Protection**: Prevents unauthorized access to sensitive data.
+- **Regulatory Compliance**: Meets requirements of GDPR, HIPAA, PCI DSS.
+- **Business Continuity**: Prevents data loss and corruption.
+- **Trust**: Customers trust organizations with their data.
+- **Reduced Liability**: Fewer breaches mean less legal and financial risk.
+
+### Disadvantages
+- **Performance Overhead**: Encryption and auditing slow down operations.
+- **Complexity**: Multi-layered security is complex to implement and manage.
+- **Cost**: Security tools and skilled personnel are expensive.
+- **Usability Impact**: Strong security can frustrate legitimate users.
+- **False Positives**: Monitoring tools may generate excessive alerts.
+
+### Uses and Applications
+- **Healthcare**: HIPAA compliance for patient records.
+- **Financial Services**: PCI DSS for payment card data, SOX for financial reporting.
+- **E-commerce**: Protecting customer payment information.
+- **Government**: classified data protection and compliance.
+- **Cloud Databases**: AWS RDS, Azure SQL, and GCP Cloud SQL security features.
+    `,
+    codeExample: `
+-- Database Security Examples
+
+CREATE DATABASE security_demo;
+USE security_demo;
+
+-- ==========================================
+-- USER MANAGEMENT AND AUTHENTICATION
+-- ==========================================
+
+-- Create users with different access levels
+CREATE USER 'app_readonly'@'localhost' IDENTIFIED BY 'SecureP@ss123!';
+CREATE USER 'app_readwrite'@'localhost' IDENTIFIED BY 'SecureP@ss456!';
+CREATE USER 'db_admin'@'localhost' IDENTIFIED BY 'AdminP@ss789!';
+
+-- ==========================================
+-- AUTHORIZATION: GRANT AND REVOKE
+-- ==========================================
+
+-- Grant specific privileges to readonly user
+GRANT SELECT ON security_demo.* TO 'app_readonly'@'localhost';
+
+-- Grant read/write privileges to application user
+GRANT SELECT, INSERT, UPDATE, DELETE ON security_demo.* TO 'app_readwrite'@'localhost';
+
+-- Grant full privileges to admin
+GRANT ALL PRIVILEGES ON security_demo.* TO 'db_admin'@'localhost';
+
+-- Grant column-level privileges (very specific)
+CREATE TABLE customers (
+    customer_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    credit_card VARCHAR(20),
+    ssn VARCHAR(11),
+    phone VARCHAR(20)
+);
+
+-- Readonly user can see name and email but NOT credit card or SSN
+GRANT SELECT (customer_id, name, email, phone) ON security_demo.customers TO 'app_readonly'@'localhost';
+
+-- ==========================================
+-- ROW-LEVEL SECURITY (PostgreSQL syntax)
+-- ==========================================
+
+-- PostgreSQL row-level security example
+-- CREATE TABLE orders (
+--     order_id INT PRIMARY KEY,
+--     customer_id INT,
+--     order_amount DECIMAL(10,2),
+--     order_date DATE
+-- );
+--
+-- ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+--
+-- CREATE POLICY orders_customer_isolation ON orders
+--     USING (customer_id = current_setting('app.current_customer_id')::INT);
+
+-- ==========================================
+-- ENCRYPTION
+-- ==========================================
+
+-- Column-level encryption (MySQL example)
+CREATE TABLE sensitive_data (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_name VARCHAR(100),
+    -- Encrypted password using AES encryption
+    encrypted_password VARBINARY(255),
+    -- Encrypted SSN
+    encrypted_ssn VARBINARY(255)
+);
+
+-- Insert with encryption
+INSERT INTO sensitive_data (user_name, encrypted_password, encrypted_ssn)
+VALUES
+    ('alice', AES_ENCRYPT('mypassword', 'secret_key_123'), AES_ENCRYPT('123-45-6789', 'secret_key_123')),
+    ('bob', AES_ENCRYPT('bobspass', 'secret_key_123'), AES_ENCRYPT('987-65-4321', 'secret_key_123'));
+
+-- Query with decryption
+SELECT
+    user_name,
+    CAST(AES_DECRYPT(encrypted_password, 'secret_key_123') AS CHAR) AS decrypted_password,
+    CAST(AES_DECRYPT(encrypted_ssn, 'secret_key_123') AS CHAR) AS decrypted_ssn
+FROM sensitive_data;
+
+-- ==========================================
+-- AUDIT LOGGING
+-- ==========================================
+
+-- Create audit log table
+CREATE TABLE audit_log (
+    log_id INT PRIMARY KEY AUTO_INCREMENT,
+    table_name VARCHAR(100),
+    action VARCHAR(10), -- INSERT, UPDATE, DELETE
+    record_id INT,
+    old_values JSON,
+    new_values JSON,
+    changed_by VARCHAR(100),
+    changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Trigger-based audit logging
+DELIMITER //
+CREATE TRIGGER trg_customers_audit
+AFTER UPDATE ON customers
+FOR EACH ROW
+BEGIN
+    INSERT INTO audit_log (table_name, action, record_id, old_values, new_values, changed_by)
+    VALUES (
+        'customers',
+        'UPDATE',
+        OLD.customer_id,
+        JSON_OBJECT('name', OLD.name, 'email', OLD.email),
+        JSON_OBJECT('name', NEW.name, 'email', NEW.email),
+        CURRENT_USER()
+    );
+END //
+DELIMITER ;
+
+-- ==========================================
+-- VIEWS FOR SECURED ACCESS
+-- ==========================================
+
+-- Create a view that hides sensitive columns
+CREATE VIEW v_customer_safe AS
+SELECT
+    customer_id,
+    name,
+    email,
+    phone
+FROM customers;
+
+-- Grant access only to the view, not the base table
+REVOKE ALL ON security_demo.customers FROM 'app_readonly'@'localhost';
+GRANT SELECT ON security_demo.v_customer_safe TO 'app_readonly'@'localhost';
+
+-- ==========================================
+-- PASSWORD POLICIES (MySQL)
+-- ==========================================
+
+-- Enforce password expiration
+ALTER USER 'app_readwrite'@'localhost' PASSWORD EXPIRE INTERVAL 90 DAY;
+
+-- Failed login attempts and account locking (MySQL 8.0+)
+ALTER USER 'app_readwrite'@'localhost'
+    FAILED_LOGIN_ATTEMPTS 5
+    PASSWORD_LOCK_TIME 1;
+
+-- ==========================================
+-- TLS/SSL ENFORCEMENT (MySQL)
+-- ==========================================
+
+-- Require SSL for all connections
+-- ALTER USER 'app_readonly'@'localhost' REQUIRE SSL;
+-- ALTER USER 'app_readwrite'@'localhost' REQUIRE X509;
+
+-- View user privileges
+SHOW GRANTS FOR 'app_readonly'@'localhost';
+SHOW GRANTS FOR 'app_readwrite'@'localhost';
+
+-- Revoke privileges when no longer needed
+REVOKE INSERT, UPDATE, DELETE ON security_demo.* FROM 'app_readwrite'@'localhost';
+    `
+  },
+  {
+    id: "dbms-010",
+    title: "NoSQL and Modern Databases",
+    language: "javascript",
+    content: `
+## NoSQL and Modern Databases
+
+### Definition
+**NoSQL (Not Only SQL)** refers to a broad class of database management systems that differ from traditional relational databases in their data models, query languages, and scalability characteristics. NoSQL databases are designed to handle large volumes of unstructured, semi-structured, or rapidly changing data. The four main types are **document stores** (MongoDB, CouchDB), **key-value stores** (Redis, DynamoDB), **column-family stores** (Cassandra, HBase), and **graph databases** (Neo4j, Amazon Neptune). Modern databases also include **NewSQL** systems (CockroachDB, TiDB) that combine NoSQL scalability with SQL compatibility.
+
+### Introduction
+The rise of big data, real-time web applications, cloud computing, and microservices architecture drove the development of NoSQL databases. Traditional relational databases excel at structured data with well-defined schemas, but they struggle with massive scale, flexible data models, and high-velocity writes. Social media platforms generate billions of posts, IoT devices produce terabytes of sensor data, and e-commerce sites need sub-millisecond response times. NoSQL databases address these challenges by offering horizontal scalability, flexible schemas, and specialized data models. However, NoSQL is not a replacement for relational databases. Many modern applications use **polyglot persistence**, combining multiple database types to leverage the strengths of each. Understanding when to use which database type is a critical skill for modern developers.
+
+### History
+The term NoSQL was popularized in 2009 by Johan Oskarsson during a meetup in San Francisco. However, the underlying concepts predate the name. **Object databases** in the 1980s and 1990s challenged the relational model. **Google's Bigtable** (2006) and **Amazon's Dynamo** (2007) were influential papers that inspired many NoSQL systems. MongoDB was created in 2007, Cassandra in 2008, and Redis in 2009. The early 2010s saw rapid NoSQL adoption driven by companies like Facebook, Twitter, Netflix, and Uber. By the mid-2010s, the industry recognized that both relational and non-relational databases have their place. The term **NewSQL** emerged for databases that aim to provide NoSQL scalability with ACID guarantees. Today, cloud providers offer managed versions of both SQL and NoSQL databases.
+
+### Types of NoSQL Databases
+
+**Document Stores**: Store data as JSON-like documents (BSON, JSON). Each document can have a different structure. Ideal for content management, user profiles, and product catalogs. Examples: MongoDB, CouchDB, Firebase Firestore.
+
+**Key-Value Stores**: Simplest NoSQL model. Data stored as key-value pairs with O(1) lookup. Ideal for caching, session storage, and real-time leaderboards. Examples: Redis, Amazon DynamoDB, Memcached.
+
+**Column-Family Stores**: Store data in columns rather than rows. Optimized for queries over large datasets with high write throughput. Ideal for time-series data, IoT, and analytics. Examples: Apache Cassandra, HBase, ScyllaDB.
+
+**Graph Databases**: Store data as nodes (entities) and edges (relationships). Optimized for traversing relationships. Ideal for social networks, recommendation engines, and fraud detection. Examples: Neo4j, Amazon Neptune, ArangoDB.
+
+### Comparison: SQL vs NoSQL
+
+**Schema**: SQL has fixed schemas; NoSQL has dynamic/flexible schemas.
+**Scaling**: SQL scales vertically (bigger server); NoSQL scales horizontally (more servers).
+**Transactions**: SQL supports ACID transactions; most NoSQL databases offer eventual consistency.
+**Query Language**: SQL uses structured query language; NoSQL uses API-specific queries.
+**Data Model**: SQL uses tables with rows and columns; NoSQL uses documents, key-value pairs, columns, or graphs.
+**Joins**: SQL supports JOINs across tables; NoSQL typically denormalizes data.
+
+### CAP Theorem
+The **CAP theorem** (Brewer's theorem) states that a distributed data store can provide only two of three guarantees simultaneously:
+- **Consistency**: Every read receives the most recent write.
+- **Availability**: Every request receives a response (success or failure).
+- **Partition Tolerance**: The system continues to operate despite network partitions.
+
+In practice, network partitions are unavoidable, so the real choice is between CP (consistent but may not be available during partitions) and AP (available but may return stale data during partitions).
+
+### Advantages of NoSQL
+- **Horizontal Scalability**: Easily add more servers to handle increased load.
+- **Flexible Schema**: Add new fields without migrating existing data.
+- **High Performance**: Optimized for specific data access patterns.
+- **High Availability**: Built-in replication and fault tolerance.
+- **Cost Effective**: Open-source options and commodity hardware support.
+- **Developer Friendly**: Schema-less models are easier to iterate on.
+
+### Disadvantages of NoSQL
+- **Eventual Consistency**: Data may be temporarily inconsistent across nodes.
+- **Limited Query Capabilities**: No JOINs, limited aggregation support.
+- **No Standardized Language**: Each database has its own query API.
+- **Data Duplication**: Denormalization leads to redundant data.
+- **Maturity**: Some NoSQL databases lack the tooling and community of relational databases.
+- **ACID Limitations**: Many NoSQL databases sacrifice transactions for performance.
+
+### Modern Database Trends
+- **Multi-Model Databases**: Support multiple data models (document + graph + key-value).
+- **Serverless Databases**: Auto-scaling with pay-per-use pricing (Aurora Serverless, PlanetScale).
+- **Time-Series Databases**: Specialized for IoT and metrics (InfluxDB, TimescaleDB).
+- **Vector Databases**: Optimized for AI/ML embeddings (Pinecone, Weaviate, pgvector).
+- **NewSQL**: SQL compatibility with NoSQL scalability (CockroachDB, TiDB, YugabyteDB).
+- **Edge Databases**: Databases running at the network edge (SQLite, Durable Objects).
+
+### Uses and Applications
+- **Social Networks**: Graph databases for friend connections and feed generation.
+- **E-commerce**: Document stores for product catalogs with varying attributes.
+- **Gaming**: Key-value stores for leaderboards, sessions, and real-time state.
+- **IoT**: Column-family stores for high-volume sensor data ingestion.
+- **Content Management**: Document stores for articles, media, and metadata.
+- **Real-time Analytics**: Time-series databases for monitoring and metrics.
+- **AI/ML**: Vector databases for similarity search and recommendation systems.
+    `,
+    codeExample: `
+// NoSQL Database Examples using MongoDB (via MongoDB Shell / Node.js)
+
+// ==========================================
+// MongoDB: Document Store Operations
+// ==========================================
+
+// Connect to MongoDB
+// mongosh "mongodb://localhost:27017"
+
+// Create database and collection
+use ecommerce_db;
+
+// Insert a single document
+db.products.insertOne({
+  name: "Wireless Mouse",
+  category: "Electronics",
+  price: 29.99,
+  inStock: true,
+  tags: ["wireless", "ergonomic", "bluetooth"],
+  specs: {
+    dpi: 1600,
+    battery: "AA",
+    weight: "120g"
+  },
+  reviews: [
+    { user: "alice", rating: 5, comment: "Great mouse!" },
+    { user: "bob", rating: 4, comment: "Good value" }
+  ],
+  createdAt: new Date()
+});
+
+// Insert multiple documents
+db.products.insertMany([
+  {
+    name: "Mechanical Keyboard",
+    category: "Electronics",
+    price: 89.99,
+    inStock: true,
+    tags: ["mechanical", "rgb", "gaming"],
+    specs: { switches: "Cherry MX Blue", layout: "Full" }
+  },
+  {
+    name: "Desk Lamp",
+    category: "Office",
+    price: 45.00,
+    inStock: false,
+    tags: ["led", "adjustable"],
+    specs: { lumens: 800, colorTemp: "3000K-6000K" }
+  },
+  {
+    name: "USB-C Hub",
+    category: "Electronics",
+    price: 59.99,
+    inStock: true,
+    tags: ["usb-c", "multiport"],
+    specs: { ports: 7, powerDelivery: true }
+  }
+]);
+
+// Query documents
+db.products.find({ category: "Electronics" });
+
+db.products.find({
+  price: { $lt: 60 },
+  inStock: true
+});
+
+// Projection: select specific fields
+db.products.find(
+  { category: "Electronics" },
+  { name: 1, price: 1, _id: 0 }
+);
+
+// Update documents
+db.products.updateOne(
+  { name: "Wireless Mouse" },
+  {
+    $set: { price: 24.99 },
+    $push: { tags: "on-sale" }
+  }
+);
+
+db.products.updateMany(
+  { category: "Electronics" },
+  { $inc: { price: -5.00 } }
+);
+
+// Aggregation pipeline
+db.products.aggregate([
+  { $match: { inStock: true } },
+  { $unwind: "$tags" },
+  { $group: {
+      _id: "$tags",
+      avgPrice: { $avg: "$price" },
+      count: { $sum: 1 }
+  }},
+  { $sort: { count: -1 } },
+  { $limit: 5 }
+]);
+
+// Delete documents
+db.products.deleteOne({ name: "Desk Lamp" });
+
+// ==========================================
+// Redis: Key-Value Store (Node.js example)
+// ==========================================
+
+// const redis = require('redis');
+// const client = redis.createClient();
+//
+// async function runRedisExamples() {
+//   await client.connect();
+//
+//   // Set and Get
+//   await client.set('user:1:name', 'Alice');
+//   const name = await client.get('user:1:name');
+//   console.log(name); // Alice
+//
+//   // Hash: Store object
+//   await client.hSet('user:1', {
+//     name: 'Alice',
+//     email: 'alice@example.com',
+//     age: '30'
+//   });
+//   const user = await client.hGetAll('user:1');
+//   console.log(user);
+//
+//   // List: Queue operations
+//   await client.rPush('task_queue', 'task1', 'task2', 'task3');
+//   const task = await client.lPop('task_queue');
+//   console.log(task); // task1
+//
+//   // Sorted Set: Leaderboard
+//   await client.zAdd('leaderboard', [
+//     { score: 1500, value: 'player1' },
+//     { score: 2300, value: 'player2' },
+//     { score: 1800, value: 'player3' }
+//   ]);
+//   const topPlayers = await client.zRangeWithScores('leaderboard', 0, -1, { REV: true });
+//   console.log(topPlayers);
+//
+//   // Set: Unique items
+//   await client.sAdd('user:1:interests', 'coding', 'gaming', 'reading');
+//   const interests = await client.sMembers('user:1:interests');
+//   console.log(interests);
+//
+//   // Expiration (TTL)
+//   await client.set('session:abc123', 'active', { EX: 3600 });
+//   const ttl = await client.ttl('session:abc123');
+//   console.log(ttl); // seconds until expiration
+//
+//   await client.quit();
+// }
+//
+// runRedisExamples();
+
+// ==========================================
+// Neo4j: Graph Database (Cypher queries)
+// ==========================================
+
+// CREATE (alice:Person {name: 'Alice', age: 30})
+// CREATE (bob:Person {name: 'Bob', age: 25})
+// CREATE (carol:Person {name: 'Carol', age: 35})
+// CREATE (alice)-[:FRIENDS_WITH {since: 2020}]->(bob)
+// CREATE (bob)-[:FRIENDS_WITH {since: 2021}]->(carol)
+// CREATE (alice)-[:WORKS_AT]->(company:Company {name: 'TechCorp'})
+// CREATE (bob)-[:WORKS_AT]->(company)
+
+// Find friends of friends
+// MATCH (person:Person {name: 'Alice'})-[:FRIENDS_WITH]->(friend)-[:FRIENDS_WITH]->(fof)
+// WHERE NOT (person)-[:FRIENDS_WITH]->(fof) AND person <> fof
+// RETURN fof.name, fof.age
+
+// Find shortest path between two people
+// MATCH path = shortestPath(
+//   (alice:Person {name: 'Alice'})-[*]-(target:Person {name: 'Carol'})
+// )
+// RETURN path
+    `
+  }
+]
   },
 
   {
-
     slug: "computer-networks",
-
     title: "Computer Networks",
-
     description: "TCP/IP, OSI model, routing, HTTP, and network security.",
-
     icon: "🌐",
-
-    notesUrl: "https://noteslink.in/product/cn-computer-networks-notes-kiit-copy/",
-
     color: "from-cyan-500 to-blue-600",
     category: "Systems",
-
     lessons: [
+  {
+    id: "1",
+    title: "Introduction to Computer Networks",
+    content: `## Definition
 
-      {
+A **Computer Network** is a collection of interconnected computing devices (such as computers, servers, routers, switches, and other hardware) that share resources and communicate with each other using defined protocols and communication channels. The fundamental purpose of a network is to enable **data exchange** and **resource sharing** between nodes.
 
-        id: "1",
+A network can be as small as two devices connected via a cable or as massive as the **Internet**, which connects billions of devices worldwide. The defining characteristics of a network include: **interconnected nodes**, **shared communication protocols**, **resource sharing capability**, and **managed data flow**.
 
-        title: "Introduction to Networking",
+## Introduction
 
-        content: "Networking is the practice of connecting computers to share resources and communicate.\n\nLAN (Local Area Network):\n- Covers a small area (home, office, campus)\n- High speed (100 Mbps - 10 Gbps)\n- Low latency, low cost\n\nWAN (Wide Area Network):\n- Spans large geographic areas\n- Uses leased lines, MPLS, or the internet\n- Lower speed, higher latency\n\nTopologies:\n- Star: All nodes connect to a central hub\n- Bus: All nodes share a single backbone\n- Ring: Nodes form a closed loop\n- Mesh: Every node connects to every other node\n\nKey Metrics:\n- Bandwidth: Maximum data transfer rate (bits per second)\n- Latency: Time for data to travel source to destination\n- Throughput: Actual data transferred successfully\n- Jitter: Variation in latency over time\n- Packet Loss: Percentage of packets that fail to arrive\n\nNetwork devices: Hubs (broadcast), Switches (MAC-based), Routers (IP-based), Bridges (segment networks).",
+Computer networking forms the backbone of modern digital infrastructure. Every email sent, every webpage loaded, every video streamed, and every file transferred relies on computer networks. Understanding networking is essential for any computer science professional because it explains **how data travels** from one point to another, **how devices discover each other**, and **how security is maintained** across communication channels.
 
-        codeExample: `// Network metrics measurement tool\ninterface NetworkMetrics {\n  bandwidth: number;    // Mbps\n  latency: number;      // ms\n  jitter: number;       // ms\n  packetLoss: number;   // percentage\n}\n\nasync function measureLatency(host: string): Promise<number> {\n  const start = performance.now();\n  await fetch(\`https://\${host}/ping\`, { mode: 'no-cors' });\n  return performance.now() - start;\n}\n\nfunction calculateThroughput(\n  bytesTransferred: number,\n  timeSeconds: number\n): number {\n  return (bytesTransferred * 8) / timeSeconds / 1_000_000;\n}\n\nfunction classifyNetwork(metrics: NetworkMetrics): string {\n  const score =\n    (metrics.bandwidth / 100) * 0.4 +\n    (100 / metrics.latency) * 0.3 +\n    ((100 - metrics.packetLoss) / 100) * 0.3;\n  if (score > 0.8) return 'Excellent';\n  if (score > 0.5) return 'Good';\n  return 'Poor';\n}\n\nconst metrics: NetworkMetrics = {\n  bandwidth: 100, latency: 15, jitter: 2, packetLoss: 0.1\n};\nconsole.log(classifyNetwork(metrics));`,
+At its core, networking involves understanding several key concepts: **protocols** (rules for communication), **addresses** (unique identifiers for devices), **topologies** (physical or logical arrangement of nodes), **transmission media** (wired or wireless channels), and **network models** (frameworks that organize communication layers). This lesson lays the groundwork for all subsequent topics in computer networks.
 
-        language: "typescript"
+## History
 
-      },
+The history of computer networks spans over five decades of rapid innovation:
 
-      {
+- **1960s - ARPANET**: The U.S. Department of Defense's Advanced Research Projects Agency (ARPA) developed ARPANET, the first wide-area packet-switching network. On October 29, 1969, the first message was sent between UCLA and Stanford Research Institute. ARPANET used **NCP** (Network Control Protocol) as its initial communication protocol.
 
-        id: "2",
+- **1970s - Ethernet and TCP/IP**: Robert Metcalfe invented **Ethernet** in 1973 at Xerox PARC, enabling local area networking. Simultaneously, Vint Cerf and Bob Kahn developed the **TCP/IP** protocol suite, which would become the universal standard for network communication.
 
-        title: "OSI & TCP/IP Models",
+- **1980s - Expansion**: ARPANET adopted TCP/IP on January 1, 1983 (known as "flag day"), marking the birth of the modern Internet. The **Domain Name System (DNS)** was introduced in 1984, replacing numeric IP addresses with human-readable names.
 
-        content: "OSI Model (7 layers):\n7. Application — HTTP, FTP, DNS, SMTP\n6. Presentation — Encryption, compression, encoding\n5. Session — Session management, sockets, NetBIOS\n4. Transport — TCP, UDP, port numbers\n3. Network — IP, ICMP, routing\n2. Data Link — MAC, Ethernet, switches, ARP\n1. Physical — Cables, signals, hubs, NICs\n\nData encapsulation: each layer adds a header (and sometimes a trailer) as data moves down the stack. Decapsulation reverses this on the receiving side.\n\nTCP/IP Model (4 layers):\n4. Application — Combines OSI layers 5-7\n3. Transport — TCP/UDP\n2. Internet — IP, ICMP, routing\n1. Network Access — Combines OSI layers 1-2\n\nComparison: OSI is a theoretical reference model; TCP/IP is the practical implementation used on the internet. Both help reason about where protocols and technologies fit in the networking stack.",
+- **1990s - The World Wide Web**: Tim Berners-Lee invented the **World Wide Web** in 1991, and with the release of the **Mosaic** browser in 1993, the Internet became accessible to the general public. Commercial ISPs began offering Internet access to households.
 
-        codeExample: `// OSI Layer simulation\ninterface Packet {\n  data: string;\n  headers: Record<string, string>;\n}\n\nclass NetworkLayer {\n  encapsulate(data: string): Packet {\n    return {\n      data,\n      headers: { type: 'HTTP', version: '1.1' }\n    };\n  }\n}\n\nclass TransportLayer {\n  encapsulate(packet: Packet): Packet {\n    return {\n      data: packet.data,\n      headers: { ...packet.headers, srcPort: '49152', dstPort: '80' }\n    };\n  }\n}\n\nclass InternetLayer {\n  encapsulate(packet: Packet): Packet {\n    return {\n      data: packet.data,\n      headers: { ...packet.headers, srcIP: '192.168.1.5', dstIP: '93.184.216.34' }\n    };\n  }\n}\n\nconst network = new NetworkLayer();\nconst transport = new TransportLayer();\nconst internet = new InternetLayer();\n\nlet pkt = network.encapsulate('Hello World');\npkt = transport.encapsulate(pkt);\npkt = internet.encapsulate(pkt);\nconsole.log(pkt.headers);`,
+- **2000s - Broadband and Wireless**: High-speed broadband replaced dial-up connections. **Wi-Fi** (IEEE 802.11) became ubiquitous. Social media, cloud computing, and mobile Internet fundamentally changed how networks were used.
 
-        language: "typescript"
+- **2010s-Present - Cloud, IoT, and 5G**: Cloud computing, the Internet of Things (IoT), software-defined networking (SDN), and **5G** wireless technology have pushed network capabilities to new heights.
 
-      },
+## Advantages
 
-      {
+1. **Resource Sharing**: Networks allow multiple users to share hardware (printers, storage), software (applications, databases), and data files, reducing costs and improving efficiency.
 
-        id: "3",
+2. **Communication**: Email, instant messaging, video conferencing, and VoIP enable rapid communication across any distance.
 
-        title: "Physical & Data Link Layer",
+3. **Centralized Management**: System administrators can manage, update, and secure all networked devices from a central location.
 
-        content: "Physical Layer handles raw bit transmission over a medium:\n- Encoding: NRZ, NRZI, Manchester, 4B/5B\n- Signaling: electrical (copper), light (fiber), radio (wireless)\n- Bandwidth and throughput limits\n\nData Link Layer provides node-to-node delivery:\n- Frames: packets with header, payload, and trailer\n- MAC addresses: 48-bit unique hardware identifiers\n- Error detection: CRC (Cyclic Redundancy Check)\n\nMedia Access Control:\n- CSMA/CD (Collision Detection) — used in wired Ethernet\n  1. Listen before transmitting\n  2. If collision detected, send jam signal\n  3. Wait random backoff time, retry\n- CSMA/CA (Collision Avoidance) — used in Wi-Fi (802.11)\n  1. Listen before transmitting\n  2. If channel idle, wait DIFS then send\n  3. Receiver sends ACK; if no ACK, exponential backoff\n\nSwitches operate at Layer 2, forwarding frames based on MAC address tables learned from source addresses.",
+4. **Scalability**: Networks can grow from two devices to thousands by adding new nodes and infrastructure incrementally.
 
-        codeExample: `// CRC-32 implementation\ndef crc32(data: string): string {\n  let crc = 0xFFFFFFFF;\n  const polynomial = 0xEDB88320;\n\n  for (const char of data) {\n    crc ^= char.charCodeAt(0);\n    for (let i = 0; i < 8; i++) {\n      crc = (crc >>> 1) ^ (crc & 1 ? polynomial : 0);\n    }\n  }\n  return ((crc ^ 0xFFFFFFFF) >>> 0).toString(16).padStart(8, '0');\n}\n\n// MAC address validator\nfunction isValidMAC(mac: string): boolean {\n  const pattern = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;\n  return pattern.test(mac);\n}\n\n// Simple frame structure\ninterface Frame {\n  preamble: string;\n  dstMAC: string;\n  srcMAC: string;\n  payload: string;\n  fcs: string;\n}\n\nfunction createFrame(dst: string, src: string, data: string): Frame {\n  return {\n    preamble: '10101010'.repeat(7),\n    dstMAC: dst, srcMAC: src,\n    payload: data,\n    fcs: crc32(data)\n  };\n}\n\nconsole.log(crc32('Hello Network'));\nconsole.log(isValidMAC('AA:BB:CC:DD:EE:FF'));`,
+5. **Reliability and Redundancy**: Multiple paths between nodes ensure that if one link fails, data can be rerouted through alternative paths.
 
-        language: "typescript"
+6. **Cost Efficiency**: Sharing resources and centralizing management significantly reduces hardware and personnel costs.
 
-      },
+7. **Collaboration**: Multiple users can work on shared documents, databases, and projects simultaneously.
 
-      {
+## Disadvantages
 
-        id: "4",
+1. **Security Vulnerabilities**: Networks are susceptible to hacking, malware, phishing, denial-of-service attacks, and data breaches.
 
-        title: "Network Layer - IP",
+2. **Setup and Maintenance Costs**: Initial infrastructure investment (cables, switches, routers, servers) and ongoing maintenance can be expensive.
 
-        content: "IPv4 (32-bit addresses):\n- Dotted decimal: 192.168.1.1\n- Classful: A (0-127), B (128-191), C (192-223), D (multicast), E (reserved)\n- CIDR replaced classful with variable-length prefix (e.g., /24)\n- Private ranges: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16\n\nSubnetting: divides a network into smaller subnets using subnet masks.\nHosts = 2^(32 - prefix) - 2 (network + broadcast addresses reserved).\n\nIPv6 (128-bit addresses):\n- Colon hexagonal: 2001:0db8:85a3::8a2e:0370:7334\n- Eliminates NAT, enables end-to-end connectivity\n- Built-in IPSec support, flow labels for QoS\n\nRouting Algorithms:\n- Distance Vector (RIP): hop count, max 15 hops\n- Link State (OSPF): Dijkstra shortest path, cost-based\n- Path Vector (BGP): policy-based, inter-domain routing\n- Static routing for simple topologies, dynamic for large networks",
+3. **Dependency and Downtime**: Network failures can halt business operations, cause data loss, and disrupt communication.
 
-        codeExample: `// IP address utilities\nclass IPAddress {\n  static toBinary(ip: string): string {\n    return ip.split('.').map(octet =>\n      parseInt(octet).toString(2).padStart(8, '0')\n    ).join('.');\n  }\n\n  static subnetMask(cidr: number): string {\n    const mask = ~(2 ** (32 - cidr) - 1);\n    return [\n      (mask >>> 24) & 255, (mask >>> 16) & 255,\n      (mask >>> 8) & 255, mask & 255\n    ].join('.');\n  }\n\n  static networkAddress(ip: string, cidr: number): string {\n    const ipNum = ip.split('.').reduce((acc, o) => (acc << 8) + parseInt(o), 0);\n    const mask = ~(2 ** (32 - cidr) - 1) >>> 0;\n    const network = (ipNum & mask) >>> 0;\n    return [(network >>> 24) & 255, (network >>> 16) & 255,\n            (network >>> 8) & 255, network & 255].join('.');\n  }\n\n  static totalHosts(cidr: number): number {\n    return 2 ** (32 - cidr) - 2;\n  }\n\n  static isPrivate(ip: string): boolean {\n    const parts = ip.split('.').map(Number);\n    return (parts[0] === 10) ||\n      (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) ||\n      (parts[0] === 192 && parts[1] === 168);\n  }\n}\n\nconsole.log(IPAddress.subnetMask(24));  // 255.255.255.0\nconsole.log(IPAddress.totalHosts(26));  // 62\nconsole.log(IPAddress.isPrivate('192.168.1.1')); // true`,
+4. **Complexity**: Large networks require skilled administrators and sophisticated monitoring tools to manage effectively.
 
-        language: "typescript"
+5. **Privacy Concerns**: Data transmitted across networks can be intercepted, raising concerns about user privacy and data protection.
 
-      },
+6. **Spread of Malware**: Viruses and worms can propagate rapidly across a network, infecting multiple systems simultaneously.
 
-      {
+## Uses and Applications
 
-        id: "5",
+- **Internet Access and Browsing**: The most widespread use of networking, connecting billions of users to web services.
+- **Enterprise LANs and WANs**: Businesses use local and wide area networks to connect offices, data centers, and remote workers.
+- **Cloud Computing**: Networks connect users to cloud services (AWS, Azure, GCP) for scalable computing and storage.
+- **Streaming Services**: Netflix, YouTube, Spotify, and other platforms deliver content over high-speed networks.
+- **IoT and Smart Devices**: Smart homes, industrial sensors, and wearable devices all communicate through networks.
+- **Healthcare**: Telemedicine, remote patient monitoring, and electronic health records rely on secure networks.
+- **Education**: Online learning platforms, virtual classrooms, and digital libraries depend on network connectivity.
+- **Financial Services**: Online banking, stock trading, and payment processing all require fast, secure networks.`,
+    codeExample: `# ===========================================
+# LESSON 1: Introduction to Computer Networks
+# Basic Network Commands and Concepts
+# ===========================================
 
-        title: "Transport Layer - TCP & UDP",
+# ----- Checking Network Interfaces -----
+# Display all network interfaces and their IP addresses
+ipconfig /all          # Windows
+ifconfig -a            # Linux/macOS
 
-        content: "TCP (Transmission Control Protocol):\n- Three-way handshake: SYN → SYN-ACK → ACK\n- Reliable delivery: sequence numbers, acknowledgments, retransmission\n- Flow control: sliding window protocol\n- Congestion control: slow start, congestion avoidance, fast retransmit\n- Four-way termination: FIN → ACK → FIN → ACK\n\nUDP (User Datagram Protocol):\n- Connectionless, no handshake\n- No ordering, no reliability guarantees\n- Lower latency and overhead\n- Checksum optional (IPv4), mandatory (IPv6)\n\nTCP Congestion Control:\n- Slow Start: exponential window growth until threshold\n- Congestion Avoidance: linear growth after threshold\n- Fast Retransmit: resend after 3 duplicate ACKs\n- Fast Recovery: halve window, skip slow start\n\nComparison:\nTCP suits: HTTP, SMTP, FTP, SSH\nUDP suits: DNS queries, VoIP, video streaming, gaming, DHCP",
+# ----- Testing Network Connectivity -----
+# Ping a remote host to test connectivity
+ping google.com
 
-        codeExample: `// TCP server with connection tracking\nimport net from 'net';\n\ninterface ClientInfo {\n  id: string;\n  socket: net.Socket;\n  connectedAt: Date;\n}\n\nconst clients = new Map<string, ClientInfo>();\nlet clientCounter = 0;\n\nconst server = net.createServer((socket) => {\n  const clientId = \`client-\${++clientCounter}\`;\n  clients.set(clientId, {\n    id: clientId, socket, connectedAt: new Date()\n  });\n\n  console.log(\`\${clientId} connected from \${socket.remoteAddress}\`);\n  socket.write(\`Welcome! You are \${clientId}\\n\`);\n\n  socket.on('data', (data) => {\n    const msg = data.toString().trim();\n    console.log(\`[\${clientId}]: \${msg}\`);\n    if (msg === 'quit') {\n      socket.end('Goodbye!\\n');\n    } else {\n      socket.write(\`Echo: \${msg}\\n\`);\n    }\n  });\n\n  socket.on('close', () => {\n    clients.delete(clientId);\n    console.log(\`\${clientId} disconnected\`);\n  });\n});\n\nserver.listen(8080, () => console.log('TCP server on :8080'));`,
+# Ping with a specific number of packets (5 packets)
+ping -n 5 google.com          # Windows
+ping -c 5 google.com          # Linux/macOS
 
-        language: "typescript"
+# ----- Viewing Network Routing Table -----
+# Display the routing table
+route print              # Windows
+netstat -rn              # Linux/macOS
 
-      },
+# ----- DNS Lookups -----
+# Query DNS for a domain name
+nslookup google.com
 
-      {
+# Using dig for detailed DNS information
+dig google.com           # Linux/macOS
 
-        id: "6",
+# ----- Tracing the Path to a Remote Host -----
+# Trace the route packets take to reach a destination
+tracert google.com       # Windows
+traceroute google.com    # Linux/macOS
 
-        title: "Application Layer",
+# ----- Checking Active Network Connections -----
+# Display all active connections and listening ports
+netstat -an
 
-        content: "HTTP/HTTPS:\n- Request-response model over TCP\n- Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS\n- Status codes: 2xx success, 3xx redirect, 4xx client error, 5xx server error\n- HTTP/2: multiplexing, header compression, server push\n- HTTP/3: QUIC protocol, 0-RTT, runs over UDP\n\nDNS (Domain Name System):\n- Hierarchical naming: root → TLD → authoritative\n- Record types: A, AAAA, CNAME, MX, NS, TXT, SOA\n- Resolution: recursive resolver → root → TLD → authoritative → IP\n\nWebSocket:\n- Full-duplex communication over a single TCP connection\n- Starts as HTTP upgrade, then switches protocol\n- Real-time applications: chat, live feeds, gaming\n\nREST (Representational State Transfer):\n- Stateless, resource-based URLs\n- Standard HTTP methods map to CRUD operations\n- JSON or XML payloads\n- HATEOAS for discoverability",
+# ----- Viewing Your Public IP Address -----
+# Using curl to fetch your public IP
+curl ifconfig.me
 
-        codeExample: `// DNS resolver using Node.js dns module\nimport dns from 'dns';\nimport { promisify } from 'util';\n\nconst resolve4 = promisify(dns.resolve4);\nconst resolve6 = promisify(dns.resolve6);\nconst resolveMx = promisify(dns.resolveMx);\nconst resolveTxt = promisify(dns.resolveTxt);\n\nasync function fullDNSLookup(domain: string) {\n  const results: Record<string, unknown> = {};\n\n  try {\n    results.ipv4 = await resolve4(domain);\n  } catch { results.ipv4 = 'N/A'; }\n\n  try {\n    results.ipv6 = await resolve6(domain);\n  } catch { results.ipv6 = 'N/A'; }\n\n  try {\n    results.mx = await resolveMx(domain);\n  } catch { results.mx = 'N/A'; }\n\n  try {\n    results.txt = await resolveTxt(domain);\n  } catch { results.txt = 'N/A'; }\n\n  return results;\n}\n\n// REST client\ninterface RESTClient {\n  get: <T>(url: string) => Promise<T>;\n  post: <T>(url: string, body: unknown) => Promise<T>;\n}\n\nconst api: RESTClient = {\n  get: async (url) => (await fetch(url)).json(),\n  post: async (url, body) => (await fetch(url, {\n    method: 'POST',\n    headers: { 'Content-Type': 'application/json' },\n    body: JSON.stringify(body)\n  })).json()\n};\n\nfullDNSLookup('google.com').then(console.log);`,
+# ----- Network Configuration Display -----
+# Show current network configuration
+ipconfig                 # Windows
+ip addr show             # Linux
+networksetup -getinfo "Wi-Fi"  # macOS`,
+    language: "bash"
+  },
+  {
+    id: "2",
+    title: "OSI & TCP/IP Models",
+    content: `## Definition
 
-        language: "typescript"
+The **OSI (Open Systems Interconnection) Model** is a conceptual framework developed by the International Organization for Standardization (ISO) in 1984 that standardizes the functions of a communication system into **seven abstraction layers**. The **TCP/IP (Transmission Control Protocol/Internet Protocol) Model** is the practical, four-layer model that forms the foundation of the modern Internet. Both models serve as reference architectures for understanding how data flows through a network.
 
-      },
+The OSI model is often called the **reference model** because it provides a universal standard for network communication. The TCP/IP model, also known as the **Internet Protocol Suite**, is the actual implementation that powers the Internet. While the OSI model is more granular with seven layers, the TCP/IP model consolidates some layers into four, reflecting real-world protocol implementations.
 
-      {
+## Introduction
 
-        id: "7",
+Understanding network models is critical because they provide a **structured way to think about communication**. Each layer has specific responsibilities and communicates with the layers directly above and below it through well-defined interfaces. This **layered approach** allows:
 
-        title: "Network Security",
+- **Modularity**: Each layer can be developed, tested, and updated independently.
+- **Interoperability**: Different vendors can implement different layers that work together.
+- **Troubleshooting**: Problems can be isolated to specific layers.
+- **Abstraction**: Higher layers don't need to understand the implementation details of lower layers.
 
-        content: "TLS (Transport Layer Security):\n- Encrypts data in transit between client and server\n- Handshake: client hello → server hello + certificate → key exchange → encrypted\n- TLS 1.3: faster handshake (1-RTT), removes weak ciphers\n\nFirewalls:\n- Packet filtering: inspect headers (IP, port, protocol)\n- Stateful inspection: track connection states\n- Application layer firewall (WAF): inspect payload\n- Next-gen: deep packet inspection, threat intelligence\n\nCommon Attacks:\n- DDoS: overwhelm with traffic (volumetric, protocol, application)\n- Man-in-the-Middle: intercept and alter communications\n- DNS Spoofing: redirect to malicious IP\n- SQL Injection: inject SQL via user input\n- XSS: inject malicious scripts into web pages\n- Brute Force: systematic password guessing\n\nDefenses: encryption (TLS), input validation, rate limiting, MFA, network segmentation, IDS/IPS systems.",
+The relationship between the two models is important: the **OSI 7-layer model** maps to the **TCP/IP 4-layer model** roughly as follows. OSI Layers 5-7 (Session, Presentation, Application) combine into TCP/IP's Application Layer. OSI Layer 4 (Transport) maps directly to TCP/IP's Transport Layer. OSI Layers 3 (Network) maps to TCP/IP's Internet Layer. OSI Layers 1-2 (Physical, Data Link) combine into TCP/IP's Network Access Layer.
 
-        codeExample: `// TLS server with certificate\nimport https from 'https';\nimport fs from 'fs';\n\n// Generate self-signed cert with:\n// openssl req -x509 -newkey rsa:2048 -nodes -keyout key.pem -out cert.pem\n\nconst options = {\n  key: fs.readFileSync('key.pem'),\n  cert: fs.readFileSync('cert.pem'),\n  minVersion: 'TLSv1.3' as const\n};\n\n// Simple WAF-like input sanitizer\nfunction sanitizeInput(input: string): string {\n  return input\n    .replace(/<script[^>]*>.*?<\\/script>/gi, '')\n    .replace(/[<>\"']/g, (char) => {\n      const map: Record<string, string> = {\n        '<': '&lt;', '>': '&gt;', '\"': '&quot;', \"'\": '&#x27;'\n      };\n      return map[char];\n    });\n}\n\n// Rate limiter\nclass RateLimiter {\n  private requests = new Map<string, number[]>();\n\n  constructor(private limit: number, private window: number) {}\n\n  isAllowed(key: string): boolean {\n    const now = Date.now();\n    const timestamps = this.requests.get(key) ?? [];\n    const recent = timestamps.filter(t => now - t < this.window);\n    if (recent.length >= this.limit) return false;\n    recent.push(now);\n    this.requests.set(key, recent);\n    return true;\n  }\n}\n\nconst limiter = new RateLimiter(100, 60000);\nconsole.log(limiter.isAllowed('192.168.1.1'));`,
+## History
 
-        language: "typescript"
+The development of these models was driven by different needs at different times:
 
-      },
+**OSI Model History:**
+- In the late 1970s, the **ISO** began working on a universal networking standard to replace the fragmented landscape of proprietary protocols.
+- In 1984, the OSI model was published as **ISO 7498**.
+- The model was designed to be protocol-independent, meaning it could describe any communication system.
+- Despite its theoretical elegance, the OSI model was slow to gain adoption because TCP/IP was already widely deployed.
+- Today, the OSI model is primarily used as a **teaching and reference framework** rather than a practical implementation guide.
 
-      {
+**TCP/IP Model History:**
+- In the 1970s, **Vint Cerf and Bob Kahn** developed TCP/IP as part of the ARPANET project.
+- The original TCP/IP had four layers: Network Access, Internet, Transport, and Application.
+- On **January 1, 1983**, ARPANET switched from NCP to TCP/IP, a moment known as "flag day."
+- TCP/IP was designed to be **robust and fault-tolerant**, able to survive partial network failures.
+- The Internet Engineering Task Force (IETF) continues to evolve TCP/IP through **RFCs** (Requests for Comments).
 
-        id: "8",
+## OSI Model Layers (7 Layers)
 
-        title: "Modern Networking",
+1. **Layer 7 - Application Layer**: Provides network services directly to end-user applications. Protocols include HTTP, FTP, SMTP, DNS, and SNMP. This layer handles high-level APIs, resource identification, and communication initialization.
 
-        content: "CDN (Content Delivery Network):\n- Distributes content to edge servers near users\n- Reduces latency, handles traffic spikes\n- Providers: Cloudflare, AWS CloudFront, Akamai\n- Caching strategies: pull vs push, cache invalidation\n\nLoad Balancing:\n- Distributes traffic across multiple servers\n- Algorithms: Round Robin, Least Connections, IP Hash, Weighted\n- Layer 4 (transport) vs Layer 7 (application) load balancing\n- Health checks remove unhealthy backends\n\ngRPC:\n- Google's RPC framework using HTTP/2 and Protocol Buffers\n- Streaming: unary, server-streaming, client-streaming, bidirectional\n- Strongly typed contracts via .proto files\n- Used for microservice-to-microservice communication\n\nIoT Networking:\n- MQTT: lightweight publish/subscribe for constrained devices\n- CoAP: RESTful protocol over UDP for IoT\n- Zigbee, LoRa, NB-IoT for low-power wide-area networks\n- Edge computing: processing data near the source\n\nZero Trust: never trust, always verify — authenticate every request regardless of network location.",
+2. **Layer 6 - Presentation Layer**: Handles data translation, encryption/decryption, compression, and formatting. It ensures that data from the application layer of one system is readable by the application layer of another. Examples include SSL/TLS encryption, JPEG/MPEG encoding, and ASCII/Unicode translation.
 
-        codeExample: `// Load balancer simulation\ninterface Server {\n  id: string;\n  url: string;\n  healthy: boolean;\n  activeConnections: number;\n}\n\nclass LoadBalancer {\n  private servers: Server[];\n  private currentIndex = 0;\n\n  constructor(servers: Server[]) {\n    this.servers = servers;\n  }\n\n  // Round Robin\n  nextRoundRobin(): Server {\n    const healthy = this.servers.filter(s => s.healthy);\n    const server = healthy[this.currentIndex % healthy.length];\n    this.currentIndex++;\n    return server;\n  }\n\n  // Least Connections\n  nextLeastConnections(): Server {\n    return this.servers\n      .filter(s => s.healthy)\n      .reduce((a, b) =>\n        a.activeConnections <= b.activeConnections ? a : b\n      );\n  }\n\n  // Health check simulation\n  async checkHealth(server: Server): Promise<boolean> {\n    try {\n      const res = await fetch(\`\${server.url}/health\`,\n        { signal: AbortSignal.timeout(3000) });\n      return res.ok;\n    } catch {\n      return false;\n    }\n  }\n}\n\nconst lb = new LoadBalancer([\n  { id: 's1', url: 'http://10.0.0.1:3000', healthy: true, activeConnections: 5 },\n  { id: 's2', url: 'http://10.0.0.2:3000', healthy: true, activeConnections: 2 },\n  { id: 's3', url: 'http://10.0.0.3:3000', healthy: false, activeConnections: 0 }\n]);\n\nconsole.log(lb.nextLeastConnections().id);`,
+3. **Layer 5 - Session Layer**: Manages sessions (dialogues) between applications. It establishes, maintains, synchronizes, and terminates connections. Examples include NetBIOS, RPC (Remote Procedure Call), and SQL session management.
 
-        language: "typescript"
+4. **Layer 4 - Transport Layer**: Provides end-to-end communication, flow control, error recovery, and data segmentation. Key protocols are **TCP** (reliable, connection-oriented) and **UDP** (unreliable, connectionless). Uses **port numbers** to identify applications.
 
-      },
+5. **Layer 3 - Network Layer**: Handles logical addressing and routing. Determines the best path for data to travel from source to destination across multiple networks. Key protocols include **IP** (IPv4, IPv6), **ICMP**, and routing protocols like **OSPF** and **BGP**.
 
-    ],
+6. **Layer 2 - Data Link Layer**: Provides node-to-node data transfer and handles error detection/correction from the physical layer. Uses **MAC addresses** for device identification. Key technologies include **Ethernet** (IEEE 802.3), **Wi-Fi** (IEEE 802.11), and switches.
 
+7. **Layer 1 - Physical Layer**: Deals with the physical transmission of raw bits over a communication channel. Covers cables (fiber, copper), connectors (RJ-45, SC), signaling (voltage levels, light pulses), and data rates.
+
+## TCP/IP Model Layers (4 Layers)
+
+1. **Network Access Layer**: Combines OSI Layers 1-2. Handles the physical transmission of data and the data link layer protocols (Ethernet, Wi-Fi, ARP).
+
+2. **Internet Layer**: Maps to OSI Layer 3. Responsible for logical addressing (IP) and routing packets across network boundaries. Key protocols: **IPv4**, **IPv6**, **ICMP**, **ARP**.
+
+3. **Transport Layer**: Maps to OSI Layer 4. Provides end-to-end communication services. **TCP** for reliable delivery, **UDP** for fast, lightweight delivery.
+
+4. **Application Layer**: Combines OSI Layers 5-7. Contains all high-level protocols: HTTP, HTTPS, FTP, SMTP, DNS, SSH, Telnet, SNMP, and DHCP.
+
+## Advantages
+
+1. **Standardization**: Both models provide a universal framework that enables different systems and vendors to communicate.
+2. **Modularity**: Each layer can be modified or upgraded without affecting other layers.
+3. **Troubleshooting**: The layered approach allows network engineers to isolate problems to specific layers.
+4. **Interoperability**: Different hardware and software from various vendors can work together using standardized protocols.
+5. **Educational Value**: The OSI model provides an excellent framework for teaching and understanding networking concepts.
+6. **Abstraction**: Layers hide implementation details, allowing developers to focus on their specific layer.
+
+## Disadvantages
+
+1. **Theoretical Nature of OSI**: The OSI model is largely theoretical; no network strictly implements all seven layers as described.
+2. **Complexity**: The 7-layer OSI model can be overly complex for simple networking tasks.
+3. **Protocol Overhead**: Each layer adds headers and potentially trailers to data, increasing overhead.
+4. **Performance Impact**: Processing at multiple layers introduces latency compared to a monolithic design.
+5. **TCP/IP Dominance**: The TCP/IP model's practical nature has made the OSI model somewhat redundant in industry.
+6. **Layer Boundaries Are Blurry**: In practice, some protocols operate across multiple layers, making strict layering difficult.
+
+## Uses and Applications
+
+- **Network Design**: Architects use these models to design scalable, modular network infrastructures.
+- **Protocol Development**: Engineers use the models as frameworks when developing new networking protocols.
+- **Troubleshooting**: Network administrators use the layered approach to systematically diagnose issues (starting from Layer 1 and working up).
+- **Certification Studies**: Both models are fundamental to certifications like CompTIA Network+, CCNA, and CISSP.
+- **Vendor Communication**: The models provide a common language for discussing network architecture across organizations.
+- **Security Analysis**: Security professionals analyze vulnerabilities at each layer to build defense-in-depth strategies.`,
+    codeExample: `# ===========================================
+# LESSON 2: OSI & TCP/IP Models
+# Layered Network Diagnostics
+# ===========================================
+
+# ----- LAYER 1 (Physical) Diagnostics -----
+# Check if network adapter is detected and active
+ipconfig | findstr "Adapter"          # Windows
+ip link show                         # Linux
+
+# Check link status (speed, duplex, connection)
+ethtool eth0                         # Linux
+Get-NetAdapter                       # PowerShell
+
+# ----- LAYER 2 (Data Link) Diagnostics -----
+# View ARP cache (IP-to-MAC mappings)
+arp -a
+
+# Clear the ARP cache
+arp -d *                             # Windows (run as admin)
+
+# ----- LAYER 3 (Network) Diagnostics -----
+# Test basic IP connectivity
+ping 8.8.8.8
+
+# Trace the route to a destination
+tracert 8.8.8.8                      # Windows
+traceroute 8.8.8.8                   # Linux/macOS
+
+# Display the routing table
+route print                          # Windows
+ip route show                        # Linux
+
+# ----- LAYER 4 (Transport) Diagnostics -----
+# Test TCP connectivity on a specific port
+Test-NetConnection google.com -Port 443    # PowerShell
+telnet google.com 443                      # If telnet installed
+
+# Check listening ports
+netstat -an | findstr LISTENING       # Windows
+ss -tlnp                             # Linux
+
+# ----- LAYER 5-7 (Application) Diagnostics -----
+# Test HTTP connectivity
+curl -I https://google.com
+
+# Test DNS resolution (Application Layer)
+nslookup google.com
+dig google.com A                     # Linux/macOS
+
+# Test SMTP connectivity
+Test-NetConnection mail.example.com -Port 25
+
+# ----- OSI Model Layer Visualization -----
+# Display the 7 OSI layers with their functions
+Write-Host "OSI Model Reference:"
+Write-Host "Layer 7: Application  - HTTP, FTP, SMTP, DNS"
+Write-Host "Layer 6: Presentation - SSL/TLS, JPEG, ASCII"
+Write-Host "Layer 5: Session      - NetBIOS, RPC"
+Write-Host "Layer 4: Transport    - TCP, UDP"
+Write-Host "Layer 3: Network      - IP, ICMP, OSPF"
+Write-Host "Layer 2: Data Link    - Ethernet, Wi-Fi, ARP"
+Write-Host "Layer 1: Physical     - Cables, Signals, Bits"
+
+# ----- TCP/IP Model Reference -----
+Write-Host ""
+Write-Host "TCP/IP Model Reference:"
+Write-Host "Layer 4: Application    = OSI Layers 5-7"
+Write-Host "Layer 3: Transport      = OSI Layer 4"
+Write-Host "Layer 2: Internet       = OSI Layer 3"
+Write-Host "Layer 1: Network Access = OSI Layers 1-2"`,
+    language: "bash"
+  },
+  {
+    id: "3",
+    title: "Physical & Data Link Layer",
+    content: `## Definition
+
+The **Physical Layer (Layer 1)** is the lowest layer of the OSI model, responsible for the transmission and reception of **raw unstructured bit streams** over a physical medium. It defines the electrical, mechanical, and procedural specifications for activating and maintaining the physical link. The **Data Link Layer (Layer 2)** provides **reliable node-to-node data transfer** across a physical link, detecting and possibly correcting errors that may occur at the Physical Layer.
+
+The Physical Layer deals with voltages, cable specifications, connector types, data rates, and signal encoding. The Data Link Layer introduces the concept of **frames** (structured data units), **MAC addresses** (hardware addresses), and **error detection** mechanisms. Together, these two layers form the foundation of all network communication.
+
+## Introduction
+
+Without a solid understanding of the Physical and Data Link layers, higher-level networking concepts cannot be fully grasped. These layers answer the fundamental question: **How do bits actually travel from one device to another?**
+
+At the Physical Layer, data exists as **electrical signals** (in copper cables), **light pulses** (in fiber optics), or **radio waves** (in wireless). At the Data Link Layer, bits are organized into **frames**, and devices are identified by their unique **MAC addresses**. Switches operate at the Data Link Layer, forwarding frames based on MAC address tables.
+
+Key concepts include: **encoding schemes** (NRZ, Manchester, 4B/5B), **transmission modes** (simplex, duplex, multiplexing), **media types** (UTP, fiber, wireless), **error detection** (CRC, checksums), and **media access control** (CSMA/CD, CSMA/CA).
+
+## History
+
+The evolution of these layers reflects the history of telecommunications and computing:
+
+**Physical Layer History:**
+- **1830s - Telegraph**: Samuel Morse's telegraph was the first electrical communication system, encoding information as dots and dashes (a simple Physical Layer protocol).
+- **1876 - Telephone**: Alexander Graham Bell's telephone introduced analog voice transmission over copper wires.
+- **1970s - Ethernet**: Robert Metcalfe developed Ethernet at Xerox PARC, initially at 2.94 Mbps over coaxial cable.
+- **1990s - Fiber Optics**: Fiber optic technology matured, enabling gigabit and terabit data rates over long distances.
+- **2000s - Wi-Fi Revolution**: IEEE 802.11 standards made wireless networking mainstream.
+- **2010s-Present**: Technologies like **Li-Fi** (light-based communication), **5G NR** (New Radio), and **Wi-Fi 6/7** push physical layer capabilities further.
+
+**Data Link Layer History:**
+- **1973 - Ethernet**: The original Ethernet protocol defined the CSMA/CD (Carrier Sense Multiple Access with Collision Detection) access method.
+- **1979 - IEEE 802 Committee**: Formed to standardize local area networks.
+- **1983 - IEEE 802.3**: Published the first Ethernet standard.
+- **1997 - IEEE 802.11**: Released the first Wi-Fi standard.
+- **1990s - Switches Replaced Hubs**: The transition from shared media (hubs) to switched networks dramatically improved performance by eliminating collisions.
+- **2000s - VLANs**: IEEE 802.1Q introduced Virtual LANs, allowing logical segmentation at the Data Link Layer.
+
+## Physical Layer Details
+
+### Transmission Media
+1. **Twisted Pair Cable (UTP/STP)**: Most common LAN cable. Categories include Cat5e (1 Gbps), Cat6 (10 Gbps up to 55m), Cat6a (10 Gbps up to 100m), and Cat8 (25-40 Gbps).
+2. **Coaxial Cable**: Used for cable TV and early Ethernet (10BASE2, 10BASE5). Features a copper conductor surrounded by insulation and a metal shield.
+3. **Fiber Optic Cable**: Uses light pulses for transmission. **Single-mode fiber** (long distance, up to 100km) and **multi-mode fiber** (short distance, up to 2km). Speeds up to 400 Gbps.
+4. **Wireless (Radio)**: IEEE 802.11 standards (Wi-Fi), Bluetooth, cellular (4G/5G), satellite.
+
+### Key Physical Layer Concepts
+- **Bit Rate**: The number of bits transmitted per second (e.g., 1 Gbps, 10 Gbps).
+- **Bandwidth**: The range of frequencies available for transmission.
+- **Signal Encoding**: Methods like NRZ, Manchester, 4B/5B, 8B/10B that convert bits to signals.
+- **Modulation**: Varying a carrier signal's amplitude, frequency, or phase to encode data.
+- **Multiplexing**: FDM, TDM, WDM allow multiple signals to share a single medium.
+
+## Data Link Layer Details
+
+### Sub-layers
+The Data Link Layer is divided into two sub-layers by IEEE:
+1. **LLC (Logical Link Control - IEEE 802.2)**: Provides flow control, error detection, and multiplexing of protocols.
+2. **MAC (Media Access Control)**: Handles physical addressing (MAC addresses) and controls how devices access the shared medium.
+
+### MAC Addresses
+- **48-bit** (6-byte) hardware address, typically written as **XX:XX:XX:XX:XX:XX** in hexadecimal.
+- First 3 bytes identify the manufacturer (**OUI - Organizationally Unique Identifier**).
+- Last 3 bytes are assigned by the manufacturer.
+- **Unicast**: Frames sent to a single device (destination MAC has bit 0 of first byte = 0).
+- **Broadcast**: Frames sent to all devices (destination MAC = FF:FF:FF:FF:FF:FF).
+- **Multicast**: Frames sent to a group of devices (destination MAC has bit 0 of first byte = 1).
+
+### Key Data Link Layer Protocols
+- **Ethernet (IEEE 802.3)**: The dominant LAN technology. Uses CSMA/CD for shared media or full-duplex switching.
+- **Wi-Fi (IEEE 802.11)**: Wireless LAN standard using CSMA/CA (Collision Avoidance).
+- **PPP (Point-to-Point Protocol)**: Used for direct connections between two nodes.
+- **ARP (Address Resolution Protocol)**: Maps IP addresses to MAC addresses (bridges Layers 2 and 3).
+
+### Error Detection
+- **CRC (Cyclic Redundancy Check)**: Applied to the frame trailer. The sender computes a CRC value and appends it; the receiver recomputes and compares.
+- **Checksum**: Simpler but less robust than CRC.
+- **FCS (Frame Check Sequence)**: The CRC field in Ethernet frames.
+
+## Advantages
+
+1. **Foundation of Communication**: All higher-layer protocols depend on these layers for actual data transmission.
+2. **Error Detection**: The Data Link Layer catches transmission errors before they propagate upward.
+3. **Hardware Independence**: Higher layers don't need to know the specifics of the physical medium.
+4. **Standardization**: Well-defined standards (Ethernet, Wi-Fi) ensure interoperability between vendors.
+5. **Efficiency**: Hardware-based switching at the Data Link Layer provides wire-speed forwarding.
+6. **Security Features**: MAC address filtering, port security, and VLAN segmentation provide basic security.
+
+## Disadvantages
+
+1. **Limited Range**: Physical layer technologies are constrained by cable length and signal attenuation.
+2. **Bandwidth Limitations**: Each medium has a maximum theoretical data rate.
+3. **Vulnerability to Interference**: Electromagnetic interference (EMI), crosstalk, and environmental factors can corrupt signals.
+4. **MAC Spoofing**: MAC addresses can be spoofed, undermining security based on hardware addresses.
+5. **Complexity of Wireless**: Wireless signals are prone to interference, multipath fading, and security threats.
+6. **Collision Domain Issues**: In shared media environments (hubs), collisions reduce effective throughput.
+
+## Uses and Applications
+
+- **Local Area Networks (LANs)**: Ethernet connects devices within a building or campus.
+- **Wide Area Networks (WANs)**: Fiber optic links connect distant networks.
+- **Wireless Networking**: Wi-Fi provides wireless connectivity in homes, offices, and public spaces.
+- **Data Centers**: High-speed Ethernet (25G, 40G, 100G, 400G) connects servers and storage.
+- **Home Networking**: Routers, switches, and access points form home networks.
+- **Industrial Networks**: Industrial Ethernet and specialized protocols connect factory equipment.
+- **Telecommunications**: Fiber optic backbones carry Internet traffic across continents and oceans.`,
+    codeExample: `# ===========================================
+# LESSON 3: Physical & Data Link Layer
+# Hardware and Link Layer Diagnostics
+# ===========================================
+
+# ----- Physical Layer Diagnostics -----
+# View all network adapters and their status
+Get-NetAdapter                           # PowerShell
+ip link show                             # Linux
+
+# Check link speed and status for a specific adapter
+Get-NetAdapter -Name "Ethernet" | Select-Object Name, LinkSpeed, Status
+ethtool eth0                             # Linux (shows speed, duplex, link detected)
+
+# Check cable type and physical connection
+Get-NetAdapterAdvancedProperty -Name "Ethernet" -DisplayName "Speed & Duplex"
+
+# ----- Data Link Layer (MAC Address) -----
+# Display MAC addresses for all interfaces
+getmac                                   # Windows
+ip link show                             # Linux/macOS
+
+# View the ARP table (IP-to-MAC mappings)
+arp -a
+
+# Ping a device to populate ARP cache, then check
+ping 192.168.1.1
+arp -a | findstr 192.168.1.1
+
+# ----- Switch and VLAN Information -----
+# Display VLAN configuration
+Get-NetAdapter -Name "Ethernet" | Get-NetAdapterAdvancedProperty -DisplayName "VLAN ID"
+
+# Show MAC address table on a Cisco switch (if accessible)
+# show mac address-table
+
+# ----- Wi-Fi Physical Layer -----
+# Show wireless network details
+netsh wlan show interfaces                # Windows
+iwconfig                                  # Linux
+
+# List available wireless networks
+netsh wlan show networks                  # Windows
+iwlist wlan scanning                      # Linux
+
+# Show Wi-Fi signal strength and channel
+netsh wlan show interfaces | findstr "Signal Channel"
+
+# ----- Frame Analysis with PowerShell -----
+# Capture and analyze network frames (requires admin)
+# Using built-in tools for link-layer inspection
+Get-NetAdapter | Format-Table Name, MacAddress, LinkSpeed, Status
+
+# ----- Diagnosing Physical Layer Issues -----
+# Test cable connectivity
+Test-Connection -ComputerName 192.168.1.1 -Count 4
+
+# Check for network adapter errors
+Get-NetAdapterStatistics -Name "Ethernet"
+
+# View detailed adapter properties
+Get-NetAdapter -Name "Ethernet" | Format-List *`,
+    language: "bash"
+  },
+  {
+    id: "4",
+    title: "Network Layer & IP Addressing",
+    content: `## Definition
+
+The **Network Layer (Layer 3)** is responsible for **logical addressing**, **routing**, and **packet forwarding** across multiple networks. It determines the best path for data to travel from source to destination, potentially crossing multiple intermediate networks. The primary protocol at this layer is the **Internet Protocol (IP)**, which comes in two versions: **IPv4** (32-bit addresses) and **IPv6** (128-bit addresses).
+
+IP addressing is the mechanism by which every device on a network is assigned a unique numerical identifier. An **IPv4 address** is written in **dotted-decimal notation** (e.g., **192.168.1.100**), with each octet ranging from 0 to 255. An **IPv6 address** is written in **hexadecimal notation** with colons (e.g., **2001:0db8:85a3::8a2e:0370:7334**). Subnetting, CIDR notation, and routing protocols all operate at this layer.
+
+## Introduction
+
+The Network Layer is where the magic of **internetworking** happens. While the Data Link Layer handles communication within a single network segment, the Network Layer enables communication **across** network segments. This is achieved through:
+
+- **Logical Addressing (IP)**: Every device gets a unique address that identifies its network and host position.
+- **Routing**: Routers use routing tables and protocols to determine the optimal path for packets.
+- **Fragmentation and Reassembly**: Large packets are broken into smaller fragments that can traverse different network types.
+- **Quality of Service (QoS)**: Different types of traffic can be prioritized.
+
+Key concepts include **subnetting**, **CIDR (Classless Inter-Domain Routing)**, **NAT (Network Address Translation)**, **DHCP (Dynamic Host Configuration Protocol)**, **ICMP (Internet Control Message Protocol)**, and routing protocols like **OSPF**, **BGP**, and **RIP**.
+
+## History
+
+The development of IP addressing has evolved through several key milestones:
+
+- **1981 - IPv4 Introduced**: The Internet Protocol version 4 was standardized in **RFC 791** by Jon Postel. It provided 32-bit addresses, allowing approximately **4.3 billion** unique addresses.
+- **1980s - Classful Addressing**: Initially, IP addresses were divided into classes (A, B, C, D, E) with fixed network/host boundaries. Class A networks had 8-bit prefixes, Class B had 16-bit, and Class C had 24-bit.
+- **1993 - CIDR**: **RFC 1519** introduced Classless Inter-Domain Routing, replacing classful addressing with variable-length subnet masks. This dramatically improved address utilization.
+- **1998 - NAT**: **RFC 1631** (later updated to RFC 3022) introduced Network Address Translation, allowing multiple private devices to share a single public IP address.
+- **1998 - IPv6 Designed**: **RFC 2460** (later updated to RFC 8200) introduced IPv6 with 128-bit addresses, providing approximately **3.4 x 10^38** addresses.
+- **2000s-Present**: IPv6 adoption has been gradual but accelerating. As of 2024, approximately 40% of Internet traffic uses IPv6.
+
+## IPv4 Addressing
+
+### Address Structure
+An IPv4 address is 32 bits, written as four decimal numbers separated by dots. Each octet represents 8 bits.
+
+Example: **192.168.1.100**
+- Binary: **11000000.10101000.00000001.01100100**
+- First part (192.168.1) = **Network portion**
+- Last part (100) = **Host portion**
+
+### CIDR Notation
+CIDR (Classless Inter-Domain Routing) uses a suffix to indicate the number of network bits:
+- **192.168.1.0/24**: Network mask is 255.255.255.0 (24 network bits, 8 host bits)
+- **10.0.0.0/8**: Network mask is 255.0.0.0 (8 network bits, 24 host bits)
+- **172.16.0.0/12**: Network mask is 255.240.0.0 (12 network bits, 20 host bits)
+
+### Private IP Address Ranges
+- **10.0.0.0/8** (10.0.0.0 to 10.255.255.255)
+- **172.16.0.0/12** (172.16.0.0 to 172.31.255.255)
+- **192.168.0.0/16** (192.168.0.0 to 192.168.255.255)
+
+### Special Addresses
+- **127.0.0.1**: Loopback (localhost)
+- **0.0.0.0**: Default route / unspecified
+- **255.255.255.255**: Limited broadcast
+- **169.254.x.x**: Link-local (APIPA)
+
+## IPv6 Addressing
+
+### Address Structure
+IPv6 addresses are 128 bits, written in hexadecimal with colon separators. Leading zeros within a group can be omitted, and consecutive zero groups can be replaced with **::** (only once).
+
+Example: **2001:0db8:85a3:0000:0000:8a2e:0370:7334**
+Compressed: **2001:db8:85a3::8a2e:370:7334**
+
+### Key Improvements Over IPv4
+- **Larger Address Space**: 128 bits vs 32 bits (3.4 x 10^38 vs 4.3 billion addresses).
+- **Simplified Header**: Fixed 40-byte header reduces processing overhead.
+- **No NAT Required**: Every device can have a globally unique address.
+- **Built-in Security**: IPsec support is mandatory in IPv6.
+- **Auto-Configuration**: SLAAC (Stateless Address Auto-Configuration) allows devices to configure themselves.
+- **No Broadcast**: Uses multicast and anycast instead.
+
+## Subnetting
+
+Subnetting is the practice of dividing a network into smaller sub-networks (subnets) for improved performance, security, and management.
+
+**Example Subnetting:**
+Given **192.168.1.0/24**, create 4 subnets:
+- Each subnet needs 2 bits from the host portion (2^2 = 4 subnets)
+- New mask: **/26** (255.255.255.192)
+- Subnet 1: **192.168.1.0/26** (hosts: 1-62)
+- Subnet 2: **192.168.1.64/26** (hosts: 65-126)
+- Subnet 3: **192.168.1.128/26** (hosts: 129-190)
+- Subnet 4: **192.168.1.192/26** (hosts: 193-254)
+
+## Routing
+
+Routing is the process of selecting the best path for network traffic:
+
+- **Static Routing**: Manually configured routes. Simple but doesn't adapt to changes.
+- **Dynamic Routing**: Routers exchange information and automatically adjust routes.
+  - **RIP (Routing Information Protocol)**: Distance-vector protocol, max 15 hops.
+  - **OSPF (Open Shortest Path First)**: Link-state protocol, uses Dijkstra's algorithm.
+  - **BGP (Border Gateway Protocol)**: Path-vector protocol, the protocol of the Internet backbone.
+  - **EIGRP (Enhanced Interior Gateway Routing Protocol)**: Cisco proprietary, hybrid protocol.
+
+## Advantages
+
+1. **Logical Addressing**: Enables unique identification of devices across the entire Internet.
+2. **Routing**: Multiple paths between networks provide redundancy and load balancing.
+3. **Subnetting**: Allows efficient address allocation and network segmentation.
+4. **NAT**: Conserves public IP addresses by allowing multiple devices to share one address.
+5. **Interoperability**: IP works across all types of physical networks (Ethernet, Wi-Fi, fiber, satellite).
+6. **Scalability**: The Internet's hierarchical routing structure scales to billions of devices.
+
+## Disadvantages
+
+1. **IPv4 Address Exhaustion**: The 32-bit address space is insufficient for modern demands (mitigated by NAT and IPv6).
+2. **Complexity**: Subnetting and routing protocols require significant expertise.
+3. **Security Vulnerabilities**: IP spoofing, routing attacks (BGP hijacking), and ICMP-based attacks.
+4. **NAT Limitations**: Breaks end-to-end connectivity, complicates peer-to-peer applications.
+5. **IPv6 Adoption Challenges**: Dual-stack requirements, legacy equipment, and training needs slow adoption.
+6. **Latency**: Routing decisions and packet processing add overhead.
+
+## Uses and Applications
+
+- **Internet Routing**: BGP routers across the Internet exchange routing information to deliver packets globally.
+- **Enterprise Networks**: Large organizations use OSPF or EIGRP for internal routing and BGP for Internet connectivity.
+- **Cloud Networking**: VPCs (Virtual Private Clouds) use IP addressing and routing for isolated cloud environments.
+- **VPN Tunnels**: IP-in-IP encapsulation enables secure remote access across public networks.
+- **IoT Networks**: Many IoT protocols (CoAP, MQTT) operate over IP, enabling smart device communication.
+- **Content Delivery Networks (CDNs)**: DNS-based routing directs users to the nearest content server.`,
+    codeExample: `# ===========================================
+# LESSON 4: Network Layer & IP Addressing
+# IP Configuration, Subnetting, and Routing
+# ===========================================
+
+# ----- View Current IP Configuration -----
+# Windows
+ipconfig /all
+
+# Linux
+ip addr show
+ifconfig -a
+
+# ----- Assign a Static IP Address -----
+# Windows (PowerShell - Run as Administrator)
+New-NetIPAddress -InterfaceAlias "Ethernet" -IPAddress 192.168.1.100 -PrefixLength 24 -DefaultGateway 192.168.1.1
+Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses 8.8.8.8, 8.8.4.4
+
+# Linux
+sudo ip addr add 192.168.1.100/24 dev eth0
+sudo ip route add default via 192.168.1.1
+
+# ----- Subnetting Calculator -----
+# Calculate subnet information from a CIDR notation
+# Example: For 192.168.1.0/26
+Write-Host "Network: 192.168.1.0/26"
+Write-Host "Subnet Mask: 255.255.255.192"
+Write-Host "Host Range: 192.168.1.1 - 192.168.1.62"
+Write-Host "Broadcast: 192.168.1.63"
+Write-Host "Usable Hosts: 62"
+
+# ----- Convert IP to Binary -----
+function ConvertTo-BinaryIP {
+    param([string]$ip)
+    $octets = $ip.Split('.')
+    $binary = $octets | ForEach-Object {
+        [Convert]::ToString([int]$_ , 2).PadLeft(8, '0')
+    }
+    return $binary -join '.'
+}
+Write-Host (ConvertTo-BinaryIP "192.168.1.100")
+
+# ----- Routing Table Commands -----
+# View routing table
+route print                            # Windows
+ip route show                          # Linux
+netstat -rn                            # macOS
+
+# Add a static route
+route add 10.0.0.0 mask 255.0.0.0 192.168.1.1       # Windows
+sudo ip route add 10.0.0.0/8 via 192.168.1.1         # Linux
+
+# Remove a static route
+route delete 10.0.0.0                               # Windows
+sudo ip route del 10.0.0.0/8                        # Linux
+
+# ----- Traceroute (Path Discovery) -----
+tracert google.com                     # Windows
+traceroute google.com                  # Linux/macOS
+
+# ----- DHCP Operations -----
+# Release and renew IP address
+ipconfig /release                      # Windows
+ipconfig /renew                        # Windows
+
+# Linux
+sudo dhclient -r eth0                  # Release
+sudo dhclient eth0                     # Renew
+
+# ----- DNS Resolution -----
+nslookup google.com
+Resolve-DnsName google.com             # PowerShell
+
+# ----- IP Conflict Detection -----
+# Test if an IP is already in use
+Test-Connection -ComputerName 192.168.1.100 -Count 1 -Quiet`,
+    language: "bash"
+  },
+  {
+    id: "5",
+    title: "Transport Layer (TCP/UDP)",
+    content: `## Definition
+
+The **Transport Layer (Layer 4)** provides **end-to-end communication** between applications running on different hosts. It is responsible for **segmentation**, **flow control**, **error recovery**, and **multiplexing** (using port numbers). The two primary protocols at this layer are **TCP (Transmission Control Protocol)** and **UDP (User Datagram Protocol)**.
+
+**TCP** is a **connection-oriented**, **reliable** protocol that ensures data is delivered in order, without errors, and without duplication. **UDP** is a **connectionless**, **unreliable** protocol that provides fast, lightweight delivery without guarantees. The choice between TCP and UDP depends on the application's requirements for reliability versus speed.
+
+## Introduction
+
+The Transport Layer bridges the gap between the Network Layer (which handles packet routing) and the Application Layer (which uses data). While the Network Layer is responsible for getting packets from source to destination, the Transport Layer ensures that the data is **usable by the receiving application**.
+
+Key responsibilities of the Transport Layer include:
+
+- **Segmentation and Reassembly**: Breaking large messages into smaller segments (TCP) or datagrams (UDP) and reassembling them at the destination.
+- **Port Multiplexing**: Using port numbers (0-65535) to distinguish between different applications on the same host.
+- **Flow Control**: Preventing a fast sender from overwhelming a slow receiver (TCP uses sliding window).
+- **Error Detection**: Detecting corrupted data using checksums (both TCP and UDP).
+- **Connection Management**: TCP establishes connections through a three-way handshake and terminates them gracefully.
+
+Understanding the difference between TCP and UDP is fundamental to network programming and application design.
+
+## History
+
+The Transport Layer protocols evolved alongside the Internet:
+
+- **1974 - TCP Concept**: Vint Cerf and Bob Kahn published their seminal paper describing the concepts of TCP in their paper "A Protocol for Packet Network Intercommunication."
+- **1981 - TCP/IP Standardized**: TCP and IP were separated into distinct protocols. TCP was defined in **RFC 793**, and UDP was defined in **RFC 768**.
+- **1988 - TCP Congestion Control**: Van Jacobson introduced congestion control algorithms to prevent network collapse, addressing the "congestion collapse" problem.
+- **1990s - TCP Variants**: Various TCP implementations emerged to optimize for different network conditions: **TCP Tahoe** (1988), **TCP Reno** (1990), **TCP NewReno** (1999), and **TCP SACK** (Selective Acknowledgment).
+- **2000s - Modern TCP**: **TCP CUBIC** (2006) became the default congestion control algorithm in Linux and Windows. **QUIC** was developed by Google in 2012, running over UDP to reduce latency.
+- **2010s-Present**: **QUIC** became an IETF standard (**RFC 9000**) in 2021, forming the basis of **HTTP/3**. **BBR** (Bottleneck Bandwidth and Round-trip propagation time) congestion control was developed by Google.
+
+## TCP (Transmission Control Protocol)
+
+### Connection Establishment: Three-Way Handshake
+1. **SYN**: Client sends a SYN (Synchronize) segment with an initial sequence number (ISN).
+2. **SYN-ACK**: Server responds with SYN-ACK (Synchronize-Acknowledgment), acknowledging the client's ISN and sending its own.
+3. **ACK**: Client sends an ACK, completing the connection establishment.
+
+### Connection Termination: Four-Way Handshake
+1. **FIN**: One side sends a FIN (Finish) segment.
+2. **ACK**: Other side acknowledges the FIN.
+3. **FIN**: Other side sends its own FIN.
+4. **ACK**: Original side acknowledges and connection closes.
+
+### TCP Header Fields
+- **Source Port** (16 bits): Port number of the sender.
+- **Destination Port** (16 bits): Port number of the receiver.
+- **Sequence Number** (32 bits): Byte offset of the first data byte in this segment.
+- **Acknowledgment Number** (32 bits): Next expected byte from the sender.
+- **Header Length** (4 bits): Size of the TCP header in 32-bit words.
+- **Flags** (6 bits): SYN, ACK, FIN, RST, PSH, URG.
+- **Window Size** (16 bits): Flow control window (number of bytes the receiver is willing to accept).
+- **Checksum** (16 bits): Error detection for header and data.
+- **Urgent Pointer** (16 bits): Points to urgent data (if URG flag set).
+
+### Key TCP Features
+- **Reliable Delivery**: ACKs, retransmissions, and sequence numbers guarantee data arrives correctly.
+- **Ordered Delivery**: Segments are reassembled in order using sequence numbers.
+- **Flow Control**: Sliding window mechanism prevents buffer overflow.
+- **Congestion Control**: Algorithms (Slow Start, Congestion Avoidance, Fast Retransmit, Fast Recovery) prevent network congestion.
+
+## UDP (User Datagram Protocol)
+
+### UDP Header (8 bytes - much simpler than TCP)
+- **Source Port** (16 bits): Sender's port (optional, set to 0 if unused).
+- **Destination Port** (16 bits): Receiver's port.
+- **Length** (16 bits): Length of the UDP header and data.
+- **Checksum** (16 bits): Error detection (optional in IPv4, mandatory in IPv6).
+
+### Key UDP Features
+- **Connectionless**: No handshake; data is sent immediately.
+- **No Ordering**: Segments may arrive out of order.
+- **No Reliability**: Lost packets are not retransmitted.
+- **No Flow Control**: Sender can overwhelm the receiver.
+- **Low Overhead**: 8-byte header vs TCP's minimum 20-byte header.
+- **Fast**: Minimal processing at both sender and receiver.
+
+## Port Numbers
+
+Port numbers identify specific applications or services:
+- **Well-Known Ports (0-1023)**: Reserved for standard services (HTTP=80, HTTPS=443, SSH=22, DNS=53, SMTP=25, FTP=21).
+- **Registered Ports (1024-49151)**: Assigned to specific applications by IANA.
+- **Dynamic/Private Ports (49152-65535)**: Used for临时 client connections.
+
+## Advantages
+
+### TCP Advantages
+1. **Reliability**: Guaranteed delivery with acknowledgments and retransmissions.
+2. **Ordered Data**: Data arrives in the correct sequence.
+3. **Flow Control**: Prevents overwhelming slow receivers.
+4. **Congestion Control**: Prevents network congestion and ensures fairness.
+5. **Error Recovery**: Detects and corrects corrupted data.
+
+### UDP Advantages
+1. **Speed**: No connection setup or acknowledgment overhead.
+2. **Low Latency**: Ideal for real-time applications.
+3. **Simplicity**: Minimal protocol overhead.
+4. **Multicast Support**: Efficiently sends data to multiple recipients.
+5. **Stateless**: No connection state to maintain.
+
+## Disadvantages
+
+### TCP Disadvantages
+1. **Higher Latency**: Three-way handshake adds connection setup delay.
+2. **Overhead**: Larger header and ACK traffic consume bandwidth.
+3. **Head-of-Line Blocking**: One lost segment blocks all subsequent segments.
+4. **Complexity**: More complex implementation than UDP.
+
+### UDP Disadvantages
+1. **Unreliable**: No guarantee of delivery or ordering.
+2. **No Flow Control**: Can overwhelm receivers.
+3. **Application Responsibility**: Reliability must be implemented in the application if needed.
+4. **Susceptible to Packet Loss**: Real-time applications may experience quality degradation.
+
+## Uses and Applications
+
+### TCP Applications
+- **Web Browsing**: HTTP/HTTPS uses TCP for reliable page delivery.
+- **Email**: SMTP, POP3, and IMAP all use TCP.
+- **File Transfer**: FTP and SFTP use TCP for reliable file transfer.
+- **Remote Access**: SSH and Telnet use TCP for reliable terminal sessions.
+- **Database Connections**: MySQL, PostgreSQL, and other databases use TCP.
+
+### UDP Applications
+- **Video Streaming**: YouTube, Netflix, and Twitch use UDP-based protocols for low-latency streaming.
+- **Online Gaming**: Real-time games require low latency, making UDP ideal.
+- **VoIP**: Voice over IP (Skype, Zoom) uses UDP for real-time voice transmission.
+- **DNS**: Domain Name System lookups use UDP for fast queries.
+- **DHCP**: Dynamic IP assignment uses UDP.
+- **SNMP**: Network management queries use UDP.
+- **QUIC/HTTP3**: Modern web protocol uses UDP as its transport.`,
+    codeExample: `# ===========================================
+# LESSON 5: Transport Layer (TCP/UDP)
+# Port Scanning, Connections, and Diagnostics
+# ===========================================
+
+# ----- Viewing Active Connections -----
+# Display all active TCP/UDP connections
+netstat -an                               # Windows/Linux/macOS
+ss -tunap                                 # Linux (more detailed)
+
+# Show connections with process IDs
+netstat -ano                              # Windows
+ss -tunap | grep ESTABLISHED              # Linux
+
+# ----- Port Scanning -----
+# Check if a specific port is open
+Test-NetConnection google.com -Port 443   # PowerShell
+telnet google.com 443                     # If telnet installed
+
+# Simple port scan using PowerShell
+1..1024 | ForEach-Object {
+    $result = Test-NetConnection -ComputerName 127.0.0.1 -Port $_ -WarningAction SilentlyContinue
+    if ($result.TcpTestSucceeded) { Write-Host "Port $_ is open" }
+}
+
+# ----- TCP Connection Testing -----
+# Ping with TCP (useful when ICMP is blocked)
+Test-NetConnection google.com -Port 80
+
+# Test multiple common ports
+$ports = @(22, 80, 443, 3306, 5432, 8080)
+foreach ($port in $ports) {
+    $result = Test-NetConnection -ComputerName 127.0.0.1 -Port $port -WarningAction SilentlyContinue
+    Write-Host "Port \${port}: $($result.TcpTestSucceeded)"
+}
+
+# ----- UDP Communication (PowerShell) -----
+# Send a UDP datagram
+$udpClient = New-Object System.Net.Sockets.UdpClient
+$remoteEP = New-Object System.Net.IPEndPoint([System.Net.IPAddress]::Parse("127.0.0.1"), 53)
+$bytes = [System.Text.Encoding]::ASCII.GetBytes("Hello UDP")
+$udpClient.Send($bytes, $bytes.Length, $remoteEP)
+$udpClient.Close()
+
+# ----- Checking Well-Known Ports -----
+# List common service ports
+Write-Host "Common TCP/UDP Ports:"
+Write-Host "HTTP: 80 (TCP)"
+Write-Host "HTTPS: 443 (TCP)"
+Write-Host "SSH: 22 (TCP)"
+Write-Host "DNS: 53 (TCP/UDP)"
+Write-Host "SMTP: 25 (TCP)"
+Write-Host "FTP: 20/21 (TCP)"
+Write-Host "Telnet: 23 (TCP)"
+Write-Host "MySQL: 3306 (TCP)"
+Write-Host "PostgreSQL: 5432 (TCP)"
+Write-Host "RDP: 3389 (TCP)"
+
+# ----- Connection State Statistics -----
+# Count connections by state
+netstat -an | Select-String "ESTABLISHED" | Measure-Object | Select-Object Count
+netstat -an | Select-String "TIME_WAIT" | Measure-Object | Select-Object Count
+netstat -an | Select-String "LISTENING" | Measure-Object | Select-Object Count
+
+# ----- TCP Window and Performance -----
+# View TCP statistics
+netstat -s                                # Windows/Linux
+nstat -s                                  # Linux (more detailed)`,
+    language: "bash"
+  },
+  {
+    id: "6",
+    title: "Application Layer Protocols",
+    content: `## Definition
+
+The **Application Layer (Layer 7)** is the topmost layer of the OSI model, providing **network services directly to end-user applications**. It is not about the applications themselves, but about the **protocols and services** that applications use to communicate over a network. The Application Layer in the TCP/IP model corresponds to OSI Layers 5-7 (Session, Presentation, Application).
+
+Application Layer protocols define how applications exchange data, including **message formats**, **authentication methods**, **error handling**, and **data encoding**. Key protocols include **HTTP/HTTPS** (web), **DNS** (domain resolution), **SMTP/POP3/IMAP** (email), **FTP** (file transfer), **SSH** (secure remote access), **DHCP** (dynamic IP assignment), and **SNMP** (network management).
+
+## Introduction
+
+The Application Layer is where users directly interact with networking. Every time you browse a website, send an email, transfer a file, or stream a video, Application Layer protocols are at work. Understanding these protocols is essential because:
+
+- **They define the rules** that applications follow to communicate.
+- **Security vulnerabilities** often exist at this layer (SQL injection, XSS, man-in-the-middle attacks).
+- **Performance optimization** requires understanding protocol behavior (HTTP/2 multiplexing, DNS caching, connection keep-alive).
+- **Troubleshooting** often involves analyzing Application Layer traffic (packet captures, HTTP logs, DNS query logs).
+
+The Application Layer is also the most rapidly evolving layer, with new protocols like **HTTP/3**, **QUIC**, **gRPC**, and **WebSocket** being developed to meet modern demands.
+
+## History
+
+Application Layer protocols have evolved with the Internet:
+
+- **1971 - Email (SMTP precursors)**: The first email program was written by Ray Tomlinson. SMTP was later standardized in **RFC 822** (1982).
+- **1973 - FTP**: The File Transfer Protocol was developed by Abhay Bhushan and standardized in **RFC 114** (1971), later revised as **RFC 959** (1985).
+- **1983 - DNS**: The Domain Name System was introduced in **RFC 882/883**, replacing the need to maintain a centralized hosts file.
+- **1991 - HTTP**: Tim Berners-Lee created the Hypertext Transfer Protocol at CERN. HTTP/1.0 was formalized in **RFC 1945** (1996).
+- **1996 - HTTP/1.1**: Defined in **RFC 2068** (later RFC 2616, then RFC 7230-7235). Introduced persistent connections, chunked transfer encoding, and host headers.
+- **2000 - SOAP/XML Web Services**: Enterprise web services standardized using SOAP over HTTP.
+- **2015 - HTTP/2**: Based on Google's SPDY protocol, HTTP/2 introduced multiplexing, header compression, and server push (**RFC 7540**).
+- **2016 - QUIC**: Google developed QUIC as a UDP-based transport protocol to reduce connection latency.
+- **2022 - HTTP/3**: Standardized as **RFC 9114**, HTTP/3 runs over QUIC instead of TCP, providing faster connections and better performance on unreliable networks.
+
+## Key Application Layer Protocols
+
+### HTTP/HTTPS (Hypertext Transfer Protocol/Secure)
+- **Purpose**: Transfer web pages and resources between clients (browsers) and servers.
+- **Default Ports**: HTTP=80, HTTPS=443.
+- **Methods**: GET (retrieve), POST (create), PUT (update), DELETE (remove), PATCH (partial update), HEAD (metadata), OPTIONS (capabilities).
+- **Status Codes**: 2xx (success), 3xx (redirection), 4xx (client error), 5xx (server error).
+- **HTTPS** adds TLS encryption for secure communication.
+- **HTTP/2**: Multiplexing, header compression, server push.
+- **HTTP/3**: Runs over QUIC (UDP), eliminating head-of-line blocking.
+
+### DNS (Domain Name System)
+- **Purpose**: Translates domain names (google.com) to IP addresses (142.250.80.46).
+- **Default Port**: 53 (UDP for queries, TCP for zone transfers).
+- **Record Types**: A (IPv4), AAAA (IPv6), CNAME (alias), MX (mail exchange), NS (name server), TXT (text), SOA (start of authority).
+- **Hierarchy**: Root servers -> TLD servers (.com, .org) -> Authoritative name servers.
+- **Caching**: DNS responses are cached at multiple levels (browser, OS, resolver, ISP).
+
+### SMTP (Simple Mail Transfer Protocol)
+- **Purpose**: Sending email from clients to servers and between mail servers.
+- **Default Port**: 25 (server-to-server), 587 (submission with authentication), 465 (SMTPS).
+- **Features**: Supports text, attachments (MIME encoding), authentication (SMTP AUTH).
+- **Related Protocols**: POP3 (retrieval, port 110/995), IMAP (retrieval, port 143/993).
+
+### SSH (Secure Shell)
+- **Purpose**: Secure remote command-line access and file transfer.
+- **Default Port**: 22.
+- **Features**: Encrypted communication, public key authentication, port forwarding, tunneling.
+- **Replaced**: Telnet (port 23), which transmitted data in plaintext.
+
+### DHCP (Dynamic Host Configuration Protocol)
+- **Purpose**: Automatically assigns IP addresses and network configuration to devices.
+- **Default Port**: 67 (server), 68 (client) - UDP.
+- **Process (DORA)**: Discover (client broadcasts), Offer (server offers IP), Request (client requests), Acknowledge (server confirms).
+
+### FTP (File Transfer Protocol)
+- **Purpose**: Transfer files between client and server.
+- **Default Ports**: 21 (control), 20 (data transfer).
+- **Modes**: Active (server connects to client) and Passive (client connects to server).
+- **Variants**: SFTP (over SSH, port 22), FTPS (over TLS, port 990).
+
+### SNMP (Simple Network Management Protocol)
+- **Purpose**: Monitor and manage network devices.
+- **Default Ports**: 161 (queries), 162 (traps) - UDP.
+- **Versions**: v1 (basic), v2c (improved), v3 (adds encryption and authentication).
+
+## Advantages
+
+1. **Standardized Communication**: Protocols ensure interoperability between different applications and platforms.
+2. **Security Options**: HTTPS, SSH, and SFTP provide encrypted alternatives to insecure protocols.
+3. **Rich Functionality**: Application Layer protocols support complex operations (authentication, encryption, compression).
+4. **User-Friendly**: Domain names, URLs, and email addresses abstract away complex network addresses.
+5. **Extensibility**: Protocols like HTTP are highly extensible through headers and content types.
+6. **Caching and Optimization**: DNS caching, HTTP caching, and connection pooling improve performance.
+
+## Disadvantages
+
+1. **Security Vulnerabilities**: This layer is the most targeted by attackers (XSS, CSRF, SQL injection, phishing).
+2. **Performance Overhead**: Encryption (TLS), encoding, and protocol negotiation add latency.
+3. **Complexity**: Modern protocols (HTTP/2, HTTP/3) are complex to implement correctly.
+4. **Legacy Protocol Issues**: Many applications still use outdated, insecure protocols (HTTP, FTP, Telnet).
+5. **Interoperability Challenges**: Different implementations of the same protocol may have subtle differences.
+6. **Dependency on Lower Layers**: Application Layer protocols are only as reliable as the layers below.
+
+## Uses and Applications
+
+- **Web Browsing**: HTTP/HTTPS enables the World Wide Web.
+- **Email Communication**: SMTP, POP3, and IMAP power global email systems.
+- **Cloud Services**: APIs (REST, GraphQL, gRPC) communicate over HTTP/HTTPS.
+- **Content Delivery**: CDNs use DNS and HTTP to deliver content efficiently.
+- **IoT Communication**: MQTT, CoAP, and AMQP are lightweight Application Layer protocols for IoT devices.
+- **Streaming**: HLS (HTTP Live Streaming) and DASH deliver video content over HTTP.
+- **Authentication**: OAuth 2.0, SAML, and OpenID Connect operate at this layer.`,
+    codeExample: `# ===========================================
+# LESSON 6: Application Layer Protocols
+# HTTP, DNS, SSH, DHCP, and More
+# ===========================================
+
+# ----- HTTP/HTTPS Requests -----
+# Fetch a web page using curl
+curl -I https://google.com                    # View headers only
+curl -v https://google.com                    # Verbose output
+curl -o page.html https://example.com         # Save to file
+
+# Using PowerShell
+Invoke-WebRequest -Uri "https://google.com" -Method Head
+(Invoke-WebRequest -Uri "https://google.com").StatusCode
+
+# ----- DNS Operations -----
+# Basic DNS lookup
+nslookup google.com
+nslookup -type=MX gmail.com                   # Mail exchange records
+nslookup -type=AAAA google.com                # IPv6 addresses
+
+# Using dig (more detailed - Linux/macOS)
+dig google.com A                              # A record
+dig google.com MX                             # MX records
+dig google.com NS                             # Name server records
+dig +short google.com                         # Short answer only
+
+# Using PowerShell
+Resolve-DnsName google.com
+Resolve-DnsName -Type AAAA google.com
+
+# ----- SSH Operations -----
+# Connect to a remote server
+ssh user@192.168.1.100
+
+# SSH with specific port
+ssh -p 2222 user@192.168.1.100
+
+# SSH with key authentication
+ssh -i ~/.ssh/mykey.pem user@192.168.1.100
+
+# Copy files using SCP
+scp file.txt user@192.168.1.100:/remote/path/
+scp user@192.168.1.100:/remote/file.txt ./
+
+# ----- DHCP Operations -----
+# Release current IP and request new one
+ipconfig /release                            # Windows
+ipconfig /renew                              # Windows
+
+# Linux
+sudo dhclient -r eth0                        # Release
+sudo dhclient eth0                           # Renew
+
+# View DHCP configuration
+ipconfig /all | findstr "DHCP"               # Windows
+
+# ----- FTP Operations -----
+# Connect to FTP server (interactive)
+ftp ftp.example.com
+
+# Download file using curl (supports FTP)
+curl -u user:password ftp://ftp.example.com/file.txt -o file.txt
+
+# ----- Email Testing -----
+# Test SMTP connectivity
+Test-NetConnection mail.example.com -Port 587
+
+# Test POP3 connectivity
+Test-NetConnection mail.example.com -Port 993
+
+# ----- SNMP Queries -----
+# Query SNMP agent (if snmpwalk is installed)
+snmpwalk -v2c -c public 192.168.1.1 system
+
+# ----- Analyzing Application Traffic -----
+# Capture HTTP traffic (requires Wireshark/tshark)
+# tshark -i "Ethernet" -f "tcp port 80" -Y "http"
+
+# Check what DNS server is being used
+Get-DnsClientServerAddress                    # PowerShell
+cat /etc/resolv.conf                          # Linux
+
+# ----- Protocol Port Reference -----
+Write-Host "Application Layer Protocol Ports:"
+Write-Host "HTTP: 80 | HTTPS: 443"
+Write-Host "DNS: 53 | DHCP: 67/68"
+Write-Host "SMTP: 25/587 | POP3: 110/995"
+Write-Host "IMAP: 143/993 | SSH: 22"
+Write-Host "FTP: 20/21 | SNMP: 161/162"
+Write-Host "Telnet: 23 | RDP: 3389"`,
+    language: "bash"
+  },
+  {
+    id: "7",
+    title: "Routing Algorithms",
+    content: `## Definition
+
+**Routing Algorithms** are the computational procedures used by routers to determine the **optimal path** for forwarding packets from source to destination across a network. These algorithms analyze network topology, link costs (bandwidth, latency, hop count, congestion), and policy constraints to compute routing tables that guide packet forwarding.
+
+Routing algorithms answer the fundamental question: **Which path should a packet take through the network?** The choice of algorithm affects network performance, convergence speed, scalability, and fault tolerance. The two primary categories are **static routing** (manually configured paths) and **dynamic routing** (algorithms that automatically adapt to network changes).
+
+## Introduction
+
+Routing is the backbone of network communication. Without routing algorithms, routers would not know how to forward packets beyond their directly connected networks. The Internet itself is a collection of thousands of autonomous systems (AS) that use routing algorithms to exchange reachability information.
+
+Key concepts in routing include:
+
+- **Convergence**: The process by which all routers agree on the network topology.
+- **Hop Count**: The number of routers a packet must traverse.
+- **Metric**: The value used to evaluate path quality (delay, bandwidth, cost, reliability).
+- **Administrative Distance**: A value indicating the trustworthiness of a routing source.
+- **Load Balancing**: Distributing traffic across multiple equal-cost paths.
+- **Convergence Time**: How quickly routers update their tables after a topology change.
+
+Understanding routing algorithms is essential for designing scalable, resilient networks and for troubleshooting connectivity issues.
+
+## History
+
+The history of routing algorithms mirrors the growth of the Internet:
+
+- **1960s - Static Routing**: Early networks used manually configured routes. This worked for small networks but didn't scale.
+- **1969 - Distance Vector Concepts**: The original ARPANET used a distributed routing algorithm based on distance vectors.
+- **1979 - LS Routing Emerges**: The ARPANET transitioned to a link-state routing algorithm, which provided better convergence and loop prevention.
+- **1982 - RIP**: The Routing Information Protocol was defined, becoming the first widely deployed distance-vector protocol.
+- **1988 - OSPF Development**: The Open Shortest Path First protocol was developed as a scalable link-state alternative to RIP.
+- **1989 - BGP**: The Border Gateway Protocol was introduced to connect autonomous systems on the Internet.
+- **1990s - EIGRP**: Cisco developed the Enhanced Interior Gateway Routing Protocol as a hybrid protocol.
+- **2000s - MPLS**: Multi-Protocol Label Switching introduced label-based forwarding alongside traditional IP routing.
+- **2010s - SDN**: Software-Defined Networking separated the control plane from the data plane, enabling centralized routing decisions.
+
+## Distance Vector Algorithms
+
+Distance vector algorithms share routing information only with directly connected neighbors. Each router maintains a table of destinations and the distance (metric) to reach them.
+
+### RIP (Routing Information Protocol)
+- **Type**: Distance vector
+- **Metric**: Hop count (maximum 15 hops; 16 = unreachable)
+- **Algorithm**: Bellman-Ford
+- **Update Frequency**: Every 30 seconds (broadcast)
+- **Convergence**: Slow (count-to-infinity problem)
+- **Use Case**: Small, simple networks
+- **Variants**: RIPv1 (classful), RIPv2 (classless with subnet masks)
+
+### How RIP Works
+1. Each router shares its entire routing table with neighbors every 30 seconds.
+2. When a router receives an update, it adds 1 to each distance and compares with its current table.
+3. If the new distance is shorter, the router updates its table.
+4. If the update is from the same next-hop with a higher metric, the route is updated (poison reverse).
+
+### Problems with Distance Vector
+- **Count-to-Infinity**: Routers may incrementally increase metric values, taking a long time to converge.
+- **Split Horizon**: Prevents sending routing information back in the direction it came from.
+- **Route Poisoning**: Sets unreachable routes to metric 16 (infinity).
+- **Hold-down Timers**: Prevents accepting new routes for a period after a route becomes unavailable.
+
+## Link-State Algorithms
+
+Link-state algorithms share information about their directly connected links with all routers in the network. Each router builds a complete topology map and independently computes the best routes.
+
+### OSPF (Open Shortest Path First)
+- **Type**: Link-state
+- **Metric**: Cost (based on bandwidth; higher bandwidth = lower cost)
+- **Algorithm**: Dijkstra's Shortest Path First (SPF)
+- **Update Frequency**: Only when topology changes (triggered updates)
+- **Convergence**: Fast
+- **Features**: Area hierarchy, VLSM support, authentication, multicast updates
+- **Use Case**: Large enterprise networks, ISP backbones
+
+### How OSPF Works
+1. **Neighbor Discovery**: Routers discover neighbors using Hello packets ( multicast 224.0.0.5).
+2. **LSA Exchange**: Routers exchange Link-State Advertisements (LSAs) describing their links and neighbors.
+3. **LSA Database**: Each router builds a complete Link-State Database (LSDB) of the entire area.
+4. **SPF Calculation**: Each router independently runs Dijkstra's algorithm to compute shortest paths.
+5. **Route Installation**: Best routes are installed in the routing table.
+
+### OSPF Areas
+- **Area 0 (Backbone)**: Required; all other areas must connect to it.
+- **Standard Areas**: Receive routes from the backbone.
+- **Stub Areas**: Receive only a default route from the backbone.
+- **NSSA (Not-So-Stubby Areas)**: Can receive external routes from within the area.
+
+### IS-IS (Intermediate System to Intermediate System)
+- **Type**: Link-state (similar to OSPF)
+- **Algorithm**: Dijkstra's SPF
+- **Features**: Protocol-independent (can carry multiple network layer protocols)
+- **Use Case**: Large ISP backbones (used by major ISPs like AT&T and NTT)
+
+## Path-Vector Algorithms
+
+### BGP (Border Gateway Protocol)
+- **Type**: Path vector
+- **Metric**: AS-path length, policy, and attributes
+- **Use Case**: Inter-domain routing (between autonomous systems on the Internet)
+- **Variants**: eBGP (between ASes), iBGP (within an AS)
+- **Features**: Policy-based routing, path attributes, community strings
+
+### How BGP Works
+1. BGP speakers establish TCP connections (port 179) with neighbors.
+2. They exchange full routing tables initially, then incremental updates.
+3. Each route includes the AS-path (sequence of autonomous systems it traverses).
+4. Routers select the best path based on attributes like AS-path length, LOCAL_PREF, MED, and weight.
+
+## Hybrid Algorithms
+
+### EIGRP (Enhanced Interior Gateway Routing Protocol)
+- **Type**: Hybrid (distance vector with link-state features)
+- **Algorithm**: Diffusing Update Algorithm (DUAL)
+- **Metric**: Composite (bandwidth, delay, reliability, load)
+- **Features**: Fast convergence, unequal-cost load balancing, bounded updates
+- **Use Case**: Cisco-dominated enterprise networks
+
+## Advantages
+
+1. **Automated Path Selection**: Dynamic algorithms automatically find and use the best paths.
+2. **Adaptability**: Routers automatically adjust to topology changes (link failures, new routes).
+3. **Scalability**: Modern protocols (OSPF, BGP) scale to thousands of routers.
+4. **Load Balancing**: Multiple equal-cost paths can be used simultaneously.
+5. **Fault Tolerance**: Algorithms detect failures and reroute traffic automatically.
+6. **Optimization**: Metrics like bandwidth and delay ensure efficient path selection.
+
+## Disadvantages
+
+1. **Convergence Time**: Some algorithms (RIP) converge slowly, causing temporary black holes.
+2. **Resource Consumption**: Link-state algorithms require significant CPU and memory for SPF calculations.
+3. **Complexity**: OSPF and BGP are complex to configure and troubleshoot.
+4. **Routing Loops**: Distance vector protocols are susceptible to loops (mitigated by split horizon, route poisoning).
+5. **Security Risks**: Routing protocols can be attacked (BGP hijacking, OSPF spoofing).
+6. **Inconsistent Metrics**: Different protocols use different metrics, making multi-protocol routing challenging.
+
+## Uses and Applications
+
+- **Enterprise LANs**: OSPF is commonly used within organizations to route traffic across departments and buildings.
+- **Internet Backbone**: BGP connects the thousands of autonomous systems that form the Internet.
+- **Data Centers**: OSPF and IS-IS route traffic between server racks and data center segments.
+- **Service Provider Networks**: BGP and IS-IS manage routing for ISPs with millions of customers.
+- **Branch Office Connectivity**: RIP or OSPF connects remote offices to headquarters.
+- **Cloud Networking**: Cloud providers use custom routing to manage virtual networks across regions.`,
+    codeExample: `# ===========================================
+# LESSON 7: Routing Algorithms
+# Routing Table Inspection and Protocol Diagnostics
+# ===========================================
+
+# ----- View Routing Table -----
+# Windows
+route print
+
+# Linux
+ip route show
+route -n
+
+# macOS
+netstat -rn
+
+# ----- Static Route Management -----
+# Add a static route (Windows)
+route add 10.0.0.0 mask 255.0.0.0 192.168.1.1
+route add 10.0.0.0 mask 255.0.0.0 192.168.1.1 metric 10
+
+# Add a static route (Linux)
+sudo ip route add 10.0.0.0/8 via 192.168.1.1
+sudo ip route add 172.16.0.0/12 via 192.168.1.1 metric 100
+
+# Delete a static route
+route delete 10.0.0.0                      # Windows
+sudo ip route del 10.0.0.0/8              # Linux
+
+# ----- OSPF Diagnostics (Cisco-style) -----
+# These commands work on Cisco routers/switches
+# show ip ospf neighbor
+# show ip ospf interface
+# show ip ospf database
+# show ip route ospf
+
+# ----- BGP Diagnostics -----
+# show ip bgp summary
+# show ip bgp neighbors
+# show ip bgp paths
+
+# ----- RIP Diagnostics -----
+# show ip rip
+# show ip route rip
+
+# ----- Tracing Route Path -----
+# Trace the path packets take through routers
+tracert google.com                        # Windows
+traceroute google.com                     # Linux/macOS
+
+# Trace with DNS resolution disabled (faster)
+tracert -d google.com                     # Windows
+traceroute -n google.com                  # Linux/macOS
+
+# ----- Pathping (Combines Ping and Traceroute) -----
+pathping google.com                       # Windows
+
+# ----- Routing Protocol Verification -----
+# Check if OSPF is running (Linux)
+cat /etc/quagga/ospfd.conf 2>/dev/null || echo "Quagga not installed"
+
+# Check routing daemon status
+systemctl status bird                     # Linux (BIRD routing daemon)
+systemctl status frr                      # Linux (FRRouting)
+
+# ----- Network Reachability Tests -----
+# Test connectivity to specific subnets
+Test-Connection -ComputerName 10.0.0.1 -Count 2
+Test-Connection -ComputerName 172.16.0.1 -Count 2
+
+# ----- Route Summary Information -----
+Write-Host "Routing Protocol Comparison:"
+Write-Host "RIP:    Distance Vector | Metric: Hop Count | Max Hops: 15"
+Write-Host "OSPF:   Link State      | Metric: Cost     | Fast Convergence"
+Write-Host "BGP:    Path Vector     | Metric: Policy   | Internet Backbone"
+Write-Host "EIGRP:  Hybrid          | Metric: Composite| Cisco Proprietary"`,
+    language: "bash"
+  },
+  {
+    id: "8",
+    title: "Network Security",
+    content: `## Definition
+
+**Network Security** encompasses the policies, practices, and technologies designed to protect the **confidentiality**, **integrity**, and **availability** (the CIA triad) of network resources and data. It involves defending against unauthorized access, misuse, modification, or denial of network services and data. Network security operates at every layer of the OSI model, from physical security to application-level protections.
+
+Effective network security requires a **defense-in-depth** strategy, implementing multiple layers of protection so that if one layer fails, others continue to provide security. This includes **firewalls**, **encryption**, **authentication**, **intrusion detection/prevention systems**, **access control lists**, **VPNs**, and **security policies**.
+
+## Introduction
+
+In today's interconnected world, network security is not optional—it is a fundamental requirement for any organization. Cyber threats are constantly evolving, from simple viruses to sophisticated state-sponsored attacks. Understanding network security is essential because:
+
+- **Data is valuable**: Personal information, financial data, intellectual property, and trade secrets are all targets.
+- **Attacks are increasingly sophisticated**: Modern attacks use advanced techniques like zero-day exploits, advanced persistent threats (APTs), and AI-powered attacks.
+- **Regulations require it**: Laws like GDPR, HIPAA, PCI DSS, and SOX mandate specific security measures.
+- **Business continuity depends on it**: A successful attack can halt operations, damage reputation, and cause financial losses.
+- **Remote work increases attack surface**: With more people working remotely, the traditional network perimeter has dissolved.
+
+Network security professionals must understand both the theoretical foundations and practical implementations of security controls.
+
+## History
+
+Network security has evolved alongside the Internet:
+
+- **1970s - The First Worms**: The **Creeper** program (1971) is considered the first computer worm, displaying "I'm the creeper, catch me if you can!" on ARPANET terminals. **Reaper** was created to chase and remove Creeper.
+- **1980s - Viruses Emerge**: The **Brain** virus (1986) was the first IBM PC virus. Morris Worm (1988) infected approximately 6,000 computers (10% of the Internet at the time).
+- **1990s - Firewalls and Encryption**: First-generation firewalls (packet filters) appeared. **DES** (Data Encryption Standard) was adopted. **PGP** (Pretty Good Privacy) was released for email encryption.
+- **1999 - SSL/TLS**: Netscape developed SSL, which evolved into TLS (Transport Layer Security), enabling secure web transactions.
+- **2000s - Advanced Threats**: **SQL Slammer** (2003) and **Conficker** (2008) demonstrated the speed of worm propagation. **Stuxnet** (2010) showed nation-state cyber capabilities.
+- **2010s - Ransomware and APTs**: **RSA SecurID breach** (2011), **Target breach** (2013), **WannaCry ransomware** (2017), and **SolarWinds supply chain attack** (2020) highlighted evolving threats.
+- **2020s - AI-Powered Attacks**: Adversarial machine learning, deepfakes, and automated vulnerability exploitation represent the cutting edge of cyber threats.
+
+## Security Threats
+
+### Malware
+- **Virus**: Self-replicating code that attaches to legitimate programs.
+- **Worm**: Self-propagating malware that spreads across networks without human interaction.
+- **Trojan Horse**: Malicious code disguised as legitimate software.
+- **Ransomware**: Encrypts victim's files and demands payment for decryption.
+- **Spyware**: Covertly monitors user activity and steals information.
+- **Rootkit**: Provides hidden, privileged access while concealing its presence.
+
+### Network Attacks
+- **Man-in-the-Middle (MitM)**: Attacker intercepts and potentially alters communications between two parties.
+- **Denial of Service (DoS)**: Overwhelms a target with traffic to make it unavailable.
+- **Distributed DoS (DDoS)**: DoS attack originating from multiple sources.
+- **DNS Spoofing/Poisoning**: Redirects DNS queries to malicious servers.
+- **ARP Spoofing**: Associates attacker's MAC address with a legitimate IP.
+- **Packet Sniffing**: Captures and analyzes network traffic.
+
+### Social Engineering
+- **Phishing**: Deceptive emails or websites designed to steal credentials.
+- **Spear Phishing**: Targeted phishing aimed at specific individuals or organizations.
+- **Pretexting**: Creating a fabricated scenario to obtain information.
+
+## Security Technologies
+
+### Firewalls
+- **Packet Filtering**: Examines packet headers (source/destination IP, port) and decides to allow or block.
+- **Stateful Inspection**: Tracks the state of active connections and makes decisions based on context.
+- **Application Layer Firewall**: Inspects the payload of packets, understanding application protocols.
+- **Next-Generation Firewall (NGFW)**: Combines traditional firewall with intrusion prevention, application awareness, and threat intelligence.
+
+### Encryption
+- **Symmetric Encryption**: Same key for encryption and decryption (AES, DES, 3DES). Fast but key distribution is challenging.
+- **Asymmetric Encryption**: Public/private key pair (RSA, ECC, Diffie-Hellman). Enables secure key exchange.
+- **TLS/SSL**: Provides encrypted communication over HTTP (HTTPS), email (SMTPS), and other protocols.
+- **IPsec**: Network-layer encryption for VPNs and secure site-to-site communication.
+
+### Authentication and Access Control
+- **Multi-Factor Authentication (MFA)**: Requires multiple forms of verification (password + token + biometric).
+- **RADIUS/TACACS+**: Centralized authentication, authorization, and accounting (AAA) protocols.
+- **802.1X**: Port-based network access control requiring authentication before network access.
+- **Zero Trust Architecture**: Never trust, always verify—every access request is authenticated regardless of location.
+
+### Intrusion Detection and Prevention
+- **IDS (Intrusion Detection System)**: Monitors network traffic for suspicious activity and alerts administrators.
+- **IPS (Intrusion Prevention System)**: Detects and actively blocks malicious traffic in real-time.
+- **SIEM (Security Information and Event Management)**: Aggregates and analyzes security logs from across the network.
+
+### VPN (Virtual Private Network)
+- **Remote Access VPN**: Individual users connect to the corporate network over the Internet.
+- **Site-to-Site VPN**: Connects two networks (e.g., branch office to headquarters).
+- **Protocols**: IPsec, OpenVPN, WireGuard, SSL/TLS VPN.
+
+## Advantages
+
+1. **Data Protection**: Encryption and access controls protect sensitive data from unauthorized access.
+2. **Business Continuity**: Security measures prevent disruptions from attacks and failures.
+3. **Regulatory Compliance**: Proper security helps meet legal and industry requirements.
+4. **Trust and Reputation**: Strong security builds customer confidence and protects brand reputation.
+5. **Cost Reduction**: Preventing breaches avoids costly remediation, legal fees, and lost business.
+6. **Risk Management**: Systematic security reduces the overall risk profile of the organization.
+
+## Disadvantages
+
+1. **Cost**: Security infrastructure and expertise require significant investment.
+2. **Complexity**: Implementing and managing multiple security layers is complex.
+3. **Performance Impact**: Encryption, inspection, and logging add latency and overhead.
+4. **User Friction**: Security measures (MFA, strong passwords, access restrictions) can inconvenience users.
+5. **False Positives**: Security systems may flag legitimate traffic as malicious, causing disruptions.
+6. **Evolution of Threats**: New attack techniques constantly emerge, requiring ongoing vigilance.
+7. **Insider Threats**: Malicious or negligent employees can bypass external security measures.
+
+## Uses and Applications
+
+- **Enterprise Networks**: Firewalls, IDS/IPS, and SIEM protect corporate networks.
+- **E-commerce**: TLS encryption secures online transactions and customer data.
+- **Healthcare**: HIPAA compliance requires encryption and access controls for patient data.
+- **Government**: Classified networks use advanced encryption and strict access controls.
+- **Remote Work**: VPNs and zero-trust architectures secure remote access.
+- **Cloud Security**: CASB (Cloud Access Security Broker) and CSPM (Cloud Security Posture Management) protect cloud resources.
+- **IoT Security**: Network segmentation and device authentication protect IoT deployments.`,
+    codeExample: `# ===========================================
+# LESSON 8: Network Security
+# Security Diagnostics, Encryption, and Monitoring
+# ===========================================
+
+# ----- Firewall Configuration (Windows) -----
+# View firewall status
+Get-NetFirewallProfile | Format-Table Name, Enabled
+
+# Block incoming traffic on a specific port
+New-NetFirewallRule -DisplayName "Block Telnet" -Direction Inbound -Protocol TCP -LocalPort 23 -Action Block
+
+# Allow incoming SSH traffic
+New-NetFirewallRule -DisplayName "Allow SSH" -Direction Inbound -Protocol TCP -LocalPort 22 -Action Allow
+
+# ----- Firewall Configuration (Linux) -----
+# Check firewall status (UFW)
+sudo ufw status verbose
+
+# Enable firewall and allow SSH
+sudo ufw allow ssh
+sudo ufw enable
+
+# Block a specific IP address
+sudo ufw deny from 10.0.0.50
+
+# ----- Encryption Operations -----
+# Generate an SSH key pair
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+
+# Encrypt a file using OpenSSL
+openssl enc -aes-256-cbc -salt -in plaintext.txt -out encrypted.bin
+
+# Decrypt a file
+openssl enc -aes-256-cbc -d -in encrypted.bin -out plaintext.txt
+
+# ----- TLS/SSL Certificate Check -----
+# Verify SSL certificate of a website
+openssl s_client -connect google.com:443 -servername google.com
+
+# Check certificate expiry
+openssl s_client -connect google.com:443 2>/dev/null | openssl x509 -noout -dates
+
+# ----- Network Monitoring -----
+# Monitor active connections in real-time
+netstat -an | findstr ESTABLISHED         # Windows
+ss -tunap | grep ESTABLISHED              # Linux
+
+# Check for suspicious listening ports
+netstat -an | findstr LISTENING
+
+# ----- IP Blocking -----
+# Block an IP using Windows Firewall
+New-NetFirewallRule -DisplayName "Block Malicious IP" -Direction Inbound -RemoteAddress 203.0.113.50 -Action Block
+
+# Block an IP using Linux (iptables)
+sudo iptables -A INPUT -s 203.0.113.50 -j DROP
+
+# ----- VPN Connection -----
+# Connect to a VPN (Windows built-in)
+rasdial "VPN Connection" username password
+
+# ----- Password Security -----
+# Generate a strong random password
+-join ((1..20) | ForEach-Object { [char](Get-Random -Minimum 33 -Maximum 126) })
+
+# ----- Security Audit Commands -----
+# Check for open ports
+Test-NetConnection -ComputerName 127.0.0.1 -Port 80
+Test-NetConnection -ComputerName 127.0.0.1 -Port 443
+
+# View security event logs (Windows)
+Get-EventLog -LogName Security -Newest 20
+
+# ----- Common Security Ports to Monitor -----
+Write-Host "Security-Sensitive Ports:"
+Write-Host "22 - SSH (should be allowed only from trusted IPs)"
+Write-Host "23 - Telnet (should be BLOCKED - insecure)"
+Write-Host "80 - HTTP (consider redirecting to HTTPS)"
+Write-Host "443 - HTTPS (should be allowed)"
+Write-Host "3389 - RDP (restrict access)"
+Write-Host "3306 - MySQL (should not be public)"
+Write-Host "5432 - PostgreSQL (should not be public)"`,
+    language: "bash"
+  },
+  {
+    id: "9",
+    title: "Wireless & Mobile Networks",
+    content: `## Definition
+
+**Wireless Networks** use electromagnetic waves (radio, microwave, infrared) to transmit data without physical cables. **Mobile Networks** enable communication for devices that move between coverage areas, maintaining connectivity as users travel. Together, these technologies have revolutionized how people access information and communicate, enabling the anytime, anywhere connectivity that defines the modern era.
+
+Wireless networks include **Wi-Fi (IEEE 802.11)** for local area wireless networking, **Bluetooth (IEEE 802.15)** for short-range personal area networks, **cellular networks** (4G LTE, 5G) for wide area mobile communication, and **satellite networks** for global coverage. Mobile networks use a **cellular architecture** where geographic areas are divided into cells, each served by a base station, enabling frequency reuse and continuous coverage.
+
+## Introduction
+
+Wireless and mobile networks are among the most transformative technologies of the past three decades. They have changed how billions of people access the Internet, communicate, work, and entertain themselves. Understanding wireless and mobile networks is essential because:
+
+- **Ubiquitous Connectivity**: Over 5.3 billion people use mobile phones globally, and Wi-Fi is available in most homes, offices, and public spaces.
+- **Unique Challenges**: Wireless media introduce challenges not present in wired networks: **signal attenuation**, **interference**, **multipath fading**, **security vulnerabilities**, and **limited bandwidth**.
+- **Mobility Management**: Mobile networks must handle handoffs between cells, roaming across networks, and maintaining sessions while moving at high speeds.
+- **Rapid Evolution**: Wireless standards evolve quickly (Wi-Fi 6/7, 5G/6G), each bringing significant improvements in speed, capacity, and latency.
+- **IoT Enablement**: Wireless technologies connect billions of IoT devices, from smart home sensors to industrial equipment.
+
+The wireless landscape is diverse, with different technologies optimized for different use cases: Wi-Fi for high-speed local access, Bluetooth for personal devices, cellular for wide area mobility, and satellite for remote coverage.
+
+## History
+
+The evolution of wireless and mobile networks has been rapid and transformative:
+
+**Wi-Fi History:**
+- **1997 - IEEE 802.11**: The original standard supported 1-2 Mbps wireless LAN.
+- **1999 - 802.11b**: Introduced 11 Mbps using the 2.4 GHz band, making Wi-Fi commercially viable.
+- **2003 - 802.11g**: Achieved 54 Mbps backward-compatible with 802.11b.
+- **2009 - 802.11n (Wi-Fi 4)**: Introduced MIMO (Multiple-Input Multiple-Output), achieving up to 600 Mbps.
+- **2014 - 802.11ac (Wi-Fi 5)**: Used wider channels and beamforming for multi-gigabit speeds.
+- **2019 - 802.11ax (Wi-Fi 6)**: Introduced OFDMA, improved MU-MIMO, and better performance in dense environments.
+- **2024 - 802.11be (Wi-Fi 7)**: Expected to deliver up to 46 Gbps with 320 MHz channels and 4096-QAM.
+
+**Cellular History:**
+- **1979 - 1G (NMT)**: The first generation of cellular networks used analog signals for voice.
+- **1991 - 2G (GSM)**: Digital cellular networks enabled SMS text messaging and improved voice quality.
+- **2001 - 3G (UMTS/CDMA2000)**: Enabled mobile Internet access and data services at speeds up to 2 Mbps.
+- **2009 - 4G (LTE)**: Achieved 100 Mbps-1 Gbps, enabling mobile broadband, video streaming, and app ecosystems.
+- **2019 - 5G NR**: Delivers up to 20 Gbps, sub-1ms latency, and support for 1 million devices per square kilometer.
+- **2030s - 6G**: Under development, expected to deliver 1 Tbps and support holographic communication.
+
+**Bluetooth History:**
+- **1998 - Bluetooth 1.0**: Created by Ericsson for short-range wireless communication (1 Mbps, 10m range).
+- **2004 - Bluetooth 2.0 + EDR**: Enhanced Data Rate (3 Mbps).
+- **2010 - Bluetooth 4.0 (BLE)**: Bluetooth Low Energy for IoT devices with minimal power consumption.
+- **2016 - Bluetooth 5.0**: Extended range (300m), higher speed (2 Mbps), and larger broadcast capacity.
+
+## Wi-Fi (IEEE 802.11) Architecture
+
+### Components
+- **Station (STA)**: Any device with a wireless network interface (laptop, phone, IoT device).
+- **Access Point (AP)**: Device that provides wireless connectivity to the wired network (router, wireless access point).
+- **Basic Service Set (BSS)**: A group of stations communicating through a single AP.
+- **Extended Service Set (ESS)**: Multiple BSSs connected through a distribution system (wired backbone).
+- **Distribution System (DS)**: The wired backbone connecting multiple APs.
+
+### Wi-Fi Operating Modes
+- **Infrastructure Mode**: Stations communicate through an AP (most common).
+- **Ad-Hoc Mode**: Stations communicate directly without an AP (peer-to-peer).
+- **Mesh Mode**: Multiple APs form a mesh network for extended coverage.
+
+### Wi-Fi Frequency Bands
+- **2.4 GHz**: Longer range, more interference (microwaves, Bluetooth), 3 non-overlapping channels (1, 6, 11).
+- **5 GHz**: Shorter range, less interference, more non-overlapping channels, higher speeds.
+- **6 GHz (Wi-Fi 6E)**: New band with 1200 MHz of spectrum, minimal interference, ultra-high speeds.
+
+## Cellular Network Architecture
+
+### Components
+- **User Equipment (UE)**: Mobile device (smartphone, tablet, IoT device).
+- **Base Station (eNodeB/gNodeB)**: Tower or antenna that provides wireless coverage (4G/5G).
+- **Evolved Packet Core (EPC)**: Core network handling authentication, routing, and session management.
+- **Mobility Management Entity (MME)**: Handles signaling and mobility management.
+- **Serving Gateway (S-GW)**: Routes data packets between base stations.
+- **Packet Data Network Gateway (P-GW)**: Connects to the Internet and external networks.
+
+### Cellular Concepts
+- **Cells**: Geographic areas served by a base station. Cell sizes range from macro (several km) to femto (a few meters).
+- **Frequency Reuse**: The same frequencies can be used in non-adjacent cells, maximizing spectrum efficiency.
+- **Handoff/Handover**: Seamless transfer of a connection from one base station to another as the user moves.
+- **Roaming**: Using another carrier's network when outside your home coverage area.
+
+## Advantages
+
+1. **Mobility**: Users can access network resources from anywhere within coverage areas.
+2. **Convenience**: No cables mean easier setup and reconfiguration.
+3. **Scalability**: Wireless networks can easily add new devices without physical infrastructure.
+4. **Cost-Effective**: Reduces cabling costs, especially in older buildings or temporary setups.
+5. **Accessibility**: Enables connectivity in remote areas where wired infrastructure is impractical.
+6. **IoT Enablement**: Wireless technologies connect billions of devices that would be impractical to wire.
+7. **Rapid Deployment**: Wireless networks can be set up quickly, useful for disaster recovery and temporary events.
+
+## Disadvantages
+
+1. **Security Vulnerabilities**: Wireless signals can be intercepted, making encryption (WPA3, TLS) essential.
+2. **Interference**: Other wireless devices, microwaves, and physical obstacles can disrupt signals.
+3. **Limited Bandwidth**: Wireless typically offers lower throughput than wired connections.
+4. **Range Limitations**: Signal strength decreases with distance and obstacles.
+5. **Latency**: Wireless connections often have higher latency than wired equivalents.
+6. **Reliability**: Weather, interference, and congestion can cause intermittent connectivity.
+7. **Power Consumption**: Wireless radios consume battery power, limiting device battery life.
+
+## Uses and Applications
+
+- **Home Networking**: Wi-Fi provides Internet access throughout the home.
+- **Enterprise WLANs**: Large organizations use Wi-Fi for employee connectivity and IoT devices.
+- **Public Hotspots**: Airports, cafes, hotels, and cities offer public Wi-Fi access.
+- **Mobile Internet**: 4G/5G provides high-speed Internet access on the go.
+- **IoT and Smart Cities**: Wireless sensors monitor traffic, environment, utilities, and infrastructure.
+- **Healthcare**: Wireless medical devices and telemedicine rely on reliable wireless networks.
+- **Industrial IoT**: Wi-Fi and 5G connect sensors and actuators in factories and warehouses.
+- **Education**: Schools and universities use Wi-Fi for digital learning and campus connectivity.`,
+    codeExample: `# ===========================================
+# LESSON 9: Wireless & Mobile Networks
+# Wi-Fi Configuration and Diagnostics
+# ===========================================
+
+# ----- View Wi-Fi Information (Windows) -----
+# Show current Wi-Fi connection details
+netsh wlan show interfaces
+
+# Show available Wi-Fi networks
+netsh wlan show networks
+
+# Show Wi-Fi profile (saved network settings)
+netsh wlan show profile name="NetworkName" key=clear
+
+# ----- View Wi-Fi Information (Linux) -----
+# Show wireless interface information
+iwconfig
+iw dev wlan0 info
+
+# Scan for available networks
+sudo iwlist wlan0 scan | grep -E "ESSID|Channel|Signal"
+
+# Show connection status
+nmcli device wifi list
+nmcli connection show
+
+# ----- Wi-Fi Signal Strength -----
+# Check signal strength in dBm and percentage
+netsh wlan show interfaces | findstr "Signal"
+iwconfig wlan0 | grep -i "signal level"
+
+# Signal strength reference:
+# -30 dBm: Maximum (excellent)
+# -50 dBm: Excellent
+# -60 dBm: Good
+# -70 dBm: Fair
+# -80 dBm: Weak
+# -90 dBm: Very weak/unusable
+
+# ----- Connect to Wi-Fi Network -----
+# Windows - Connect to a saved network
+netsh wlan connect name="NetworkName"
+
+# Linux
+nmcli device wifi connect "NetworkName" password "your_password"
+
+# ----- Disconnect from Wi-Fi -----
+netsh wlan disconnect                     # Windows
+nmcli device disconnect wlan0            # Linux
+
+# ----- Wi-Fi Diagnostics -----
+# Ping test through wireless connection
+ping 8.8.8.8
+
+# Test throughput (using speedtest-cli if installed)
+speedtest-cli
+
+# Check for channel interference
+netsh wlan show networks mode=bssid | findstr "Channel"
+iwlist wlan0 scan | grep "Channel"
+
+# ----- Bluetooth Status -----
+# Windows
+Get-Service bthserv
+Get-Device | Where-Object { $_.Class -eq "Bluetooth" }
+
+# Linux
+bluetoothctl show
+bluetoothctl devices
+
+# ----- Cellular Network Info (PowerShell) -----
+# Get network adapter info for cellular
+Get-NetAdapter | Where-Object { $_.InterfaceDescription -like "*Cellular*" -or $_.InterfaceDescription -like "*Mobile*" }
+
+# ----- Wi-Fi Security Check -----
+# Verify WPA3/WPA2 security
+netsh wlan show profile name="NetworkName" | findstr "Authentication"
+
+# Common security types:
+# WPA3-Personal (SAE) - Most secure
+# WPA2-Personal (PSK) - Widely used
+# WPA2-Enterprise (802.1X) - Business use
+# Open (None) - Insecure, avoid
+
+# ----- Wi-Fi Channel Optimization -----
+Write-Host "Wi-Fi Channel Recommendations:"
+Write-Host "2.4 GHz Band: Use channels 1, 6, or 11 (non-overlapping)"
+Write-Host "5 GHz Band: Choose channels in UNII-1 (36-48) or UNII-3 (149-165)"
+Write-Host "6 GHz Band: All channels are available with minimal interference"
+
+# ----- Network Speed Test -----
+# Test download and upload speed
+Write-Host "Testing network speed..."
+Test-Connection -ComputerName google.com -Count 5 | Measure-Object -Property ResponseTime -Average`,
+    language: "bash"
+  },
+  {
+    id: "10",
+    title: "Modern Networking",
+    content: `## Definition
+
+**Modern Networking** refers to the current generation of networking technologies, architectures, and paradigms that have emerged to address the demands of cloud computing, massive-scale applications, IoT, and evolving security requirements. Key technologies include **Software-Defined Networking (SDN)**, **Network Function Virtualization (NFV)**, **Cloud Networking**, **Content Delivery Networks (CDNs)**, **Edge Computing**, **Zero Trust Architecture**, **HTTP/3**, and **5G Network Slicing**.
+
+Modern networking represents a fundamental shift from traditional hardware-centric, manually configured networks to **software-driven, automated, and programmable** infrastructure. This shift enables unprecedented agility, scalability, and efficiency in how networks are designed, deployed, and managed.
+
+## Introduction
+
+The networking landscape has undergone a dramatic transformation in the past decade. Traditional approaches—where network engineers manually configured routers and switches using command-line interfaces—are giving way to **automated, programmable, and software-defined** approaches. Understanding modern networking is essential because:
+
+- **Cloud is Dominant**: Most organizations now run workloads in public clouds (AWS, Azure, GCP), requiring new networking paradigms.
+- **Automation is Essential**: The scale of modern networks (thousands of devices, millions of endpoints) makes manual management impossible.
+- **Security Has Evolved**: The traditional perimeter-based security model is obsolete; zero-trust principles are now standard.
+- **Performance Demands are Extreme**: Applications like AI/ML training, real-time gaming, and video conferencing demand ultra-low latency and high bandwidth.
+- **New Protocols Are Emerging**: QUIC, HTTP/3, gRPC, and eBPF represent the cutting edge of networking technology.
+
+Modern networking professionals must understand both the foundational concepts (covered in earlier lessons) and the emerging technologies that are reshaping the industry.
+
+## History
+
+The evolution of modern networking has been driven by cloud computing, scalability challenges, and security threats:
+
+- **2008 - SDN Concept**: Martin Casado et al. published "OpenFlow: Enabling Innovation in Campus Networks," laying the foundation for Software-Defined Networking.
+- **2010 - OpenFlow Protocol**: The Open Networking Foundation released OpenFlow 1.0, enabling centralized control of network switches.
+- **2012 - OpenStack Networking**: OpenStack's Neutron project provided programmable networking for cloud environments.
+- **2013 - Container Revolution**: Docker's rise created new networking requirements for container orchestration (Kubernetes networking).
+- **2014 - NFV**: ETSI published Network Function Virtualization standards, enabling virtual firewalls, load balancers, and routers.
+- **2016 - Kubernetes Networking**: Kubernetes became the standard for container orchestration, requiring sophisticated networking (CNI plugins, service meshes).
+- **2017 - eBPF**: The Linux kernel's extended Berkeley Packet Filter (eBPF) technology emerged as a revolutionary programmable data plane.
+- **2019 - QUIC Standardization**: IETF began standardizing QUIC as the next-generation transport protocol.
+- **2020 - SASE**: Gartner coined Secure Access Service Edge (SASE), combining networking and security in the cloud.
+- **2021 - HTTP/3**: RFC 9114 standardized HTTP/3 over QUIC, becoming the new web standard.
+- **2022-Present - AI Networking**: Large-scale AI/ML training clusters demand specialized high-bandwidth, low-latency networks (RDMA, InfiniBand, RoCE).
+
+## Software-Defined Networking (SDN)
+
+SDN separates the **control plane** (decision-making) from the **data plane** (packet forwarding), enabling centralized, programmable network management.
+
+### SDN Architecture
+- **Application Layer**: Network applications (firewalls, load balancers, traffic engineering).
+- **Control Layer**: SDN controller (OpenDaylight, ONOS, Cisco ACI) that makes forwarding decisions.
+- **Infrastructure Layer**: Physical and virtual switches that forward packets based on controller instructions.
+
+### OpenFlow Protocol
+- Communication protocol between SDN controller and switches.
+- Enables the controller to program forwarding tables in switches.
+- Supports flow-based forwarding (not just destination-based).
+
+### Benefits of SDN
+- Centralized management and visibility.
+- Programmable network behavior.
+- Rapid provisioning and changes.
+- Vendor neutrality (open standards).
+
+## Network Function Virtualization (NFV)
+
+NFV replaces dedicated hardware appliances (firewalls, load balancers, routers) with **software running on commodity servers**.
+
+### NFV Components
+- **Virtualized Network Functions (VNFs)**: Software implementations of network functions (e.g., virtual firewall, virtual router).
+- **NFV Infrastructure (NFVI)**: Compute, storage, and networking resources that host VNFs.
+- **NFV Orchestrator**: Manages the lifecycle of VNFs (deployment, scaling, healing).
+
+### Benefits of NFV
+- Reduced hardware costs (commodity servers vs. specialized appliances).
+- Faster deployment (minutes vs. weeks for hardware).
+- Elastic scaling (add/remove instances based on demand).
+- Reduced physical footprint and power consumption.
+
+## Cloud Networking
+
+Cloud networking extends traditional networking concepts to virtual environments:
+
+### Key Concepts
+- **Virtual Private Cloud (VPC)**: Isolated virtual network within a cloud provider.
+- **Subnets**: Segments within a VPC for organizing resources.
+- **Security Groups**: Virtual firewalls controlling inbound/outbound traffic.
+- **Load Balancers**: Distribute traffic across multiple instances.
+- **VPN Gateway**: Encrypted connection between on-premises and cloud networks.
+- **Direct Connect/ExpressRoute**: Dedicated private connections to cloud providers.
+
+### Cloud Networking Models
+- **Overlay Networks**: Virtual networks built on top of physical infrastructure using encapsulation (VXLAN, GRE).
+- **Underlay Network**: The physical network that carries overlay traffic.
+- **Service Mesh**: Infrastructure layer for service-to-service communication (Istio, Linkerd).
+
+## Content Delivery Networks (CDNs)
+
+CDNs distribute content across geographically distributed servers to reduce latency and improve performance.
+
+### How CDNs Work
+1. User requests content (e.g., a video).
+2. DNS resolves to the nearest CDN edge server.
+3. Edge server serves the cached content (cache hit) or fetches from origin (cache hit miss).
+4. Content is cached at the edge for future requests.
+
+### Major CDN Providers
+- **Cloudflare**: CDN, DDoS protection, and security.
+- **Akamai**: One of the largest CDNs with global coverage.
+- **AWS CloudFront**: Integrated with AWS services.
+- **Google Cloud CDN**: Google's global CDN.
+
+## Edge Computing
+
+Edge computing processes data **closer to the source** (IoT devices, users) rather than in centralized data centers.
+
+### Benefits
+- **Reduced Latency**: Processing at the edge eliminates round-trip to cloud.
+- **Bandwidth Savings**: Only relevant data is sent to the cloud.
+- **Privacy**: Sensitive data can be processed locally.
+- **Reliability**: Continues working even if cloud connectivity is lost.
+
+### Edge Technologies
+- **Multi-access Edge Computing (MEC)**: Computing at the edge of cellular networks.
+- **AWS Greengrass**: Lambda functions running on edge devices.
+- **Azure IoT Edge**: Modular systems for IoT edge computing.
+
+## Zero Trust Architecture
+
+Zero Trust is a security model based on the principle: **"Never trust, always verify."**
+
+### Core Principles
+- **Verify Explicitly**: Always authenticate and authorize based on all available data points.
+- **Use Least Privilege Access**: Limit access to only what is needed.
+- **Assume Breach**: Design systems as if attackers are already inside the network.
+
+### Zero Trust Components
+- **Identity Provider (IdP)**: Centralized authentication and authorization.
+- **Micro-segmentation**: Isolate workloads and applications.
+- **Software-Defined Perimeter (SDP)**: Hide infrastructure from unauthorized users.
+- **Continuous Monitoring**: Real-time verification of user and device trust.
+
+## Modern Protocols
+
+### QUIC and HTTP/3
+- **QUIC**: UDP-based transport protocol with built-in TLS 1.3, 0-RTT connection establishment, and no head-of-line blocking.
+- **HTTP/3**: Runs over QUIC instead of TCP, providing faster connections and better performance on unreliable networks.
+
+### gRPC
+- High-performance RPC framework using Protocol Buffers and HTTP/2.
+- Used extensively in microservices architectures.
+
+### WireGuard
+- Modern, lightweight VPN protocol.
+- Simpler and faster than IPsec and OpenVPN.
+
+## Advantages
+
+1. **Agility**: Software-defined approaches enable rapid network changes and provisioning.
+2. **Scalability**: Cloud networking scales elastically with demand.
+3. **Cost Efficiency**: NFV and cloud reduce hardware and operational costs.
+4. **Programmability**: APIs and automation enable infrastructure-as-code.
+5. **Security**: Zero Trust and micro-segmentation provide stronger security.
+6. **Performance**: CDNs, edge computing, and modern protocols reduce latency.
+7. **Visibility**: Centralized controllers provide comprehensive network monitoring.
+
+## Disadvantages
+
+1. **Complexity**: Modern architectures are complex and require specialized skills.
+2. **Vendor Lock-in**: Cloud providers may create dependencies.
+3. **Security Risks**: Software-defined infrastructure introduces new attack surfaces.
+4. **Migration Challenges**: Transitioning from legacy to modern architectures is difficult.
+5. **Performance Overhead**: Virtualization and overlay networks add processing overhead.
+6. **Cost at Scale**: Cloud costs can escalate quickly without proper management.
+7. **Skills Gap**: The demand for modern networking skills exceeds supply.
+
+## Uses and Applications
+
+- **Cloud-Native Applications**: Kubernetes networking, service meshes, and container networking.
+- **Enterprise WAN**: SD-WAN connects branch offices to cloud services efficiently.
+- **Data Center Networking**: Leaf-spine architectures with VXLAN and EVPN.
+- **Telecom 5G**: Network slicing and MEC enable new mobile services.
+- **IoT Deployments**: Edge computing processes sensor data locally.
+- **Remote Work**: SASE and Zero Trust secure remote access.
+- **AI/ML Infrastructure**: High-performance networking for GPU clusters (RDMA, InfiniBand).
+- **Gaming**: Low-latency networking for competitive gaming and cloud gaming.`,
+    codeExample: `# ===========================================
+# LESSON 10: Modern Networking
+# SDN, Cloud Networking, and Automation
+# ===========================================
+
+# ----- Kubernetes Networking -----
+# View Kubernetes services and their cluster IPs
+kubectl get services
+
+# View all pods and their IP addresses
+kubectl get pods -o wide
+
+# View network policies
+kubectl get networkpolicies
+
+# Describe a specific service
+kubectl describe service my-service
+
+# ----- Docker Networking -----
+# List Docker networks
+docker network ls
+
+# Inspect a Docker network
+docker network inspect bridge
+
+# Create a custom Docker network
+docker network create --driver bridge my-network
+
+# Run a container on a specific network
+docker run -d --name my-container --network my-network nginx
+
+# ----- Cloud CLI Operations (AWS) -----
+# View VPC configurations
+aws ec2 describe-vpcs
+
+# List subnets
+aws ec2 describe-subnets
+
+# View security groups
+aws ec2 describe-security-groups
+
+# List load balancers
+aws elbv2 describe-load-balancers
+
+# ----- Cloud CLI Operations (Azure) -----
+# View virtual networks
+az network vnet list
+
+# View subnets
+az network vnet subnet list --resource-group myRG --vnet-name myVNet
+
+# View network security groups
+az network nsg list --resource-group myRG
+
+# ----- Network Automation (Ansible-style) -----
+# Example Ansible playbook for network configuration
+# (Written as a reference - actual Ansible files use YAML)
+Write-Host "Network Automation Example:"
+Write-Host "Playbook: Configure switch ports"
+Write-Host "  - Set VLAN 10 for access ports"
+Write-Host "  - Enable port security"
+Write-Host "  - Configure storm control"
+
+# ----- SDN/OpenFlow Reference -----
+# OpenFlow controller commands (OVS)
+# ovs-ofctl add-flow bridge "in_port=1,actions=output:2"
+# ovs-ofctl dump-flows bridge
+
+# Check Open vSwitch status
+sudo ovs-vsctl show                     # Linux
+
+# ----- Performance Testing -----
+# Test network throughput using iperf3
+# Server: iperf3 -s
+# Client: iperf3 -c server-ip -t 10
+
+# Test latency
+ping -c 10 8.8.8.8
+
+# ----- Modern Protocol Check -----
+# Verify HTTP/3 support (requires curl with HTTP/3 support)
+# curl --http3 https://example.com
+
+# Check QUIC support
+# nmap --script ssl-enum-ciphers -p 443 example.com
+
+# ----- Network Monitoring Tools -----
+# Install and use nload for real-time bandwidth monitoring
+# sudo apt install nload
+# nload eth0
+
+# Using iftop for per-connection bandwidth
+# sudo apt install iftop
+# sudo iftop -i eth0
+
+# ----- Infrastructure as Code (Terraform Reference) -----
+Write-Host "Terraform Network Resources:"
+Write-Host "  - aws_vpc: Create virtual private cloud"
+Write-Host "  - aws_subnet: Create subnets"
+Write-Host "  - aws_security_group: Define firewall rules"
+Write-Host "  - aws_route_table: Configure routing"
+Write-Host "  - aws_nat_gateway: Enable internet access for private subnets"
+
+# ----- Service Mesh Check -----
+# Verify Istio service mesh
+kubectl get pods -n istio-system
+istioctl analyze
+
+# Check Linkerd service mesh
+linkerd check`,
+    language: "bash"
+  }
+]
   },
 
   {
