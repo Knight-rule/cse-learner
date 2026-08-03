@@ -6750,7 +6750,8 @@ istioctl analyze
 linkerd check`,
     language: "bash"
   }
-]
+],
+  notesUrl: "https://noteslink.in/product/cn-notes-kiit/",
   },
 
   {
@@ -6877,11 +6878,9 @@ linkerd check`,
         codeExample: `# 1. .env.example — tracked in git, documents every required key\nPORT=3000\nDATABASE_URL=postgres://user:pass@host:5432/db\nNODE_ENV=development\nCORS_ORIGIN=http://localhost:5173\n\n# 2. Dockerfile — reproducible environment\nFROM node:20-alpine\nWORKDIR /app\nCOPY package.json package-lock.json ./\nRUN npm ci --only=production\nCOPY . .\nEXPOSE 3000\nCMD ["node", "dist/server.js"]\n\n# 3. docker-compose.yml — full stack\nservices:\n  api:\n    build: .\n    ports:\n      - "3000:3000"\n    environment:\n      - NODE_ENV=production\n    depends_on:\n      - db\n  db:\n    image: postgres:16-alpine\n\nvolumes:\n  pgdata:`,
 
         language: "yaml"
-
-      },
-
+      }
     ],
-
+    notesUrl: "https://noteslink.in/product/web-dev-notes-kiit/",
   },
 
   {
@@ -8139,7 +8138,8 @@ if os.path.exists("tasks.json"):
     os.remove("tasks.json")`,
       language: 'python'
     }
-  ]
+  ],
+  notesUrl: "https://noteslink.in/product/oop-notes-kiit/",
 },
 
     {
@@ -8149,7 +8149,7 @@ if os.path.exists("tasks.json"):
   icon: "☕",
   color: "from-red-400 to-orange-500",
   category: "Languages",
-  notesUrl: "https://github.com/Knight-rule/cse-learner/blob/main/docs/java-notes.md",
+  notesUrl: "https://noteslink.in/product/java-notes-kiit/",
   lessons: [
     {
       id: "java-1",
@@ -12547,9 +12547,9 @@ int main() {
     return 0;
 }`,
         language: "c"
-      },
+      }
     ],
-
+    notesUrl: "https://noteslink.in/product/c-language-notes-kiit/",
   },
 
   {
@@ -14710,7 +14710,8 @@ async function getData() {
       codeExample: `// try...catch\ntry {\n  const result = JSON.parse("{ invalid json }");\n} catch (error) {\n  console.error("Parse error:", error.message);\n} finally {\n  console.log("Cleanup here");\n}\n\n// Throwing errors\nfunction setAge(age) {\n  if (typeof age !== "number") {\n    throw new TypeError("Age must be a number");\n  }\n  if (age < 0 || age > 150) {\n    throw new RangeError("Age must be 0-150");\n  }\n  return age;\n}\n\ntry {\n  console.log(setAge(25));\n  console.log(setAge(-5));  // RangeError\n} catch (error) {\n  console.error(error.constructor.name + ":", error.message);\n}\n\n// Practical example: safe JSON parsing\nfunction safeParse(json) {\n  try {\n    return { data: JSON.parse(json), error: null };\n  } catch (e) {\n    return { data: null, error: e.message };\n  }\n}\n\nconst result1 = safeParse('{"name": "Alice"}');\nconst result2 = safeParse("not json");\nconsole.log(result1); // { data: {name: "Alice"}, error: null }\nconsole.log(result2); // { data: null, error: "..." }\n\n// Async error handling\nasync function fetchUser(id) {\n  try {\n    const res = await fetch(\\\`/api/users/\\\${id}\\\`);\n    if (!res.ok) throw new Error(\\\`HTTP \\\${res.status}\\\`);\n    return await res.json();\n  } catch (err) {\n    console.error("Failed to fetch user:", err.message);\n    return null;\n  }\n}`,
       language: "javascript"
     }
-  ]
+  ],
+  notesUrl: "https://noteslink.in/product/javascript-notes-kiit/",
 },
 
   {
@@ -15160,10 +15161,9 @@ findMax(array, length) {
 
     icon: "🔗",
 
-    notesUrl: "https://noteslink.in/product/de-la-notes-kiit/",
-
     color: "from-violet-500 to-purple-600",
     category: "Core CS",
+    notesUrl: "https://noteslink.in/product/de-la-notes-kiit/",
 
     lessons: [
 
@@ -20178,7 +20178,8 @@ int main() {
 }`,
       language: "c"
     }
-  ]
+  ],
+  notesUrl: "https://noteslink.in/product/compiler-design-notes-kiit/",
 },
 
   {
@@ -28160,10 +28161,9 @@ sim.display_isa_comparison()`,
 
     icon: "📋",
 
-    notesUrl: "https://noteslink.in/product/software-project-management-notes-kiit/",
-
     color: "from-cyan-500 to-blue-600",
     category: "Software Dev",
+    notesUrl: "https://noteslink.in/product/software-project-management-notes-kiit/",
 
     lessons: [
 
@@ -29994,11 +29994,9 @@ for item in training:
         codeExample: `#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n\nint main() {\n    // 1. Memory leak\n    char *leak = malloc(100);\n    strcpy(leak, "I am leaked");\n    // forgot free(leak) -- memory lost!\n\n    // 2. Dangling pointer\n    int *p = malloc(sizeof(int));\n    *p = 42;\n    free(p);\n    // p is now dangling -- *p is UNDEFINED\n    p = NULL;   // FIX: nullify after free\n\n    // 3. Double free (AVOID THIS)\n    int *q = malloc(sizeof(int));\n    *q = 10;\n    free(q);\n    // free(q);  // ⚠ DOUBLE FREE -- heap corruption!\n    q = NULL;   // FIX: nullify\n\n    // 4. Buffer overflow\n    int *buf = malloc(5 * sizeof(int));\n    for (int i = 0; i < 5; i++) buf[i] = i;\n    // buf[5] = 100;  // ⚠ OVERFLOW -- writes past allocation\n    free(buf);\n\n    // Safe pattern: always check malloc + track size\n    size_t capacity = 10;\n    int *safe_buf = malloc(capacity * sizeof(int));\n    if (!safe_buf) {\n        fprintf(stderr, "Out of memory\\n");\n        return 1;\n    }\n    size_t len = 0;\n    // Grow if needed\n    if (len == capacity) {\n        capacity *= 2;\n        int *tmp = realloc(safe_buf, capacity * sizeof(int));\n        if (!tmp) { free(safe_buf); return 1; }\n        safe_buf = tmp;\n    }\n    safe_buf[len++] = 42;\n\n    free(safe_buf);\n    return 0;\n}`,
 
         language: "c"
-
-      },
-
+      }
     ],
-
+    notesUrl: "https://noteslink.in/product/c-pointers-notes-kiit/",
   },
 
   {
@@ -30083,11 +30081,9 @@ for item in training:
         codeExample: `-- Create indexes\nCREATE INDEX idx_emp_dept ON employees(department);\nCREATE INDEX idx_emp_salary ON employees(salary);\n\n-- Composite index (leftmost prefix rule)\nCREATE INDEX idx_emp_dept_salary ON employees(department, salary);\n-- ✅ This query uses the index:\nSELECT * FROM employees WHERE department = 'Engineering';\n-- ✅ This too:\nSELECT * FROM employees WHERE department = 'Engineering' AND salary > 100000;\n-- ❌ This does NOT (skips leftmost column):\nSELECT * FROM employees WHERE salary > 100000;\n\n-- Covering index: all data in the index\nCREATE INDEX idx_covering ON employees(department, salary, name);\n-- Query is satisfied entirely from index (no table access):\nSELECT name, salary FROM employees WHERE department = 'Engineering';\n\n-- EXPLAIN to check query plan\nEXPLAIN ANALYZE\nSELECT e.name, d.budget\nFROM employees e\nJOIN departments d ON e.department = d.name\nWHERE e.salary > 90000;\n-- Look for: Seq Scan (bad on large tables) vs Index Scan (good)\n\n-- Unique index: enforces no duplicates\nCREATE UNIQUE INDEX idx_unique_email ON users(email);\n\n-- Partial index (PostgreSQL)\nCREATE INDEX idx_active ON employees(salary)\nWHERE termination_date IS NULL;\n-- Index only active employees -- smaller, faster`,
 
         language: "javascript"
-
-      },
-
+      }
     ],
-
+    notesUrl: "https://noteslink.in/product/sql-notes-kiit/",
   },
 
   {
@@ -30172,11 +30168,9 @@ for item in training:
         codeExample: `#!/bin/bash\nset -euo pipefail  # exit on error, undefined vars, pipe errors\n\n# Variables\nNAME=\"Alice\"\nAGE=30\necho \"Hello $NAME, you are $AGE years old\"\n\n# Conditional\nif [ -f \"/etc/passwd\" ]; then\n    echo \"Password file exists\"\nelif [ -d \"/opt\" ]; then\n    echo \"/opt exists\"\nelse\n    echo \"Neither found\"\nfi\n\n# String comparison\nif [[ \"$NAME\" == \"Alice\" ]]; then\n    echo \"Welcome back, Alice\"\nfi\n\n# For loop\nfor file in *.txt; do\n    echo \"Processing: $file\"\n    wc -l \"$file\"\ndone\n\n# While loop\nCOUNT=0\nwhile [ $COUNT -lt 5 ]; do\n    echo \"Count: $COUNT\"\n    ((COUNT++))\ndone\n\n# Function\ncalculate() {\n    local a=$1\n    local b=$2\n    echo $((a + b))\n}\n\nRESULT=$(calculate 3 4)\necho \"3 + 4 = $RESULT\"\n\n# Read file line by line\nwhile IFS= read -r line; do\n    echo \"Line: $line\"\ndone < data.txt`,
 
         language: "javascript"
-
-      },
-
+      }
     ],
-
+    notesUrl: "https://noteslink.in/product/linux-notes-kiit/",
   },
 
   {
@@ -30261,11 +30255,9 @@ for item in training:
         codeExample: `# Feature branch workflow\ngit switch main\ngit pull origin main\ngit switch -c feature/user-profile\n\n# Make changes and commit\ngit add .\ngit commit -m \"feat: add user profile page\"\ngit commit -m \"feat: add profile editing\"\ngit commit -m \"fix: validate avatar upload size\"\n\n# Push and create PR\ngit push -u origin feature/user-profile\n# Then create PR on GitHub/GitLab\n\n# Address review feedback\ngit add .\ngit commit -m \"fix: address review comments\"\ngit push  # PR updates automatically\n\n# After PR is approved, merge via UI (squash merge)\n\n# Clean up after merge\ngit switch main\ngit pull origin main\ngit branch -d feature/user-profile\n\n# Branch naming examples\n# feature/PROJ-123-user-auth\n# bugfix/fix-login-timeout\n# hotfix/security-patch-v2\n# chore/update-dependencies\n\n# Conventional commits\ngit commit -m \"feat(auth): add OAuth2 support\"\ngit commit -m \"fix(api): handle null response\"\ngit commit -m \"docs(readme): add setup instructions\"\ngit commit -m \"refactor(db): optimize query builder\"\n\n# Stash work-in-progress\ngit stash push -m \"WIP: profile form\"\ngit stash list\ngit stash pop                    # apply and remove`,
 
         language: "javascript"
-
-      },
-
+      }
     ],
-
+    notesUrl: "https://noteslink.in/product/git-notes-kiit/",
   },
 
   {
@@ -30876,11 +30868,9 @@ for item in training:
         codeExample: `<!-- Named colors -->\n<p style=\"color: red;\">Red text</p>\n<p style=\"color: coral;\">Coral text</p>\n<p style=\"background-color: lightgoldenrodyellow;\">Light goldenrod</p>\n\n<!-- HEX colors -->\n<p style=\"color: #FF0000;\">HEX red</p>\n<p style=\"color: #F00;\">Short HEX red</p>\n<p style=\"background-color: #1a1a2e; color: #eee;\">Dark background</p>\n\n<!-- RGB colors -->\n<p style=\"color: rgb(0, 128, 255);\">RGB blue</p>\n<p style=\"background-color: rgba(255, 0, 0, 0.3);\">Semi-transparent red</p>\n\n<!-- HSL colors -->\n<p style=\"color: hsl(120, 100%, 30%);\">HSL green</p>\n<p style=\"background-color: hsla(210, 80%, 60%, 0.8);\">HSLA blue</p>\n\n<!-- Responsive images with srcset -->\n<img src=\"photo-800.jpg\"\n     srcset=\"photo-400.jpg 400w,\n             photo-800.jpg 800w,\n             photo-1200.jpg 1200w\"\n     sizes=\"(max-width: 600px) 400px, 800px\"\n     alt=\"Responsive landscape photo\">\n\n<!-- Picture element for art direction -->\n<picture>\n  <source media=\"(min-width: 800px)\" srcset=\"wide-banner.webp\"\n          type=\"image/webp\">\n  <source media=\"(min-width: 800px)\" srcset=\"wide-banner.jpg\">\n  <img src=\"mobile-banner.jpg\" alt=\"Banner image\">\n</picture>`,
 
         language: "html"
-
-      },
-
+      }
     ],
-
+    notesUrl: "https://noteslink.in/product/html-notes-kiit/",
   },
 
 {
@@ -33759,7 +33749,8 @@ int main() {
         codeExample: `import numpy as np\n\nclass ModelQuantizer:\n    def __init__(self, model):\n        self.model = model\n    \n    def quantize_weights(self, bits=8):\n        \"\"\"Post-training weight quantization to INT8\"\"\"\n        quantized = []\n        for w in self.model.weights:\n            # Find min/max for scaling\n            w_min, w_max = w.min(), w.max()\n            \n            # Scale to INT8 range\n            scale = (w_max - w_min) / (2**bits - 1)\n            zero_point = np.round(-w_min / scale)\n            \n            # Quantize\n            w_quant = np.clip(np.round(w / scale + zero_point), 0, 2**bits - 1).astype(np.int8)\n            \n            quantized.append({\n                'weights': w_quant,\n                'scale': scale,\n                'zero_point': zero_point,\n                'dtype': 'int8'\n            })\n        \n        return quantized\n    \n    def quantize_activations(self, X, bits=8):\n        \"\"\"Dynamic activation quantization\"\"\"\n        X_min, X_max = X.min(), X.max()\n        scale = (X_max - X_min) / (2**bits - 1)\n        zero_point = np.round(-X_min / scale)\n        \n        X_quant = np.clip(np.round(X / scale + zero_point), 0, 2**bits - 1).astype(np.int8)\n        return X_quant, scale, zero_point\n\nclass ModelPruner:\n    def __init__(self, model, sparsity=0.5):\n        self.model = model\n        self.sparsity = sparsity\n    \n    def magnitude_prune(self):\n        \"\"\"Remove smallest weights by magnitude\"\"\"\n        all_weights = np.concatenate([w.flatten() for w in self.model.weights])\n        threshold = np.percentile(np.abs(all_weights), self.sparsity * 100)\n        \n        pruned_weights = []\n        for w in self.model.weights:\n            mask = np.abs(w) >= threshold\n            pruned = w * mask\n            pruned_weights.append(pruned)\n            \n            sparsity_actual = 1 - np.count_nonzero(pruned) / pruned.size\n            print(f"Layer: {sparsity_actual:.2%} sparse")\n        \n        self.model.weights = pruned_weights\n        return self.model\n\nclass KnowledgeDistillation:\n    def __init__(self, teacher, student, temperature=3.0, alpha=0.7):\n        self.teacher = teacher\n        self.student = student\n        self.temperature = temperature\n        self.alpha = alpha\n    \n    def soft_labels(self, logits):\n        \"\"\"Convert logits to soft probability distributions\"\"\"\n        return np.exp(logits / self.temperature) / np.sum(np.exp(logits / self.temperature))\n    \n    def distillation_loss(self, student_logits, teacher_logits, hard_labels):\n        \"\"\"Combined loss: soft targets + hard labels\"\"\"\n        student_soft = self.soft_labels(student_logits)\n        teacher_soft = self.soft_labels(teacher_logits)\n        \n        # KL divergence for soft targets\n        soft_loss = np.sum(teacher_soft * np.log(teacher_soft / (student_soft + 1e-8)))\n        \n        # Cross-entropy for hard labels\n        hard_loss = -np.sum(hard_labels * np.log(student_softmax(student_logits) + 1e-8))\n        \n        return self.alpha * soft_loss + (1 - self.alpha) * hard_loss\n\ndef student_softmax(z):\n    exp_z = np.exp(z - np.max(z, axis=-1, keepdims=True))\n    return exp_z / np.sum(exp_z, axis=-1, keepdims=True)\n\n# Example: Deploy quantized model\nmodel = NeuralNetwork([784, 256, 128, 10])\nquantizer = ModelQuantizer(model)\nquantized = quantizer.quantize_weights(bits=8)\n\nprint("Original model size:", sum(w.nbytes for w in model.weights) / 1024, "KB")\nprint("Quantized model size:", sum(q['weights'].nbytes for q in quantized) / 1024, "KB")`,
         language: "python"
       }
-    ]
+    ],
+    notesUrl: "https://noteslink.in/product/deep-learning-notes-kiit/",
   },
   {
   slug: "nlp-fundamentals",
@@ -34583,7 +34574,8 @@ for i, practice in enumerate(best_practices, 1):
     print(f"{i}. {practice}")`,
       language: "python"
     }
-  ]
+  ],
+  notesUrl: "https://noteslink.in/product/nlp-notes-kiit/",
 }
 ];
 

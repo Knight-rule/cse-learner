@@ -1,11 +1,30 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, ArrowLeft, ArrowRight, ExternalLink, BookOpen, Code, CheckCircle2, Brain } from "lucide-react";
+import { ChevronRight, ArrowLeft, ArrowRight, ExternalLink, BookOpen, Code, CheckCircle2, Brain, Layers } from "lucide-react";
 import { courses, getCourse } from "@/data/courses";
 import { practiceData } from "@/data/practice";
 import { notFound } from "next/navigation";
 import LessonContent from "@/components/LessonContent";
 import LessonTracker from "@/components/LessonTracker";
+
+const prerequisiteMap: Record<string, { slug: string; title: string }[]> = {
+  "algorithms": [{ slug: "data-structures", title: "Data Structures" }],
+  "operating-systems": [{ slug: "data-structures", title: "Data Structures" }],
+  "database-management": [{ slug: "data-structures", title: "Data Structures" }],
+  "computer-networks": [{ slug: "operating-systems", title: "Operating Systems" }],
+  "compiler-design": [{ slug: "data-structures", title: "Data Structures" }, { slug: "programming-cpp", title: "C++" }],
+  "machine-learning": [{ slug: "python-fundamentals", title: "Python" }],
+  "deep-learning": [{ slug: "machine-learning", title: "Machine Learning" }],
+  "data-mining-warehousing": [{ slug: "data-structures", title: "Data Structures" }],
+  "advanced-microprocessor": [{ slug: "digital-systems", title: "Digital Systems" }],
+  "high-performance-computing": [{ slug: "multicore-programming", title: "Multicore Programming" }],
+  "distributed-os": [{ slug: "operating-systems", title: "Operating Systems" }],
+  "nlp": [{ slug: "machine-learning", title: "Machine Learning" }],
+  "image-processing": [{ slug: "deep-learning", title: "Deep Learning" }],
+  "automata-theory": [{ slug: "discrete-structures", title: "Discrete Structures" }],
+  "probability-statistics": [{ slug: "discrete-structures", title: "Discrete Structures" }],
+  "software-engineering": [{ slug: "object-oriented-programming", title: "OOP" }],
+};
 
 export function generateStaticParams() {
   const params: { slug: string; id: string }[] = [];
@@ -137,12 +156,48 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
       </div>
 
       {/* ═══ Lesson Content ═══ */}
+      {prerequisiteMap[course.slug] && lessonIndex === 0 && (
+        <div className="container-sm" style={{ padding: "0 20px" }}>
+          <div style={{
+            display: "flex", alignItems: "center", gap: 8,
+            padding: "12px 16px",
+            marginTop: 24,
+            borderRadius: "var(--radius-lg)",
+            background: "var(--surface)",
+            border: "1px solid var(--border)",
+            fontSize: 13,
+          }}>
+            <Layers size={14} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
+            <span style={{ color: "var(--text-muted)" }}>Prerequisites:</span>
+            {prerequisiteMap[course.slug].map((p) => (
+              <Link
+                key={p.slug}
+                href={`/courses/${p.slug}`}
+                style={{
+                  padding: "3px 10px",
+                  borderRadius: "var(--radius-md)",
+                  background: "var(--bg-card)",
+                  border: "1px solid var(--border)",
+                  color: "var(--text-primary)",
+                  fontSize: 12, fontWeight: 500,
+                  textDecoration: "none",
+                  transition: "all 0.2s",
+                }}
+              >
+                {p.title}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
       <div className="container-sm" style={{ padding: "40px 20px 80px" }}>
         <LessonContent
           lesson={lesson}
           course={{ slug: course.slug, title: course.title }}
           lessonIndex={lessonIndex}
           totalLessons={course.lessons.length}
+          prevLesson={prevLesson ? { id: prevLesson.id, title: prevLesson.title } : null}
+          nextLesson={nextLesson ? { id: nextLesson.id, title: nextLesson.title } : null}
         />
 
         {/* Practice This Topic */}

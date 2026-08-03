@@ -6,13 +6,13 @@ const features = [
   {
     icon: "📊",
     title: "Visual Concept Maps",
-    desc: "Every topic broken down into interconnected concept graphs. See how data structures, algorithms, and systems link together.",
+    desc: "Data Structures lessons include inline SVG diagrams showing memory layouts, tree structures, and algorithm flows.",
     color: "#f97316",
   },
   {
     icon: "🧩",
     title: "Interactive Diagrams",
-    desc: "Hover over nodes to explore relationships. Click to dive deeper into each concept with real code examples.",
+    desc: "Hover over diagram nodes to explore relationships. Each concept gets a visual breakdown before the written content.",
     color: "#a855f7",
   },
   {
