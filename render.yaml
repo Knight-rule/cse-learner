@@ -4,7 +4,7 @@ services:
     runtime: node
     repo: https://github.com/Knight-rule/cse-learner
     plan: free
-    buildCommand: pnpm build
+    buildCommand: rm -rf .next && NEXT_PUBLIC_BUILD_ID=$(git rev-parse --short HEAD) pnpm build
     startCommand: pnpm start
     healthCheckPath: /api/health
     envVars:

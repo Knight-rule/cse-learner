@@ -7,6 +7,8 @@ import { notFound } from "next/navigation";
 import LessonContent from "@/components/LessonContent";
 import LessonTracker from "@/components/LessonTracker";
 
+export const revalidate = 60;
+
 const prerequisiteMap: Record<string, { slug: string; title: string }[]> = {
   "algorithms": [{ slug: "data-structures", title: "Data Structures" }],
   "operating-systems": [{ slug: "data-structures", title: "Data Structures" }],

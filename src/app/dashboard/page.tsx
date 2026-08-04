@@ -32,7 +32,7 @@ export default function DashboardPage() {
     const recommendations: Recommendation[] = [];
     const codeRuns = stats.codeRuns;
 
-    const csFundamentals = ["python", "c", "data-structures", "algorithms", "computer-organization"];
+    const csFundamentals = ["python", "c-language", "data-structures", "algorithms", "computer-organization"];
     for (const slug of csFundamentals) {
       const course = courses.find((c) => c.slug === slug);
       if (!course) continue;

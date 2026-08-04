@@ -4,6 +4,8 @@ import { courses } from "@/data/courses";
 import { practiceData } from "@/data/practice";
 import PracticeClient from "./PracticeClient";
 
+export const revalidate = 60;
+
 export function generateStaticParams() {
   const params: { slug: string; problemId: string }[] = [];
   practiceData.forEach((cp) => {

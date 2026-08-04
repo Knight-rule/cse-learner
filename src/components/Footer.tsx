@@ -49,6 +49,8 @@ export default function Footer() {
         <div className="footer-bottom" style={{ flexDirection: "column", gap: 8 }}>
           <p className="footer-copy">&copy; {new Date().getFullYear()} CSE Learner. All rights reserved.</p>
           <p className="footer-copy" style={{ fontSize: 12, opacity: 0.7 }}>Progress data stored locally in your browser only. No accounts, no servers.</p>
+          {/* build:process.env.BUILD_ID || "dev" */}
+          <p className="footer-copy" style={{ fontSize: 10, opacity: 0.35, fontFamily: "monospace" }}>build {process.env.NEXT_PUBLIC_BUILD_ID || "dev"}</p>
           <div className="footer-socials">
             <a href="https://github.com/Knight-rule/cse-learner" target="_blank" rel="noopener noreferrer" aria-label="GitHub">GH</a>
             <a href="https://x.com/cselearner" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">X</a>

@@ -6,14 +6,14 @@ import { ChevronRight, BookOpen, Search, Sparkles } from "lucide-react";
 import { courses, type Course } from "@/data/courses";
 import PremiumCourseCard from "@/components/PremiumCourseCard";
 
-const categoryOrder: Course["category"][] = ["Core CS", "Languages", "Systems", "Software Dev", "AI & ML", "Electives"];
+const categoryOrder: Course["category"][] = ["Core CS", "Languages", "Systems", "Software Dev", "AI & ML"];
 const categoryIcons: Record<Course["category"], string> = {
   "Core CS": "🧮",
   "Languages": "💻",
   "Systems": "🖥️",
   "Software Dev": "🚀",
   "AI & ML": "🤖",
-  "Electives": "⚡",
+
 };
 
 export default function CoursesPage() {

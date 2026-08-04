@@ -4,6 +4,8 @@ import { ChevronRight, Code, BookOpen, Trophy, Zap, Target } from "lucide-react"
 import { courses } from "@/data/courses";
 import { practiceData } from "@/data/practice";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Practice Problems",
   description: "Solve coding challenges for every CS course topic. Practice DSA, algorithms, system design and more.",
