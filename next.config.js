@@ -33,6 +33,7 @@ const nextConfig = {
         { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
         { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
         { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
+        { key: "Cache-Control", value: "no-store, must-revalidate" },
         {
           key: "Content-Security-Policy",
           value: [

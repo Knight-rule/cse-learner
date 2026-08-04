@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import LessonContent from "@/components/LessonContent";
 import LessonTracker from "@/components/LessonTracker";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 const prerequisiteMap: Record<string, { slug: string; title: string }[]> = {
   "algorithms": [{ slug: "data-structures", title: "Data Structures" }],
@@ -27,16 +27,6 @@ const prerequisiteMap: Record<string, { slug: string; title: string }[]> = {
   "probability-statistics": [{ slug: "discrete-structures", title: "Discrete Structures" }],
   "software-engineering": [{ slug: "object-oriented-programming", title: "OOP" }],
 };
-
-export function generateStaticParams() {
-  const params: { slug: string; id: string }[] = [];
-  courses.forEach((c) => {
-    c.lessons.forEach((l) => {
-      params.push({ slug: c.slug, id: l.id });
-    });
-  });
-  return params;
-}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string; id: string }> }): Promise<Metadata> {
   const { slug, id } = await params;

@@ -4,17 +4,7 @@ import { courses } from "@/data/courses";
 import { practiceData } from "@/data/practice";
 import PracticeClient from "./PracticeClient";
 
-export const revalidate = 60;
-
-export function generateStaticParams() {
-  const params: { slug: string; problemId: string }[] = [];
-  practiceData.forEach((cp) => {
-    cp.problems.forEach((p) => {
-      params.push({ slug: cp.courseSlug, problemId: p.id });
-    });
-  });
-  return params;
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string; problemId: string }> }) {
   const { slug, problemId } = await params;
