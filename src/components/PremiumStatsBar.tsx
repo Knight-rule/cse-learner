@@ -7,12 +7,13 @@ import { practiceData } from "@/data/practice";
 
 const totalProblems = practiceData.reduce((sum, c) => sum + c.problems.length, 0);
 const totalLessons = courses.reduce((sum, c) => sum + c.lessons.length, 0);
+const estimatedHours = Math.round(totalLessons * 0.35);
 
 const stats = [
   { value: courses.length, label: "Courses", icon: BookOpen, color: "#f97316" },
   { value: totalLessons, label: "Lessons", icon: Code, color: "#a855f7" },
   { value: totalProblems, label: "Practice Problems", icon: Brain, color: "#3b82f6" },
-  { value: 60, label: "Hours of Content", suffix: "+", icon: Trophy, color: "#10b981" },
+  { value: estimatedHours, label: "Hours of Content", suffix: "+", icon: Trophy, color: "#10b981" },
 ];
 
 function formatValue(value: number, suffix?: string) {

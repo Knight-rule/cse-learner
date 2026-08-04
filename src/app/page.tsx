@@ -10,7 +10,7 @@ import LearningFeatures from "@/components/LearningFeatures";
 
 const testimonials = [
   { name: "Students & Educators", role: "CSE Community", initials: "CS", quote: "A growing collection of CS learning resources — from data structures to system design. Built by students, for students." },
-  { name: "Open Curriculum", role: "Computer Science", initials: "OC", quote: "Structured lessons covering core CSE topics with hands-on code examples and practice problems across 29+ subjects." },
+  { name: "Open Curriculum", role: "Computer Science", initials: "OC", quote: `Structured lessons covering core CSE topics with hands-on code examples and practice problems across ${courses.length}+ subjects.` },
   { name: "Peer Reviewed", role: "Learning Platform", initials: "PR", quote: "Content aligned with standard university curricula. Practice problems with instant feedback to help reinforce concepts." },
 ];
 

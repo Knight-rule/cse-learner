@@ -27,7 +27,7 @@ export const learningPaths: LearningPath[] = [
     targetAudience: "1st-4th Year / All Students",
     estimatedTotalHours: 300,
     courses: [
-      { slug: "python", order: 1, required: true, estimatedHours: 20 },
+      { slug: "python-complete", order: 1, required: true, estimatedHours: 20 },
       { slug: "c-language", order: 2, required: true, estimatedHours: 25 },
       { slug: "c-pointers-memory", order: 3, required: true, estimatedHours: 10 },
       { slug: "data-structures", order: 4, required: true, estimatedHours: 30 },
@@ -49,7 +49,7 @@ export const learningPaths: LearningPath[] = [
     targetAudience: "1st Year / Beginners",
     estimatedTotalHours: 120,
     courses: [
-      { slug: "python", order: 1, required: true, estimatedHours: 20 },
+      { slug: "python-complete", order: 1, required: true, estimatedHours: 20 },
       { slug: "c-language", order: 2, required: true, estimatedHours: 25 },
       { slug: "data-structures", order: 3, required: true, estimatedHours: 30 },
       { slug: "algorithms", order: 4, required: true, estimatedHours: 25 },
@@ -68,7 +68,7 @@ export const learningPaths: LearningPath[] = [
       { slug: "operating-systems", order: 1, required: true, estimatedHours: 30 },
       { slug: "dbms", order: 2, required: true, estimatedHours: 25 },
       { slug: "computer-networks", order: 3, required: true, estimatedHours: 30 },
-      { slug: "cpp", order: 4, required: false, estimatedHours: 20 },
+      { slug: "cpp", order: 4, required: false, estimatedHours: 20, comingSoon: true },
       { slug: "software-engineering", order: 5, required: true, estimatedHours: 20 },
       { slug: "system-design", order: 6, required: false, estimatedHours: 15, comingSoon: true },
     ],
@@ -117,7 +117,7 @@ export const learningPaths: LearningPath[] = [
     courses: [
       { slug: "web-development", order: 1, required: true, estimatedHours: 30 },
       { slug: "javascript", order: 2, required: true, estimatedHours: 20 },
-      { slug: "python", order: 3, required: false, estimatedHours: 15 },
+      { slug: "python-complete", order: 3, required: false, estimatedHours: 15 },
       { slug: "dbms", order: 4, required: true, estimatedHours: 20 },
       { slug: "devops", order: 5, required: false, estimatedHours: 15, comingSoon: true },
     ],
@@ -131,7 +131,7 @@ export const learningPaths: LearningPath[] = [
     targetAudience: "AI/ML Aspirants",
     estimatedTotalHours: 150,
     courses: [
-      { slug: "python", order: 1, required: true, estimatedHours: 20 },
+      { slug: "python-complete", order: 1, required: true, estimatedHours: 20 },
       { slug: "data-science", order: 2, required: true, estimatedHours: 25, comingSoon: true },
       { slug: "machine-learning", order: 3, required: true, estimatedHours: 35 },
       { slug: "deep-learning", order: 4, required: true, estimatedHours: 30 },
@@ -149,7 +149,7 @@ export const learningPaths: LearningPath[] = [
     targetAudience: "Security Enthusiants / 2nd-4th Year",
     estimatedTotalHours: 180,
     courses: [
-      { slug: "python", order: 1, required: true, estimatedHours: 20 },
+      { slug: "python-complete", order: 1, required: true, estimatedHours: 20 },
       { slug: "computer-networks", order: 2, required: true, estimatedHours: 30 },
       { slug: "operating-systems", order: 3, required: true, estimatedHours: 25 },
       { slug: "cyber-security", order: 4, required: true, estimatedHours: 40, comingSoon: true },
@@ -167,7 +167,7 @@ export const learningPaths: LearningPath[] = [
     targetAudience: "Data Enthusiants / 2nd-4th Year",
     estimatedTotalHours: 160,
     courses: [
-      { slug: "python", order: 1, required: true, estimatedHours: 20 },
+      { slug: "python-complete", order: 1, required: true, estimatedHours: 20 },
       { slug: "data-science", order: 2, required: true, estimatedHours: 35, comingSoon: true },
       { slug: "sql-mastery", order: 3, required: true, estimatedHours: 15 },
       { slug: "machine-learning", order: 4, required: true, estimatedHours: 35 },
@@ -185,7 +185,7 @@ export const learningPaths: LearningPath[] = [
     targetAudience: "Backend / Infra Aspirants",
     estimatedTotalHours: 140,
     courses: [
-      { slug: "python", order: 1, required: true, estimatedHours: 20 },
+      { slug: "python-complete", order: 1, required: true, estimatedHours: 20 },
       { slug: "linux", order: 2, required: true, estimatedHours: 20, comingSoon: true },
       { slug: "computer-networks", order: 3, required: true, estimatedHours: 25 },
       { slug: "cloud-computing", order: 4, required: true, estimatedHours: 35, comingSoon: true },
@@ -203,7 +203,7 @@ export const learningPaths: LearningPath[] = [
     targetAudience: "Mobile Dev Aspirants",
     estimatedTotalHours: 120,
     courses: [
-      { slug: "python", order: 1, required: true, estimatedHours: 15 },
+      { slug: "python-complete", order: 1, required: true, estimatedHours: 15 },
       { slug: "javascript", order: 2, required: true, estimatedHours: 20 },
       { slug: "react-native", order: 3, required: true, estimatedHours: 30, comingSoon: true },
       { slug: "flutter", order: 4, required: false, estimatedHours: 30, comingSoon: true },
@@ -219,8 +219,8 @@ export const learningPaths: LearningPath[] = [
     targetAudience: "Gaming Enthusiasts",
     estimatedTotalHours: 150,
     courses: [
-      { slug: "python", order: 1, required: true, estimatedHours: 15 },
-      { slug: "cpp", order: 2, required: true, estimatedHours: 25 },
+      { slug: "python-complete", order: 1, required: true, estimatedHours: 15 },
+      { slug: "cpp", order: 2, required: true, estimatedHours: 25, comingSoon: true },
       { slug: "data-structures", order: 3, required: true, estimatedHours: 20 },
       { slug: "game-development", order: 4, required: true, estimatedHours: 40, comingSoon: true },
       { slug: "computer-graphics", order: 5, required: false, estimatedHours: 30, comingSoon: true },
@@ -236,7 +236,7 @@ export const learningPaths: LearningPath[] = [
     targetAudience: "Web3 Enthusiants",
     estimatedTotalHours: 100,
     courses: [
-      { slug: "python", order: 1, required: true, estimatedHours: 15 },
+      { slug: "python-complete", order: 1, required: true, estimatedHours: 15 },
       { slug: "javascript", order: 2, required: true, estimatedHours: 20 },
       { slug: "web-development", order: 3, required: true, estimatedHours: 25 },
       { slug: "blockchain", order: 4, required: true, estimatedHours: 25, comingSoon: true },
@@ -253,7 +253,7 @@ export const learningPaths: LearningPath[] = [
     estimatedTotalHours: 180,
     courses: [
       { slug: "c-language", order: 1, required: true, estimatedHours: 25 },
-      { slug: "cpp", order: 2, required: true, estimatedHours: 25 },
+      { slug: "cpp", order: 2, required: true, estimatedHours: 25, comingSoon: true },
       { slug: "operating-systems", order: 3, required: true, estimatedHours: 30 },
       { slug: "computer-architecture", order: 4, required: true, estimatedHours: 25 },
       { slug: "data-structures", order: 5, required: true, estimatedHours: 25 },
@@ -271,7 +271,7 @@ export const learningPaths: LearningPath[] = [
     estimatedTotalHours: 120,
     courses: [
       { slug: "c-language", order: 1, required: true, estimatedHours: 25 },
-      { slug: "python", order: 2, required: true, estimatedHours: 15 },
+      { slug: "python-complete", order: 2, required: true, estimatedHours: 15 },
       { slug: "computer-architecture", order: 3, required: true, estimatedHours: 20 },
       { slug: "computer-networks", order: 4, required: true, estimatedHours: 25 },
       { slug: "embedded-systems", order: 5, required: true, estimatedHours: 35, comingSoon: true },

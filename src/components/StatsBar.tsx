@@ -52,12 +52,13 @@ interface Stat {
 
 const totalProblems = practiceData.reduce((sum, c) => sum + c.problems.length, 0);
 const totalLessons = courses.reduce((sum, c) => sum + c.lessons.length, 0);
+const estimatedHours = Math.round(totalLessons * 0.35);
 
 const stats: Stat[] = [
   { value: courses.length, label: "Courses" },
   { value: totalLessons, label: "Lessons" },
   { value: totalProblems, label: "Practice Problems" },
-  { value: 60, label: "Hours of Content", suffix: "+" },
+  { value: estimatedHours, label: "Hours of Content", suffix: "+" },
 ];
 
 export default function StatsBar() {
