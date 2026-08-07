@@ -12,6 +12,7 @@ const fresherCategories = [
   "Cloud & Infra",
   "AI/ML",
   "Consulting",
+  "Media",
   "Startups",
 ];
 
@@ -25,6 +26,8 @@ const experiencedCategories = [
   "DevTools",
   "Robotics",
   "Gaming",
+  "Media",
+  "Consulting",
   "Europe",
   "Asia-Pacific",
   "Middle East",
