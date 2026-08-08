@@ -87,7 +87,7 @@ export default function InternshipsPage() {
       </div>
 
       {/* ═══ Content ═══ */}
-      <div className="container" style={{ padding: "32px 20px 80px" }}>
+      <div className="container-page">
         {/* Search */}
         <div style={{
           display: "flex", alignItems: "center", gap: 10,
@@ -108,7 +108,7 @@ export default function InternshipsPage() {
         {/* Mode Filter */}
         <div style={{ marginBottom: 16 }}>
           <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)", marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>Mode</div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          <div className="internship-filter-group" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
             {modeFilters.map((f) => (
               <button
                 key={f.value}
@@ -131,7 +131,7 @@ export default function InternshipsPage() {
         {/* Region Filter */}
         <div style={{ marginBottom: 16 }}>
           <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)", marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>Region</div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          <div className="internship-filter-group" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
             {originFilters.map((f) => (
               <button
                 key={f.value}
@@ -153,7 +153,7 @@ export default function InternshipsPage() {
         {/* Type filter */}
         <div style={{ marginBottom: 16 }}>
           <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)", marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>Type</div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          <div className="internship-filter-group" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
             <button
               onClick={() => setType("")}
               style={{
@@ -187,7 +187,7 @@ export default function InternshipsPage() {
         {/* Company filter */}
         <div style={{ marginBottom: 24 }}>
           <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)", marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.5 }}>Company</div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          <div className="internship-filter-group" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
             <button
               onClick={() => setCompany("")}
               style={{

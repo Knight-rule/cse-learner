@@ -73,7 +73,7 @@ export default function HomePage() {
               </div>
 
               {/* Trust badges */}
-              <div style={{ display: "flex", gap: 24, marginTop: 40 }}>
+              <div className="trust-badges" style={{ display: "flex", gap: 24, marginTop: 40 }}>
                 <span style={{ fontSize: 13, display: "flex", alignItems: "center", gap: 6 }}>
                   <BookOpen size={14} /> {courses.length} Courses
                 </span>

@@ -148,7 +148,7 @@ export default function DashboardPage() {
       </div>
 
       {/* ═══ Content ═══ */}
-      <div className="container" style={{ padding: "32px 20px 80px" }}>
+      <div className="container-page">
         {/* localStorage disclosure */}
         <div style={{
           display: "flex", alignItems: "center", gap: 10,

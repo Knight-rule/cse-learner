@@ -113,7 +113,7 @@ export default function CoursesPage() {
       </div>
 
       {/* ═══ Content ═══ */}
-      <div className="container" style={{ paddingTop: 32, paddingBottom: 80 }}>
+      <div className="container-page">
         {/* Category filters */}
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 32 }}>
           <button

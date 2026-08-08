@@ -106,6 +106,7 @@ img { max-width: 100%; display: block; }
 /* ===== CONTAINER ===== */
 .container { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
 .container-sm { max-width: 900px; margin: 0 auto; padding: 0 32px; }
+.container-page { max-width: 1280px; margin: 0 auto; padding: 32px 20px 80px; }
 
 @media (min-width: 1536px) {
   .container { max-width: 1400px; }
@@ -727,6 +728,17 @@ img { max-width: 100%; display: block; }
   .testimonial-grid { grid-template-columns: 1fr; }
   .contact-grid { grid-template-columns: 1fr; }
 }
+
+@media (max-width: 768px) {
+  .hero { min-height: 70vh; }
+  .trust-badges { gap: 16px; flex-wrap: wrap; }
+}
+
+@media (max-width: 480px) {
+  .hero { min-height: auto; padding: 80px 0 40px; }
+  .trust-badges { gap: 12px; }
+  .trust-badges span { font-size: 12px; }
+}
 @media (max-width: 768px) {
   .nav-center { display: none; }
   .nav-actions { display: none; }
@@ -751,6 +763,7 @@ img { max-width: 100%; display: block; }
   .heading-hero { font-size: clamp(32px, 9vw, 44px); letter-spacing: -1.5px; }
   .hero-section { padding: 80px 0 40px; }
   .container { padding: 0 16px; }
+  .container-page { padding: 24px 16px 60px; }
   .section { padding: 48px 0; }
   .stats-bar { grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 16px; }
   .stat-card { padding: 16px; }
@@ -1604,6 +1617,31 @@ html.light .code-editor-border { border-color: rgba(0, 0, 0, 0.08); }
   .mentor-quick-btn { padding: 14px 14px; min-height: 44px; font-size: 14px; }
   .practice-run-btn { padding: 12px 20px; min-height: 44px; }
   .practice-filter-btn { padding: 10px 16px; min-height: 44px; }
+
+  /* Jobs/Internships inline-styled buttons: ensure 44px touch targets */
+  .jobs-category-pill,
+  .internship-filter-pill {
+    padding: 10px 16px !important;
+    min-height: 44px !important;
+    font-size: 13px !important;
+  }
+
+  /* Internship filter group buttons */
+  .internship-filter-group button {
+    padding: 10px 16px !important;
+    min-height: 44px !important;
+    font-size: 13px !important;
+  }
+
+  /* Jobs bookmark button: larger touch target */
+  .jobs-bookmark-btn {
+    padding: 8px !important;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
   /* Font sizes: ensure minimum 12px */
   .practice-chapter-count { font-size: 12px; }

@@ -154,7 +154,7 @@ export default function JobsPage() {
       </div>
 
       {/* ═══ Content ═══ */}
-      <div className="container" style={{ padding: "32px 20px 80px" }}>
+      <div className="container-page">
 
         {/* ═══ Level Tabs ═══ */}
         <div style={{
@@ -274,18 +274,19 @@ export default function JobsPage() {
             }).length;
             if (count === 0) return null;
             return (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(selectedCategory === cat ? "" : cat)}
-                style={{
-                  padding: "8px 16px", borderRadius: "var(--radius-lg)",
-                  background: selectedCategory === cat ? "var(--gradient)" : "var(--bg-card)",
-                  border: `1px solid ${selectedCategory === cat ? "transparent" : "var(--border)"}`,
-                  color: selectedCategory === cat ? "#fff" : "var(--text-secondary)",
-                  fontSize: 13, fontWeight: 500, cursor: "pointer",
-                  transition: "all 0.2s",
-                }}
-              >
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(selectedCategory === cat ? "" : cat)}
+                  className="jobs-category-pill"
+                  style={{
+                    padding: "8px 16px", borderRadius: "var(--radius-lg)",
+                    background: selectedCategory === cat ? "var(--gradient)" : "var(--bg-card)",
+                    border: `1px solid ${selectedCategory === cat ? "transparent" : "var(--border)"}`,
+                    color: selectedCategory === cat ? "#fff" : "var(--text-secondary)",
+                    fontSize: 13, fontWeight: 500, cursor: "pointer",
+                    transition: "all 0.2s",
+                  }}
+                >
                 {cat} ({count})
               </button>
             );
@@ -424,6 +425,7 @@ export default function JobsPage() {
                   </div>
                   <button
                     onClick={() => toggleSave(company.slug)}
+                    className="jobs-bookmark-btn"
                     style={{
                       background: "none", border: "none", cursor: "pointer",
                       color: savedCompanies.includes(company.slug) ? "var(--accent)" : "var(--text-muted)",
