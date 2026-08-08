@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { AuthProvider } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -59,13 +60,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className={inter.className}>
-        <div className="mesh-bg" />
-        <a href="#main-content" className="skip-to-content">
-          Skip to content
-        </a>
-        <Navbar />
-        <main id="main-content" className="min-h-screen">{children}</main>
-        <Footer />
+        <AuthProvider>
+          <div className="mesh-bg" />
+          <a href="#main-content" className="skip-to-content">
+            Skip to content
+          </a>
+          <Navbar />
+          <main id="main-content" className="min-h-screen">{children}</main>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

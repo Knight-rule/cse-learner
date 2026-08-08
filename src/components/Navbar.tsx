@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Sun, Moon, Menu, X } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Sun, Moon, Menu, X, LogOut, User } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useAuth } from "@/lib/auth";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -20,10 +21,13 @@ const navLinks = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dark, setDark] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -57,6 +61,12 @@ export default function Navbar() {
     setDark(next);
     document.documentElement.classList.toggle("light", !next);
     try { localStorage.setItem("theme", next ? "dark" : "light"); } catch {}
+  };
+
+  const handleLogout = () => {
+    logout();
+    setShowUserMenu(false);
+    router.push("/");
   };
 
   const isActive = (href: string) =>
@@ -93,12 +103,53 @@ export default function Navbar() {
           >
             {mounted ? (dark ? <Sun size={16} /> : <Moon size={16} />) : <Sun size={16} />}
           </button>
-          <Link href="/dashboard" className="btn btn-ghost btn-sm">
-            Dashboard
-          </Link>
-          <Link href="/courses" className="btn btn-primary btn-sm">
-            Get Started
-          </Link>
+          
+          {user ? (
+            <div className="relative">
+              <button
+                className="nav-user-btn"
+                onClick={() => setShowUserMenu(!showUserMenu)}
+                aria-label="User menu"
+              >
+                <div className="nav-user-avatar">
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                <span className="nav-user-name">{user.name}</span>
+              </button>
+              
+              {showUserMenu && (
+                <div className="nav-user-dropdown">
+                  <div className="nav-user-dropdown-header">
+                    <div className="nav-user-avatar-lg">
+                      {user.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <p className="nav-user-dropdown-name">{user.name}</p>
+                      <p className="nav-user-dropdown-email">{user.email}</p>
+                    </div>
+                  </div>
+                  <div className="nav-user-dropdown-divider" />
+                  <Link href="/dashboard" className="nav-user-dropdown-item" onClick={() => setShowUserMenu(false)}>
+                    <User size={16} />
+                    Dashboard
+                  </Link>
+                  <button className="nav-user-dropdown-item text-red-500" onClick={handleLogout}>
+                    <LogOut size={16} />
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              <Link href="/login" className="btn btn-ghost btn-sm">
+                Login
+              </Link>
+              <Link href="/signup" className="btn btn-primary btn-sm">
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Actions */}
@@ -137,12 +188,35 @@ export default function Navbar() {
           </div>
 
           <div className="nav-mobile-cta">
-            <Link href="/dashboard" className="btn btn-secondary" onClick={() => setMobileOpen(false)}>
-              Dashboard
-            </Link>
-            <Link href="/courses" className="btn btn-primary" onClick={() => setMobileOpen(false)}>
-              Get Started
-            </Link>
+            {user ? (
+              <>
+                <div className="nav-mobile-user">
+                  <div className="nav-user-avatar">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <p className="nav-mobile-user-name">{user.name}</p>
+                    <p className="nav-mobile-user-email">{user.email}</p>
+                  </div>
+                </div>
+                <Link href="/dashboard" className="btn btn-secondary" onClick={() => setMobileOpen(false)}>
+                  Dashboard
+                </Link>
+                <button className="btn btn-ghost text-red-500" onClick={() => { handleLogout(); setMobileOpen(false); }}>
+                  <LogOut size={16} />
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" className="btn btn-secondary" onClick={() => setMobileOpen(false)}>
+                  Login
+                </Link>
+                <Link href="/signup" className="btn btn-primary" onClick={() => setMobileOpen(false)}>
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}
