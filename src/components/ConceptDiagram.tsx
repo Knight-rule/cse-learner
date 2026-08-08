@@ -67,7 +67,7 @@ export default function ConceptDiagram({ title, nodes, edges, description }: {
               <g key={i}>
                 <line
                   x1={from.x} y1={from.y} x2={to.x} y2={to.y}
-                  stroke={isHighlighted ? "rgba(249,115,22,0.6)" : "rgba(255,255,255,0.15)"}
+                  stroke={isHighlighted ? "rgba(139,94,60,0.6)" : "rgba(255,255,255,0.15)"}
                   strokeWidth={isHighlighted ? 2 : 1}
                   strokeDasharray={isHighlighted ? "none" : "6 4"}
                   markerEnd="url(#arrow)"

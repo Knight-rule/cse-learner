@@ -6,12 +6,12 @@ const diagrams: Record<string, Record<string, React.ReactNode>> = {
       <svg viewBox="0 0 600 280" style={{ width: "100%", height: "auto" }}>
         <defs>
           <linearGradient id="ds-g1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#f97316" stopOpacity="0.2" />
-            <stop offset="100%" stopColor="#f97316" stopOpacity="0.05" />
+            <stop offset="0%" stopColor="#8B5E3C" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="#8B5E3C" stopOpacity="0.05" />
           </linearGradient>
         </defs>
-        <rect x="20" y="20" width="560" height="240" rx="16" fill="url(#ds-g1)" stroke="#f97316" strokeWidth="1" strokeOpacity="0.3" />
-        <text x="300" y="55" textAnchor="middle" fill="#f97316" fontSize="15" fontWeight="700" fontFamily="system-ui">Data Structure Categories</text>
+        <rect x="20" y="20" width="560" height="240" rx="16" fill="url(#ds-g1)" stroke="#8B5E3C" strokeWidth="1" strokeOpacity="0.3" />
+        <text x="300" y="55" textAnchor="middle" fill="#8B5E3C" fontSize="15" fontWeight="700" fontFamily="system-ui">Data Structure Categories</text>
         <rect x="60" y="80" width="140" height="70" rx="10" fill="#3b82f620" stroke="#3b82f6" strokeWidth="1.5" />
         <text x="130" y="110" textAnchor="middle" fill="#3b82f6" fontSize="13" fontWeight="600" fontFamily="system-ui">Linear</text>
         <text x="130" y="130" textAnchor="middle" fill="#94a3b8" fontSize="10" fontFamily="system-ui">Array, List, Stack, Queue</text>
@@ -115,7 +115,7 @@ const diagrams: Record<string, Record<string, React.ReactNode>> = {
           </g>
         ))}
         <text x="70" y="85" textAnchor="end" fill="#10b981" fontSize="11" fontWeight="600" fontFamily="system-ui">dequeue ←</text>
-        <text x="535" y="85" fill="#f97316" fontSize="11" fontWeight="600" fontFamily="system-ui">← enqueue</text>
+        <text x="535" y="85" fill="#8B5E3C" fontSize="11" fontWeight="600" fontFamily="system-ui">← enqueue</text>
         <line x1="100" y1="130" x2="520" y2="130" stroke="#8b5cf6" strokeWidth="1" strokeOpacity="0.3" strokeDasharray="4 3" />
         <text x="310" y="148" textAnchor="middle" fill="#94a3b8" fontSize="10" fontFamily="system-ui">Time: enqueue O(1) | dequeue O(1) | peek O(1)</text>
         <rect x="40" y="165" width="160" height="40" rx="8" fill="#10b98110" stroke="#10b981" strokeWidth="1" strokeOpacity="0.4" />
@@ -147,19 +147,19 @@ const diagrams: Record<string, Record<string, React.ReactNode>> = {
     ),
     "7": (
       <svg viewBox="0 0 600 280" style={{ width: "100%", height: "auto" }}>
-        <text x="300" y="25" textAnchor="middle" fill="#f97316" fontSize="14" fontWeight="700" fontFamily="system-ui">Max-Heap — Parent ≥ Children</text>
+        <text x="300" y="25" textAnchor="middle" fill="#8B5E3C" fontSize="14" fontWeight="700" fontFamily="system-ui">Max-Heap — Parent ≥ Children</text>
         {[{x:300,y:65,v:"90"},{x:170,y:135,v:"75"},{x:430,y:135,v:"80"},{x:100,y:210,v:"50"},{x:240,y:210,v:"65"},{x:360,y:210,v:"70"},{x:500,y:210,v:"55"}].map((n,i) => (
           <g key={i}>
-            <rect x={n.x - 22} y={n.y - 18} width="44" height="36" rx="8" fill={i === 0 ? "#f9731625" : "#f9731612"} stroke="#f97316" strokeWidth={i === 0 ? 2 : 1} />
+            <rect x={n.x - 22} y={n.y - 18} width="44" height="36" rx="8" fill={i === 0 ? "#8B5E3C25" : "#8B5E3C12"} stroke="#8B5E3C" strokeWidth={i === 0 ? 2 : 1} />
             <text x={n.x} y={n.y + 5} textAnchor="middle" fill="#e2e8f0" fontSize="13" fontWeight="600" fontFamily="monospace">{n.v}</text>
           </g>
         ))}
-        <line x1="285" y1="83" x2="185" y2="117" stroke="#f97316" strokeWidth="1" strokeOpacity="0.5" />
-        <line x1="315" y1="83" x2="415" y2="117" stroke="#f97316" strokeWidth="1" strokeOpacity="0.5" />
-        <line x1="155" y1="153" x2="115" y2="192" stroke="#f97316" strokeWidth="1" strokeOpacity="0.5" />
-        <line x1="185" y1="153" x2="225" y2="192" stroke="#f97316" strokeWidth="1" strokeOpacity="0.5" />
-        <line x1="415" y1="153" x2="375" y2="192" stroke="#f97316" strokeWidth="1" strokeOpacity="0.5" />
-        <line x1="445" y1="153" x2="485" y2="192" stroke="#f97316" strokeWidth="1" strokeOpacity="0.5" />
+        <line x1="285" y1="83" x2="185" y2="117" stroke="#8B5E3C" strokeWidth="1" strokeOpacity="0.5" />
+        <line x1="315" y1="83" x2="415" y2="117" stroke="#8B5E3C" strokeWidth="1" strokeOpacity="0.5" />
+        <line x1="155" y1="153" x2="115" y2="192" stroke="#8B5E3C" strokeWidth="1" strokeOpacity="0.5" />
+        <line x1="185" y1="153" x2="225" y2="192" stroke="#8B5E3C" strokeWidth="1" strokeOpacity="0.5" />
+        <line x1="415" y1="153" x2="375" y2="192" stroke="#8B5E3C" strokeWidth="1" strokeOpacity="0.5" />
+        <line x1="445" y1="153" x2="485" y2="192" stroke="#8B5E3C" strokeWidth="1" strokeOpacity="0.5" />
         <rect x="40" y="248" width="200" height="22" rx="4" fill="#10b98110" stroke="#10b981" strokeWidth="0.5" />
         <text x="140" y="263" textAnchor="middle" fill="#10b981" fontSize="10" fontFamily="system-ui">Min-Heap: parent ≤ children</text>
         <rect x="360" y="248" width="200" height="22" rx="4" fill="#3b82f610" stroke="#3b82f6" strokeWidth="0.5" />

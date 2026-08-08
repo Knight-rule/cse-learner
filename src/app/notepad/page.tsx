@@ -39,7 +39,7 @@ const NOTE_COLORS = [
   { name: "Blue", value: "rgba(59,130,246,0.12)", border: "rgba(59,130,246,0.3)" },
   { name: "Green", value: "rgba(16,185,129,0.12)", border: "rgba(16,185,129,0.3)" },
   { name: "Purple", value: "rgba(139,92,246,0.12)", border: "rgba(139,92,246,0.3)" },
-  { name: "Orange", value: "rgba(249,115,22,0.12)", border: "rgba(249,115,22,0.3)" },
+  { name: "Orange", value: "rgba(139,94,60,0.12)", border: "rgba(139,94,60,0.3)" },
   { name: "Pink", value: "rgba(236,72,153,0.12)", border: "rgba(236,72,153,0.3)" },
   { name: "Teal", value: "rgba(20,184,166,0.12)", border: "rgba(20,184,166,0.3)" },
 ];

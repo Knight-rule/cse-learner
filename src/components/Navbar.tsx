@@ -21,7 +21,7 @@ const navLinks = [
 export default function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [dark, setDark] = useState(true);
+  const [dark, setDark] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -30,9 +30,9 @@ export default function Navbar() {
     try {
       const saved = localStorage.getItem("theme");
       const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      const isDark = saved ? saved === "dark" : prefersDark;
+      const isDark = saved ? saved === "dark" : false;
       setDark(isDark);
-      document.documentElement.classList.toggle("light", !isDark);
+      document.documentElement.classList.toggle("dark", isDark);
     } catch {}
   }, []);
 
@@ -55,7 +55,7 @@ export default function Navbar() {
   const toggleTheme = () => {
     const next = !dark;
     setDark(next);
-    document.documentElement.classList.toggle("light", !next);
+    document.documentElement.classList.toggle("dark", next);
     try { localStorage.setItem("theme", next ? "dark" : "light"); } catch {}
   };
 

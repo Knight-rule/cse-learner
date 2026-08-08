@@ -200,7 +200,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
               display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
               padding: "16px 24px",
               borderRadius: "var(--radius-lg)",
-              background: "linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(168, 85, 247, 0.06))",
+              background: "linear-gradient(135deg, rgba(92, 122, 107, 0.08), rgba(139, 94, 60, 0.06))",
               border: "1px solid rgba(59, 130, 246, 0.2)",
               color: "var(--text-primary)",
               textDecoration: "none",

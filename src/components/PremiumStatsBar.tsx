@@ -10,8 +10,8 @@ const totalLessons = courses.reduce((sum, c) => sum + c.lessons.length, 0);
 const estimatedHours = Math.round(totalLessons * 0.35);
 
 const stats = [
-  { value: courses.length, label: "Courses", icon: BookOpen, color: "#f97316" },
-  { value: totalLessons, label: "Lessons", icon: Code, color: "#a855f7" },
+  { value: courses.length, label: "Courses", icon: BookOpen, color: "#8B5E3C" },
+  { value: totalLessons, label: "Lessons", icon: Code, color: "#A67B5B" },
   { value: totalProblems, label: "Practice Problems", icon: Brain, color: "#3b82f6" },
   { value: estimatedHours, label: "Hours of Content", suffix: "+", icon: Trophy, color: "#10b981" },
 ];
@@ -53,7 +53,7 @@ export default function PremiumStatsBar() {
     }}>
       <div style={{
         position: "absolute", inset: 0,
-        background: "linear-gradient(180deg, transparent, rgba(249,115,22,0.03), transparent)",
+        background: "linear-gradient(180deg, transparent, rgba(139,94,60,0.03), transparent)",
         pointerEvents: "none",
       }} />
 

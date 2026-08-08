@@ -111,7 +111,7 @@ export default async function LearningPathDetailPage({ params }: PageProps) {
                         {courseInfo.slug.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")}
                       </h3>
                       <span className="px-2 py-0.5 text-xs rounded-full" style={{
-                        background: "rgba(168, 85, 247, 0.12)",
+                        background: "rgba(139, 94, 60, 0.12)",
                         color: "var(--accent-purple)",
                       }}>
                         Coming soon

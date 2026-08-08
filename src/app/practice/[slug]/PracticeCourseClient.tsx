@@ -31,7 +31,7 @@ export default function PracticeCourseClient({ slug, courseTitle, courseIcon, co
   const [page, setPage] = useState(1);
   const [solved, setSolved] = useState<Set<string>>(() => getSolvedProblems());
 
-  const color = courseColor.split(" ")[0] || "#f97316";
+  const color = courseColor.split(" ")[0] || "#8B5E3C";
 
   useEffect(() => {
     setPage(1);

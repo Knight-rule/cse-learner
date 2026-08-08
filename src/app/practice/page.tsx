@@ -19,7 +19,7 @@ export default function PracticePage() {
     <div style={{ minHeight: "100vh" }}>
       {/* ═══ Premium Hero ═══ */}
       <div style={{
-        background: "linear-gradient(135deg, rgba(168, 85, 247, 0.06), rgba(59, 130, 246, 0.04), transparent)",
+        background: "linear-gradient(135deg, rgba(139, 94, 60, 0.06), rgba(92, 122, 107, 0.04), transparent)",
         borderBottom: "1px solid var(--border)",
         padding: "48px 0 40px",
         position: "relative",
@@ -27,7 +27,7 @@ export default function PracticePage() {
       }}>
         <div style={{
           position: "absolute", top: 0, right: 0, bottom: 0, left: 0,
-          backgroundImage: "radial-gradient(circle at 60% 30%, rgba(168, 85, 247, 0.06), transparent 60%), radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.04), transparent 60%)",
+          backgroundImage: "radial-gradient(circle at 60% 30%, rgba(139, 94, 60, 0.06), transparent 60%), radial-gradient(circle at 20% 80%, rgba(92, 122, 107, 0.04), transparent 60%)",
           pointerEvents: "none",
         }} />
 
@@ -41,8 +41,8 @@ export default function PracticePage() {
           <div style={{ display: "flex", alignItems: "flex-start", gap: 16, marginBottom: 24 }}>
             <div style={{
               width: 56, height: 56, borderRadius: "var(--radius-xl)",
-              background: "linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(59, 130, 246, 0.15))",
-              border: "1px solid rgba(168, 85, 247, 0.2)",
+              background: "linear-gradient(135deg, rgba(139, 94, 60, 0.15), rgba(92, 122, 107, 0.15))",
+              border: "1px solid rgba(139, 94, 60, 0.2)",
               display: "flex", alignItems: "center", justifyContent: "center",
               flexShrink: 0,
             }}>
@@ -153,16 +153,16 @@ export default function PracticePage() {
                       <span style={{
                         fontSize: 12, fontWeight: 600,
                         padding: "4px 10px", borderRadius: 8,
-                        background: "rgba(249, 115, 22, 0.12)",
-                        color: "#f97316",
+                        background: "rgba(139, 94, 60, 0.12)",
+                        color: "#8B5E3C",
                       }}>{difficulties.medium} Medium</span>
                     )}
                     {difficulties.hard > 0 && (
                       <span style={{
                         fontSize: 12, fontWeight: 600,
                         padding: "4px 10px", borderRadius: 8,
-                        background: "rgba(168, 85, 247, 0.12)",
-                        color: "#a855f7",
+                        background: "rgba(166, 123, 91, 0.12)",
+                        color: "#A67B5B",
                       }}>{difficulties.hard} Hard</span>
                     )}
                   </div>

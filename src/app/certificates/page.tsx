@@ -50,7 +50,7 @@ export default function CertificatesPage() {
           slug: cp.courseSlug,
           title: course.title,
           icon: course.icon,
-          color: course.color.split(" ")[0] || "#f97316",
+          color: course.color.split(" ")[0] || "#8B5E3C",
           total,
           solved: solvedCount,
           earned,

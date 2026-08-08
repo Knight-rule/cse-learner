@@ -50,7 +50,7 @@ export default function AboutPage() {
           </div>
           <div style={{
             width: "100%", aspectRatio: "4/3", borderRadius: "var(--radius-2xl)",
-            background: "linear-gradient(135deg, rgba(249, 115, 22, 0.08), rgba(168, 85, 247, 0.08))",
+            background: "linear-gradient(135deg, rgba(139, 94, 60, 0.08), rgba(166, 123, 91, 0.08))",
             border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 72
           }}>
             🎯

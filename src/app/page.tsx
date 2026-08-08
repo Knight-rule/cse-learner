@@ -30,7 +30,7 @@ export default function HomePage() {
         {/* Depth layer 0: Background gradient mesh */}
         <div style={{
           position: "absolute", inset: 0, zIndex: 0,
-          background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(249,115,22,0.06) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 50%, rgba(168,85,247,0.04) 0%, transparent 50%)",
+          background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(139,94,60,0.08) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 50%, rgba(166,123,91,0.06) 0%, transparent 50%)",
         }} />
 
         {/* Depth layer 1: Floating orbs */}
@@ -38,14 +38,14 @@ export default function HomePage() {
           <div style={{
             position: "absolute", top: "10%", left: "5%",
             width: 300, height: 300,
-            background: "radial-gradient(circle, rgba(249,115,22,0.08), transparent 70%)",
+            background: "radial-gradient(circle, rgba(139,94,60,0.10), transparent 70%)",
             borderRadius: "50%", filter: "blur(60px)",
             animation: "heroFloat 8s ease-in-out infinite",
           }} />
           <div style={{
             position: "absolute", bottom: "10%", right: "10%",
             width: 250, height: 250,
-            background: "radial-gradient(circle, rgba(168,85,247,0.06), transparent 70%)",
+            background: "radial-gradient(circle, rgba(166,123,91,0.08), transparent 70%)",
             borderRadius: "50%", filter: "blur(50px)",
             animation: "heroFloat 10s ease-in-out infinite reverse",
           }} />
@@ -151,7 +151,7 @@ export default function HomePage() {
                   width={40} height={40}
                   style={{ borderRadius: 8, objectFit: "contain", background: "var(--surface)", padding: 4 }}
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><rect width="40" height="40" rx="8" fill="%23374151"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="system-ui" font-size="16" font-weight="600" fill="%239ca3af">${company.name.charAt(0)}</text></svg>`)}`;
+                    (e.target as HTMLImageElement).src = `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><rect width="40" height="40" rx="8" fill="%23E8DFD8"/><text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="system-ui" font-size="16" font-weight="600" fill="%238B5E3C">${company.name.charAt(0)}</text></svg>`)}`;
                   }}
                 />
                 <span style={{ fontSize: 12, fontWeight: 500, color: "var(--text-secondary)", textAlign: "center" }}>{company.name}</span>
@@ -185,7 +185,7 @@ export default function HomePage() {
               }}>
                 <div style={{
                   fontSize: 48, position: "absolute", top: 16, right: 20,
-                  color: "var(--accent)", opacity: 0.1, fontFamily: "Georgia, serif",
+                  color: "var(--accent)", opacity: 0.15, fontFamily: "'Playfair Display', Georgia, serif",
                   lineHeight: 1,
                 }}>&ldquo;</div>
                 <p style={{ fontSize: 15, color: "var(--text-secondary)", lineHeight: 1.7, marginBottom: 20, position: "relative", zIndex: 1 }}>
@@ -247,7 +247,7 @@ export default function HomePage() {
       <section style={{ padding: "80px 0", position: "relative", overflow: "hidden" }}>
         <div style={{
           position: "absolute", inset: 0,
-          background: "linear-gradient(135deg, rgba(249,115,22,0.05), rgba(168,85,247,0.05))",
+          background: "linear-gradient(135deg, rgba(139,94,60,0.08), rgba(166,123,91,0.08))",
           borderTop: "1px solid var(--border)",
           borderBottom: "1px solid var(--border)",
         }} />
