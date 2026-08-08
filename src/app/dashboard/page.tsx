@@ -113,7 +113,7 @@ export default function DashboardPage() {
     <div style={{ minHeight: "100vh" }}>
       {/* ═══ Premium Hero ═══ */}
       <div style={{
-        background: "linear-gradient(135deg, rgba(139, 94, 60, 0.06), rgba(166, 123, 91, 0.04), transparent)",
+        background: "linear-gradient(135deg, rgba(249, 115, 22, 0.06), rgba(168, 85, 247, 0.04), transparent)",
         borderBottom: "1px solid var(--border)",
         padding: "48px 0 40px",
         position: "relative",
@@ -121,7 +121,7 @@ export default function DashboardPage() {
       }}>
         <div style={{
           position: "absolute", top: 0, right: 0, bottom: 0, left: 0,
-          backgroundImage: "radial-gradient(circle at 70% 30%, rgba(139, 94, 60, 0.06), transparent 60%), radial-gradient(circle at 30% 70%, rgba(166, 123, 91, 0.04), transparent 60%)",
+          backgroundImage: "radial-gradient(circle at 70% 30%, rgba(249, 115, 22, 0.06), transparent 60%), radial-gradient(circle at 30% 70%, rgba(168, 85, 247, 0.04), transparent 60%)",
           pointerEvents: "none",
         }} />
 
@@ -303,7 +303,7 @@ export default function DashboardPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: 16, position: "sticky", top: 80 }}>
             {/* Jobs CTA */}
             <div style={{
-              background: "linear-gradient(135deg, rgba(139, 94, 60, 0.08), rgba(166, 123, 91, 0.06))",
+              background: "linear-gradient(135deg, rgba(249, 115, 22, 0.08), rgba(168, 85, 247, 0.06))",
               border: "1px solid var(--border)",
               borderRadius: "var(--radius-xl)",
               padding: 24,

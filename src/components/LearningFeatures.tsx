@@ -7,13 +7,13 @@ const features = [
     icon: "📊",
     title: "Visual Concept Maps",
     desc: "Data Structures lessons include inline SVG diagrams showing memory layouts, tree structures, and algorithm flows.",
-    color: "#8B5E3C",
+    color: "#f97316",
   },
   {
     icon: "🧩",
     title: "Interactive Diagrams",
     desc: "Hover over diagram nodes to explore relationships. Each concept gets a visual breakdown before the written content.",
-    color: "#A67B5B",
+    color: "#a855f7",
   },
   {
     icon: "💻",
@@ -37,7 +37,7 @@ const features = [
     icon: "🧠",
     title: "Spaced Repetition",
     desc: "Smart review system that schedules concept reviews at optimal intervals for long-term retention.",
-    color: "#8B5E3C",
+    color: "#f97316",
   },
 ];
 

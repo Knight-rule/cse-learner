@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -7,7 +7,6 @@ import Footer from "@/components/Footer";
 export const dynamic = "force-dynamic";
 
 const inter = Inter({ subsets: ["latin"] });
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://cse-learner.onrender.com";
 
@@ -55,11 +54,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'){document.documentElement.classList.add('dark')}else{document.documentElement.classList.remove('dark')}}catch(e){document.documentElement.classList.remove('dark')}})()`,
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='light'){document.documentElement.classList.remove('dark')}else{document.documentElement.classList.add('dark')}}catch(e){document.documentElement.classList.add('dark')}})()`,
           }}
         />
       </head>
-      <body className={`${inter.className} ${playfair.variable}`}>
+      <body className={inter.className}>
         <div className="mesh-bg" />
         <a href="#main-content" className="skip-to-content">
           Skip to content

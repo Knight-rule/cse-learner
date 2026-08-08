@@ -46,7 +46,7 @@ export default function CoursesPage() {
     <div style={{ minHeight: "100vh" }}>
       {/* ═══ Premium Hero ═══ */}
       <div style={{
-        background: "linear-gradient(135deg, rgba(139, 94, 60, 0.06), rgba(166, 123, 91, 0.04), transparent)",
+        background: "linear-gradient(135deg, rgba(249, 115, 22, 0.06), rgba(168, 85, 247, 0.04), transparent)",
         borderBottom: "1px solid var(--border)",
         padding: "48px 0 40px",
         position: "relative",
@@ -54,7 +54,7 @@ export default function CoursesPage() {
       }}>
         <div style={{
           position: "absolute", top: 0, right: 0, bottom: 0, left: 0,
-          backgroundImage: "radial-gradient(circle at 70% 30%, rgba(139, 94, 60, 0.06), transparent 60%), radial-gradient(circle at 30% 70%, rgba(166, 123, 91, 0.04), transparent 60%)",
+          backgroundImage: "radial-gradient(circle at 70% 30%, rgba(249, 115, 22, 0.06), transparent 60%), radial-gradient(circle at 30% 70%, rgba(168, 85, 247, 0.04), transparent 60%)",
           pointerEvents: "none",
         }} />
 
@@ -128,7 +128,7 @@ export default function CoursesPage() {
               fontSize: 14, fontWeight: activeCategory === "all" ? 600 : 500,
               cursor: "pointer",
               transition: "all 0.2s",
-              boxShadow: activeCategory === "all" ? "0 4px 16px rgba(139, 94, 60, 0.2)" : "none",
+              boxShadow: activeCategory === "all" ? "0 4px 16px rgba(249, 115, 22, 0.2)" : "none",
             }}
           >
             📚 All
@@ -156,7 +156,7 @@ export default function CoursesPage() {
                   fontSize: 14, fontWeight: isActive ? 600 : 500,
                   cursor: "pointer",
                   transition: "all 0.2s",
-                  boxShadow: isActive ? "0 4px 16px rgba(139, 94, 60, 0.2)" : "none",
+                  boxShadow: isActive ? "0 4px 16px rgba(249, 115, 22, 0.2)" : "none",
                 }}
               >
                 <span>{categoryIcons[cat]}</span>

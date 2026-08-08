@@ -32,7 +32,7 @@ export default function LeaderboardPage() {
         courseSlug: cp.courseSlug,
         title: course?.title || cp.courseSlug,
         icon: course?.icon || "📚",
-        color: course?.color || "#8B5E3C #A67B5B",
+        color: course?.color || "#f97316 #a855f7",
         solved: s,
         total: cp.problems.length,
       };
@@ -55,7 +55,7 @@ export default function LeaderboardPage() {
     <div style={{ minHeight: "100vh" }}>
       {/* ═══ Premium Hero ═══ */}
       <div style={{
-        background: "linear-gradient(135deg, rgba(166, 123, 91, 0.06), rgba(139, 94, 60, 0.04), transparent)",
+        background: "linear-gradient(135deg, rgba(245, 158, 11, 0.06), rgba(249, 115, 22, 0.04), transparent)",
         borderBottom: "1px solid var(--border)",
         padding: "48px 0 40px",
         position: "relative",

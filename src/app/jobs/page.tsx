@@ -414,7 +414,7 @@ export default function JobsPage() {
                           <span style={{
                             fontSize: 10, fontWeight: 600,
                             padding: "2px 8px", borderRadius: 6,
-                            background: "rgba(139, 94, 60, 0.1)",
+                            background: "rgba(249, 115, 22, 0.1)",
                             color: "var(--accent-orange)",
                           }}>
                             All Levels

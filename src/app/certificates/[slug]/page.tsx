@@ -43,7 +43,7 @@ export default function CertificateViewPage({ params }: { params: Promise<{ slug
   if (!slug) return null;
 
   const course = courses.find((c) => c.slug === slug);
-  const color = course ? course.color.split(" ")[0] || "#8B5E3C" : "#8B5E3C";
+  const color = course ? course.color.split(" ")[0] || "#f97316" : "#f97316";
 
   if (!course) {
     return (
